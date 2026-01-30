@@ -28,7 +28,7 @@ namespace Hospital.WebProject.Controllers
         {
             if (User?.Identity?.IsAuthenticated ?? false)
             {
-                var docs = await Context.Nurses.Select(x => new ViewModels. Nurse.NurseIndexViewModel
+                var docs = await Context.Nurses.Include(x => x.Shift).Include(x => x.Specialization).Include(x => x.User).Select(x => new ViewModels. Nurse.NurseIndexViewModel
                 {
                     SpecializationID = x.SpecializationId,
                     Specialization = x.Specialization,
@@ -37,7 +37,7 @@ namespace Hospital.WebProject.Controllers
                     UserID = x.UserId,
                     User = x.User,
                     IsAccepted = x.IsAccepted
-                }).Include(x=>x.Shift).Include(x=>x.Specialization).Include(x=>x.UserID).ToListAsync();
+                }).ToListAsync();
                 return View(docs);
             }
             else

@@ -20,13 +20,13 @@ namespace Hospital.WebProject.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var medications = await Context.Medications.Select(x => new MedicationIndexViewModel
+            var medications = await Context.Medications.Include(x => x.Diagnose).Select(x => new MedicationIndexViewModel
             {
                 Name = x.Name,
                 DiagnoseID = x.DiagnoseID,
                 Diagnose = x.Diagnose,
                 Description = x.Description
-            }).Include(x=>x.Diagnose).ToListAsync();
+            }).ToListAsync();
             return View(medications);
         }
         [HttpGet]

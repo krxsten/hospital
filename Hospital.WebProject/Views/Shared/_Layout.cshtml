@@ -22,7 +22,7 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Hospital.WebProject</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Hospital "Saint Anna"</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -34,10 +34,10 @@
                         </li>
                        
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="DiagnosesController" asp-action="Index">Diagnoses</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Diagnose" asp-action="Index">Diagnoses</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="SpecializationsController" asp-action="Index">Specializations</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Specialization" asp-action="Index">Specializations</a>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -46,17 +46,17 @@
                             <ul class="dropdown-menu">
                                 <li>
                                     <a class="dropdown-item"
-                                       asp-controller="DoctorsController" asp-action="Index">Doctors</a>
+                                       asp-controller="Doctors" asp-action="Index">Doctors</a>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item" asp-controller="NursesController" asp-action="Index">Nurses</a>
+                                    <a class="dropdown-item" asp-controller="Nurses" asp-action="Index">Nurses</a>
                                 </li>
                             </ul>
                         </li>
                         @if (User.IsInRole("Patient"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="PatientsController" asp-action="Index">Patients</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Patients" asp-action="Index">Patients</a>
                             </li>
                         }
                     </ul>
