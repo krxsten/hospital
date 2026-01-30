@@ -1,0 +1,21 @@
+﻿@using Hospital.WebProject.ViewModels.Room
+@model List<RoomIndexViewModel>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Room Number</th>
+            <th scope="col">Occupied</th>
+        </tr>
+    </thead>
+    <tbody class="table-group-divider">
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>@item.ID</td>
+            <td>@item.RoomNumber</td>
+            <td>@item.IsTaken</td>
+        </tr>
+        }
+    </tbody>
+</table>

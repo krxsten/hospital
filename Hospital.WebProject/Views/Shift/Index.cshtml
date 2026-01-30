@@ -1,0 +1,21 @@
+﻿@using Hospital.WebProject.ViewModels.Shift
+@model List<ShiftIndexViewModel>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Type</th>
+            <th scope="col">Start time</th>
+            <th scope="col">End time</th>
+        </tr>
+    </thead>
+    <tbody class="table-group-divider">
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Type</td>
+                <td>@item.StartTime</td>
+                <td>@item.EndTime</td>
+            </tr>
+        }
+    </tbody>
+</table>

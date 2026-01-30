@@ -1,0 +1,17 @@
+﻿@using Hospital.WebProject.ViewModels.Specialization
+@model List<SpecializationIndexViewModel>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Name</th>
+        </tr>
+    </thead>
+    <tbody class="table-group-divider">
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.SpecializationName</td>
+            </tr>
+        }
+    </tbody>
+</table>

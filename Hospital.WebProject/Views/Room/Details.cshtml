@@ -1,0 +1,17 @@
+﻿@using Hospital.WebProject.ViewModels.Room
+@model List<RoomCreateDetailsViewModel>
+
+@foreach (var item in Model)
+{
+    <div class="card" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title">@item.RoomNumber</h5>
+
+            @if (item.IsTaken == true)
+            {
+                <p class="card-text">Room No.@item.RoomNumber is occupied!</p>
+            }
+            <p class="card-text">Room No.@item.RoomNumber is not occupied!</p>
+        </div>
+    </div>
+}

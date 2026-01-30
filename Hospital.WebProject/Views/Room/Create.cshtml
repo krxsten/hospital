@@ -1,0 +1,13 @@
+﻿@using Hospital.WebProject.ViewModels.Room
+@model RoomCreateDetailsViewModel
+<form asp-action="Create" method="post">
+    <div class="mb-3">
+        <label asp-for="RoomNumber" class="form-label">Room number: </label>
+        <input asp-for="RoomNumber" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="IsTaken" class="form-label">Is occupied: </label>
+        <input type="radio" asp-for="IsTaken" name="taken" value="True" />Occupied
+        <input type="radio" asp-for="IsTaken" name="taken" value="False" />Not occupied
+    </div>
+</form>

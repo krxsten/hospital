@@ -1,0 +1,20 @@
+﻿@using Hospital.WebProject.ViewModels.Shift
+@model ShiftCreateViewModel
+
+<form asp-action="Create" method="post">
+    <div class="mb-3">
+        <label asp-for="Type" class="form-label">Type: </label>
+        <input type="radio" asp-for="Type" name="type" value="DayShift"/>Day shift
+        <input type="radio" asp-for="Type" name="type" value="NightShift"/>Night shift
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="StartTime" class="form-label">Start time: </label>
+        <input asp-for="StartTime" class="form-control"/>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="EndTime" class="form-label">End time: </label>
+        <input asp-for="EndTime" class="form-control" />
+    </div>
+</form>

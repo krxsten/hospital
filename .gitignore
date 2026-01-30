@@ -1,0 +1,62 @@
+## Ignore Visual Studio temporary files, build results, and user-specific files
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+## Build results
+bin/
+obj/
+out/
+
+## ASP.NET Core
+appsettings.Development.json
+appsettings.Local.json
+
+## Logs
+*.log
+
+## Debug / Release folders
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+
+## Rider / VS Code
+.idea/
+.vscode/
+
+## NuGet
+packages/
+*.nupkg
+*.snupkg
+.nuget/NuGet.Config
+.nuget/NuGet.targets
+.nuget/NuGet.props
+
+## Entity Framework
+Migrations/*.csproj
+**/Migrations/*.Designer.cs
+
+## Publish output
+publish/
+wwwroot/lib/
+
+## OS files
+Thumbs.db
+.DS_Store
+desktop.ini
+
+## Backup & temp files
+*.bak
+*.tmp
+*.temp
+*.swp
+
+## Test results
+TestResults/
+*.trx
+
+## DotNet tools
+.dotnet/
