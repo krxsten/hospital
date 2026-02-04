@@ -28,15 +28,15 @@ namespace Hospital.WebProject.Controllers
         {
             if (User?.Identity?.IsAuthenticated ?? false)
             {
-                var docs = await Context.Nurses.Include(x => x.Shift).Include(x => x.Specialization).Include(x => x.User).Select(x => new ViewModels. Nurse.NurseIndexViewModel
+                var docs = await Context.Nurses.Include(x => x.Shift).Include(x => x.Specialization).Include(x => x.User).Select(x => new NurseViewModel
                 {
-                    SpecializationID = x.SpecializationId,
-                    Specialization = x.Specialization,
-                    ShiftID = x.ShiftId,
-                    Shift = x.Shift,
-                    UserID = x.UserId,
-                    User = x.User,
-                    IsAccepted = x.IsAccepted
+                    //SpecializationID = x.SpecializationId,
+                    //Specialization = x.Specialization,
+                    //ShiftID = x.ShiftId,
+                    //Shift = x.Shift,
+                    //UserID = x.UserId,
+                    //User = x.User,
+                    //IsAccepted = x.IsAccepted
                 }).ToListAsync();
                 return View(docs);
             }
@@ -49,10 +49,10 @@ namespace Hospital.WebProject.Controllers
         public IActionResult Create()
         {
 
-            return View(new NurseCreateViewModel());
+            return View(new NurseViewModel());
         }
         [HttpPost]
-        public async Task<IActionResult> Create(NurseCreateViewModel model)
+        public async Task<IActionResult> Create(NurseViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -60,13 +60,13 @@ namespace Hospital.WebProject.Controllers
             }
             var nurse = new Nurse()
             {
-                SpecializationId = model.SpecializationId,
-                Specialization = model.Specialization,
-                ShiftId = model.ShiftId,
-                Shift = model.Shift,
-                UserId = model.UserId,
-                User = model.User,
-                IsAccepted = model.IsAccepted
+                //SpecializationId = model.SpecializationId,
+                //Specialization = model.Specialization,
+                //ShiftId = model.ShiftId,
+                //Shift = model.Shift,
+                //UserId = model.UserId,
+                //User = model.User,
+                //IsAccepted = model.IsAccepted
             };
             await Context.Nurses.AddAsync(nurse);
             await Context.SaveChangesAsync();
@@ -82,18 +82,18 @@ namespace Hospital.WebProject.Controllers
             {
                 return NotFound();
             }
-            var model = new MedicationCreateViewModel
+            var model = new MedicationViewModel
             {
                 Name = medication.Name,
                 DiagnoseID = medication.DiagnoseID,
-                Diagnose = medication.Diagnose,
+                //Diagnose = medication.Diagnose,
                 Description = medication.Description,
                 SideEffects = medication.SideEffects
             };
             return View(medication);
         }
         [HttpPost]
-        public async Task<IActionResult> Edit(MedicationCreateViewModel model)
+        public async Task<IActionResult> Edit(MedicationViewModel model)
         {
             ViewBag.Shift = new SelectList(Context.Shifts, "ID", "Type");
             ViewBag.Specialization = new SelectList(Context.Specializations, "ID", "SpecializationName");

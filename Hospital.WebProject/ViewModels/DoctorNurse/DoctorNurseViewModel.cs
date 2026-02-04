@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Hospital.WebProject.ViewModels.Doctor;
+using Hospital.WebProject.ViewModels.Nurse;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Hospital.WebProject.ViewModels.DoctorNurse

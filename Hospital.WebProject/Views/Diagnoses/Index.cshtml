@@ -1,0 +1,23 @@
+﻿@using Hospital.WebProject.ViewModels.Diagnose
+@model List<DiagnoseViewModel>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Room Number</th>
+                <th scope="col">Occupied</th>
+            </tr>
+        </thead>
+        <tbody class="table-group-divider">
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.ID</td>
+                    <td>@item.Name</td>
+                    <td>@item.Name</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+

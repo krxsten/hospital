@@ -1,8 +1,10 @@
 ﻿using Hospital.Data;
+using Hospital.Data.Entities;
 using Hospital.Entities;
 using Hospital.WebProject.ViewModels.Diagnose;
 using Hospital.WebProject.ViewModels.Shift;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,16 +13,18 @@ namespace Hospital.WebProject.Controllers
     [Authorize]
     public class ShiftsController : Controller
     {
-        private HospitalDbContext context { get; set; }
-        public ShiftsController(HospitalDbContext context)
+        private readonly HospitalDbContext Context;
+        private readonly UserManager<User> UserManager;
+        public ShiftsController(HospitalDbContext context, UserManager<User> userManager)
         {
-            this.context = context;
+            this.Context = context;
+            this.UserManager = userManager;
         }
 
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var shifts = await context.Shifts.Select(x => new ShiftIndexViewModel
+            var shifts = await Context.Shifts.Select(x => new ShiftViewModel
             {
                 Type = x.Type,
                 StartTime = x.StartTime,
@@ -31,10 +35,10 @@ namespace Hospital.WebProject.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            return View(new ShiftCreateViewModel());
+            return View(new ShiftViewModel());
         }
         [HttpPost]
-        public async Task<IActionResult> Create(ShiftCreateViewModel model)
+        public async Task<IActionResult> Create(ShiftViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -46,8 +50,8 @@ namespace Hospital.WebProject.Controllers
                 StartTime = model.StartTime,
                 EndTime = model.EndTime
             };
-            await context.Shifts.AddAsync(shift);
-            await context.SaveChangesAsync();
+            await Context.Shifts.AddAsync(shift);
+            await Context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
     }

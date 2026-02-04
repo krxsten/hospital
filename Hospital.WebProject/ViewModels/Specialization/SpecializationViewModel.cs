@@ -2,7 +2,7 @@
 
 namespace Hospital.WebProject.ViewModels.Specialization
 {
-    public class SpecializationCreateViewModel
+    public class SpecializationViewModel
     {
         public Guid ID { get; set; }
         [Required]

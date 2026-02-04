@@ -2,23 +2,18 @@
 using Hospital.Data.Entities;
 using Hospital.Entities;
 using Hospital.WebProject.ViewModels.Doctor;
-using Hospital.WebProject.ViewModels.Diagnose;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Hospital.WebProject.ViewModels.Specialization;
-using Hospital.WebProject.ViewModels.Shift;
-using Hospital.WebProject.ViewModels.User;
 
 namespace Hospital.WebProject.Controllers
 {
-    [Authorize]
-    public class DoctorsController : Controller
+    public class PatientsController: Controller
     {
-        private readonly HospitalDbContext Context;
+        private HospitalDbContext Context { get; set; }
         private readonly UserManager<User> UserManager;
-        public DoctorsController(HospitalDbContext context, UserManager<User> userManager)
+        public PatientsController(HospitalDbContext context, UserManager<User> userManager)
         {
             this.Context = context;
             this.UserManager = userManager;
@@ -29,17 +24,17 @@ namespace Hospital.WebProject.Controllers
         {
             if (User?.Identity?.IsAuthenticated ?? false)
             {
-                var docs = await Context.Doctors.Include(x => x.Specialization).Include(x => x.Shift).Include(x => x.User).Select(x => new DoctorIndexViewModel
+                var pat = await Context.Patients.Include(x => x.User).Include(x => x.User).Select(x => new DoctorIndexViewModel
                 {
-                    SpecializationId = x.SpecializationId,
-                    Specialization = x.Specialization,
-                    ShiftId = x.ShiftId,
-                    Shift = x.Shift,
-                    User = x.User,
-                    IsAccepted = x.IsAccepted,
-                    UserId = x.UserId
+                    //SpecializationId = x.SpecializationId,
+                    //Specialization = x.Specialization,
+                    //ShiftId = x.ShiftId,
+                    //Shift = x.Shift,
+                    //UserId = x.UserId,
+                    //User = x.User,
+                    //IsAccepted = x.IsAccepted
                 }).ToListAsync();
-                return View(docs);
+                return View(pat);
             }
             else
             {
@@ -61,13 +56,13 @@ namespace Hospital.WebProject.Controllers
             }
             var doctor = new Doctor()
             {
-                SpecializationId = model.SpecializationID,
-                Specialization = model.Specialization,
-                ShiftId = model.ShiftID,
-                Shift = model.Shift,
-                User = model.User,
-                IsAccepted = model.IsAccepted,
-                UserId = model.UserID
+                //SpecializationId = model.SpecializationID,
+                //Specialization = model.Specialization,
+                //ShiftId = model.ShiftID,
+                //Shift = model.Shift,
+                //UserId = model.UserID,
+                //User = model.User,
+                //IsAccepted = model.IsAccepted
             };
             await Context.Doctors.AddAsync(doctor);
             await Context.SaveChangesAsync();
@@ -83,13 +78,13 @@ namespace Hospital.WebProject.Controllers
             }
             var model = new DoctorCreateViewModel
             {
-                SpecializationID = doctor.SpecializationId,
-                Specialization = doctor.Specialization,
-                ShiftID = doctor.ShiftId,
-                Shift = doctor.Shift,
-                User = doctor.User,
-                IsAccepted = doctor.IsAccepted,
-                UserID = doctor.UserId
+                //SpecializationID = doctor.SpecializationId,
+                //Specialization = doctor.Specialization,
+                //ShiftID = doctor.ShiftId,
+                //Shift = doctor.Shift,
+                //UserID = doctor.UserId,
+                //User = doctor.User,
+                //IsAccepted = doctor.IsAccepted
             };
             return View(doctor);
         }

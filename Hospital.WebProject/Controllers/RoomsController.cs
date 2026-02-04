@@ -1,7 +1,9 @@
 ﻿using Hospital.Data;
+using Hospital.Data.Entities;
 using Hospital.Entities;
 using Hospital.WebProject.ViewModels.Room;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,15 +13,17 @@ namespace Hospital.WebProject.Controllers
     public class RoomsController : Controller
     {
         private readonly HospitalDbContext Context;
-        public RoomsController(HospitalDbContext context)
+        private readonly UserManager<User> UserManager;
+        public RoomsController(HospitalDbContext context, UserManager<User> userManager)
         {
             this.Context = context;
+            this.UserManager = userManager;
         }
 
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var rooms = await Context.Rooms.Select(x => new RoomIndexViewModel
+            var rooms = await Context.Rooms.Select(x => new RoomViewModel
             {
                 ID = x.ID,
                 RoomNumber = x.RoomNumber,
@@ -31,11 +35,11 @@ namespace Hospital.WebProject.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            return View(new RoomCreateDetailsViewModel());
+            return View(new RoomViewModel());
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(RoomCreateDetailsViewModel model)
+        public async Task<IActionResult> Create(RoomViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -55,7 +59,7 @@ namespace Hospital.WebProject.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(Guid id)
         {
-            var room = await Context.Rooms.Where(x => x.ID == id).Select(x=>new RoomCreateDetailsViewModel
+            var room = await Context.Rooms.Where(x => x.ID == id).Select(x=>new RoomViewModel
             {
                 IsTaken = x.IsTaken,
                 RoomNumber=x.RoomNumber

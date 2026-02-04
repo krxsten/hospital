@@ -1,11 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Hospital.WebProject.ViewModels.Shift;
+using Hospital.WebProject.ViewModels.Specialization;
+using Hospital.WebProject.ViewModels.User;
+using System.ComponentModel.DataAnnotations;
 
 namespace Hospital.WebProject.ViewModels.Nurse
 {
-    public class NurseCreateViewModel
+    public class NurseViewModel
     {
-        public Guid UserId { get; set; }
-
         public Hospital.Data.Entities.User User { get; set; }
 
         [Required]

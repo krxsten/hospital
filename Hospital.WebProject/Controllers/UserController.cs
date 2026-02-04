@@ -3,7 +3,6 @@ using Hospital.WebProject.ViewModels.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using static System.Reflection.Metadata.BlobBuilder;
 
 namespace Hospital.WebProject.Controllers
 {
@@ -87,7 +86,7 @@ namespace Hospital.WebProject.Controllers
 
             if (user != null)
             {
-                var result = await this.signManager.PasswordSignInAsync(user, model.Password, false, false);
+                var result = await this.signManager.PasswordSignInAsync(user, model.Password, true, false);
 
                 if (result.Succeeded)
                 {

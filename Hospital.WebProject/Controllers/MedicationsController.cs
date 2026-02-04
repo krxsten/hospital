@@ -3,6 +3,7 @@ using Hospital.Data.Entities;
 using Hospital.Entities;
 using Hospital.WebProject.ViewModels.Doctor;
 using Hospital.WebProject.ViewModels.Medication;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -12,19 +13,21 @@ namespace Hospital.WebProject.Controllers
     public class MedicationsController : Controller
     {
         private readonly HospitalDbContext Context;
-        public MedicationsController(HospitalDbContext context)
+        private readonly UserManager<User> UserManager;
+        public MedicationsController(HospitalDbContext context, UserManager<User> userManager)
         {
             this.Context = context;
+            this.UserManager = userManager;
         }
 
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var medications = await Context.Medications.Include(x => x.Diagnose).Select(x => new MedicationIndexViewModel
+            var medications = await Context.Medications.Include(x => x.Diagnose).Select(x => new MedicationViewModel
             {
                 Name = x.Name,
                 DiagnoseID = x.DiagnoseID,
-                Diagnose = x.Diagnose,
+                //Diagnose = x.Diagnose,
                 Description = x.Description
             }).ToListAsync();
             return View(medications);
@@ -33,10 +36,10 @@ namespace Hospital.WebProject.Controllers
         public IActionResult Create()
         {
             ViewBag.Diagnose = new SelectList(Context.Diagnoses, "ID", "Name");
-            return View(new MedicationCreateViewModel ());
+            return View(new MedicationViewModel ());
         }
         [HttpPost]
-        public async Task<IActionResult> Create(MedicationCreateViewModel model)
+        public async Task<IActionResult> Create(MedicationViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -46,7 +49,7 @@ namespace Hospital.WebProject.Controllers
             {
                 Name = model.Name,
                 DiagnoseID= model.DiagnoseID,
-                Diagnose= model.Diagnose,
+                //Diagnose= model.Diagnose,
                 Description = model.Description,
                 SideEffects = model.SideEffects
             };
@@ -64,18 +67,18 @@ namespace Hospital.WebProject.Controllers
             {
                 return NotFound();
             }
-            var model = new MedicationCreateViewModel
+            var model = new MedicationViewModel
             {
                 Name = medication.Name,
                 DiagnoseID = medication.DiagnoseID,
-                Diagnose = medication.Diagnose,
+                //Diagnose = medication.Diagnose,
                 Description = medication.Description,
                 SideEffects = medication.SideEffects
             };
             return View(medication);
         }
         [HttpPost]
-        public async Task<IActionResult> Edit(MedicationCreateViewModel model)
+        public async Task<IActionResult> Edit(MedicationViewModel model)
         {
             if (!ModelState.IsValid)
             {

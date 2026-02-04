@@ -1,7 +1,9 @@
 ﻿using Hospital.Data;
+using Hospital.Data.Entities;
 using Hospital.WebProject.ViewModels.Shift;
 using Hospital.WebProject.ViewModels.Specialization;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,15 +13,17 @@ namespace Hospital.WebProject.Controllers
     public class SpecializationsController : Controller
     {
         private readonly HospitalDbContext Context;
-        public SpecializationsController(HospitalDbContext context)
+        private readonly UserManager<User> UserManager;
+        public SpecializationsController(HospitalDbContext context, UserManager<User> userManager)
         {
             this.Context = context;
+            this.UserManager = userManager;
         }
         [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var specializations = await Context.Specializations.Select(x => new SpecializationIndexViewModel
+            var specializations = await Context.Specializations.Select(x => new SpecializationViewModel
             {
                 SpecializationName = x.SpecializationName
             }).ToListAsync();
@@ -28,10 +32,10 @@ namespace Hospital.WebProject.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            return View(new SpecializationCreateViewModel());
+            return View(new SpecializationViewModel());
         }
         [HttpPost]
-        public async Task<IActionResult> Create(SpecializationCreateViewModel model)
+        public async Task<IActionResult> Create(SpecializationViewModel model)
         {
             if (!ModelState.IsValid)
             {

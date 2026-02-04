@@ -1,11 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Hospital.WebProject.ViewModels.Doctor;
+using Hospital.WebProject.ViewModels.Room;
+using Hospital.WebProject.ViewModels.User;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Hospital.WebProject.ViewModels.Patient
 {
-    public class PatientCreateViewModel
+    public class PatientViewModel
     {
-        public Guid UserId { get; set; }
         public Hospital.Data.Entities.User User { get; set; }
         [Required]
         public Guid DoctorId { get; set; }

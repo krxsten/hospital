@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Hospital.WebProject.ViewModels.Room
 {
-    public class RoomCreateDetailsViewModel
+    public class RoomViewModel
     {
         [Key]
         public Guid ID { get; set; }

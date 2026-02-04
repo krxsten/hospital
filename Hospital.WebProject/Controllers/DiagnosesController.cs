@@ -26,27 +26,22 @@ namespace Hospital.WebProject.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            if (User?.Identity?.IsAuthenticated ?? false)
-            {
-                var diagnoses = await Context.Diagnoses.Select(x => new DiagnoseIndexViewModel
+            
+                var diagnoses = await Context.Diagnoses.Select(x => new DiagnoseViewModel
                 {
                     ID = Guid.NewGuid(),
                     Name = x.Name
                 }).ToListAsync();
                 return View(diagnoses);
-            }
-            else
-            {
-                return NotFound();
-            }
+            
         }
         [HttpGet]
         public IActionResult Create()
         {
-            return View(new DiagnoseCreateViewModel());
+            return View(new DiagnoseViewModel());
         }
         [HttpPost]
-        public async Task<IActionResult> Create(DiagnoseCreateViewModel model)
+        public async Task<IActionResult> Create(DiagnoseViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -69,7 +64,7 @@ namespace Hospital.WebProject.Controllers
             {
                 return NotFound();
             }
-            var model = new DiagnoseCreateViewModel
+            var model = new DiagnoseViewModel
             {
                 ID = diagnose.ID,
                 Name = diagnose.Name
@@ -77,7 +72,7 @@ namespace Hospital.WebProject.Controllers
             return View(diagnose);
         }
         [HttpPost]
-        public async Task<IActionResult> Edit(DiagnoseCreateViewModel model)
+        public async Task<IActionResult> Edit(DiagnoseViewModel model)
         {
             if (!ModelState.IsValid)
             {
