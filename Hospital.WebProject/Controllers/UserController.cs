@@ -49,7 +49,7 @@ namespace Hospital.WebProject.Controllers
 
             if (result.Succeeded)
             {
-                if (model.Role == "Doctor" || model.Role == "Nurse" || model.Role == "Patient")
+                if (model.Role == "Doctor" || model.Role == "Nurse" || model.Role == "Patient" || model.Role=="Admin")
                 {
                     await userManager.AddToRoleAsync(user, model.Role);
                 }

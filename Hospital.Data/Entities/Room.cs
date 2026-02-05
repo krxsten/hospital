@@ -17,6 +17,5 @@ namespace Hospital.Entities
         [Required]
         public bool IsTaken { get; set; }
         public List<Patient> ListOfPatients { get; set; } = new List<Patient>();
-        public int PatientsCount { get; set; }
     }
 }

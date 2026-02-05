@@ -1,15 +1,16 @@
 ﻿using Hospital.Data;
 using Hospital.Data.Entities;
 using Hospital.Entities;
-using Hospital.WebProject.ViewModels.Doctor;
 using Hospital.WebProject.ViewModels.Diagnose;
+using Hospital.WebProject.ViewModels.Doctor;
+using Hospital.WebProject.ViewModels.Shift;
+using Hospital.WebProject.ViewModels.Specialization;
+using Hospital.WebProject.ViewModels.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using Hospital.WebProject.ViewModels.Specialization;
-using Hospital.WebProject.ViewModels.Shift;
-using Hospital.WebProject.ViewModels.User;
 
 namespace Hospital.WebProject.Controllers
 {
@@ -27,29 +28,25 @@ namespace Hospital.WebProject.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            if (User?.Identity?.IsAuthenticated ?? false)
+            var docs = await Context.Doctors.Include(x => x.Specialization).Include(x => x.Shift).Include(x => x.User).Select(x => new DoctorIndexViewModel
             {
-                var docs = await Context.Doctors.Include(x => x.Specialization).Include(x => x.Shift).Include(x => x.User).Select(x => new DoctorIndexViewModel
-                {
-                    SpecializationId = x.SpecializationId,
-                    Specialization = x.Specialization,
-                    ShiftId = x.ShiftId,
-                    Shift = x.Shift,
-                    User = x.User,
-                    IsAccepted = x.IsAccepted,
-                    UserId = x.UserId
-                }).ToListAsync();
-                return View(docs);
-            }
-            else
-            {
-                return NotFound();
-            }
+                SpecializationId = x.SpecializationId,
+                Specialization = x.Specialization,
+                ShiftId = x.ShiftId,
+                Shift = x.Shift,
+                User = x.User,
+                IsAccepted = x.IsAccepted,
+                UserId = x.UserId,
+                Image = x.Image
+            }).ToListAsync();
+            return View(docs);
+
         }
         [HttpGet]
         public IActionResult Create()
         {
-
+            ViewBag.Specialization = new SelectList(Context.Specializations, "ID", "Name");
+            ViewBag.Shift = new SelectList(Context.Shifts, "ID", "Name");
             return View(new DoctorCreateViewModel());
         }
         [HttpPost]
@@ -67,7 +64,8 @@ namespace Hospital.WebProject.Controllers
                 Shift = model.Shift,
                 User = model.User,
                 IsAccepted = model.IsAccepted,
-                UserId = model.UserID
+                UserId = model.UserID,
+                Image = model.Image
             };
             await Context.Doctors.AddAsync(doctor);
             await Context.SaveChangesAsync();
@@ -76,6 +74,8 @@ namespace Hospital.WebProject.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(Guid id)
         {
+            ViewBag.Specialization = new SelectList(Context.Specializations, "ID", "Name");
+            ViewBag.Shift = new SelectList(Context.Shifts, "ID", "Name");
             var doctor = await Context.Doctors.FindAsync(id);
             if (doctor == null)
             {
@@ -89,7 +89,8 @@ namespace Hospital.WebProject.Controllers
                 Shift = doctor.Shift,
                 User = doctor.User,
                 IsAccepted = doctor.IsAccepted,
-                UserID = doctor.UserId
+                UserID = doctor.UserId,
+                Image = doctor.Image
             };
             return View(doctor);
         }
@@ -100,7 +101,7 @@ namespace Hospital.WebProject.Controllers
             {
                 return View(model);
             }
-            var doctor = await Context.Doctors.FindAsync(model.User.UserID);
+            var doctor = await Context.Doctors.FindAsync(model.UserID);
             if (doctor == null)
             {
                 return NotFound();

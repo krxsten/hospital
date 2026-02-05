@@ -1,10 +1,12 @@
 ﻿using Hospital.Data;
 using Hospital.Data.Entities;
 using Hospital.Entities;
+using Hospital.WebProject.ViewModels.Patient;
 using Hospital.WebProject.ViewModels.Room;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace Hospital.WebProject.Controllers
@@ -52,7 +54,6 @@ namespace Hospital.WebProject.Controllers
                 IsTaken = model.IsTaken
             };
             await Context.Rooms.AddAsync(room);
-           // room.PatientsCount++;
             await Context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
@@ -71,5 +72,50 @@ namespace Hospital.WebProject.Controllers
             }
             return View(room);
         }
+        [HttpGet]
+        public async Task<IActionResult> Edit(Guid id)
+        {
+            var room = await Context.Rooms.FindAsync(id);
+            if (room == null)
+            {
+                return NotFound();
+            }
+            var model = new RoomViewModel
+            {
+                ID = room.ID,
+                RoomNumber = room.RoomNumber,
+                IsTaken = room.IsTaken
+            };
+            return View(room);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Edit(RoomViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var pat = await Context.Patients.FindAsync(model.ID);
+            if (pat == null)
+            {
+                return NotFound();
+            }
+            Context.Patients.Update(pat);
+            await Context.SaveChangesAsync();
+            return RedirectToAction("Index");
+        }
+        [HttpPost]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var pat = await Context.Patients.FindAsync(id);
+            if (pat == null)
+            {
+                return NotFound();
+            }
+            Context.Patients.Remove(pat);
+            await Context.SaveChangesAsync();
+            return RedirectToAction("Index");
+        }
+
     }
 }

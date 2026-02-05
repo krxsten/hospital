@@ -25,7 +25,10 @@ namespace Hospital.Entities
         public Shift Shift { get; set; }
 
         public bool IsAccepted { get; set; } = false;
+        public string Image { get; set; }
         public List<Patient> Patients { get; set; } = new List<Patient>();
         public List<DoctorAndNurse> DoctorNurses { get; set; } = new List<DoctorAndNurse>();
+
+        public List<Checkup> Checkups { get; set; } = new List<Checkup>();
     }
 }

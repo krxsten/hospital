@@ -25,6 +25,7 @@ namespace Hospital.WebProject.Controllers
         {
             var specializations = await Context.Specializations.Select(x => new SpecializationViewModel
             {
+                ID= Guid.NewGuid(),
                 SpecializationName = x.SpecializationName
             }).ToListAsync();
             return View(specializations);
@@ -49,5 +50,50 @@ namespace Hospital.WebProject.Controllers
             await Context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(Guid id)
+        {
+            var spec = await Context.Specializations.FindAsync(id);
+            if (spec == null)
+            {
+                return NotFound();
+            }
+            var model = new SpecializationViewModel
+            {
+                ID=spec.ID,
+                SpecializationName = spec.SpecializationName
+            };
+            return View(spec);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Edit(SpecializationViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            var spec = await Context.Specializations.FindAsync(model.ID);
+            if (spec == null)
+            {
+                return NotFound();
+            }
+            Context.Specializations.Update(spec);
+            await Context.SaveChangesAsync();
+            return RedirectToAction("Index");
+        }
+        [HttpPost]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            var spec = await Context.Specializations.FindAsync(id);
+            if (spec == null)
+            {
+                return NotFound();
+            }
+            Context.Specializations.Remove(spec);
+            await Context.SaveChangesAsync();
+            return RedirectToAction("Index");
+        }
+
     }
 }

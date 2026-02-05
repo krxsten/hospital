@@ -22,5 +22,6 @@ namespace Hospital.WebProject.ViewModels.Doctor
         [Required]
         public Guid UserId { get; set; }
         public bool IsAccepted { get; set; } = false;
+        public string Image { get; set; }
     }
 }

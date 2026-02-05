@@ -8,6 +8,7 @@ namespace Hospital.WebProject.ViewModels.Patient
 {
     public class PatientViewModel
     {
+        public Guid UserID { get; set; }
         public Hospital.Data.Entities.User User { get; set; }
         [Required]
         public Guid DoctorId { get; set; }

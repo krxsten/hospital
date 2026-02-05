@@ -14,7 +14,5 @@ namespace Hospital.WebProject.ViewModels.DoctorNurse
         [Required]
         public Guid NurseID { get; set; }
         public Hospital.Entities.Nurse Nurse { get; set; }
-        [Required]
-        public int CountOfAssignedPatients { get; set; }
     }
 }

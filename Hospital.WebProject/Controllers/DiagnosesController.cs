@@ -19,21 +19,21 @@ namespace Hospital.WebProject.Controllers
         private readonly UserManager<User> UserManager;
         public DiagnosesController(HospitalDbContext context, UserManager<User> userManager)
         {
-            this.Context=context;
-            this.UserManager=userManager;
+            this.Context = context;
+            this.UserManager = userManager;
         }
         [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            
-                var diagnoses = await Context.Diagnoses.Select(x => new DiagnoseViewModel
-                {
-                    ID = Guid.NewGuid(),
-                    Name = x.Name
-                }).ToListAsync();
-                return View(diagnoses);
-            
+
+            var diagnoses = await Context.Diagnoses.Select(x => new DiagnoseViewModel
+            {
+                ID = Guid.NewGuid(),
+                Name = x.Name
+            }).ToListAsync();
+            return View(diagnoses);
+
         }
         [HttpGet]
         public IActionResult Create()

@@ -26,6 +26,7 @@ namespace Hospital.Data
         public DbSet<Room> Rooms { get; set; }
         public DbSet<Shift> Shifts { get; set; }
         public DbSet<Specialization> Specializations { get; set; }
+        public DbSet<Checkup> Checkups { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -96,7 +97,16 @@ namespace Hospital.Data
             modelBuilder.Entity<PatientAndDiagnose>()
                 .HasIndex(x => new { x.PatientId, x.DiagnoseId })
                 .IsUnique();
-        }
 
+            modelBuilder.Entity<Checkup>().HasOne(c => c.Patient)
+                      .WithMany(p => p.Checkups)
+                      .HasForeignKey(c => c.PatientID)
+                      .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Checkup>().HasOne(c => c.Doctor)
+                      .WithMany(d => d.Checkups)
+                      .HasForeignKey(c => c.DoctorID)
+                      .OnDelete(DeleteBehavior.Restrict);
+        }
     }
 }

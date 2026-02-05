@@ -37,5 +37,7 @@ namespace Hospital.Data.Entities
         public string UCN { get; set; }
 
         public List<PatientAndDiagnose> PatientDiagnoses { get; set; } = new List<PatientAndDiagnose>();
+
+        public List<Checkup> Checkups { get; set; } = new List<Checkup>();
     }
 }

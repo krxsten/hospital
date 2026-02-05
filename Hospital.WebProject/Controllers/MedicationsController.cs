@@ -27,7 +27,7 @@ namespace Hospital.WebProject.Controllers
             {
                 Name = x.Name,
                 DiagnoseID = x.DiagnoseID,
-                //Diagnose = x.Diagnose,
+                Diagnose = x.Diagnose,
                 Description = x.Description
             }).ToListAsync();
             return View(medications);
@@ -47,9 +47,10 @@ namespace Hospital.WebProject.Controllers
             }
             var medication = new Medication()
             {
+                ID = Guid.NewGuid(),
                 Name = model.Name,
                 DiagnoseID= model.DiagnoseID,
-                //Diagnose= model.Diagnose,
+                Diagnose= model.Diagnose,
                 Description = model.Description,
                 SideEffects = model.SideEffects
             };
@@ -69,9 +70,10 @@ namespace Hospital.WebProject.Controllers
             }
             var model = new MedicationViewModel
             {
+                ID = medication.ID,
                 Name = medication.Name,
                 DiagnoseID = medication.DiagnoseID,
-                //Diagnose = medication.Diagnose,
+                Diagnose = medication.Diagnose,
                 Description = medication.Description,
                 SideEffects = medication.SideEffects
             };

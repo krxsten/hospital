@@ -13,5 +13,6 @@ namespace Hospital.WebProject.ViewModels.Doctor
         public Guid UserID { get; set; }
         public Hospital.Data.Entities.User User { get; set; }
         public bool IsAccepted { get; set; } = false;
+        public string Image { get; set; }
     }
 }
