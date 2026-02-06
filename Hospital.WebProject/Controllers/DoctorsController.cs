@@ -43,10 +43,18 @@ namespace Hospital.WebProject.Controllers
 
         }
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewBag.Specialization = new SelectList(Context.Specializations, "ID", "Name");
-            ViewBag.Shift = new SelectList(Context.Shifts, "ID", "Name");
+            var doctorRole = await UserManager.GetUsersInRoleAsync("Doctor");
+            var users = doctorRole.Select(u => new
+            {
+                u.Id,
+                FullName = u.FirstName + " " + u.LastName
+            }).ToList();
+
+            ViewBag.Users = new SelectList(users, "Id", "FullName");
+            ViewBag.Specialization = new SelectList(Context.Specializations, "ID", "SpecializationName");
+            ViewBag.Shift = new SelectList(Context.Shifts, "ID", "Type");
             return View(new DoctorCreateViewModel());
         }
         [HttpPost]
@@ -74,13 +82,20 @@ namespace Hospital.WebProject.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(Guid id)
         {
-            ViewBag.Specialization = new SelectList(Context.Specializations, "ID", "Name");
-            ViewBag.Shift = new SelectList(Context.Shifts, "ID", "Name");
             var doctor = await Context.Doctors.FindAsync(id);
             if (doctor == null)
             {
                 return NotFound();
             }
+            ViewBag.Specialization = new SelectList(Context.Specializations, "ID", "SpecializationName");
+            ViewBag.Shift = new SelectList(Context.Shifts, "ID", "Type");
+            var doctorUsers = await UserManager.GetUsersInRoleAsync("Doctor");
+            ViewBag.Users = new SelectList(
+                doctorUsers.Select(u => new { u.Id, FullName = u.FirstName + " " + u.LastName }),
+                "Id",
+                "FullName",
+                doctor.UserId
+            );
             var model = new DoctorCreateViewModel
             {
                 SpecializationID = doctor.SpecializationId,

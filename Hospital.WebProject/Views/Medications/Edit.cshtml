@@ -1,6 +1,6 @@
 ﻿@using Hospital.WebProject.ViewModels.Medication
 @model MedicationViewModel
-<form asp-action="Create" method="post">
+<form asp-action="Edit" method="post">
     <div class="mb-3">
         <label asp-for="Name" class="form-label">Diagnose: </label>
         <input asp-for="Name" class="form-control" />
@@ -18,6 +18,11 @@
 
     <div class="mb-3">
         <label asp-for="DiagnoseID" class="form-label">Medication for diagnose: </label>
-        <select asp-for="DiagnoseID" asp-items="ViewBag.Diagnose" class="form-select"  />
+        <select asp-for="DiagnoseID" asp-items="ViewBag.Diagnose" class="form-select" />
+    </div>
+
+    <div class="mb-3">
+        <button type="submit" class="btn-hospital">Submit</button>
+        <a asp-action="Index" class="btn-hospital-secondary" style="display:inline">Back</a>
     </div>
 </form>

@@ -1,0 +1,26 @@
+﻿@using Hospital.WebProject.ViewModels.Checkup
+@model CheckupViewModel
+@if (User?.Identity?.IsAuthenticated ?? false)
+{
+    <form asp-action="Edit" method="post">
+        <div class="mb-3">
+            <label asp-for="PatientID" class="form-label">Patient: </label>
+            <select asp-for="PatientID" asp-items="ViewBag.Patients" class="form-select" />
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="DoctorID" class="form-label">Doctor: </label>
+            <select asp-for="DoctorID" asp-items="ViewBag.Doctor" class="form-select" />
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Date" class="form-label">Date of checkup: </label>
+            <input asp-for="Date" type="date" class="form-control" min="@DateTime.Now.ToString("yyyy-MM-dd")" />
+        </div>
+        <div class="mb-3">
+            <button type="submit" class="btn btn-primary">Submit</button>
+            <a asp-action="Index" class="btn btn-secondary" style="display:inline">Back</a>
+        </div>
+    </form>
+}
+

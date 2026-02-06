@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Numerics;
 
 namespace Hospital.WebProject.Controllers
 {
@@ -41,10 +42,18 @@ namespace Hospital.WebProject.Controllers
 
         }
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewBag.Specialization = new SelectList(Context.Specializations, "ID", "Name");
-            ViewBag.Shift = new SelectList(Context.Shifts, "ID", "Name");
+            ViewBag.Specialization = new SelectList(Context.Specializations, "ID", "SpecializationName");
+            ViewBag.Shift = new SelectList(Context.Shifts, "ID", "Type");
+            var nurseRole = await UserManager.GetUsersInRoleAsync("Nurse");
+            var users = nurseRole.Select(u => new
+            {
+                u.Id,
+                FullName = u.FirstName + " " + u.LastName
+            }).ToList();
+            ViewBag.Users = new SelectList(users, "Id", "FullName");
+            ViewBag.Users = new SelectList(users, "Id", "FullName");
             return View(new NurseViewModel());
         }
         [HttpPost]
@@ -73,12 +82,19 @@ namespace Hospital.WebProject.Controllers
         public async Task<IActionResult> Edit(Guid id)
         {
             ViewBag.Shift = new SelectList(Context.Shifts, "ID", "Type");
-            ViewBag.Specialization = new SelectList(Context.Specializations, "ID", "Name");
+            ViewBag.Specialization = new SelectList(Context.Specializations, "ID", "SpecializationName");
             var nurse = await Context.Nurses.FindAsync(id);
             if (nurse == null)
             {
                 return NotFound();
             }
+            var nurseUser = await UserManager.GetUsersInRoleAsync("Nurse");
+            ViewBag.Users = new SelectList(
+                nurseUser.Select(u => new { u.Id, FullName = u.FirstName + " " + u.LastName }),
+                "Id",
+                "FullName",
+                nurse.UserId
+            );
             var model = new NurseViewModel
             {
                 SpecializationId = nurse.SpecializationId,

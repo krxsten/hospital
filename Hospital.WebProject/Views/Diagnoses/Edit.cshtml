@@ -2,7 +2,7 @@
 @model DiagnoseViewModel
 @if (User?.Identity?.IsAuthenticated ?? false)
 {
-    <form asp-action="Create" method="post">
+    <form asp-action="Edit" method="post">
         <div class="mb-3">
             <label asp-for="Name" class="form-label">Diagnose: </label>
             <input asp-for="Name" class="form-control" />

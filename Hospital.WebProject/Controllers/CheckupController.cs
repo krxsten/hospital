@@ -29,10 +29,10 @@ namespace Hospital.WebProject.Controllers
             {
                 ID = Guid.NewGuid(),
                 Date = new DateTime(),
-                Doctor= x.Doctor,
-                DoctorID= x.DoctorID,
-                PatientID= x.PatientID,
-                Patient=x.Patient
+                Doctor = x.Doctor,
+                DoctorID = x.DoctorID,
+                PatientID = x.PatientID,
+                Patient = x.Patient
 
             }).ToListAsync();
             return View(checkup);
@@ -41,8 +41,22 @@ namespace Hospital.WebProject.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            ViewBag.Doctor = new SelectList(Context.Doctors, "ID", "Name");
-            ViewBag.Patient = new SelectList(Context.Patients, "ID", "Name");
+            var doctors = Context.Doctors.Include(d => d.User).Select(d => new
+            {
+                d.UserId,
+                FullName = d.User.FirstName + " " + d.User.LastName
+            }).ToList();
+
+            ViewBag.Doctor = new SelectList(doctors, "UserId", "FullName");
+
+            var patients = Context.Patients.Include(p => p.User).Select(p => new
+            {
+                p.UserId,
+                FullName = p.User.FirstName + " " + p.User.LastName
+            }).ToList();
+
+            ViewBag.Patients = new SelectList(patients, "UserId", "FullName");
+
             return View(new CheckupViewModel());
         }
         [HttpPost]
@@ -68,8 +82,23 @@ namespace Hospital.WebProject.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(Guid id)
         {
-            ViewBag.Doctor = new SelectList(Context.Doctors, "ID", "Name");
-            ViewBag.Patient = new SelectList(Context.Patients, "ID", "Name");
+
+            var doctors = Context.Doctors.Include(d => d.User).Select(d => new
+            {
+                d.UserId,
+                FullName = d.User.FirstName + " " + d.User.LastName
+            }).ToList();
+
+            ViewBag.Doctor = new SelectList(doctors, "UserId", "FullName");
+
+            var patients = Context.Patients.Include(p => p.User).Select(p => new
+            {
+                p.UserId,
+                FullName = p.User.FirstName + " " + p.User.LastName
+            }).ToList();
+
+            ViewBag.Patients = new SelectList(patients, "UserId", "FullName");
+
             var checkup = await Context.Checkups.FindAsync(id);
             if (checkup == null)
             {

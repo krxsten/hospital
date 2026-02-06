@@ -8,5 +8,6 @@ namespace Hospital.WebProject.ViewModels.Diagnose
         [StringLength(100, MinimumLength = 5)]
         [Required]
         public string Name { get; set; }
+
     }
 }

@@ -8,5 +8,6 @@ namespace Hospital.WebProject.ViewModels.Specialization
         [Required]
         [StringLength(100, MinimumLength = 5)]
         public string SpecializationName { get; set; }
+        public string Image { get; set; }
     }
 }

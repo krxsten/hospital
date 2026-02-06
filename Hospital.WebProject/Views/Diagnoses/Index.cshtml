@@ -1,23 +1,17 @@
 ﻿@using Hospital.WebProject.ViewModels.Diagnose
 @model List<DiagnoseViewModel>
-
-    <table class="table">
-        <thead>
-            <tr>
-                <th scope="col">ID</th>
-                <th scope="col">Room Number</th>
-                <th scope="col">Occupied</th>
-            </tr>
-        </thead>
-        <tbody class="table-group-divider">
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>@item.ID</td>
-                    <td>@item.Name</td>
-                    <td>@item.Name</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-
+<div class="diagnose-grid">
+@foreach (var item in Model)
+{
+    <div class="diagnose-card">
+        <h5 class="diagnose-title">@item.Name</h5>
+        <p><strong>ID:</strong> @item.ID</p>
+        <div class="diagnose-actions">
+                <a asp-action="Edit" asp-route-id="@item.ID" style="display:inline" class="btn btn-warning mb-3">Edit</a>
+                <form asp-action="Delete" class="mb-3" asp-route-id="@item.ID" method="post" style="display:inline">
+                    <button class="btn btn-danger">Delete</button>
+                </form>
+        </div>
+    </div>
+}
+</div>

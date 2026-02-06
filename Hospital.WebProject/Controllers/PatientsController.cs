@@ -20,7 +20,7 @@ namespace Hospital.WebProject.Controllers
             this.Context = context;
             this.UserManager = userManager;
         }
-        [Authorize(Roles ="Admin, Doctor, Patient, Nurse")]
+        [Authorize(Roles = "Admin, Doctor, Patient, Nurse")]
         [HttpGet]
         public async Task<IActionResult> Index()
         {
@@ -44,10 +44,26 @@ namespace Hospital.WebProject.Controllers
         }
         [Authorize(Roles = "Admin, Doctor, Nurse")]
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewBag.Doctor = new SelectList(Context.Doctors, "ID", "Type");
-            ViewBag.Room = new SelectList(Context.Rooms, "ID", "Name");
+            var doctors = Context.Doctors
+     .Include(d => d.User)
+     .Select(d => new
+     {
+         d.UserId,
+         FullName = d.User.FirstName + " " + d.User.LastName
+     })
+     .ToList();
+
+            ViewBag.Doctor = new SelectList(doctors, "UserId", "FullName");
+            ViewBag.Room = new SelectList(Context.Rooms, "ID", "RoomNumber");
+            var patientRole = await UserManager.GetUsersInRoleAsync("Patient");
+            var users = patientRole.Select(u => new
+            {
+                u.Id,
+                FullName = u.FirstName + " " + u.LastName
+            }).ToList();
+            ViewBag.Users = new SelectList(users, "Id", "FullName");
             return View(new PatientViewModel());
         }
         [HttpPost]
@@ -66,7 +82,7 @@ namespace Hospital.WebProject.Controllers
                 UserId = model.UserID,
                 User = model.User,
                 Room = model.Room,
-                RoomId =  model.RoomId,
+                RoomId = model.RoomId,
                 BirthCity = model.BirthCity,
                 DateOfBirth = model.DateOfBirth,
                 PhoneNumber = model.PhoneNumber,
@@ -79,13 +95,30 @@ namespace Hospital.WebProject.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(Guid id)
         {
-            ViewBag.Doctor = new SelectList(Context.Doctors, "ID", "Type");
-            ViewBag.Room = new SelectList(Context.Rooms, "ID", "Name");
+            var doctors = Context.Doctors
+       .Include(d => d.User)
+       .Select(d => new
+       {
+           d.UserId,
+           FullName = d.User.FirstName + " " + d.User.LastName
+       })
+       .ToList();
+
+            ViewBag.Doctor = new SelectList(doctors, "UserId", "FullName");
+            ViewBag.Room = new SelectList(Context.Rooms, "ID", "RoomNumber");
+            
             var pat = await Context.Patients.FindAsync(id);
             if (pat == null)
             {
                 return NotFound();
             }
+            var patientRole = await UserManager.GetUsersInRoleAsync("Patient");
+            ViewBag.Users = new SelectList(
+                patientRole.Select(u => new { u.Id, FullName = u.FirstName + " " + u.LastName }),
+                "Id",
+                "FullName",
+                pat.UserId
+            );
             var model = new PatientViewModel
             {
                 Doctor = pat.Doctor,

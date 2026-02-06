@@ -1,6 +1,7 @@
 ﻿using Hospital.Entities;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
@@ -17,6 +18,7 @@ namespace Hospital.Data.Entities
         [ForeignKey("Doctor")]
         public Guid DoctorID { get; set; }
         public Doctor Doctor { get; set; }
+        [DataType(DataType.Date)]
         public DateTime Date { get; set; } = new DateTime();
 
     }

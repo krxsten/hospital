@@ -1,17 +1,39 @@
 ﻿@using Hospital.WebProject.ViewModels.Doctor
 @model List<DoctorIndexViewModel>
-
+<div class="doctor-grid">
 @foreach (var doctor in Model)
 {
-    <ul class="nav nav-tabs">
-        <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">@doctor.User.FirstName</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">@doctor.User.LastName</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">@doctor.Specialization.SpecializationName</a>
-        </li>
-    </ul>
+    <div class="doctor-card">
+        <img src="@doctor.Image"
+             alt="Doctor photo"
+             class="doctor-image" />
+        <h5 class="doctor-name">
+            @doctor.User.FirstName @doctor.User.LastName
+        </h5>
+        <p class="doctor-field">
+            <strong>Specialization:</strong> @doctor.Specialization.SpecializationName
+        </p>
+        <p class="doctor-field">
+            <strong>Shift:</strong> @doctor.Shift.Type
+        </p>
+        <p class="doctor-field">
+            <strong>Status:</strong>
+            @if (doctor.IsAccepted)
+            {
+                <span class="badge-accepted">Accepted</span>
+            }
+            else
+            {
+                <span class="badge-pending">Pending</span>
+            }
+        </p>
+
+        <div class="doctor-actions">
+                <a asp-action="Edit" asp-route-id="@doctor.User.Id" style="display:inline" class="btn btn-warning mb-3">Edit</a>
+                <form asp-action="Delete" class="mb-3" asp-route-id="@doctor.User.Id" method="post" style="display:inline">
+                    <button class="btn btn-danger">Delete</button>
+                </form>
+        </div>
+    </div>
 }
+</div>
