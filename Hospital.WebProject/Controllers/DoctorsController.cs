@@ -42,6 +42,7 @@ namespace Hospital.WebProject.Controllers
             return View(docs);
 
         }
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> Create()
         {
@@ -57,6 +58,7 @@ namespace Hospital.WebProject.Controllers
             ViewBag.Shift = new SelectList(Context.Shifts, "ID", "Type");
             return View(new DoctorCreateViewModel());
         }
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Create(DoctorCreateViewModel model)
         {
@@ -79,6 +81,7 @@ namespace Hospital.WebProject.Controllers
             await Context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> Edit(Guid id)
         {
@@ -109,6 +112,7 @@ namespace Hospital.WebProject.Controllers
             };
             return View(doctor);
         }
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Edit(DoctorCreateViewModel model)
         {
@@ -125,6 +129,7 @@ namespace Hospital.WebProject.Controllers
             await Context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Delete(Guid id)
         {

@@ -1,21 +1,27 @@
-﻿using Hospital.Data.Entities;
+﻿using Hospital.Data;
+using Hospital.Data.Entities;
 using Hospital.WebProject.ViewModels.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Hospital.WebProject.Controllers
 {
 
     public class UserController : Controller
     {
+        private readonly HospitalDbContext Context;
         private readonly UserManager<User> userManager;
         private readonly SignInManager<User> signManager;
+        private readonly RoleManager<IdentityRole<Guid>> roleManager;
 
-        public UserController(UserManager<User> userManager, SignInManager<User> signInManager)
+        public UserController(HospitalDbContext context, UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<IdentityRole<Guid>> roleManager)
         {
+            this.Context = context;
             this.userManager = userManager;
             this.signManager = signInManager;
+            this.roleManager = roleManager;
         }
 
         [HttpGet]
@@ -90,8 +96,25 @@ namespace Hospital.WebProject.Controllers
 
                 if (result.Succeeded)
                 {
+                    var doctor = Context.Doctors.FirstOrDefault(d => d.UserId == user.Id);
+                    if (doctor != null && !doctor.IsAccepted)
+                    {
+                        await signManager.SignOutAsync();
+                        ModelState.AddModelError("", "Waiting for admin approval.");
+                        return View(model);
+                    }
+
+                    var nurse = Context.Nurses.FirstOrDefault(n => n.UserId == user.Id);
+                    if (nurse != null && !nurse.IsAccepted)
+                    {
+                        await signManager.SignOutAsync();
+                        ModelState.AddModelError("", "Waiting for admin approval.");
+                        return View(model);
+                    }
                     return RedirectToAction("Index", "Home");
                 }
+                await signManager.SignInAsync(user, isPersistent:true);
+                return RedirectToAction("Index", "Home");
             }
             ModelState.AddModelError("", "Invalid login");
             return View(model);
@@ -103,18 +126,18 @@ namespace Hospital.WebProject.Controllers
 
             return RedirectToAction("Index", "Home");
         }
-        //[AllowAnonymous]
-        //public async Task<IActionResult> SeedRoles()
-        //{
-        //    string[] roles = { "Admin", "Doctor", "Nurse", "Patient" };
-        //    foreach (var role in roles)
-        //    {
-        //        if (!await roleManager.RoleExistsAsync(role))
-        //        {
-        //            await roleManager.CreateAsync(new IdentityRole<Guid>(role));
-        //        }
-        //    }
-        //    return Content("Roles seeded (created if missing).");
-        //}
+        [AllowAnonymous]
+        public async Task<IActionResult> SeedRoles()
+        {
+            string[] roles = { "Admin", "Doctor", "Nurse", "Patient" };
+            foreach (var role in roles)
+            {
+                if (!await roleManager.RoleExistsAsync(role))
+                {
+                    await roleManager.CreateAsync(new IdentityRole<Guid>(role));
+                }
+            }
+            return Content("Roles seeded (created if missing).");
+        }
     }
 }

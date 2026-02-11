@@ -21,6 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Hospital.Core\Hospital.Core.csproj" />
     <ProjectReference Include="..\Hospital.Data\Hospital.Data.csproj" />
   </ItemGroup>
 

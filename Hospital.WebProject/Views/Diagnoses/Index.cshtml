@@ -1,17 +1,24 @@
 ﻿@using Hospital.WebProject.ViewModels.Diagnose
 @model List<DiagnoseViewModel>
-<div class="diagnose-grid">
-@foreach (var item in Model)
-{
-    <div class="diagnose-card">
-        <h5 class="diagnose-title">@item.Name</h5>
-        <p><strong>ID:</strong> @item.ID</p>
-        <div class="diagnose-actions">
-                <a asp-action="Edit" asp-route-id="@item.ID" style="display:inline" class="btn btn-warning mb-3">Edit</a>
-                <form asp-action="Delete" class="mb-3" asp-route-id="@item.ID" method="post" style="display:inline">
-                    <button class="btn btn-danger">Delete</button>
-                </form>
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    @foreach (var item in Model)
+    {
+        <div class="col">
+            <div class="card h-100 diagnose-card">
+                <div class="card-body">
+                    <h5 class="card-title">@item.Name</h5>
+                    <p class="card-text"><strong>ID: </strong>@item.ID</p>
+                </div>
+                @if (User?.Identity?.IsAuthenticated ?? false)
+                {
+                    <div class="card-footer">
+                        <a asp-action="Edit" asp-route-id="@item.ID" class="btn btn-warning me-2">Edit</a>
+                        <form asp-action="Delete" asp-route-id="@item.ID" method="post" class="d-inline">
+                            <button class="btn btn-danger">Delete</button>
+                        </form>
+                    </div>
+                }
+            </div>
         </div>
-    </div>
-}
+    }
 </div>

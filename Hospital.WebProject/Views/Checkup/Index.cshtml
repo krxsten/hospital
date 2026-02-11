@@ -1,29 +1,35 @@
 ﻿@using Hospital.WebProject.ViewModels.Checkup
 @model List<CheckupViewModel>
-<table class="table">
-    <thead>
-        <tr>
-            <th scope="col">ID</th>
-            <th scope="col">Patient name</th>
-            <th scope="col">Patient's doctor</th>
-            <th scope="col">Date of checkup</th>
-            <th scope="col"></th>
-        </tr>
-    </thead>
-    <tbody class="table-group-divider">
-        @foreach (var item in Model)
-        {
+@if (User?.Identity?.IsAuthenticated ?? false)
+{
+    <table class="table">
+        <thead>
             <tr>
-                <th scope="row">@item.ID</th>
-                <td>@item.Patient.User.FirstName + " " + @item.Patient.User.LastName</td>
-                <td>@item.Patient.Doctor.User.FirstName + " " + @item.Patient.Doctor.User.LastName</td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.ID" style="display:inline" class="btn btn-warning mb-3">Edit</a>
-                    <form asp-action="Delete" class="mb-3" asp-route-id="@item.ID" method="post" style="display:inline">
-                        <button class="btn btn-danger">Delete</button>
-                    </form>
-                </td>
+                <th scope="col">ID</th>
+                <th scope="col">Patient name</th>
+                <th scope="col">Patient's doctor</th>
+                <th scope="col">Date of checkup</th>
+                <th scope="col"></th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody class="table-group-divider">
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <th scope="row">@item.ID</th>
+                    <td>@item.Patient.User.FirstName + " " + @item.Patient.User.LastName</td>
+                    <td>@item.Patient.Doctor.User.FirstName + " " + @item.Patient.Doctor.User.LastName</td>
+                    <td>
+                        @if (User?.Identity?.IsAuthenticated ?? false)
+                        {
+                            <a asp-action="Edit" asp-route-id="@item.ID" style="display:inline" class="btn btn-warning mb-3">Edit</a>
+                            <form asp-action="Delete" class="mb-3" asp-route-id="@item.ID" method="post" style="display:inline">
+                                <button class="btn btn-danger">Delete</button>
+                            </form>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

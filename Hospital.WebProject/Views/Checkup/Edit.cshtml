@@ -14,9 +14,10 @@
         </div>
 
         <div class="mb-3">
-            <label asp-for="Date" class="form-label">Date of checkup: </label>
-            <input asp-for="Date" type="date" class="form-control" min="@DateTime.Now.ToString("yyyy-MM-dd")" />
+            <label asp-for="Date" class="form-label">Checkup Date & Time</label>
+            <input asp-for="Date" type="datetime-local" class="form-control" id="checkupDate" />
         </div>
+
         <div class="mb-3">
             <button type="submit" class="btn btn-primary">Submit</button>
             <a asp-action="Index" class="btn btn-secondary" style="display:inline">Back</a>

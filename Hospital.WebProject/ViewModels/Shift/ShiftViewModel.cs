@@ -8,8 +8,8 @@ namespace Hospital.WebProject.ViewModels.Shift
         [Required]
         public string Type { get; set; }
         [Required]
-        public DateTime StartTime { get; set; } = new DateTime();
+        public DateTime StartTime { get; set; }
         [Required]
-        public DateTime EndTime { get; set; } = new DateTime();
+        public DateTime EndTime { get; set; }
     }
 }

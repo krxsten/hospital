@@ -1,14 +1,55 @@
 ﻿@using Hospital.WebProject.ViewModels.Nurse
 @model List<NurseViewModel>
+<div class="nurse-grid">
+    @foreach (var nurse in Model)
+    {
+        <div class="nurse-card">
 
-<ul class="nav nav-tabs">
-    <li class="nav-item">
-        <a class="nav-link active" aria-current="page" href="#">Active</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link active" aria-current="page" href="#">Active</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link active" aria-current="page" href="#">Active</a>
-    </li>
-</ul>
+            <img src="@nurse.Image"
+                 alt="Nurse photo"
+                 class="nurse-image" />
+
+            <h5 class="nurse-name">
+                @nurse.User.FirstName @nurse.User.LastName
+            </h5>
+
+            <p class="nurse-field">
+                <strong>Specialization:</strong> @nurse.Specialization.SpecializationName
+            </p>
+
+            <p class="nurse-field">
+                <strong>Shift:</strong> @nurse.Shift.Type
+            </p>
+
+            <p class="nurse-field">
+                <strong>Status:</strong>
+                @if (nurse.IsAccepted)
+                {
+                    <span class="badge-accepted">Accepted</span>
+                }
+                else
+                {
+                    <span class="badge-pending">Pending</span>
+                }
+            </p>
+
+            @if (User.IsInRole("Admin"))
+            {
+                <div class="nurse-actions">
+                    <a asp-action="Edit"
+                       asp-route-id="@nurse.UserID"
+                       class="btn btn-warning">Edit</a>
+
+                    <form asp-action="Delete"
+                          asp-route-id="@nurse.UserID"
+                          method="post"
+                          style="display:inline">
+
+                        <button class="btn btn-danger">Delete</button>
+                    </form>
+                </div>
+            }
+
+        </div>
+    }
+</div>

@@ -22,7 +22,7 @@ namespace Hospital.WebProject.Controllers
             this.Context = context;
             this.UserManager = userManager;
         }
-
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> Index()
         {
@@ -34,11 +34,13 @@ namespace Hospital.WebProject.Controllers
             }).ToListAsync();
             return View(shifts);
         }
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult Create()
         {
             return View(new ShiftViewModel());
         }
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Create(ShiftViewModel model)
         {
@@ -57,6 +59,7 @@ namespace Hospital.WebProject.Controllers
             await Context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> Edit(Guid id)
         {
@@ -74,6 +77,7 @@ namespace Hospital.WebProject.Controllers
             };
             return View(shift);
         }
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Edit(ShiftViewModel model)
         {
@@ -90,6 +94,7 @@ namespace Hospital.WebProject.Controllers
             await Context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Delete(Guid id)
         {

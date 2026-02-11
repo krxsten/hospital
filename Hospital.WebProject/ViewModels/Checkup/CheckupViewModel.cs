@@ -11,6 +11,6 @@ namespace Hospital.WebProject.ViewModels.Checkup
         public Guid DoctorID { get; set; }
         public Hospital.Entities.Doctor Doctor { get; set; }
         [DataType(DataType.Date)]
-        public DateTime Date { get; set; } = new DateTime();
+        public DateTime Date { get; set; }
     }
 }

@@ -6,7 +6,7 @@
         <div class="accordion-item">
             <h2 class="accordion-header">
                 <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
-                   @item.Name
+                    @item.Name
                 </button>
             </h2>
             <div id="flush-collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
@@ -14,4 +14,11 @@
             </div>
         </div>
     </div>
+    @if (User?.Identity?.IsAuthenticated ?? false)
+    {
+        <a asp-action="Edit" asp-route-id="@item.ID" style="display:inline" class="btn btn-warning mb-3">Edit</a>
+        <form asp-action="Delete" class="mb-3" asp-route-id="@item.ID" method="post" style="display:inline">
+            <button class="btn btn-danger">Delete</button>
+        </form>
+    }
 }

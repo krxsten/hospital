@@ -15,9 +15,9 @@ namespace Hospital.Data.Entities
         [Required]
         public string Type { get; set; }
         [Required]
-        public DateTime StartTime { get; set; } = new DateTime();
+        public DateTime StartTime { get; set; }
         [Required]
-        public DateTime EndTime { get; set; } = new DateTime();
+        public DateTime EndTime { get; set; }
         public List<Doctor> ListOfDoctors { get; set; } = new List<Doctor>();
         public List<Nurse> ListOfNurses { get; set; } = new List<Nurse>();
     }

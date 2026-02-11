@@ -1,0 +1,33 @@
+﻿@using Hospital.WebProject.ViewModels.Nurse
+@model NurseViewModel
+@if (User?.Identity?.IsAuthenticated ?? false)
+{
+    <form asp-action="Create" method="post">
+        <div class="mb-3">
+            <label asp-for="UserID" class="form-label">Nurses: </label>
+            <select asp-for="UserID" asp-items="ViewBag.Nurses" class="form-select" />
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="SpecializationId" class="form-label">Specialization</label>
+            <select asp-for="SpecializationId" asp-items="ViewBag.Specializations" class="form-select">
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="ShiftId" class="form-label">Shift</label>
+            <select asp-for="ShiftId" asp-items="ViewBag.Shifts" class="form-select">
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Image" class="form-label">Image URL</label>
+            <input asp-for="Image" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <button type="submit" class="btn-hospital">Submit</button>
+            <a asp-action="Index" class="btn-hospital-secondary" style="display:inline">Back</a>
+        </div>
+    </form>
+}

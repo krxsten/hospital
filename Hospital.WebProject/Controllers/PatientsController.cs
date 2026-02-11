@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Hospital.WebProject.Controllers
 {
+    [Authorize]
     public class PatientsController : Controller
     {
         private HospitalDbContext Context { get; set; }
@@ -46,14 +47,11 @@ namespace Hospital.WebProject.Controllers
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            var doctors = Context.Doctors
-     .Include(d => d.User)
-     .Select(d => new
-     {
-         d.UserId,
-         FullName = d.User.FirstName + " " + d.User.LastName
-     })
-     .ToList();
+            var doctors = Context.Doctors.Include(d => d.User).Select(d => new
+            {
+                d.UserId,
+                FullName = d.User.FirstName + " " + d.User.LastName
+            }).ToList();
 
             ViewBag.Doctor = new SelectList(doctors, "UserId", "FullName");
             ViewBag.Room = new SelectList(Context.Rooms, "ID", "RoomNumber");
@@ -66,6 +64,7 @@ namespace Hospital.WebProject.Controllers
             ViewBag.Users = new SelectList(users, "Id", "FullName");
             return View(new PatientViewModel());
         }
+        [Authorize(Roles = "Admin, Doctor, Nurse")]
         [HttpPost]
         public async Task<IActionResult> Create(PatientViewModel model)
         {
@@ -92,21 +91,17 @@ namespace Hospital.WebProject.Controllers
             await Context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
+        [Authorize(Roles = "Admin, Doctor, Nurse")]
         [HttpGet]
         public async Task<IActionResult> Edit(Guid id)
         {
-            var doctors = Context.Doctors
-       .Include(d => d.User)
-       .Select(d => new
-       {
-           d.UserId,
-           FullName = d.User.FirstName + " " + d.User.LastName
-       })
-       .ToList();
-
+            var doctors = Context.Doctors.Include(d => d.User).Select(d => new
+            {
+                d.UserId,
+                FullName = d.User.FirstName + " " + d.User.LastName
+            }).ToList();
             ViewBag.Doctor = new SelectList(doctors, "UserId", "FullName");
             ViewBag.Room = new SelectList(Context.Rooms, "ID", "RoomNumber");
-            
             var pat = await Context.Patients.FindAsync(id);
             if (pat == null)
             {
@@ -136,6 +131,7 @@ namespace Hospital.WebProject.Controllers
             };
             return View(pat);
         }
+        [Authorize(Roles = "Admin, Doctor, Nurse")]
         [HttpPost]
         public async Task<IActionResult> Edit(PatientViewModel model)
         {
@@ -152,6 +148,7 @@ namespace Hospital.WebProject.Controllers
             await Context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
+        [Authorize(Roles = "Admin, Doctor, Nurse")]
         [HttpPost]
         public async Task<IActionResult> Delete(Guid id)
         {
@@ -164,7 +161,5 @@ namespace Hospital.WebProject.Controllers
             await Context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
-
-
     }
 }

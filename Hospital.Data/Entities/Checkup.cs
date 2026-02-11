@@ -19,7 +19,7 @@ namespace Hospital.Data.Entities
         public Guid DoctorID { get; set; }
         public Doctor Doctor { get; set; }
         [DataType(DataType.Date)]
-        public DateTime Date { get; set; } = new DateTime();
+        public DateTime Date { get; set; }
 
     }
 }

@@ -28,7 +28,7 @@ namespace Hospital.WebProject.Controllers
             var checkup = await Context.Checkups.Select(x => new CheckupViewModel
             {
                 ID = Guid.NewGuid(),
-                Date = new DateTime(),
+                Date = x.Date,
                 Doctor = x.Doctor,
                 DoctorID = x.DoctorID,
                 PatientID = x.PatientID,
@@ -38,6 +38,7 @@ namespace Hospital.WebProject.Controllers
             return View(checkup);
 
         }
+        [Authorize(Roles = "Admin, Doctor, Nurse, Patient")]
         [HttpGet]
         public IActionResult Create()
         {
@@ -59,6 +60,7 @@ namespace Hospital.WebProject.Controllers
 
             return View(new CheckupViewModel());
         }
+        [Authorize(Roles = "Admin, Doctor, Nurse, Patient")]
         [HttpPost]
         public async Task<IActionResult> Create(CheckupViewModel model)
         {
@@ -69,7 +71,7 @@ namespace Hospital.WebProject.Controllers
             var checkup = new Checkup()
             {
                 ID = Guid.NewGuid(),
-                Date = new DateTime(),
+                Date = model.Date,
                 Doctor = model.Doctor,
                 DoctorID = model.DoctorID,
                 PatientID = model.PatientID,
@@ -79,6 +81,7 @@ namespace Hospital.WebProject.Controllers
             await Context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
+        [Authorize(Roles = "Admin, Doctor, Nurse, Patient")]
         [HttpGet]
         public async Task<IActionResult> Edit(Guid id)
         {
@@ -107,7 +110,7 @@ namespace Hospital.WebProject.Controllers
             var model = new CheckupViewModel
             {
                 ID = Guid.NewGuid(),
-                Date = new DateTime(),
+                Date = checkup.Date,
                 Doctor = checkup.Doctor,
                 DoctorID = checkup.DoctorID,
                 PatientID = checkup.PatientID,
@@ -115,6 +118,7 @@ namespace Hospital.WebProject.Controllers
             };
             return View(checkup);
         }
+        [Authorize(Roles = "Admin, Doctor, Nurse, Patient")]
         [HttpPost]
         public async Task<IActionResult> Edit(CheckupViewModel model)
         {
@@ -131,7 +135,7 @@ namespace Hospital.WebProject.Controllers
             await Context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
-
+        [Authorize(Roles = "Admin, Doctor, Nurse")]
         [HttpPost]
         public async Task<IActionResult> Delete(Guid id)
         {
@@ -144,5 +148,24 @@ namespace Hospital.WebProject.Controllers
             await Context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
+        [HttpGet]
+        public async Task<IActionResult> GetBusyTimes(Guid doctorId, DateTime date)
+        {
+            var busy = await Context.Checkups.Where(c => c.DoctorID == doctorId && c.Date.Date == date.Date)
+            .Select(c => c.Date).ToListAsync();
+            return Json(busy);
+        }
+        [HttpGet]
+        public async Task<IActionResult> GetDoctorShift(Guid doctorId)
+        {
+            var shift = await Context.Doctors.Include(d => d.Shift).Where(d => d.UserId == doctorId)
+                .Select(d => new
+                {
+                    d.Shift.StartTime,
+                    d.Shift.EndTime
+                }).FirstOrDefaultAsync();
+            return Json(shift);
+        }
+
     }
 }

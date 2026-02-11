@@ -21,7 +21,7 @@ namespace Hospital.WebProject.Controllers
             this.Context = context;
             this.UserManager = userManager;
         }
-
+        [Authorize(Roles ="Admin, Patient, Doctor, Nurse")]
         [HttpGet]
         public async Task<IActionResult> Index()
         {
@@ -33,13 +33,13 @@ namespace Hospital.WebProject.Controllers
             }).ToListAsync();
             return View(rooms);
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult Create()
         {
             return View(new RoomViewModel());
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Create(RoomViewModel model)
         {
@@ -57,6 +57,7 @@ namespace Hospital.WebProject.Controllers
             await Context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
+        [Authorize(Roles = "Admin, Patient, Doctor, Nurse")]
         [HttpGet]
         public async Task<IActionResult> Details(Guid id)
         {
@@ -72,6 +73,7 @@ namespace Hospital.WebProject.Controllers
             }
             return View(room);
         }
+        [Authorize(Roles = "Admin, Doctor, Nurse")]
         [HttpGet]
         public async Task<IActionResult> Edit(Guid id)
         {
@@ -88,6 +90,7 @@ namespace Hospital.WebProject.Controllers
             };
             return View(room);
         }
+        [Authorize(Roles = "Admin, Doctor, Nurse")]
         [HttpPost]
         public async Task<IActionResult> Edit(RoomViewModel model)
         {
@@ -104,6 +107,7 @@ namespace Hospital.WebProject.Controllers
             await Context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Delete(Guid id)
         {

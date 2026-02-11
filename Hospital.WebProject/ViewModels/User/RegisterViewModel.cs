@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-
 namespace Hospital.WebProject.ViewModels.User
 {
     public class RegisterViewModel

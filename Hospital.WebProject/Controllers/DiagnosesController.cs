@@ -26,7 +26,6 @@ namespace Hospital.WebProject.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-
             var diagnoses = await Context.Diagnoses.Select(x => new DiagnoseViewModel
             {
                 ID = Guid.NewGuid(),
@@ -35,11 +34,13 @@ namespace Hospital.WebProject.Controllers
             return View(diagnoses);
 
         }
+        [Authorize(Roles = "Admin, Doctor")]
         [HttpGet]
         public IActionResult Create()
         {
             return View(new DiagnoseViewModel());
         }
+        [Authorize(Roles = "Admin, Doctor")]
         [HttpPost]
         public async Task<IActionResult> Create(DiagnoseViewModel model)
         {
@@ -56,6 +57,7 @@ namespace Hospital.WebProject.Controllers
             await Context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
+        [Authorize(Roles = "Admin, Doctor")]
         [HttpGet]
         public async Task<IActionResult> Edit(Guid id)
         {
@@ -71,6 +73,7 @@ namespace Hospital.WebProject.Controllers
             };
             return View(diagnose);
         }
+        [Authorize(Roles = "Admin, Doctor")]
         [HttpPost]
         public async Task<IActionResult> Edit(DiagnoseViewModel model)
         {
@@ -87,6 +90,7 @@ namespace Hospital.WebProject.Controllers
             await Context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
+        [Authorize(Roles = "Admin, Doctor")]
         [HttpPost]
         public async Task<IActionResult> Delete(Guid id)
         {
@@ -99,6 +103,5 @@ namespace Hospital.WebProject.Controllers
             await Context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
-
     }
 }

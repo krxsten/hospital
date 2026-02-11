@@ -1,0 +1,25 @@
+﻿<h2>Pending Doctors</h2>
+
+@foreach (var d in ViewBag.Doctors)
+{
+    <div>
+        @d.User.FirstName @d.User.LastName
+        <form asp-action="AcceptDoctor" method="post">
+            <input type="hidden" name="id" value="@d.UserId" />
+            <button class="btn btn-success">Accept</button>
+        </form>
+    </div>
+}
+
+<h2>Pending Nurses</h2>
+
+@foreach (var n in ViewBag.Nurses)
+{
+    <div>
+        @n.User.FirstName @n.User.LastName
+        <form asp-action="AcceptNurse" method="post">
+            <input type="hidden" name="id" value="@n.UserId" />
+            <button class="btn btn-success">Accept</button>
+        </form>
+    </div>
+}

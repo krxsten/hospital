@@ -30,11 +30,13 @@ namespace Hospital.WebProject.Controllers
             }).ToListAsync();
             return View(specializations);
         }
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult Create()
         {
             return View(new SpecializationViewModel());
         }
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Create(SpecializationViewModel model)
         {
@@ -50,7 +52,7 @@ namespace Hospital.WebProject.Controllers
             await Context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
-
+        [Authorize(Roles = "Admin, Doctor, Nurse")]
         [HttpGet]
         public async Task<IActionResult> Edit(Guid id)
         {
@@ -66,6 +68,7 @@ namespace Hospital.WebProject.Controllers
             };
             return View(spec);
         }
+        [Authorize(Roles = "Admin, Doctor, Nurse")]
         [HttpPost]
         public async Task<IActionResult> Edit(SpecializationViewModel model)
         {
@@ -82,6 +85,7 @@ namespace Hospital.WebProject.Controllers
             await Context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Delete(Guid id)
         {

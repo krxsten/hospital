@@ -10,16 +10,21 @@
 
         <div class="mb-3">
             <label asp-for="DoctorID" class="form-label">Doctor: </label>
-            <select asp-for="DoctorID" asp-items="ViewBag.Doctor" class="form-select" />
+            <select asp-for="DoctorID" id="DoctorID" asp-items="ViewBag.Doctor" class="form-select" />
         </div>
 
         <div class="mb-3">
-            <label asp-for="Date" class="form-label">Date of checkup: </label>
-            <input asp-for="Date" type="date" class="form-control" min="@DateTime.Now.ToString("yyyy-MM-dd")" />
+            <label asp-for="Date" class="form-label">Checkup Date & Time</label>
+            <input asp-for="Date" type="datetime-local" class="form-control" id="checkupDate" />
         </div>
+
         <div class="mb-3">
             <button type="submit" class="btn btn-primary">Submit</button>
             <a asp-action="Index" class="btn btn-secondary">Back</a>
         </div>
+
     </form>
+}
+@section Scripts {
+    <script src="~/js/checkup.js"></script>
 }

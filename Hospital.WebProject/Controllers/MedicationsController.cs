@@ -3,6 +3,7 @@ using Hospital.Data.Entities;
 using Hospital.Entities;
 using Hospital.WebProject.ViewModels.Doctor;
 using Hospital.WebProject.ViewModels.Medication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -10,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Hospital.WebProject.Controllers
 {
+    [Authorize]
     public class MedicationsController : Controller
     {
         private readonly HospitalDbContext Context;
@@ -19,7 +21,7 @@ namespace Hospital.WebProject.Controllers
             this.Context = context;
             this.UserManager = userManager;
         }
-
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> Index()
         {
@@ -32,12 +34,14 @@ namespace Hospital.WebProject.Controllers
             }).ToListAsync();
             return View(medications);
         }
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult Create()
         {
             ViewBag.Diagnose = new SelectList(Context.Diagnoses, "ID", "Name");
             return View(new MedicationViewModel ());
         }
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Create(MedicationViewModel model)
         {
@@ -58,7 +62,7 @@ namespace Hospital.WebProject.Controllers
             await Context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
-
+        [Authorize(Roles = "Admin, Doctor, Nurse")]
         [HttpGet]
         public async Task<IActionResult> Edit(Guid id)
         {
@@ -79,6 +83,7 @@ namespace Hospital.WebProject.Controllers
             };
             return View(medication);
         }
+        [Authorize(Roles = "Admin, Doctor, Nurse")]
         [HttpPost]
         public async Task<IActionResult> Edit(MedicationViewModel model)
         {
@@ -95,7 +100,7 @@ namespace Hospital.WebProject.Controllers
             await Context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
-        
+        [Authorize(Roles = "Admin, Doctor, Nurse")]
         [HttpPost]
         public async Task<IActionResult> Delete(Guid id)
         {

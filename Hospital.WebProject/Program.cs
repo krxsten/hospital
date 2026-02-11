@@ -1,3 +1,5 @@
+using Hospital.Core.Contracts;
+using Hospital.Core.Services;
 using Hospital.Data;
 using Hospital.Data.Entities;
 using Hospital.WebProject.Controllers;
@@ -23,12 +25,13 @@ builder.Services.AddIdentity<User, IdentityRole<Guid>>(options =>
     options.Password.RequireUppercase = true;
 
 })
+.AddRoles<IdentityRole<Guid>>()
 .AddEntityFrameworkStores<HospitalDbContext>()
 .AddDefaultTokenProviders();
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
-
+builder.Services.AddScoped<IDiagnoseService, DiagnoseService>();
 var app = builder.Build();
 
 using (var scope = app.Services.CreateScope())
