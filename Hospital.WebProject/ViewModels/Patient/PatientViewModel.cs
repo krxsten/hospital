@@ -1,4 +1,5 @@
-﻿using Hospital.WebProject.ViewModels.Doctor;
+﻿using Hospital.Entities;
+using Hospital.WebProject.ViewModels.Doctor;
 using Hospital.WebProject.ViewModels.Room;
 using Hospital.WebProject.ViewModels.User;
 using System.ComponentModel.DataAnnotations;
@@ -32,5 +33,8 @@ namespace Hospital.WebProject.ViewModels.Patient
 
         [StringLength(10)]
         public string UCN { get; set; }
+        public List<PatientAndDiagnose> PatientDiagnoses { get; set; } = new List<PatientAndDiagnose>();
+
+        public List<Hospital.Data.Entities.Checkup> Checkups { get; set; } = new List<Hospital.Data.Entities.Checkup>();
     }
 }

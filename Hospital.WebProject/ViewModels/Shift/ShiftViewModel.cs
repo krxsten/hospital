@@ -11,5 +11,7 @@ namespace Hospital.WebProject.ViewModels.Shift
         public DateTime StartTime { get; set; }
         [Required]
         public DateTime EndTime { get; set; }
+        public List<Hospital.Entities.Doctor> ListOfDoctors { get; set; } = new List<Hospital.Entities.Doctor>();
+        public List<Hospital.Entities.Nurse> ListOfNurses { get; set; } = new List<Hospital.Entities.Nurse>();
     }
 }

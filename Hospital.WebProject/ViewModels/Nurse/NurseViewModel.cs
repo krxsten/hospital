@@ -1,4 +1,5 @@
-﻿using Hospital.WebProject.ViewModels.Shift;
+﻿using Hospital.Entities;
+using Hospital.WebProject.ViewModels.Shift;
 using Hospital.WebProject.ViewModels.Specialization;
 using Hospital.WebProject.ViewModels.User;
 using System.ComponentModel.DataAnnotations;
@@ -19,5 +20,6 @@ namespace Hospital.WebProject.ViewModels.Nurse
         public Hospital.Data.Entities.Shift Shift { get; set; }
         public bool IsAccepted { get; set; } = false;
         public string Image { get; set; }
+        public List<DoctorAndNurse> DoctorNurses { get; set; } = new List<DoctorAndNurse>();
     }
 }

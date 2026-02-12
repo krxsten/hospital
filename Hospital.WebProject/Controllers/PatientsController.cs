@@ -38,7 +38,9 @@ namespace Hospital.WebProject.Controllers
                 BirthCity = x.BirthCity,
                 DateOfBirth = x.DateOfBirth,
                 PhoneNumber = x.PhoneNumber,
-                UCN = x.UCN
+                UCN = x.UCN,
+                Checkups=x.Checkups,
+                PatientDiagnoses=x.PatientDiagnoses
             }).ToListAsync();
             return View(pat);
 
@@ -85,7 +87,9 @@ namespace Hospital.WebProject.Controllers
                 BirthCity = model.BirthCity,
                 DateOfBirth = model.DateOfBirth,
                 PhoneNumber = model.PhoneNumber,
-                UCN = model.UCN
+                UCN = model.UCN,
+                Checkups=model.Checkups,
+                PatientDiagnoses = model.PatientDiagnoses
             };
             await Context.Patients.AddAsync(pat);
             await Context.SaveChangesAsync();
@@ -127,7 +131,9 @@ namespace Hospital.WebProject.Controllers
                 BirthCity = pat.BirthCity,
                 DateOfBirth = pat.DateOfBirth,
                 PhoneNumber = pat.PhoneNumber,
-                UCN = pat.UCN
+                UCN = pat.UCN,
+                Checkups= pat.Checkups,
+                PatientDiagnoses = pat.PatientDiagnoses
             };
             return View(pat);
         }

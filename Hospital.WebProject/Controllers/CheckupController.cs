@@ -27,7 +27,7 @@ namespace Hospital.WebProject.Controllers
         {
             var checkup = await Context.Checkups.Select(x => new CheckupViewModel
             {
-                ID = Guid.NewGuid(),
+                ID = x.ID,
                 Date = x.Date,
                 Doctor = x.Doctor,
                 DoctorID = x.DoctorID,
@@ -109,7 +109,7 @@ namespace Hospital.WebProject.Controllers
             }
             var model = new CheckupViewModel
             {
-                ID = Guid.NewGuid(),
+                ID = checkup.ID,
                 Date = checkup.Date,
                 Doctor = checkup.Doctor,
                 DoctorID = checkup.DoctorID,

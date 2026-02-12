@@ -36,7 +36,8 @@ namespace Hospital.WebProject.Controllers
                 UserID = x.UserId,
                 User = x.User,
                 IsAccepted = x.IsAccepted,
-                Image = x.Image
+                Image = x.Image,
+                DoctorNurses = x.DoctorNurses
             }).ToListAsync();
             return View(docs);
 
@@ -74,7 +75,8 @@ namespace Hospital.WebProject.Controllers
                 UserId = model.UserID,
                 User = model.User,
                 IsAccepted = model.IsAccepted,
-                Image = model.Image
+                Image = model.Image,
+                DoctorNurses = model.DoctorNurses
             };
             await Context.Nurses.AddAsync(nurse);
             await Context.SaveChangesAsync();
@@ -107,7 +109,8 @@ namespace Hospital.WebProject.Controllers
                 UserID = nurse.UserId,
                 User = nurse.User,
                 IsAccepted = nurse.IsAccepted,
-                Image = nurse.Image
+                Image = nurse.Image,
+                DoctorNurses= nurse.DoctorNurses
             };
             return View(nurse);
         }

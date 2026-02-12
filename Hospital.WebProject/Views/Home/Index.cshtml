@@ -1,25 +1,34 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
-    string imageName = "img2.jpg";
 }
 <style>
     body {
         min-height: 100vh;
-        background: linear-gradient( 135deg, #e6f2ff, #f5fbff, #ffffff );
-        font-family: "Segoe UI", Tahoma, sans-serif;
+        margin: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: radial-gradient(circle at top, #1e88e5, #0d47a1);
     }
 
+    .container {
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-radius: 16px;
+        padding: 30px;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+        color: white;
+    }
 </style>
 
 <div class="text-center">
-    <h1 class="display-3">Welcome to hospital "Saint Anna"</h1>
+    <h1 class="display-3 text-dark" style="font-family: 'Times New Roman'">Welcome to hospital "Saint Anna"</h1>
     <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
             <div class="carousel-item active">
-                <img src="img/img1.png" height="700" width="700" class="d-block w-100" alt="hospital">
+                <img src="img/img2.jpg" height="700" width="700" class="d-block w-100" alt="hospital">
             </div>
             <div class="carousel-item">
-                <img src="img/@imageName" height="700" width="700" class="d-block w-100" alt="doctors">
+                <img src="img/img2.jpg" height="700" width="700" class="d-block w-100" alt="doctors">
             </div>
             <div class="carousel-item">
                 <img src="img/img3.jpg" height="700" width="700" class="d-block w-100" alt="medicine">

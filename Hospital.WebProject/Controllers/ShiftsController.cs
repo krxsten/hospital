@@ -30,7 +30,10 @@ namespace Hospital.WebProject.Controllers
             {
                 Type = x.Type,
                 StartTime = x.StartTime,
-                EndTime = x.EndTime
+                EndTime = x.EndTime,
+                ID = x.ID,  
+                ListOfDoctors = x.ListOfDoctors,
+                ListOfNurses = x.ListOfNurses
             }).ToListAsync();
             return View(shifts);
         }

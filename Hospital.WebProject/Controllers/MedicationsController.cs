@@ -30,7 +30,10 @@ namespace Hospital.WebProject.Controllers
                 Name = x.Name,
                 DiagnoseID = x.DiagnoseID,
                 Diagnose = x.Diagnose,
-                Description = x.Description
+                Description = x.Description,
+                SideEffects = x.SideEffects,
+                ID = x.ID
+                
             }).ToListAsync();
             return View(medications);
         }

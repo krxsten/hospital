@@ -1,9 +1,20 @@
 ﻿<style>
     body {
         min-height: 100vh;
-        background: linear-gradient(to bottom, #2b5876, #4e9fd1);
+        margin: 0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: radial-gradient(circle at top, #1e88e5, #0d47a1);
     }
 
+    .container {
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-radius: 16px;
+        padding: 30px;
+        box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+        color: white;
+    }
 </style>
 <!DOCTYPE html>
 <html lang="en">
@@ -58,6 +69,10 @@
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Patients" asp-action="Index">Patients</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Checkup" asp-action="Index">Check up</a>
+                            </li>
+
                         }
                         @if (User.IsInRole("Patient, Doctor"))
                         {

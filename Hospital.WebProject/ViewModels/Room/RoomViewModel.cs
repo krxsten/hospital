@@ -11,5 +11,6 @@ namespace Hospital.WebProject.ViewModels.Room
         public int RoomNumber { get; set; }
         [Required]
         public bool IsTaken { get; set; }
+        public List<Hospital.Data.Entities.Patient> ListOfPatients { get; set; } = new List<Hospital.Data.Entities.Patient>();
     }
 }

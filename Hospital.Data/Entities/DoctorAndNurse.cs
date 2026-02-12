@@ -24,7 +24,5 @@ namespace Hospital.Entities
         [ForeignKey("Nurse")]
         public Guid NurseID { get; set; }
         public Nurse Nurse { get; set; }
-        [Required]
-        public int CountOfAssignedPatients { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Hospital.Entities;
+using System.ComponentModel.DataAnnotations;
 
 namespace Hospital.WebProject.ViewModels.Diagnose
 {
@@ -8,6 +9,7 @@ namespace Hospital.WebProject.ViewModels.Diagnose
         [StringLength(100, MinimumLength = 5)]
         [Required]
         public string Name { get; set; }
-
+        public string Image { get; set; }
+        public List<PatientAndDiagnose> ListOfPatientsAndDiagnoses { get; set; } = new List<PatientAndDiagnose>();
     }
 }

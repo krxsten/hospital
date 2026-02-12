@@ -28,8 +28,10 @@ namespace Hospital.WebProject.Controllers
         {
             var diagnoses = await Context.Diagnoses.Select(x => new DiagnoseViewModel
             {
-                ID = Guid.NewGuid(),
-                Name = x.Name
+                ID = x.ID,
+                Name = x.Name,
+                ListOfPatientsAndDiagnoses=x.ListOfPatientsAndDiagnoses,
+                Image=x.Image
             }).ToListAsync();
             return View(diagnoses);
 
@@ -51,7 +53,9 @@ namespace Hospital.WebProject.Controllers
             var diagnose = new Diagnose()
             {
                 ID = Guid.NewGuid(),
-                Name = model.Name
+                Name = model.Name,
+                ListOfPatientsAndDiagnoses = model.ListOfPatientsAndDiagnoses,
+                Image = model.Image
             };
             await Context.Diagnoses.AddAsync(diagnose);
             await Context.SaveChangesAsync();
@@ -69,7 +73,9 @@ namespace Hospital.WebProject.Controllers
             var model = new DiagnoseViewModel
             {
                 ID = diagnose.ID,
-                Name = diagnose.Name
+                Name = diagnose.Name,
+                ListOfPatientsAndDiagnoses = diagnose.ListOfPatientsAndDiagnoses,
+                Image = diagnose.Image
             };
             return View(diagnose);
         }
