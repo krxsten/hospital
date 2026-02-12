@@ -23,6 +23,7 @@ builder.Services.AddIdentity<User, IdentityRole<Guid>>(options =>
     options.Password.RequiredLength = 5;
     options.Password.RequireLowercase = true;
     options.Password.RequireUppercase = true;
+    options.Password.RequireNonAlphanumeric = false;
 
 })
 .AddRoles<IdentityRole<Guid>>()

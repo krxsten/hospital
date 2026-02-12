@@ -33,7 +33,7 @@ namespace Hospital.WebProject.Seed
                     LastName = adminUsername,
                 };
 
-                await userManager.CreateAsync(user, "Admin1234*");
+                await userManager.CreateAsync(user, "Admin1234");
             }
 
             if (!await userManager.IsInRoleAsync(user, "Admin"))
