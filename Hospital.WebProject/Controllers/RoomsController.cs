@@ -69,6 +69,7 @@ namespace Hospital.WebProject.Controllers
                 RoomNumber=x.RoomNumber,
                 ID = x.ID,
                 ListOfPatients = x.ListOfPatients
+                
             }).FirstOrDefaultAsync();
 
             if (room == null)

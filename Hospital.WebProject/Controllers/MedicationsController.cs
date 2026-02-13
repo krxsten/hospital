@@ -83,6 +83,7 @@ namespace Hospital.WebProject.Controllers
                 Diagnose = medication.Diagnose,
                 Description = medication.Description,
                 SideEffects = medication.SideEffects
+                
             };
             return View(medication);
         }

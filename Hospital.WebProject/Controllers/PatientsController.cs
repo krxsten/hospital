@@ -41,6 +41,7 @@ namespace Hospital.WebProject.Controllers
                 UCN = x.UCN,
                 Checkups=x.Checkups,
                 PatientDiagnoses=x.PatientDiagnoses
+                
             }).ToListAsync();
             return View(pat);
 

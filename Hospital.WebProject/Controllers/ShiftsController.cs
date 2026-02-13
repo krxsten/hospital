@@ -34,6 +34,7 @@ namespace Hospital.WebProject.Controllers
                 ID = x.ID,  
                 ListOfDoctors = x.ListOfDoctors,
                 ListOfNurses = x.ListOfNurses
+                
             }).ToListAsync();
             return View(shifts);
         }
@@ -56,7 +57,9 @@ namespace Hospital.WebProject.Controllers
                 ID = Guid.NewGuid(),
                 Type = model.Type,
                 StartTime = model.StartTime,
-                EndTime = model.EndTime
+                EndTime = model.EndTime,
+                ListOfDoctors= model.ListOfDoctors,
+                ListOfNurses= model.ListOfNurses
             };
             await Context.Shifts.AddAsync(shift);
             await Context.SaveChangesAsync();
@@ -76,7 +79,9 @@ namespace Hospital.WebProject.Controllers
                 ID = shift.ID,
                 Type = shift.Type,
                 StartTime = shift.StartTime,
-                EndTime = shift.EndTime
+                EndTime = shift.EndTime,
+                ListOfDoctors = shift.ListOfDoctors,
+                ListOfNurses = shift.ListOfNurses
             };
             return View(shift);
         }

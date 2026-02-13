@@ -26,7 +26,10 @@ namespace Hospital.WebProject.Controllers
             var specializations = await Context.Specializations.Select(x => new SpecializationViewModel
             {
                 ID= Guid.NewGuid(),
-                SpecializationName = x.SpecializationName
+                SpecializationName = x.SpecializationName,
+                Image=x.Image,
+                ListOfDoctors= x.ListOfDoctors,
+                ListOfNurses= x.ListOfNurses,
             }).ToListAsync();
             return View(specializations);
         }
@@ -46,7 +49,12 @@ namespace Hospital.WebProject.Controllers
             }
             var spec = new Hospital.Entities.Specialization()
             {
-                SpecializationName = model.SpecializationName
+                SpecializationName = model.SpecializationName,
+                ID= Guid.NewGuid(),
+                ListOfDoctors = model.ListOfDoctors,
+                ListOfNurses= model.ListOfNurses,
+                Image = model.Image
+                
             };
             await Context.Specializations.AddAsync(spec);
             await Context.SaveChangesAsync();
@@ -64,7 +72,10 @@ namespace Hospital.WebProject.Controllers
             var model = new SpecializationViewModel
             {
                 ID=spec.ID,
-                SpecializationName = spec.SpecializationName
+                SpecializationName = spec.SpecializationName,
+                Image= spec.Image,
+                ListOfDoctors= spec.ListOfDoctors,
+                ListOfNurses = spec.ListOfNurses
             };
             return View(spec);
         }

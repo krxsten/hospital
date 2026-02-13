@@ -15,6 +15,7 @@ namespace Hospital.Entities
         [StringLength(100, MinimumLength = 5)]
         [Required]
         public string Name { get; set; }
+        [Required]
         public string Image { get; set; }
         public List<PatientAndDiagnose> ListOfPatientsAndDiagnoses { get; set; } = new List<PatientAndDiagnose>();
         public List<Medication> ListOfMedication { get; set; } = new List<Medication>();

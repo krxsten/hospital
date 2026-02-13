@@ -55,6 +55,7 @@ namespace Hospital.WebProject.Controllers
                 ID = Guid.NewGuid(),
                 Name = model.Name,
                 ListOfPatientsAndDiagnoses = model.ListOfPatientsAndDiagnoses,
+                ListOfMedication=model.ListOfMedication,
                 Image = model.Image
             };
             await Context.Diagnoses.AddAsync(diagnose);
