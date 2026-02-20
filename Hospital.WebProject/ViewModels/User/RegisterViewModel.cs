@@ -4,10 +4,10 @@ namespace Hospital.WebProject.ViewModels.User
     public class RegisterViewModel
     {
         [Required]
-        [StringLength(40, MinimumLength = 5)]
+        [StringLength(100, MinimumLength = 2)]
         public string FirstName { get; set; } = null!;
         [Required]
-        [StringLength(40, MinimumLength = 5)]
+        [StringLength(100, MinimumLength = 2)]
         public string LastName { get; set; } = null!;
         [Required]
         [EmailAddress]

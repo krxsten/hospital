@@ -4,7 +4,9 @@
 <form asp-action="Create" method="post">
     <div class="mb-3">
         <label asp-for="Type" class="form-label">Type: </label>
+        <br />
         <input type="radio" asp-for="Type" name="type" value="DayShift"/>Day shift
+        <br />
         <input type="radio" asp-for="Type" name="type" value="NightShift"/>Night shift
     </div>
 
@@ -16,5 +18,9 @@
     <div class="mb-3">
         <label asp-for="EndTime" class="form-label">End time: </label>
         <input asp-for="EndTime" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <button type="submit" class="btn btn-primary">Submit</button>
+        <a asp-action="Index" class="btn btn-secondary" style="display:inline">Back</a>
     </div>
 </form>

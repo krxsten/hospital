@@ -1,4 +1,6 @@
-﻿<h2>Pending Doctors</h2>
+﻿<div class="mb-3">
+
+<h2 style="text-align:center">Pending Doctors</h2>
 
 @foreach (var d in ViewBag.Doctors)
 {
@@ -10,8 +12,10 @@
         </form>
     </div>
 }
+</div>
 
-<h2>Pending Nurses</h2>
+<div class="mb-3">
+<h2 style="text-align:center">Pending Nurses</h2>
 
 @foreach (var n in ViewBag.Nurses)
 {
@@ -23,3 +27,4 @@
         </form>
     </div>
 }
+</div>

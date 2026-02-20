@@ -106,6 +106,7 @@ namespace Hospital.Data
             modelBuilder.Entity<Checkup>().HasOne(c => c.Doctor)
                       .WithMany(d => d.Checkups)
                       .HasForeignKey(c => c.DoctorID)
+
                       .OnDelete(DeleteBehavior.Restrict);
         }
     }

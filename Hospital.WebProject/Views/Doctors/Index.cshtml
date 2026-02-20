@@ -32,7 +32,7 @@
             </p>
 
             <div class="doctor-actions">
-                @if (User?.Identity?.IsAuthenticated ?? false)
+                @if (User.IsInRole("Admin"))
                 {
                     <a asp-action="Edit" asp-route-id="@doctor.User.Id" style="display:inline" class="btn btn-warning mb-3">Edit</a>
                     <form asp-action="Delete" class="mb-3" asp-route-id="@doctor.User.Id" method="post" style="display:inline">
@@ -43,3 +43,10 @@
         </div>
     }
 </div>
+
+@if (User.IsInRole("Admin"))
+{
+    <div class="mb-3">
+        <a asp-action="Create" class="btn btn-success">Create</a>
+    </div>
+}

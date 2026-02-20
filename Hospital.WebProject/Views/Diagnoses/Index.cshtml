@@ -1,5 +1,11 @@
 ﻿@using Hospital.WebProject.ViewModels.Diagnose
 @model List<DiagnoseViewModel>
+@if (User.IsInRole("Admin") || User.IsInRole("Doctor"))
+{
+    <div class="mb-3" style="font-family: 'Times New Roman'; font-size: 24px">
+        Add a diagnose: <a asp-action="Create" class="btn btn-success" style="font-family: 'Times New Roman'; font-size: 20px">Create</a>
+    </div>
+}
 <div class="row row-cols-1 row-cols-md-3 g-4">
     @foreach (var item in Model)
     {
@@ -7,7 +13,7 @@
             <div class="card h-100 diagnose-card">
                 <div class="card-body">
                     <h5 class="card-title">@item.Name</h5>
-                    <p class="card-text"><strong>ID: </strong>@item.ID</p>
+                    <p class="card-text">@item.Image</p>
                 </div>
                 @if (User?.Identity?.IsAuthenticated ?? false)
                 {
@@ -22,3 +28,4 @@
         </div>
     }
 </div>
+

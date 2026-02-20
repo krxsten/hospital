@@ -6,6 +6,7 @@ using Hospital.WebProject.ViewModels.Doctor;
 using Hospital.WebProject.ViewModels.Shift;
 using Hospital.WebProject.ViewModels.Specialization;
 using Hospital.WebProject.ViewModels.User;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -49,18 +50,17 @@ namespace Hospital.WebProject.Controllers
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            var doctorRole = await UserManager.GetUsersInRoleAsync("Doctor");
-            var users = doctorRole.Select(u => new
+            var userDb = await UserManager.Users.ToListAsync();
+            var users = userDb.Select(u => new
             {
                 u.Id,
                 FullName = u.FirstName + " " + u.LastName
             }).ToList();
-
             ViewBag.Users = new SelectList(users, "Id", "FullName");
-            ViewBag.Specialization = new SelectList(Context.Specializations, "ID", "SpecializationName");
-            ViewBag.Shift = new SelectList(Context.Shifts, "ID", "Type");
+            ViewBag.Specialization = new SelectList(await Context.Specializations.ToListAsync(), "ID", "SpecializationName");
+            ViewBag.Shift = new SelectList(await Context.Shifts.ToListAsync(), "ID", "Type");
             return View(new DoctorCreateViewModel());
-        }
+        }   
         [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Create(DoctorCreateViewModel model)

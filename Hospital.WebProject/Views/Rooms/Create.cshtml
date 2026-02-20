@@ -5,9 +5,17 @@
         <label asp-for="RoomNumber" class="form-label">Room number: </label>
         <input asp-for="RoomNumber" class="form-control" />
     </div>
+    <div class="form-check">
+        <input class="form-check-input" type="radio" asp-for="IsTaken" value="true" />
+        <label class="form-check-label">Occupied</label>
+    </div>
+
+    <div class="form-check">
+        <input class="form-check-input" type="radio" asp-for="IsTaken" value="false" />
+        <label class="form-check-label">Not occupied</label>
+    </div>
     <div class="mb-3">
-        <label asp-for="IsTaken" class="form-label">Is occupied: </label>
-        <input type="radio" asp-for="IsTaken" name="taken" value="True" />Occupied
-        <input type="radio" asp-for="IsTaken" name="taken" value="False" />Not occupied
+        <button type="submit" class="btn btn-primary">Submit</button>
+        <a asp-action="Index" class="btn btn-secondary" style="display:inline">Back</a>
     </div>
 </form>
