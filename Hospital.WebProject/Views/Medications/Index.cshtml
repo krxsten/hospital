@@ -14,7 +14,7 @@
             </div>
         </div>
     </div>
-    @if (User?.Identity?.IsAuthenticated ?? false)
+    @if (User.IsInRole("Admin"))
     {
         <a asp-action="Edit" asp-route-id="@item.ID" style="display:inline" class="btn btn-warning mb-3">Edit</a>
         <form asp-action="Delete" class="mb-3" asp-route-id="@item.ID" method="post" style="display:inline">
@@ -24,4 +24,7 @@
 }
 <div class="mb-3">
     <a asp-action="Create" class="btn btn-success">Create</a>
+</div>
+<div class="mb-3">
+    <a asp-action="Index" class="btn btn-secondary">Back</a>
 </div>

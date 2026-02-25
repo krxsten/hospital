@@ -1,6 +1,6 @@
 ﻿@using Hospital.WebProject.ViewModels.Medication
 @model MedicationViewModel
-@if (User?.Identity?.IsAuthenticated ?? false)
+@if (User.IsInRole("Admin"))
 {
     <form asp-action="Edit" method="post">
         <div class="mb-3">

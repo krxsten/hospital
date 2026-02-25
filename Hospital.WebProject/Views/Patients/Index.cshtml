@@ -1,1 +1,54 @@
-﻿
+﻿@using Hospital.WebProject.ViewModels.Patient
+@model List<PatientViewModel>
+@if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Patient") || User.IsInRole("Nurse"))
+{
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th scope="col">First name</th>
+                <th scope="col">Last name</th>
+                <th scope="col">Doctor's first name</th>
+                <th scope="col">Doctor's last name</th>
+                <th scope="col">Hospitalization date</th>
+                <th scope="col">Discharge date</th>
+                <th scope="col">Room number</th>
+                <th scope="col">Birth city</th>
+                <th scope="col">Date of birth</th>
+                <th scope="col">Phone number</th>
+                <th scope="col">UCN</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody class="table-group-divider">
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.User.FirstName</td>
+                    <td>@item.User.LastName</td>
+                    <td>@item.Doctor.User.FirstName</td>
+                    <td>@item.Doctor.User.LastName</td>
+                    <td>@item.HospitalizationDate.ToShortDateString()</td>
+                    <td>@item.DischargeDate.ToShortDateString()</td>
+                    <td>@item.Room.RoomNumber</td>
+                    <td>@item.BirthCity</td>
+                    <td>@item.DateOfBirth.ToShortDateString()</td>
+                    <td>@item.PhoneNumber</td>
+                    <td>@item.UCN</td>
+                    <td>
+                            <a asp-action="Edit" asp-route-id="@item.User.Id" class="btn btn-warning me-2">Edit</a>
+                            <form asp-action="Delete" asp-route-id="@item.User.Id" method="post" class="d-inline">
+                                <button class="btn btn-danger">Delete</button>
+                            </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="mb-3">
+        <a asp-action="Create" class="btn btn-success">Create</a>
+    </div>
+
+    <div class="mb-3">
+        <a asp-action="Index" asp-controller="Home" class="btn btn-secondary">Back</a>
+    </div>
+}

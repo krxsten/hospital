@@ -1,6 +1,6 @@
 ﻿@using Hospital.WebProject.ViewModels.Diagnose
 @model DiagnoseViewModel
-@if (User?.Identity?.IsAuthenticated ?? false)
+@if (User.IsInRole("Admin") || User.IsInRole("Doctor"))
 {
     <form asp-action="Create" method="post">
         <div class="mb-3">
@@ -13,3 +13,6 @@
         </div>
     </form>
 }
+<div class="mb-3">
+    <a asp-action="Index" class="btn btn-secondary">Back</a>
+</div>

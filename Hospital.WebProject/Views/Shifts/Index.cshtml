@@ -6,6 +6,7 @@
             <th scope="col">Type</th>
             <th scope="col">Start time</th>
             <th scope="col">End time</th>
+            <th scope="col"></th>
         </tr>
     </thead>
     <tbody class="table-group-divider">
@@ -15,6 +16,16 @@
                 <td>@item.Type</td>
                 <td>@item.StartTime</td>
                 <td>@item.EndTime</td>
+                <td>
+                    @if (User.IsInRole(""))
+                    {
+                        
+                    }
+                    <a asp-action="Edit" asp-route-id="@item.ID" class="btn btn-warning me-2">Edit</a>
+                    <form asp-action="Delete" asp-route-id="@item.ID" method="post" class="d-inline">
+                        <button class="btn btn-danger">Delete</button>
+                    </form>
+                </td>
             </tr>
         }
     </tbody>

@@ -1,0 +1,25 @@
+﻿@model List<DateTime>
+<h2>Busy Times</h2>
+
+@if (Model == null || !Model.Any())
+{
+    <p>No busy times for selected date.</p>
+}
+else
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Busy Time</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var time in Model)
+            {
+                <tr>
+                    <td>@time.ToString("hh:mm tt")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

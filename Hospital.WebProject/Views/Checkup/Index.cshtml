@@ -1,6 +1,6 @@
 ﻿@using Hospital.WebProject.ViewModels.Checkup
 @model List<CheckupViewModel>
-@if (User?.Identity?.IsAuthenticated ?? false)
+@if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse") || User.IsInRole("Patient"))
 {
     <table class="table">
         <thead>
@@ -20,13 +20,11 @@
                     <td>@item.Patient.User.FirstName + " " + @item.Patient.User.LastName</td>
                     <td>@item.Patient.Doctor.User.FirstName + " " + @item.Patient.Doctor.User.LastName</td>
                     <td>
-                        @if (User?.Identity?.IsAuthenticated ?? false)
-                        {
-                            <a asp-action="Edit" asp-route-id="@item.ID" style="display:inline" class="btn btn-warning mb-3">Edit</a>
-                            <form asp-action="Delete" class="mb-3" asp-route-id="@item.ID" method="post" style="display:inline">
-                                <button class="btn btn-danger">Delete</button>
-                            </form>
-                        }
+
+                        <a asp-action="Edit" asp-route-id="@item.ID" style="display:inline" class="btn btn-warning mb-3">Edit</a>
+                        <form asp-action="Delete" class="mb-3" asp-route-id="@item.ID" method="post" style="display:inline">
+                            <button class="btn btn-danger">Delete</button>
+                        </form>
                     </td>
                 </tr>
             }
@@ -35,5 +33,6 @@
 
     <div class="mb-3">
         <a asp-action="Create" class="btn btn-success">Create</a>
+        <a asp-action="Index" class="btn btn-secondary" style="display:inline">Back</a>
     </div>
 }

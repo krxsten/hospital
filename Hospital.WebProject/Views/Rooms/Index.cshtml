@@ -6,16 +6,23 @@
             <th scope="col">ID</th>
             <th scope="col">Room Number</th>
             <th scope="col">Occupied</th>
+            <th scope="col"></th>
         </tr>
     </thead>
     <tbody class="table-group-divider">
         @foreach (var item in Model)
         {
-        <tr>
-            <td>@item.ID</td>
-            <td>@item.RoomNumber</td>
-            <td>@item.IsTaken</td>
-        </tr>
+            <tr>
+                <td>@item.ID</td>
+                <td>@item.RoomNumber</td>
+                <td>@item.IsTaken</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.ID" class="btn btn-warning me-2">Edit</a>
+                    <form asp-action="Delete" asp-route-id="@item.ID" method="post" class="d-inline">
+                        <button class="btn btn-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
         }
     </tbody>
 </table>

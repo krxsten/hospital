@@ -153,7 +153,7 @@ namespace Hospital.WebProject.Controllers
         {
             var busy = await Context.Checkups.Where(c => c.DoctorID == doctorId && c.Date.Date == date.Date)
             .Select(c => c.Date).ToListAsync();
-            return Json(busy);
+            return View(busy);
         }
         [HttpGet]
         public async Task<IActionResult> GetDoctorShift(Guid doctorId)
@@ -164,7 +164,7 @@ namespace Hospital.WebProject.Controllers
                     d.Shift.StartTime,
                     d.Shift.EndTime
                 }).FirstOrDefaultAsync();
-            return Json(shift);
+            return View(shift);
         }
 
     }

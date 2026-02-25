@@ -1,11 +1,12 @@
 ﻿@using Hospital.WebProject.ViewModels.Doctor
 @model DoctorCreateViewModel
-
+@if (User.IsInRole("Admin"))
+{
     <form asp-action="Create" method="post">
         <div class="mb-3">
             <label asp-for="UserID" class="form-label">Doctor: </label>
             <select asp-for="UserID" asp-items="ViewBag.Users" class="form-select">
-             </select>
+            </select>
         </div>
 
         <div class="mb-3">
@@ -30,3 +31,4 @@
             <a asp-action="Index" class="btn btn-secondary" style="display:inline">Back</a>
         </div>
     </form>
+}
