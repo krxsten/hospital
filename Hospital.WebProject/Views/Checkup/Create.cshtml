@@ -1,6 +1,6 @@
 ﻿@using Hospital.WebProject.ViewModels.Checkup
 @model CheckupViewModel
-@if (User?.Identity?.IsAuthenticated ?? false)
+@if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse") || User.IsInRole("Patient"))
 {
     <form asp-action="Create" method="post">
         <div class="mb-3">

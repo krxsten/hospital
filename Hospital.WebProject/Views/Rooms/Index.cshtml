@@ -1,34 +1,41 @@
 ﻿@using Hospital.WebProject.ViewModels.Room
 @model List<RoomViewModel>
-<table class="table">
-    <thead>
-        <tr>
-            <th scope="col">ID</th>
-            <th scope="col">Room Number</th>
-            <th scope="col">Occupied</th>
-            <th scope="col"></th>
-        </tr>
-    </thead>
-    <tbody class="table-group-divider">
-        @foreach (var item in Model)
-        {
+
+@if (User.IsInRole("Admin") || User.IsInRole("Patient") || User.IsInRole("Doctor") || User.IsInRole("Nurse"))
+{
+    <table class="table">
+        <thead>
             <tr>
-                <td>@item.ID</td>
-                <td>@item.RoomNumber</td>
-                <td>@item.IsTaken</td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.ID" class="btn btn-warning me-2">Edit</a>
-                    <form asp-action="Delete" asp-route-id="@item.ID" method="post" class="d-inline">
-                        <button class="btn btn-danger">Delete</button>
-                    </form>
-                </td>
+                <th scope="col">ID</th>
+                <th scope="col">Room Number</th>
+                <th scope="col">Occupied</th>
+                <th scope="col"></th>
             </tr>
-        }
-    </tbody>
-</table>
-<div class="mb-3">
-    <a asp-action="Create" class="btn btn-success">Create</a>
-</div>
+        </thead>
+        <tbody class="table-group-divider">
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.ID</td>
+                    <td>@item.RoomNumber</td>
+                    <td>@item.IsTaken</td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.ID" class="btn btn-warning me-2">Edit</a>
+                        <form asp-action="Delete" asp-route-id="@item.ID" method="post" class="d-inline">
+                            <button class="btn btn-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+@if (User.IsInRole("Admin"))
+{
+    <div class="mb-3">
+        <a asp-action="Create" class="btn btn-success">Create</a>
+    </div>
+}
 
 <div class="mb-3">
     <a asp-action="Index" asp-controller="Home" class="btn btn-secondary">Back</a>

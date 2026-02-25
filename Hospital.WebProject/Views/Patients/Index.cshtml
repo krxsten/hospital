@@ -1,5 +1,9 @@
 ﻿@using Hospital.WebProject.ViewModels.Patient
 @model List<PatientViewModel>
+
+<div class="mb-3">
+    <h2 style="text-align:center">Patients</h2>
+</div>
 @if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Patient") || User.IsInRole("Nurse"))
 {
     <table class="table table-bordered table-striped">
@@ -35,20 +39,25 @@
                     <td>@item.PhoneNumber</td>
                     <td>@item.UCN</td>
                     <td>
+                        @if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse"))
+                        {
                             <a asp-action="Edit" asp-route-id="@item.User.Id" class="btn btn-warning me-2">Edit</a>
                             <form asp-action="Delete" asp-route-id="@item.User.Id" method="post" class="d-inline">
                                 <button class="btn btn-danger">Delete</button>
                             </form>
+                        }
                     </td>
                 </tr>
             }
         </tbody>
     </table>
+}
+@if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse"))
+{
     <div class="mb-3">
         <a asp-action="Create" class="btn btn-success">Create</a>
     </div>
-
-    <div class="mb-3">
-        <a asp-action="Index" asp-controller="Home" class="btn btn-secondary">Back</a>
-    </div>
 }
+<div class="mb-3">
+    <a asp-action="Index" asp-controller="Home" class="btn btn-secondary">Back</a>
+</div>

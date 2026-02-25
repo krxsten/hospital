@@ -1,5 +1,8 @@
 ﻿@using Hospital.WebProject.ViewModels.Medication
 @model List<MedicationViewModel>
+<div class="mb-3">
+    <h2 style="text-align:center">Medications</h2>
+</div>
 @foreach (var item in Model)
 {
     <div class="accordion accordion-flush" id="accordionFlushExample">
@@ -22,9 +25,12 @@
         </form>
     }
 }
-<div class="mb-3">
-    <a asp-action="Create" class="btn btn-success">Create</a>
-</div>
+@if (User.IsInRole("Admin"))
+{
+    <div class="mb-3">
+        <a asp-action="Create" class="btn btn-success">Create</a>
+    </div>
+}
 <div class="mb-3">
     <a asp-action="Index" class="btn btn-secondary">Back</a>
 </div>

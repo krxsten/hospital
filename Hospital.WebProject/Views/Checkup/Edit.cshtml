@@ -1,6 +1,6 @@
 ﻿@using Hospital.WebProject.ViewModels.Checkup
 @model CheckupViewModel
-@if (User?.Identity?.IsAuthenticated ?? false)
+@if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse") || User.IsInRole("Patient"))
 {
     <form asp-action="Edit" method="post">
         <div class="mb-3">
@@ -19,7 +19,7 @@
         </div>
 
         <div class="mb-3">
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary">Update</button>
             <a asp-action="Index" class="btn btn-secondary" style="display:inline">Back</a>
         </div>
     </form>

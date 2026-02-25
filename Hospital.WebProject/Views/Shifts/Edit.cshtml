@@ -2,18 +2,18 @@
 @model ShiftViewModel
 @if (User.IsInRole("Admin"))
 {
-    <form asp-action="Create" method="post">
+    <form asp-action="Edit" method="post">
         <div class="mb-3">
             <label asp-for="Type" class="form-label">Type: </label>
             <br />
-            <input type="radio" asp-for="Type" name="type" value="DayShift"/>Day shift
+            <input type="radio" asp-for="Type" name="type" value="DayShift" />Day shift
             <br />
-            <input type="radio" asp-for="Type" name="type" value="NightShift"/>Night shift
+            <input type="radio" asp-for="Type" name="type" value="NightShift" />Night shift
         </div>
 
         <div class="mb-3">
             <label asp-for="StartTime" class="form-label">Start time: </label>
-            <input asp-for="StartTime" class="form-control"/>
+            <input asp-for="StartTime" class="form-control" />
         </div>
 
         <div class="mb-3">
@@ -21,7 +21,7 @@
             <input asp-for="EndTime" class="form-control" />
         </div>
         <div class="mb-3">
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary">Update</button>
             <a asp-action="Index" class="btn btn-secondary" style="display:inline">Back</a>
         </div>
     </form>

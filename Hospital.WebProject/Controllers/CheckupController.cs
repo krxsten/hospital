@@ -118,7 +118,7 @@ namespace Hospital.WebProject.Controllers
             };
             return View(checkup);
         }
-        [Authorize(Roles = "Admin, Doctor, Nurse, Patient")]
+        [Authorize(Roles = "Admin, Doctor, Nurse")]
         [HttpPost]
         public async Task<IActionResult> Edit(CheckupViewModel model)
         {
@@ -148,6 +148,7 @@ namespace Hospital.WebProject.Controllers
             await Context.SaveChangesAsync();
             return RedirectToAction("Index");
         }
+        [Authorize(Roles = "Admin, Doctor, Nurse")]
         [HttpGet]
         public async Task<IActionResult> GetBusyTimes(Guid doctorId, DateTime date)
         {
@@ -155,6 +156,7 @@ namespace Hospital.WebProject.Controllers
             .Select(c => c.Date).ToListAsync();
             return View(busy);
         }
+        [Authorize(Roles = "Admin, Doctor, Nurse")]
         [HttpGet]
         public async Task<IActionResult> GetDoctorShift(Guid doctorId)
         {

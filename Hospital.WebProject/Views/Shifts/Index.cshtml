@@ -17,14 +17,13 @@
                 <td>@item.StartTime</td>
                 <td>@item.EndTime</td>
                 <td>
-                    @if (User.IsInRole(""))
+                    @if (User.IsInRole("Admin"))
                     {
-                        
+                        <a asp-action="Edit" asp-route-id="@item.ID" class="btn btn-warning me-2">Edit</a>
+                        <form asp-action="Delete" asp-route-id="@item.ID" method="post" class="d-inline">
+                            <button class="btn btn-danger">Delete</button>
+                        </form>
                     }
-                    <a asp-action="Edit" asp-route-id="@item.ID" class="btn btn-warning me-2">Edit</a>
-                    <form asp-action="Delete" asp-route-id="@item.ID" method="post" class="d-inline">
-                        <button class="btn btn-danger">Delete</button>
-                    </form>
                 </td>
             </tr>
         }

@@ -1,9 +1,7 @@
 ﻿@using Hospital.WebProject.ViewModels.Medication
 @model MedicationViewModel
 @if (User.IsInRole("Admin"))
-
 {
-
     <form asp-action="Create" method="post">
         <div class="mb-3">
             <label asp-for="Name" class="form-label">Diagnose: </label>
@@ -30,5 +28,4 @@
             <a asp-action="Index" class="btn-hospital-secondary" style="display:inline">Back</a>
         </div>
     </form>
-
 }
