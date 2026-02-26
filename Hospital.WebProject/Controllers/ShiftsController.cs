@@ -83,7 +83,7 @@ namespace Hospital.WebProject.Controllers
                 ListOfDoctors = shift.ListOfDoctors,
                 ListOfNurses = shift.ListOfNurses
             };
-            return View(shift);
+            return View(model);
         }
         [Authorize(Roles = "Admin")]
         [HttpPost]

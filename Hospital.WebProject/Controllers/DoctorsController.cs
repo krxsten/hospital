@@ -71,17 +71,11 @@ namespace Hospital.WebProject.Controllers
             }
             var doctor = new Doctor()
             {
+                UserId = model.UserID,                
                 SpecializationId = model.SpecializationID,
-                Specialization = model.Specialization,
                 ShiftId = model.ShiftID,
-                Shift = model.Shift,
-                User = model.User,
                 IsAccepted = model.IsAccepted,
-                UserId = model.UserID,
-                Image = model.Image,
-                Checkups=model.Checkups,
-                DoctorNurses=model.DoctorNurses,
-                Patients=model.Patients
+                Image = model.Image
             };
             await Context.Doctors.AddAsync(doctor);
             await Context.SaveChangesAsync();
@@ -119,7 +113,7 @@ namespace Hospital.WebProject.Controllers
                 Checkups = doctor.Checkups,
                 Patients = doctor.Patients
             };
-            return View(doctor);
+            return View(model);
         }
         [Authorize(Roles = "Admin")]
         [HttpPost]

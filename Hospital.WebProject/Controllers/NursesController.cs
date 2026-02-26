@@ -112,7 +112,7 @@ namespace Hospital.WebProject.Controllers
                 Image = nurse.Image,
                 DoctorNurses= nurse.DoctorNurses
             };
-            return View(nurse);
+            return View(model);
         }
         [Authorize(Roles = "Admin")]
         [HttpPost]

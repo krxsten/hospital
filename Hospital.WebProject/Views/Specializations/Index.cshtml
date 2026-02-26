@@ -1,9 +1,14 @@
 ﻿@using Hospital.WebProject.ViewModels.Specialization
 @model List<SpecializationViewModel>
+
+<div class="mb-3">
+    <h2 style="text-align:center">Specializations</h2>
+</div>
 <table class="table table-striped table-bordered">
     <thead>
         <tr>
-            <th scope="col">Name</th>
+            <th scope="col" class="text-center">Name</th>
+            <th scope="col" class="text-center">Actions</th>
         </tr>
     </thead>
     <tbody class="table-group-divider">
@@ -11,30 +16,34 @@
         {
             <tr>
                 <td>@item.SpecializationName</td>
-            </tr>
-            @if (User.IsInRole("Admin") || User.IsInRole("Nurse") || User.IsInRole("Doctor"))
-            {
-                <a asp-action="Edit"
-                   asp-route-id="@item.ID"
-                   class="btn btn-warning">Edit</a>
-            }
-            @if (User.IsInRole("Admin"))
-            {
-                <form asp-action="Delete"
-                      asp-route-id="@item.ID"
-                      method="post"
-                      style="display:inline">
 
-                    <button class="btn btn-danger">Delete</button>
-                </form>
-            }
+                @if (User.IsInRole("Admin") || User.IsInRole("Nurse") || User.IsInRole("Doctor"))
+                {
+                    <td>
+
+                        <a asp-action="Edit"
+                           asp-route-id="@item.ID"
+                           class="btn btn-warning">Edit</a>
+
+                        <form asp-action="Delete"
+                              asp-route-id="@item.ID"
+                              method="post"
+                              style="display:inline">
+                            <button class="btn btn-danger">Delete</button>
+                        </form>
+                    </td>
+                }
+            </tr>
+        }
         }
     </tbody>
 </table>
-
-<div class="mb-3">
-    <a asp-action="Create" class="btn btn-success">Create</a>
-</div>
+@if (User.IsInRole("Admin"))
+{
+    <div class="mb-3">
+        <a asp-action="Create" class="btn btn-success">Create</a>
+    </div>
+}
 
 <div class="mb-3">
     <a asp-action="Index" asp-controller="Home" class="btn btn-secondary">Back</a>

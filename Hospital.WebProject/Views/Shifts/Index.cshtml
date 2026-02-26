@@ -1,5 +1,8 @@
 ﻿@using Hospital.WebProject.ViewModels.Shift
 @model List<ShiftViewModel>
+<div class="mb-3">
+    <h2 style="text-align:center">Shifts</h2>
+</div>
 <table class="table">
     <thead>
         <tr>
@@ -29,6 +32,13 @@
         }
     </tbody>
 </table>
+@if (User.IsInRole("Admin"))
+{
+    <div class="mb-3">
+        <a asp-action="Create" class="btn btn-success">Create</a>
+    </div>
+}
+
 <div class="mb-3">
-    <a asp-action="Create" class="btn btn-success">Create</a>
+    <a asp-action="Index" asp-controller="Home" class="btn btn-secondary">Back</a>
 </div>

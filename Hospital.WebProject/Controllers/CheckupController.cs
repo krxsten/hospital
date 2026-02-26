@@ -116,7 +116,7 @@ namespace Hospital.WebProject.Controllers
                 PatientID = checkup.PatientID,
                 Patient = checkup.Patient
             };
-            return View(checkup);
+            return View(model);
         }
         [Authorize(Roles = "Admin, Doctor, Nurse")]
         [HttpPost]

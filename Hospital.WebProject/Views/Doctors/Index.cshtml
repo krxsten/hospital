@@ -6,6 +6,7 @@
 <div class="doctor-grid">
     @foreach (var doctor in Model)
     {
+        <input type="hidden" asp-for="@doctor.UserId" />
         <div class="doctor-card">
             <img src="@doctor.Image"
                  alt="Doctor photo"

@@ -93,7 +93,7 @@ namespace Hospital.WebProject.Controllers
                 RoomNumber = room.RoomNumber,
                 IsTaken = room.IsTaken
             };
-            return View(room);
+            return View(model);
         }
         [Authorize(Roles = "Admin, Doctor, Nurse")]
         [HttpPost]

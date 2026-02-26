@@ -1,6 +1,9 @@
 ﻿@using Hospital.WebProject.ViewModels.Room
 @model List<RoomViewModel>
 
+<div class="mb-3">
+    <h2 style="text-align:center">Rooms</h2>
+</div>
 @if (User.IsInRole("Admin") || User.IsInRole("Patient") || User.IsInRole("Doctor") || User.IsInRole("Nurse"))
 {
     <table class="table">
@@ -20,10 +23,20 @@
                     <td>@item.RoomNumber</td>
                     <td>@item.IsTaken</td>
                     <td>
-                        <a asp-action="Edit" asp-route-id="@item.ID" class="btn btn-warning me-2">Edit</a>
-                        <form asp-action="Delete" asp-route-id="@item.ID" method="post" class="d-inline">
-                            <button class="btn btn-danger">Delete</button>
-                        </form>
+                        @if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse"))
+                        {
+                            <a asp-action="Edit" asp-route-id="@item.ID" class="btn btn-warning me-2">Edit</a>
+                        }
+                        @if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse") || User.IsInRole("Patient"))
+                        {
+                            <a asp-action="Details" asp-route-id="@item.ID" class="btn btn-success">Details</a>
+                        }
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <form asp-action="Delete" asp-route-id="@item.ID" method="post" class="d-inline">
+                                <button class="btn btn-danger">Delete</button>
+                            </form>
+                        }
                     </td>
                 </tr>
             }

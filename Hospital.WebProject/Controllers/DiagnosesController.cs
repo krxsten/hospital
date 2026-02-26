@@ -78,7 +78,7 @@ namespace Hospital.WebProject.Controllers
                 ListOfPatientsAndDiagnoses = diagnose.ListOfPatientsAndDiagnoses,
                 Image = diagnose.Image
             };
-            return View(diagnose);
+            return View(model);
         }
         [Authorize(Roles = "Admin, Doctor")]
         [HttpPost]

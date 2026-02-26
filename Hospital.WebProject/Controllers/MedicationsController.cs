@@ -85,7 +85,7 @@ namespace Hospital.WebProject.Controllers
                 SideEffects = medication.SideEffects
                 
             };
-            return View(medication);
+            return View(model);
         }
         [Authorize(Roles = "Admin")]
         [HttpPost]

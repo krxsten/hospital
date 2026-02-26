@@ -77,7 +77,7 @@ namespace Hospital.WebProject.Controllers
                 ListOfDoctors= spec.ListOfDoctors,
                 ListOfNurses = spec.ListOfNurses
             };
-            return View(spec);
+            return View(model);
         }
         [Authorize(Roles = "Admin, Doctor, Nurse")]
         [HttpPost]
