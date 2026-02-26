@@ -71,7 +71,7 @@ namespace Hospital.WebProject.Controllers
             }
             var doctor = new Doctor()
             {
-                UserId = model.UserID,                
+                UserId = model.UserID,
                 SpecializationId = model.SpecializationID,
                 ShiftId = model.ShiftID,
                 IsAccepted = model.IsAccepted,

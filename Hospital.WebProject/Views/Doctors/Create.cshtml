@@ -2,7 +2,7 @@
 @model DoctorCreateViewModel
 @if (User.IsInRole("Admin"))
 {
-    <form asp-action="Create" method="post">
+    <form asp-controller="Doctors" asp-action="Create" method="post">
         <div class="mb-3">
             <label asp-for="UserID" class="form-label">Doctor: </label>
             <select asp-for="UserID" asp-items="ViewBag.Users" class="form-select">

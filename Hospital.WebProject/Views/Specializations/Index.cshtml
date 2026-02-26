@@ -16,7 +16,6 @@
         {
             <tr>
                 <td>@item.SpecializationName</td>
-
                 @if (User.IsInRole("Admin") || User.IsInRole("Nurse") || User.IsInRole("Doctor"))
                 {
                     <td>
@@ -24,7 +23,6 @@
                         <a asp-action="Edit"
                            asp-route-id="@item.ID"
                            class="btn btn-warning">Edit</a>
-
                         <form asp-action="Delete"
                               asp-route-id="@item.ID"
                               method="post"
@@ -34,7 +32,6 @@
                     </td>
                 }
             </tr>
-        }
         }
     </tbody>
 </table>
