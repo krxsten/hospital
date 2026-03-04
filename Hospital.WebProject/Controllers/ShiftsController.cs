@@ -98,7 +98,12 @@ namespace Hospital.WebProject.Controllers
             {
                 return NotFound();
             }
-            Context.Shifts.Update(shift);
+            shift.ID = model.ID;
+            shift.Type = model.Type;
+            shift.StartTime = model.StartTime;
+            shift.EndTime = model.EndTime;
+            shift.ListOfDoctors = model.ListOfDoctors;
+            shift.ListOfNurses = model.ListOfNurses;
             await Context.SaveChangesAsync();
             return RedirectToAction("Index");
         }

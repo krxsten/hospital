@@ -8,10 +8,12 @@ using Hospital.WebProject.ViewModels.Specialization;
 using Hospital.WebProject.ViewModels.User;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Hospital.WebProject.Controllers
 {
@@ -39,9 +41,9 @@ namespace Hospital.WebProject.Controllers
                 IsAccepted = x.IsAccepted,
                 UserId = x.UserId,
                 Image = x.Image,
-                Checkups=x.Checkups,
-                DoctorNurses=x.DoctorNurses,
-                Patients=x.Patients
+                Checkups = x.Checkups,
+                DoctorNurses = x.DoctorNurses,
+                Patients = x.Patients
             }).ToListAsync();
             return View(docs);
 
@@ -60,7 +62,7 @@ namespace Hospital.WebProject.Controllers
             ViewBag.Specialization = new SelectList(await Context.Specializations.ToListAsync(), "ID", "SpecializationName");
             ViewBag.Shift = new SelectList(await Context.Shifts.ToListAsync(), "ID", "Type");
             return View(new DoctorCreateViewModel());
-        }   
+        }
         [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Create(DoctorCreateViewModel model)
@@ -128,7 +130,11 @@ namespace Hospital.WebProject.Controllers
             {
                 return NotFound();
             }
-            Context.Doctors.Update(doctor);
+            doctor.UserId = model.UserID;
+            doctor.SpecializationId = model.SpecializationID;
+            doctor.ShiftId = model.ShiftID;
+            doctor.IsAccepted = model.IsAccepted;
+            doctor.Image = model.Image;
             await Context.SaveChangesAsync();
             return RedirectToAction("Index");
         }

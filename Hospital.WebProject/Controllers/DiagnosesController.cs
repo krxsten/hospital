@@ -93,7 +93,9 @@ namespace Hospital.WebProject.Controllers
             {
                 return NotFound();
             }
-            Context.Diagnoses.Update(diagnose);
+            diagnose.ID = model.ID;
+            diagnose.Name = model.Name;
+            diagnose.Image = model.Image;
             await Context.SaveChangesAsync();
             return RedirectToAction("Index");
         }

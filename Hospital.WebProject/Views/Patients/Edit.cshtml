@@ -1,4 +1,5 @@
-﻿@using Hospital.WebProject.ViewModels.Patient
+﻿<link rel="stylesheet" href="/css/styles.css">
+@using Hospital.WebProject.ViewModels.Patient
 @model PatientViewModel
 
 @if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse"))

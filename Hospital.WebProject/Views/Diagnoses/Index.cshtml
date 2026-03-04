@@ -1,10 +1,11 @@
-﻿@using Hospital.WebProject.ViewModels.Diagnose
+﻿<link rel="stylesheet" href="/css/styles.css">
+@using Hospital.WebProject.ViewModels.Diagnose
 @model List<DiagnoseViewModel>
 <div class="mb-3">
     <h2 style="text-align:center">Diagnoses</h2>
 </div>
 
-<div class="row row-cols-1 row-cols-md-3 g-4">
+<div class="row row-cols-1 row-cols-md-3 g-4 mb-3">
     @foreach (var item in Model)
     {
         <div class="col">
@@ -26,12 +27,11 @@
         </div>
     }
 </div>
-@if (User.IsInRole("Admin") || User.IsInRole("Doctor"))
-{
-    <div class="mb-3" style="font-family: 'Times New Roman'; font-size: 24px">
-        Add a diagnose: <a asp-action="Create" class="btn btn-success" style="font-family: 'Times New Roman'; font-size: 20px">Create</a>
-    </div>
-}
-<div class="mb-3">
-    <a asp-action="Index" class="btn btn-secondary">Back</a>
+
+<div class="mb-3" style="font-family: 'Times New Roman'; font-size: 24px">
+    @if (User.IsInRole("Admin") || User.IsInRole("Doctor"))
+    {
+        <a asp-action="Create" class="btn btn-success" style="display: inline; font-family: 'Times New Roman'; font-size: 20px">Create</a>
+    }
+    <a asp-action="Index" asp-controller="Home" class="btn btn-secondary" style="display:inline; font-family: 'Times New Roman'; font-size: 20px">Back</a>
 </div>

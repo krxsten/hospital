@@ -131,7 +131,12 @@ namespace Hospital.WebProject.Controllers
             {
                 return NotFound();
             }
-            Context.Checkups.Update(checkup);
+            checkup.Date = model.Date;
+            checkup.ID = model.ID;
+            checkup.Doctor = model.Doctor;
+            checkup.DoctorID = model.DoctorID;
+            checkup.Patient = model.Patient;
+            checkup.PatientID = model.PatientID;
             await Context.SaveChangesAsync();
             return RedirectToAction("Index");
         }

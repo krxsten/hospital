@@ -39,9 +39,9 @@ namespace Hospital.WebProject.Controllers
                 DateOfBirth = x.DateOfBirth,
                 PhoneNumber = x.PhoneNumber,
                 UCN = x.UCN,
-                Checkups=x.Checkups,
-                PatientDiagnoses=x.PatientDiagnoses
-                
+                Checkups = x.Checkups,
+                PatientDiagnoses = x.PatientDiagnoses
+
             }).ToListAsync();
             return View(pat);
 
@@ -89,7 +89,7 @@ namespace Hospital.WebProject.Controllers
                 DateOfBirth = model.DateOfBirth,
                 PhoneNumber = model.PhoneNumber,
                 UCN = model.UCN,
-                Checkups=model.Checkups,
+                Checkups = model.Checkups,
                 PatientDiagnoses = model.PatientDiagnoses
             };
             await Context.Patients.AddAsync(pat);
@@ -133,7 +133,7 @@ namespace Hospital.WebProject.Controllers
                 DateOfBirth = pat.DateOfBirth,
                 PhoneNumber = pat.PhoneNumber,
                 UCN = pat.UCN,
-                Checkups= pat.Checkups,
+                Checkups = pat.Checkups,
                 PatientDiagnoses = pat.PatientDiagnoses
             };
             return View(model);
@@ -151,7 +151,20 @@ namespace Hospital.WebProject.Controllers
             {
                 return NotFound();
             }
-            Context.Patients.Update(pat);
+            pat.Doctor = model.Doctor;
+            pat.DoctorId = model.DoctorId;
+            pat.HospitalizationDate = model.HospitalizationDate;
+            pat.DischargeDate = model.DischargeDate;
+            pat.UserId = model.UserID;
+            pat.User = model.User;
+            pat.Room = model.Room;
+            pat.RoomId = model.RoomId;
+            pat.BirthCity = model.BirthCity;
+            pat.DateOfBirth = model.DateOfBirth;
+            pat.PhoneNumber = model.PhoneNumber;
+            pat.UCN = model.UCN;
+            pat.Checkups = model.Checkups;
+            pat.PatientDiagnoses = model.PatientDiagnoses;
             await Context.SaveChangesAsync();
             return RedirectToAction("Index");
         }

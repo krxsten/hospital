@@ -103,12 +103,15 @@ namespace Hospital.WebProject.Controllers
             {
                 return View(model);
             }
-            var pat = await Context.Patients.FindAsync(model.ID);
-            if (pat == null)
+            var room = await Context.Rooms.FindAsync(model.ID);
+            if (room == null)
             {
                 return NotFound();
             }
-            Context.Patients.Update(pat);
+            room.ID = model.ID;
+            room.RoomNumber = model.RoomNumber;
+            room.IsTaken = model.IsTaken;
+            room.ListOfPatients = model.ListOfPatients;
             await Context.SaveChangesAsync();
             return RedirectToAction("Index");
         }

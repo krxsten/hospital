@@ -33,7 +33,7 @@ namespace Hospital.WebProject.Controllers
                 Description = x.Description,
                 SideEffects = x.SideEffects,
                 ID = x.ID
-                
+
             }).ToListAsync();
             return View(medications);
         }
@@ -42,7 +42,7 @@ namespace Hospital.WebProject.Controllers
         public IActionResult Create()
         {
             ViewBag.Diagnose = new SelectList(Context.Diagnoses, "ID", "Name");
-            return View(new MedicationViewModel ());
+            return View(new MedicationViewModel());
         }
         [Authorize(Roles = "Admin")]
         [HttpPost]
@@ -56,8 +56,8 @@ namespace Hospital.WebProject.Controllers
             {
                 ID = Guid.NewGuid(),
                 Name = model.Name,
-                DiagnoseID= model.DiagnoseID,
-                Diagnose= model.Diagnose,
+                DiagnoseID = model.DiagnoseID,
+                Diagnose = model.Diagnose,
                 Description = model.Description,
                 SideEffects = model.SideEffects
             };
@@ -70,7 +70,7 @@ namespace Hospital.WebProject.Controllers
         public async Task<IActionResult> Edit(Guid id)
         {
             ViewBag.Diagnose = new SelectList(Context.Diagnoses, "ID", "Name");
-            var medication = await Context. Medications.FindAsync(id);
+            var medication = await Context.Medications.FindAsync(id);
             if (medication == null)
             {
                 return NotFound();
@@ -83,7 +83,7 @@ namespace Hospital.WebProject.Controllers
                 Diagnose = medication.Diagnose,
                 Description = medication.Description,
                 SideEffects = medication.SideEffects
-                
+
             };
             return View(model);
         }
@@ -100,7 +100,12 @@ namespace Hospital.WebProject.Controllers
             {
                 return NotFound();
             }
-            Context.Medications.Update(medication);
+            medication.ID = model.ID;
+            medication.Name = model.Name;
+            medication.DiagnoseID = model.DiagnoseID;
+            medication.Diagnose = model.Diagnose;
+            medication.Description = model.Description;
+            medication.SideEffects = model.SideEffects;
             await Context.SaveChangesAsync();
             return RedirectToAction("Index");
         }

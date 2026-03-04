@@ -1,9 +1,10 @@
-﻿@using Hospital.WebProject.ViewModels.Specialization
+﻿<link rel="stylesheet" href="/css/styles.css">
+@using Hospital.WebProject.ViewModels.Specialization
 @model SpecializationViewModel
 
 @if (User.IsInRole("Admin"))
 {
-    <form asp-action="Create" method="post">
+    <form asp-action="Edit" method="post">
         <div class="mb-3">
             <label asp-for="SpecializationName" class="form-label">Name of specialization: </label>
             <input asp-for="SpecializationName" class="form-control" />

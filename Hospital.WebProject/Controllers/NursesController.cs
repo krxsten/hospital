@@ -5,11 +5,13 @@ using Hospital.WebProject.ViewModels.Diagnose;
 using Hospital.WebProject.ViewModels.Medication;
 using Hospital.WebProject.ViewModels.Nurse;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Numerics;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Hospital.WebProject.Controllers
 {
@@ -129,7 +131,14 @@ namespace Hospital.WebProject.Controllers
             {
                 return NotFound();
             }
-            Context.Nurses.Update(nurse);
+            nurse.SpecializationId = model.SpecializationId;
+            nurse.Specialization = model.Specialization;
+              nurse.ShiftId = model.ShiftId;
+            nurse.Shift = model.Shift;
+            nurse.UserId = model.UserID;
+            nurse.User = model.User;
+            nurse.IsAccepted = model.IsAccepted;
+            nurse.Image = model.Image;
             await Context.SaveChangesAsync();
             return RedirectToAction("Index");
         }

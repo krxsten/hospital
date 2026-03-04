@@ -1,8 +1,9 @@
-﻿@using Hospital.WebProject.ViewModels.Diagnose
+﻿<link rel="stylesheet" href="/css/styles.css">
+@using Hospital.WebProject.ViewModels.Diagnose
 @model DiagnoseViewModel
 @if (User.IsInRole("Admin") || User.IsInRole("Doctor"))
 {
-    <form asp-action="Create" method="post">
+    <form asp-action="Create" method="post" asp-antiforgery="true">
         <div class="mb-3">
             <label asp-for="Name" class="form-label">Diagnose: </label>
             <input asp-for="Name" class="form-control" />

@@ -1,4 +1,5 @@
-﻿@using Hospital.WebProject.ViewModels.Doctor
+﻿<link rel="stylesheet" href="/css/styles.css">
+@using Hospital.WebProject.ViewModels.Doctor
 @model List<DoctorIndexViewModel>
 <div class="mb-3">
     <h2 style="text-align:center">Doctors</h2>
@@ -44,13 +45,10 @@
         </div>
     }
 </div>
-
-@if (User.IsInRole("Admin"))
-{
-    <div class="mb-3">
-        <a asp-action="Create" asp-controller="Doctors" class="btn btn-success">Create</a>
-    </div>
-}
-<div class="mb-3">
-    <a asp-action="Index" asp-controller="Home" class="btn btn-secondary">Back</a>
+<div class="mb-3" style="font-family: 'Times New Roman'; font-size: 24px">
+    @if (User.IsInRole("Admin"))
+    {
+        <a asp-action="Create" class="btn btn-success" style="display: inline; font-family: 'Times New Roman'; font-size: 20px">Create</a>
+    }
+    <a asp-action="Index" asp-controller="Home" class="btn btn-secondary" style="display:inline; font-family: 'Times New Roman'; font-size: 20px">Back</a>
 </div>
