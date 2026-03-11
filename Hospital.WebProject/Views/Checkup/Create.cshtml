@@ -5,18 +5,21 @@
 {
     <form asp-action="Create" method="post">
         <div class="mb-3">
-            <label asp-for="PatientID" class="form-label">Patient: </label>
-            <select asp-for="PatientID" asp-items="ViewBag.Patients" class="form-select" />
+            <label asp-for="@Model.PatientID" class="form-label">Patient: </label>
+            <select asp-for="@Model.PatientID" asp-items="ViewBag.Users" class="form-select"></select>
+            <span class="text-danger" asp-validation-for="@Model.PatientID"></span>
         </div>
 
         <div class="mb-3">
-            <label asp-for="DoctorID" class="form-label">Doctor: </label>
-            <select asp-for="DoctorID" id="DoctorID" asp-items="ViewBag.Doctor" class="form-select" />
+            <label asp-for="@Model.DoctorID" class="form-label">Doctor: </label>
+            <select asp-for="@Model.DoctorID" id="DoctorID" asp-items="ViewBag.Doctor" class="form-select"></select>
+            <span class="text-danger" asp-validation-for="@Model.DoctorID"></span>
         </div>
 
         <div class="mb-3">
-            <label asp-for="Date" class="form-label">Checkup Date & Time</label>
-            <input asp-for="Date" type="datetime-local" class="form-control" id="checkupDate" />
+            <label asp-for="@Model.Date" class="form-label">Checkup Date & Time</label>
+            <input asp-for="@Model.Date" type="datetime-local" class="form-control" id="checkupDate" />
+            <span class="text-danger" asp-validation-for="@Model.Date"></span>
         </div>
 
         <div class="mb-3">
@@ -27,5 +30,5 @@
     </form>
 }
 @section Scripts {
-    <script src="~/js/checkup.js"></script>
+    <partial name="_ValidationScriptsPartial" />
 }

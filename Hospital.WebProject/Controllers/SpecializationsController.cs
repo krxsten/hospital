@@ -29,8 +29,6 @@ namespace Hospital.WebProject.Controllers
                 ID = Guid.NewGuid(),
                 SpecializationName = x.SpecializationName,
                 Image = x.Image,
-                ListOfDoctors = x.ListOfDoctors,
-                ListOfNurses = x.ListOfNurses,
             }).ToListAsync();
             return View(specializations);
         }
@@ -52,8 +50,6 @@ namespace Hospital.WebProject.Controllers
             {
                 SpecializationName = model.SpecializationName,
                 ID = Guid.NewGuid(),
-                ListOfDoctors = model.ListOfDoctors,
-                ListOfNurses = model.ListOfNurses,
                 Image = model.Image
 
             };
@@ -75,8 +71,6 @@ namespace Hospital.WebProject.Controllers
                 ID = spec.ID,
                 SpecializationName = spec.SpecializationName,
                 Image = spec.Image,
-                ListOfDoctors = spec.ListOfDoctors,
-                ListOfNurses = spec.ListOfNurses
             };
             return View(model);
         }
@@ -95,8 +89,6 @@ namespace Hospital.WebProject.Controllers
             }
             spec.SpecializationName = model.SpecializationName;
             spec.ID = model.ID;
-            spec.ListOfDoctors = model.ListOfDoctors;
-            spec.ListOfNurses = model.ListOfNurses;
             spec.Image = model.Image;
             await Context.SaveChangesAsync();
             return RedirectToAction("Index");

@@ -6,6 +6,7 @@ namespace Hospital.WebProject.ViewModels.Medication
 {
     public class MedicationViewModel
     {
+        [Required]
         public Guid ID { get; set; }
         [Required]
         public string Name { get; set; }

@@ -30,7 +30,6 @@ namespace Hospital.WebProject.Controllers
             {
                 ID = x.ID,
                 Name = x.Name,
-                ListOfPatientsAndDiagnoses=x.ListOfPatientsAndDiagnoses,
                 Image=x.Image
             }).ToListAsync();
             return View(diagnoses);
@@ -54,8 +53,6 @@ namespace Hospital.WebProject.Controllers
             {
                 ID = Guid.NewGuid(),
                 Name = model.Name,
-                ListOfPatientsAndDiagnoses = model.ListOfPatientsAndDiagnoses,
-                ListOfMedication=model.ListOfMedication,
                 Image = model.Image
             };
             await Context.Diagnoses.AddAsync(diagnose);
@@ -75,7 +72,6 @@ namespace Hospital.WebProject.Controllers
             {
                 ID = diagnose.ID,
                 Name = diagnose.Name,
-                ListOfPatientsAndDiagnoses = diagnose.ListOfPatientsAndDiagnoses,
                 Image = diagnose.Image
             };
             return View(model);

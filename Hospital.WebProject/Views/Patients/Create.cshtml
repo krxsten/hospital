@@ -6,51 +6,60 @@
 {
     <form asp-action="Create" method="post">
         <div class="mb-3">
-            <label asp-for="UserID" class="form-label">Patient: </label>
-            <select asp-for="UserID" asp-items="ViewBag.Users" class="form-select">
+            <label asp-for="@Model.UserID" class="form-label">Patient: </label>
+            <select asp-for="@Model.UserID" asp-items="ViewBag.Users" class="form-select">
             </select>
+                <span class="text-danger" asp-validation-for="@Model.UserID"></span>
         </div>
 
         <div class="mb-3">
-            <label asp-for="DoctorId" class="form-label">Doctor: </label>
-            <select asp-for="DoctorId" asp-items="ViewBag.Doctor" class="form-select">
+            <label asp-for="@Model.UserID" class="form-label">Doctor: </label>
+            <select asp-for="@Model.UserID" asp-items="ViewBag.Doctor" class="form-select">
             </select>
+                <span class="text-danger" asp-validation-for="@Model.DoctorId"></span>
         </div>
 
         <div class="mb-3">
-            <label asp-for="HospitalizationDate" class="form-label">Hospitalization date: </label>
-            <input asp-for="HospitalizationDate" type="datetime-local" class="form-control" />
+            <label asp-for="@Model.HospitalizationDate" class="form-label">Hospitalization date: </label>
+            <input asp-for="@Model.HospitalizationDate" type="datetime-local" class="form-control" />
+            <span class="text-danger" asp-validation-for="@Model.HospitalizationDate"></span>
         </div>
 
         <div class="mb-3">
-            <label asp-for="DischargeDate" class="form-label">Discharge date: </label>
-            <input asp-for="DischargeDate" type="datetime-local" class="form-control" />
+            <label asp-for="@Model.DischargeDate" class="form-label">Discharge date: </label>
+            <input asp-for="@Model.DischargeDate" type="datetime-local" class="form-control" />
+            <span class="text-danger" asp-validation-for="@Model.DischargeDate"></span>
         </div>
 
         <div class="mb-3">
-            <label asp-for="RoomId" class="form-label">Room: </label>
-            <select asp-for="RoomId" asp-items="ViewBag.Room" class="form-select">
+            <label asp-for="@Model.RoomId" class="form-label">Room: </label>
+            <select asp-for="@Model.RoomId" asp-items="ViewBag.Room" class="form-select">
             </select>
+            <span class="text-danger" asp-validation-for="@Model.RoomId"></span>
         </div>
 
         <div class="mb-3">
-            <label asp-for="BirthCity" class="form-label">Birth city: </label>
-            <input asp-for="BirthCity" class="form-control" />
+            <label asp-for="@Model.BirthCity" class="form-label">Birth city: </label>
+            <input asp-for="@Model.BirthCity" class="form-control" />
+            <span class="text-danger" asp-validation-for="@Model.BirthCity"></span>
         </div>
 
         <div class="mb-3">
-            <label asp-for="DateOfBirth" class="form-label">Date of birth: </label>
-            <input asp-for="DateOfBirth" class="form-control" />
+            <label asp-for="@Model.DateOfBirth" class="form-label">Date of birth: </label>
+            <input asp-for="@Model.DateOfBirth" class="form-control" />
+            <span class="text-danger" asp-validation-for="@Model.DateOfBirth"></span>
         </div>
 
         <div class="mb-3">
-            <label asp-for="PhoneNumber" class="form-label">Phone number: </label>
-            <input asp-for="PhoneNumber" class="form-control" />
+            <label asp-for="@Model.PhoneNumber" class="form-label">Phone number: </label>
+            <input asp-for="@Model.PhoneNumber" class="form-control" />
+            <span class="text-danger" asp-validation-for="@Model.PhoneNumber"></span>
         </div>
 
          <div class="mb-3">
-            <label asp-for="UCN" class="form-label">UCN: </label>
-            <input asp-for="UCN" class="form-control" />
+            <label asp-for="@Model.UCN" class="form-label">UCN: </label>
+            <input asp-for="@Model.UCN" class="form-control" />
+            <span class="text-danger" asp-validation-for="@Model.UCN"></span>
         </div>
 
         <div class="mb-3">
@@ -58,4 +67,7 @@
             <a asp-action="Index" class="btn btn-secondary" style="display:inline">Back</a>
         </div>
     </form>
+}
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
 }

@@ -8,6 +8,7 @@ namespace Hospital.WebProject.ViewModels.Nurse
 {
     public class NurseViewModel
     {
+        [Required]
         public Guid UserID { get; set; }
         public Hospital.Data.Entities.User User { get; set; }
 
@@ -18,7 +19,9 @@ namespace Hospital.WebProject.ViewModels.Nurse
         [Required]
         public Guid ShiftId { get; set; }
         public Hospital.Data.Entities.Shift Shift { get; set; }
+        [Required]
         public bool IsAccepted { get; set; } = false;
+        [Required]
         public string Image { get; set; }
         public List<DoctorAndNurse> DoctorNurses { get; set; } = new List<DoctorAndNurse>();
     }

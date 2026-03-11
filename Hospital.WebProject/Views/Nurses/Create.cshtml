@@ -5,25 +5,29 @@
 {
     <form asp-action="Create" method="post">
         <div class="mb-3">
-            <label asp-for="UserID" class="form-label">Nurses: </label>
-            <select asp-for="UserID" asp-items="ViewBag.Nurses" class="form-select" />
+            <label asp-for="@Model.UserID" class="form-label">Nurses: </label>
+            <select asp-for="@Model.UserID" asp-items="ViewBag.Nurses" class="form-select" ></select>
+            <span class="text-danger" asp-validation-for="@Model.UserID"></span>
         </div>
 
         <div class="mb-3">
-            <label asp-for="SpecializationId" class="form-label">Specialization</label>
-            <select asp-for="SpecializationId" asp-items="ViewBag.Specializations" class="form-select">
+            <label asp-for="@Model.SpecializationId" class="form-label">Specialization</label>
+            <select asp-for="@Model.SpecializationId" asp-items="ViewBag.Specializations" class="form-select">
             </select>
+                <span class="text-danger" asp-validation-for="@Model.SpecializationId"></span>
         </div>
 
         <div class="mb-3">
-            <label asp-for="ShiftId" class="form-label">Shift</label>
-            <select asp-for="ShiftId" asp-items="ViewBag.Shifts" class="form-select">
+            <label asp-for="@Model.ShiftId" class="form-label">Shift</label>
+            <select asp-for="@Model.ShiftId" asp-items="ViewBag.Shifts" class="form-select">
             </select>
+                <span class="text-danger" asp-validation-for="@Model.ShiftId"></span>
         </div>
 
         <div class="mb-3">
-            <label asp-for="Image" class="form-label">Image URL</label>
-            <input asp-for="Image" class="form-control" />
+            <label asp-for="@Model.Image" class="form-label">Image URL</label>
+            <input asp-for="@Model.Image" class="form-control" />
+            <span class="text-danger" asp-validation-for="@Model.Image"></span>
         </div>
 
         <div class="mb-3">
@@ -31,4 +35,7 @@
             <a asp-action="Index" class="btn btn-secondary" style="display:inline">Back</a>
         </div>
     </form>
+}
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
 }

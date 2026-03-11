@@ -5,7 +5,7 @@ namespace Hospital.WebProject.ViewModels.Room
 {
     public class RoomViewModel
     {
-        [Key]
+        [Required]
         public Guid ID { get; set; }
         [Required]
         public int RoomNumber { get; set; }

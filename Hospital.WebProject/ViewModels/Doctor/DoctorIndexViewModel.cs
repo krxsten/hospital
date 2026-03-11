@@ -21,7 +21,9 @@ namespace Hospital.WebProject.ViewModels.Doctor
 
         [Required]
         public Guid UserId { get; set; }
+        [Required]
         public bool IsAccepted { get; set; } = false;
+        [Required]
         public string Image { get; set; }
         public List<Hospital.Data.Entities.Patient> Patients { get; set; } = new List<Hospital.Data.Entities.Patient>();
         public List<DoctorAndNurse> DoctorNurses { get; set; } = new List<DoctorAndNurse>();

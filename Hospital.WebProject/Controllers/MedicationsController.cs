@@ -29,7 +29,6 @@ namespace Hospital.WebProject.Controllers
             {
                 Name = x.Name,
                 DiagnoseID = x.DiagnoseID,
-                Diagnose = x.Diagnose,
                 Description = x.Description,
                 SideEffects = x.SideEffects,
                 ID = x.ID
@@ -57,7 +56,6 @@ namespace Hospital.WebProject.Controllers
                 ID = Guid.NewGuid(),
                 Name = model.Name,
                 DiagnoseID = model.DiagnoseID,
-                Diagnose = model.Diagnose,
                 Description = model.Description,
                 SideEffects = model.SideEffects
             };
@@ -80,7 +78,6 @@ namespace Hospital.WebProject.Controllers
                 ID = medication.ID,
                 Name = medication.Name,
                 DiagnoseID = medication.DiagnoseID,
-                Diagnose = medication.Diagnose,
                 Description = medication.Description,
                 SideEffects = medication.SideEffects
 
@@ -103,7 +100,6 @@ namespace Hospital.WebProject.Controllers
             medication.ID = model.ID;
             medication.Name = model.Name;
             medication.DiagnoseID = model.DiagnoseID;
-            medication.Diagnose = model.Diagnose;
             medication.Description = model.Description;
             medication.SideEffects = model.SideEffects;
             await Context.SaveChangesAsync();

@@ -34,16 +34,10 @@ namespace Hospital.WebProject.Controllers
             var docs = await Context.Doctors.Include(x => x.Specialization).Include(x => x.Shift).Include(x => x.User).Select(x => new DoctorIndexViewModel
             {
                 SpecializationId = x.SpecializationId,
-                Specialization = x.Specialization,
                 ShiftId = x.ShiftId,
-                Shift = x.Shift,
-                User = x.User,
                 IsAccepted = x.IsAccepted,
                 UserId = x.UserId,
                 Image = x.Image,
-                Checkups = x.Checkups,
-                DoctorNurses = x.DoctorNurses,
-                Patients = x.Patients
             }).ToListAsync();
             return View(docs);
 
@@ -104,16 +98,10 @@ namespace Hospital.WebProject.Controllers
             var model = new DoctorCreateViewModel
             {
                 SpecializationID = doctor.SpecializationId,
-                Specialization = doctor.Specialization,
                 ShiftID = doctor.ShiftId,
-                Shift = doctor.Shift,
-                User = doctor.User,
                 IsAccepted = doctor.IsAccepted,
                 UserID = doctor.UserId,
                 Image = doctor.Image,
-                DoctorNurses = doctor.DoctorNurses,
-                Checkups = doctor.Checkups,
-                Patients = doctor.Patients
             };
             return View(model);
         }

@@ -6,13 +6,15 @@
 {
     <form asp-action="Create" method="post">
         <div class="mb-3">
-            <label asp-for="SpecializationName" class="form-label">Name of specialization: </label>
-            <input asp-for="SpecializationName" class="form-control" />
+            <label asp-for="@Model.SpecializationName" class="form-label">Name of specialization: </label>
+            <input asp-for="@Model.SpecializationName" class="form-control" />
+            <span class="text-danger" asp-validation-for="@Model.SpecializationName"></span>
         </div>
 
         <div class="mb-3">
-            <label asp-for="Image" class="form-label">Image: </label>
-            <input asp-for="Image" class="form-control" />
+            <label asp-for="@Model.Image" class="form-label">Image: </label>
+            <input asp-for="@Model.Image" class="form-control" />
+            <span class="text-danger" asp-validation-for="@Model.Image"></span>
         </div>
 
         <div class="mb-3">
@@ -20,4 +22,7 @@
             <a asp-action="Index" class="btn btn-secondary" style="display:inline">Back</a>
         </div>
     </form>
+}
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
 }

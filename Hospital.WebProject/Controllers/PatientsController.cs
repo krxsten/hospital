@@ -50,14 +50,17 @@ namespace Hospital.WebProject.Controllers
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            var doctors = Context.Doctors.Include(d => d.User).Select(d => new
+            var docRole = await UserManager.GetUsersInRoleAsync("Doctor");
+            var doctors = docRole.Select(d => new
             {
-                d.UserId,
-                FullName = d.User.FirstName + " " + d.User.LastName
+                d.Id,
+                FullName = d.FirstName + " " + d.LastName
             }).ToList();
 
-            ViewBag.Doctor = new SelectList(doctors, "UserId", "FullName");
+            ViewBag.Doctor = new SelectList(doctors, "Id", "FullName");
+
             ViewBag.Room = new SelectList(Context.Rooms, "ID", "RoomNumber");
+
             var patientRole = await UserManager.GetUsersInRoleAsync("Patient");
             var users = patientRole.Select(u => new
             {
@@ -77,20 +80,15 @@ namespace Hospital.WebProject.Controllers
             }
             var pat = new Patient()
             {
-                Doctor = model.Doctor,
                 DoctorId = model.DoctorId,
                 HospitalizationDate = model.HospitalizationDate,
                 DischargeDate = model.DischargeDate,
                 UserId = model.UserID,
-                User = model.User,
-                Room = model.Room,
                 RoomId = model.RoomId,
                 BirthCity = model.BirthCity,
                 DateOfBirth = model.DateOfBirth,
                 PhoneNumber = model.PhoneNumber,
                 UCN = model.UCN,
-                Checkups = model.Checkups,
-                PatientDiagnoses = model.PatientDiagnoses
             };
             await Context.Patients.AddAsync(pat);
             await Context.SaveChangesAsync();
@@ -121,20 +119,15 @@ namespace Hospital.WebProject.Controllers
             );
             var model = new PatientViewModel
             {
-                Doctor = pat.Doctor,
                 DoctorId = pat.DoctorId,
                 HospitalizationDate = pat.HospitalizationDate,
                 DischargeDate = pat.DischargeDate,
                 UserID = pat.UserId,
-                User = pat.User,
-                Room = pat.Room,
                 RoomId = pat.RoomId,
                 BirthCity = pat.BirthCity,
                 DateOfBirth = pat.DateOfBirth,
                 PhoneNumber = pat.PhoneNumber,
                 UCN = pat.UCN,
-                Checkups = pat.Checkups,
-                PatientDiagnoses = pat.PatientDiagnoses
             };
             return View(model);
         }
@@ -151,20 +144,15 @@ namespace Hospital.WebProject.Controllers
             {
                 return NotFound();
             }
-            pat.Doctor = model.Doctor;
             pat.DoctorId = model.DoctorId;
             pat.HospitalizationDate = model.HospitalizationDate;
             pat.DischargeDate = model.DischargeDate;
             pat.UserId = model.UserID;
-            pat.User = model.User;
-            pat.Room = model.Room;
             pat.RoomId = model.RoomId;
             pat.BirthCity = model.BirthCity;
             pat.DateOfBirth = model.DateOfBirth;
             pat.PhoneNumber = model.PhoneNumber;
             pat.UCN = model.UCN;
-            pat.Checkups = model.Checkups;
-            pat.PatientDiagnoses = model.PatientDiagnoses;
             await Context.SaveChangesAsync();
             return RedirectToAction("Index");
         }

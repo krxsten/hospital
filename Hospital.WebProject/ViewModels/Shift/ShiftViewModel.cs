@@ -4,6 +4,7 @@ namespace Hospital.WebProject.ViewModels.Shift
 {
     public class ShiftViewModel
     {
+        [Required]
         public Guid ID { get; set; }
         [Required]
         public string Type { get; set; }

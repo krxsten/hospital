@@ -5,12 +5,17 @@
 {
     <form asp-action="Create" method="post" asp-antiforgery="true">
         <div class="mb-3">
-            <label asp-for="Name" class="form-label">Diagnose: </label>
-            <input asp-for="Name" class="form-control" />
+            <label asp-for="@Model.Name" class="form-label">Diagnose: </label>
+            <input asp-for="@Model.Name" class="form-control" />
+            <span class="text-danger" asp-validation-for="@Model.Name"></span>
         </div>
         <div class="mb-3">
             <button type="submit" class="btn btn-primary">Submit</button>
             <a asp-action="Index" class="btn btn-secondary" style="display:inline">Back</a>
         </div>
     </form>
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
 }

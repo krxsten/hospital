@@ -30,7 +30,6 @@ namespace Hospital.WebProject.Controllers
                 ID = x.ID,
                 RoomNumber = x.RoomNumber,
                 IsTaken = x.IsTaken,
-                ListOfPatients = x.ListOfPatients
             }).ToListAsync();
             return View(rooms);
         }
@@ -53,7 +52,6 @@ namespace Hospital.WebProject.Controllers
                 ID = Guid.NewGuid(),
                 RoomNumber = model.RoomNumber,
                 IsTaken = model.IsTaken,
-                ListOfPatients= model.ListOfPatients
             };
             await Context.Rooms.AddAsync(room);
             await Context.SaveChangesAsync();
@@ -68,8 +66,6 @@ namespace Hospital.WebProject.Controllers
                 IsTaken = x.IsTaken,
                 RoomNumber=x.RoomNumber,
                 ID = x.ID,
-                ListOfPatients = x.ListOfPatients
-                
             }).FirstOrDefaultAsync();
 
             if (room == null)
@@ -111,7 +107,6 @@ namespace Hospital.WebProject.Controllers
             room.ID = model.ID;
             room.RoomNumber = model.RoomNumber;
             room.IsTaken = model.IsTaken;
-            room.ListOfPatients = model.ListOfPatients;
             await Context.SaveChangesAsync();
             return RedirectToAction("Index");
         }

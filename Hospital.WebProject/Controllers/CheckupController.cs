@@ -40,23 +40,23 @@ namespace Hospital.WebProject.Controllers
         }
         [Authorize(Roles = "Admin, Doctor, Nurse, Patient")]
         [HttpGet]
-        public IActionResult Create()
+        public async Task< IActionResult> Create()
         {
-            var doctors = Context.Doctors.Include(d => d.User).Select(d => new
+            var docRole = await UserManager.GetUsersInRoleAsync("Doctor");
+            var doctors = docRole.Select(d => new
             {
-                d.UserId,
-                FullName = d.User.FirstName + " " + d.User.LastName
+                d.Id,
+                FullName = d.FirstName + " " + d.LastName
             }).ToList();
+            ViewBag.Doctor = new SelectList(doctors, "Id", "FullName");
 
-            ViewBag.Doctor = new SelectList(doctors, "UserId", "FullName");
-
-            var patients = Context.Patients.Include(p => p.User).Select(p => new
+            var patientRole = await UserManager.GetUsersInRoleAsync("Patient");
+            var users = patientRole.Select(u => new
             {
-                p.UserId,
-                FullName = p.User.FirstName + " " + p.User.LastName
+                u.Id,
+                FullName = u.FirstName + " " + u.LastName
             }).ToList();
-
-            ViewBag.Patients = new SelectList(patients, "UserId", "FullName");
+            ViewBag.Users = new SelectList(users, "Id", "FullName");
 
             return View(new CheckupViewModel());
         }
@@ -72,10 +72,8 @@ namespace Hospital.WebProject.Controllers
             {
                 ID = Guid.NewGuid(),
                 Date = model.Date,
-                Doctor = model.Doctor,
                 DoctorID = model.DoctorID,
                 PatientID = model.PatientID,
-                Patient = model.Patient
             };
             await Context.Checkups.AddAsync(checkup);
             await Context.SaveChangesAsync();
@@ -111,10 +109,8 @@ namespace Hospital.WebProject.Controllers
             {
                 ID = checkup.ID,
                 Date = checkup.Date,
-                Doctor = checkup.Doctor,
                 DoctorID = checkup.DoctorID,
                 PatientID = checkup.PatientID,
-                Patient = checkup.Patient
             };
             return View(model);
         }
@@ -133,9 +129,7 @@ namespace Hospital.WebProject.Controllers
             }
             checkup.Date = model.Date;
             checkup.ID = model.ID;
-            checkup.Doctor = model.Doctor;
             checkup.DoctorID = model.DoctorID;
-            checkup.Patient = model.Patient;
             checkup.PatientID = model.PatientID;
             await Context.SaveChangesAsync();
             return RedirectToAction("Index");

@@ -71,14 +71,10 @@ namespace Hospital.WebProject.Controllers
             var nurse = new Nurse()
             {
                 SpecializationId = model.SpecializationId,
-                Specialization = model.Specialization,
                 ShiftId = model.ShiftId,
-                Shift = model.Shift,
                 UserId = model.UserID,
-                User = model.User,
                 IsAccepted = model.IsAccepted,
                 Image = model.Image,
-                DoctorNurses = model.DoctorNurses
             };
             await Context.Nurses.AddAsync(nurse);
             await Context.SaveChangesAsync();
@@ -105,14 +101,10 @@ namespace Hospital.WebProject.Controllers
             var model = new NurseViewModel
             {
                 SpecializationId = nurse.SpecializationId,
-                Specialization = nurse.Specialization,
                 ShiftId = nurse.ShiftId,
-                Shift = nurse.Shift,
                 UserID = nurse.UserId,
-                User = nurse.User,
                 IsAccepted = nurse.IsAccepted,
                 Image = nurse.Image,
-                DoctorNurses= nurse.DoctorNurses
             };
             return View(model);
         }
@@ -132,11 +124,8 @@ namespace Hospital.WebProject.Controllers
                 return NotFound();
             }
             nurse.SpecializationId = model.SpecializationId;
-            nurse.Specialization = model.Specialization;
-              nurse.ShiftId = model.ShiftId;
-            nurse.Shift = model.Shift;
+            nurse.ShiftId = model.ShiftId;
             nurse.UserId = model.UserID;
-            nurse.User = model.User;
             nurse.IsAccepted = model.IsAccepted;
             nurse.Image = model.Image;
             await Context.SaveChangesAsync();
