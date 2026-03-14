@@ -1,0 +1,17 @@
+body {
+    min-height: 100vh;
+    margin: 0;
+    font-family: 'Times New Roman';
+    background: radial-gradient(circle at top, #1e88e5, #0d47a1);
+    font-size: 18px;
+}
+
+.container {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+    color: white;
+}

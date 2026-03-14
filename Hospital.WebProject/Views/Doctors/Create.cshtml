@@ -1,0 +1,42 @@
+﻿<link rel="stylesheet" href="/css/styles.css">
+@using Hospital.WebProject.ViewModels.Doctor
+@model DoctorCreateViewModel
+@if (User.IsInRole("Admin"))
+{
+    <form asp-controller="Doctors" asp-action="Create" method="post">
+        <div class="mb-3">
+            <label asp-for="@Model.UserID" class="form-label">Doctor: </label>
+            <select asp-for="@Model.UserID" asp-items="ViewBag.Users" class="form-select">
+            </select>
+                <span class="text-danger" asp-validation-for="@Model.UserID"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="@Model.SpecializationID" class="form-label">Specialization</label>
+            <select asp-for="@Model.SpecializationID" asp-items="ViewBag.Specialization" class="form-select">
+            </select>
+                <span class="text-danger" asp-validation-for="@Model.SpecializationID"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="@Model.ShiftID" class="form-label">Shift</label>
+            <select asp-for="@Model.ShiftID" asp-items="ViewBag.Shift" class="form-select">
+            </select>
+                <span class="text-danger" asp-validation-for="@Model.ShiftID"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="@Model.Image" class="form-label">Image URL</label>
+            <input asp-for="@Model.Image" class="form-control" />
+            <span class="text-danger" asp-validation-for="@Model.Image"></span>
+        </div>
+
+        <div class="mb-3">
+            <button type="submit" class="btn btn-primary">Submit</button>
+            <a asp-action="Index" class="btn btn-secondary" style="display:inline">Back</a>
+        </div>
+    </form>
+}
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

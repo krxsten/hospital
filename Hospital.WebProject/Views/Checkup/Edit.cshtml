@@ -1,0 +1,30 @@
+﻿<link rel="stylesheet" href="/css/styles.css">
+@using Hospital.WebProject.ViewModels.Checkup
+@model CheckupIndexViewModel
+
+@if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse") || User.IsInRole("Patient"))
+{
+    <form asp-action="Edit" method="post">
+        <div class="mb-3">
+            <label asp-for="PatientID" class="form-label">Patient: </label>
+            <select asp-for="PatientID" asp-items="ViewBag.Patients" class="form-select" />
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="DoctorID" class="form-label">Doctor: </label>
+            <select asp-for="DoctorID" asp-items="ViewBag.Doctor" class="form-select" />
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Date" class="form-label">Checkup Date & Time</label>
+            <input asp-for="Date" type="datetime-local" class="form-control" id="checkupDate" />
+        </div>
+
+        <div class="mb-3">
+            <button type="submit" class="btn btn-primary">Update</button>
+            <a asp-action="Index" class="btn btn-secondary" style="display:inline">Back</a>
+        </div>
+    </form>
+}
+
+

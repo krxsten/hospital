@@ -1,0 +1,24 @@
+﻿@using Hospital.WebProject.ViewModels.Diagnose
+@model DiagnoseIndexViewModel
+
+@if (User.IsInRole("Admin") || User.IsInRole("Doctor"))
+{
+    <form asp-action="Create" method="post">
+        @Html.AntiForgeryToken()
+
+        <div class="mb-3">
+            <label asp-for="Name" class="form-label">Diagnose:</label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <button type="submit" class="btn btn-primary">Submit</button>
+            <a asp-action="Index" class="btn btn-secondary">Back</a>
+        </div>
+    </form>
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

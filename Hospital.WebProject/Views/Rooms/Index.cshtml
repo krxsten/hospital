@@ -1,0 +1,54 @@
+﻿<link rel="stylesheet" href="/css/styles.css">
+@using Hospital.WebProject.ViewModels.Room
+@model List<RoomIndexViewModel>
+
+<div class="mb-3">
+    <h2 style="text-align:center">———— Rooms ————</h2>
+</div>
+<div class="mb-3 d-flex justify-content-end" style="font-family: 'Times New Roman'; font-size: 24px">
+    @if (User.IsInRole("Admin"))
+    {
+        <a asp-action="Create" class="btn btn-success" style="font-family: 'Times New Roman'; font-size: 20px">+ Create</a>
+    }
+    <a asp-action="Index" asp-controller="Home" class="btn btn-secondary ms-3" style="font-family: 'Times New Roman'; font-size: 20px">← Back</a>
+</div>
+@if (User.IsInRole("Admin") || User.IsInRole("Patient") || User.IsInRole("Doctor") || User.IsInRole("Nurse"))
+{
+    <table class="table table-striped table-bordered" style="text-align:center">
+        <thead>
+            <tr>
+                <th scope="col">Room Number</th>
+                <th scope="col">Occupied</th>
+                @if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse") || User.IsInRole("Patient"))
+                {
+                    <th scope="col">Actions</th>
+                }
+            </tr>
+        </thead>
+        <tbody class="table-group-divider">
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.RoomNumber</td>
+                    <td>@item.IsTaken</td>
+                    <td>
+                        @if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse"))
+                        {
+                            <a asp-action="Edit" asp-route-id="@item.ID" class="btn btn-warning me-2">Edit</a>
+                        }
+                        @if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse") || User.IsInRole("Patient"))
+                        {
+                            <a asp-action="Details" asp-route-id="@item.ID" class="btn btn-success">Details</a>
+                        }
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <form asp-action="Delete" asp-route-id="@item.ID" method="post" class="d-inline">
+                                <button class="btn btn-danger">Delete</button>
+                            </form>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

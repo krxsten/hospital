@@ -1,0 +1,43 @@
+﻿<link rel="stylesheet" href="/css/styles.css">
+@using Hospital.WebProject.ViewModels.Shift
+@model List<ShiftIndexViewModel>
+<div class="mb-3">
+    <h2 style="text-align:center">———— Shifts ————</h2>
+</div>
+<div class="mb-3 d-flex justify-content-end" style="font-family: 'Times New Roman'; font-size: 24px">
+    @if (User.IsInRole("Admin"))
+    {
+        <a asp-action="Create" class="btn btn-success" style="font-family: 'Times New Roman'; font-size: 20px">+ Create</a>
+    }
+    <a asp-action="Index" asp-controller="Home" class="btn btn-secondary ms-3" style="font-family: 'Times New Roman'; font-size: 20px">← Back</a>
+</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Type</th>
+            <th scope="col">Start time</th>
+            <th scope="col">End time</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody class="table-group-divider">
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Type</td>
+                <td>@item.StartTime</td>
+                <td>@item.EndTime</td>
+                <td>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.ID" class="btn btn-warning me-2">Edit</a>
+                        <form asp-action="Delete" asp-route-id="@item.ID" method="post" class="d-inline">
+                            <button class="btn btn-danger">Delete</button>
+                        </form>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

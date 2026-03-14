@@ -1,0 +1,65 @@
+﻿<link rel="stylesheet" href="/css/styles.css">
+@using Hospital.WebProject.ViewModels.Patient
+@model List<PatientIndexViewModel>
+
+<div class="mb-3">
+    <h2 style="text-align:center">———— Patients ————</h2>
+</div>
+<div class="mb-3 d-flex justify-content-end" style="font-family: 'Times New Roman'; font-size: 24px">
+    @if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse"))
+    {
+        <a asp-action="Create" class="btn btn-success" style="font-family: 'Times New Roman'; font-size: 20px">+ Create</a>
+    }
+    <a asp-action="Index" asp-controller="Home" class="btn btn-secondary ms-3" style="font-family: 'Times New Roman'; font-size: 20px">← Back</a>
+</div>
+@if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Patient") || User.IsInRole("Nurse"))
+{
+    <table class="table table-bordered table-striped" style="text-align:center">
+        <thead>
+            <tr>
+                <th scope="col">First name</th>
+                <th scope="col">Last name</th>
+                <th scope="col">Doctor's first name</th>
+                <th scope="col">Doctor's last name</th>
+                <th scope="col">Hospitalization date</th>
+                <th scope="col">Discharge date</th>
+                <th scope="col">Room number</th>
+                <th scope="col">Birth city</th>
+                <th scope="col">Date of birth</th>
+                <th scope="col">Phone number</th>
+                <th scope="col">UCN</th>
+                @if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse"))
+                {
+                    <th scope="col">Actions</th>
+                }
+            </tr>
+        </thead>
+        <tbody class="table-group-divider">
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.User.FirstName</td>
+                    <td>@item.User.LastName</td>
+                    <td>@item.Doctor.User.FirstName</td>
+                    <td>@item.Doctor.User.LastName</td>
+                    <td>@item.HospitalizationDate.ToShortDateString()</td>
+                    <td>@item.DischargeDate.ToShortDateString()</td>
+                    <td>@item.Room.RoomNumber</td>
+                    <td>@item.BirthCity</td>
+                    <td>@item.DateOfBirth.ToShortDateString()</td>
+                    <td>@item.PhoneNumber</td>
+                    <td>@item.UCN</td>
+                    <td>
+                        @if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse"))
+                        {
+                            <a asp-action="Edit" asp-route-id="@item.User.Id" class="btn btn-warning me-2">Edit</a>
+                            <form asp-action="Delete" asp-route-id="@item.User.Id" method="post" class="d-inline">
+                                <button class="btn btn-danger">Delete</button>
+                            </form>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

@@ -1,0 +1,53 @@
+﻿@using Hospital.WebProject.ViewModels.Checkup
+@model List<CheckupIndexViewModel>
+
+<div class="mb-3">
+    <h2 style="text-align:center">———— Check ups ————</h2>
+</div>
+<div class="mb-3 d-flex justify-content-end" style="font-family: 'Times New Roman'; font-size: 24px">
+    @if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse") || User.IsInRole("Patient"))
+    {
+        <a asp-action="Create" class="btn btn-success" style="font-family: 'Times New Roman'; font-size: 20px">+ Create</a>
+    }
+    <a asp-action="Index" asp-controller="Home" class="btn btn-secondary ms-3" style="font-family: 'Times New Roman'; font-size: 20px">← Back</a>
+</div>
+@if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse") || User.IsInRole("Patient"))
+{
+    <table class="table table-striped table-bordered" style="text-align:center">
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Patient name</th>
+                <th scope="col">Patient's doctor</th>
+                <th scope="col">Date of checkup</th>
+                @if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse"))
+                {
+                    <th scope="col">Actions</th>
+                }
+            </tr>
+        </thead>
+        <tbody class="table-group-divider">
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <th scope="row">@item.ID</th>
+                    <td>@item.Patient.User.FirstName + " " + @item.Patient.User.LastName</td>
+                    <td>@item.Patient.Doctor.User.FirstName + " " + @item.Patient.Doctor.User.LastName</td>
+                    <td>
+                        @if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse"))
+                        {
+                            <a asp-action="Edit" asp-route-id="@item.ID" style="display:inline" class="btn btn-warning mb-3">Edit</a>
+                            <form asp-action="Delete" class="mb-3" asp-route-id="@item.ID" method="post" style="display:inline">
+                                <button class="btn btn-danger">Delete</button>
+                                <a asp-action="GetBusyTimes" asp-route-id="@item.ID" style="display:inline" class="btn btn-warning mb-3">Busy times</a>
+                                <a asp-action="GetDoctorShift" asp-route-id="@item.ID" style="display:inline" class="btn btn-warning mb-3">Doctor shifts</a>
+                            </form>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+

@@ -1,0 +1,37 @@
+﻿<link rel="stylesheet" href="/css/styles.css">
+@using Hospital.WebProject.ViewModels.Diagnose
+@model List<DiagnoseIndexViewModel>
+<div class="mb-3">
+    <h2 style="text-align:center">———— Diagnoses ————</h2>
+</div>
+<div class="mb-3 d-flex justify-content-end" style="font-family: 'Times New Roman'; font-size: 24px">
+    @if (User.IsInRole("Admin") || User.IsInRole("Doctor"))
+    {
+        <a asp-action="Create" class="btn btn-success" style="font-family: 'Times New Roman'; font-size: 20px">+ Create</a>
+    }
+    <a asp-action="Index" asp-controller="Home" class="btn btn-secondary ms-3" style="font-family: 'Times New Roman'; font-size: 20px">← Back</a>
+</div>  
+
+<div class="row row-cols-1 row-cols-md-3 g-4 mb-3">
+    @foreach (var item in Model)
+    {
+        <div class="col">
+            <div class="card h-100 diagnose-card">
+                <div class="card-body">
+                    <h5 class="card-title">@item.Name</h5>
+                    <p class="card-text">@item.Image</p>
+                </div>
+                @if (User.IsInRole("Admin") || User.IsInRole("Doctor"))
+                {
+                    <div class="card-footer">
+                        <a asp-action="Edit" asp-route-id="@item.ID" class="btn btn-warning me-2">Edit</a>
+                        <form asp-action="Delete" asp-route-id="@item.ID" method="post" class="d-inline">
+                            <button class="btn btn-danger">Delete</button>
+                        </form>
+                    </div>
+                }
+            </div>
+        </div>
+    }
+</div>
+
