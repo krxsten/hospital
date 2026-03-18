@@ -12,6 +12,8 @@ namespace Hospital.Entities
     public class Nurse
     {
         [Key]
+        public Guid ID { get; set; }
+        [Required]
         public Guid UserId { get; set; }
 
         public User User { get; set; }

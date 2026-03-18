@@ -1,4 +1,6 @@
-﻿using Hospital.Data;
+﻿using Hospital.Core.Contracts;
+using Hospital.Core.DTOs;
+using Hospital.Data;
 using Hospital.Data.Entities;
 using Hospital.Entities;
 using Hospital.WebProject.ViewModels.Diagnose;
@@ -17,129 +19,179 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace Hospital.WebProject.Controllers
 {
-    [Authorize]
-    public class DoctorsController : Controller
-    {
-        private readonly HospitalDbContext Context;
-        private readonly UserManager<User> UserManager;
-        public DoctorsController(HospitalDbContext context, UserManager<User> userManager)
-        {
-            this.Context = context;
-            this.UserManager = userManager;
-        }
-        [AllowAnonymous]
-        [HttpGet]
-        public async Task<IActionResult> Index()
-        {
-            var docs = await Context.Doctors.Include(x => x.Specialization).Include(x => x.Shift).Include(x => x.User).Select(x => new DoctorIndexViewModel
-            {
-                SpecializationId = x.SpecializationId,
-                ShiftId = x.ShiftId,
-                IsAccepted = x.IsAccepted,
-                UserId = x.UserId,
-                Image = x.Image,
-            }).ToListAsync();
-            return View(docs);
+	[Authorize]
+	public class DoctorsController : Controller
+	{
+		private readonly IDoctorService doctorService;
+		private readonly HospitalDbContext context;
+		private readonly UserManager<User> userManager;
 
-        }
-        [Authorize(Roles = "Admin")]
-        [HttpGet]
-        public async Task<IActionResult> Create()
-        {
-            var userDb = await UserManager.Users.ToListAsync();
-            var users = userDb.Select(u => new
-            {
-                u.Id,
-                FullName = u.FirstName + " " + u.LastName
-            }).ToList();
-            ViewBag.Users = new SelectList(users, "Id", "FullName");
-            ViewBag.Specialization = new SelectList(await Context.Specializations.ToListAsync(), "ID", "SpecializationName");
-            ViewBag.Shift = new SelectList(await Context.Shifts.ToListAsync(), "ID", "Type");
-            return View(new DoctorCreateViewModel());
-        }
-        [Authorize(Roles = "Admin")]
-        [HttpPost]
-        public async Task<IActionResult> Create(DoctorCreateViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-            var doctor = new Doctor()
-            {
-                UserId = model.UserID,
-                SpecializationId = model.SpecializationID,
-                ShiftId = model.ShiftID,
-                IsAccepted = model.IsAccepted,
-                Image = model.Image
-            };
-            await Context.Doctors.AddAsync(doctor);
-            await Context.SaveChangesAsync();
-            return RedirectToAction("Index");
-        }
-        [Authorize(Roles = "Admin")]
-        [HttpGet]
-        public async Task<IActionResult> Edit(Guid id)
-        {
-            var doctor = await Context.Doctors.FindAsync(id);
-            if (doctor == null)
-            {
-                return NotFound();
-            }
-            ViewBag.Specialization = new SelectList(Context.Specializations, "ID", "SpecializationName");
-            ViewBag.Shift = new SelectList(Context.Shifts, "ID", "Type");
-            var doctorUsers = await UserManager.GetUsersInRoleAsync("Doctor");
-            ViewBag.Users = new SelectList(
-                doctorUsers.Select(u => new { u.Id, FullName = u.FirstName + " " + u.LastName }),
-                "Id",
-                "FullName",
-                doctor.UserId
-            );
-            var model = new DoctorCreateViewModel
-            {
-                SpecializationID = doctor.SpecializationId,
-                ShiftID = doctor.ShiftId,
-                IsAccepted = doctor.IsAccepted,
-                UserID = doctor.UserId,
-                Image = doctor.Image,
-            };
-            return View(model);
-        }
-        [Authorize(Roles = "Admin")]
-        [HttpPost]
-        public async Task<IActionResult> Edit(DoctorCreateViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-            var doctor = await Context.Doctors.FindAsync(model.UserID);
-            if (doctor == null)
-            {
-                return NotFound();
-            }
-            doctor.UserId = model.UserID;
-            doctor.SpecializationId = model.SpecializationID;
-            doctor.ShiftId = model.ShiftID;
-            doctor.IsAccepted = model.IsAccepted;
-            doctor.Image = model.Image;
-            await Context.SaveChangesAsync();
-            return RedirectToAction("Index");
-        }
-        [Authorize(Roles = "Admin")]
-        [HttpPost]
-        public async Task<IActionResult> Delete(Guid id)
-        {
-            var doctor = await Context.Doctors.FindAsync(id);
-            if (doctor == null)
-            {
-                return NotFound();
-            }
-            Context.Doctors.Remove(doctor);
-            await Context.SaveChangesAsync();
-            return RedirectToAction("Index");
-        }
+		public DoctorsController(
+			IDoctorService doctorService,
+			HospitalDbContext context,
+			UserManager<User> userManager)
+		{
+			this.doctorService = doctorService;
+			this.context = context;
+			this.userManager = userManager;
+		}
 
+		[AllowAnonymous]
+		[HttpGet]
+		public async Task<IActionResult> Index()
+		{
+			var dtos = await doctorService.GetAllAsync();
 
-    }
+			var model = dtos.Select(x => new DoctorIndexViewModel
+			{
+				ID = x.ID,
+				SpecializationId = x.SpecializationId,
+				SpecializationName = x.SpecializationName,
+				ShiftId = x.ShiftId,
+				ShiftName = x.ShiftName,
+				IsAccepted = x.IsAccepted,
+				UserId = x.UserId,
+				UserName = x.UserName,
+				Image = x.Image
+			}).ToList();
+
+			return View(model);
+		}
+
+		[Authorize(Roles = "Admin")]
+		[HttpGet]
+		public async Task<IActionResult> Create()
+		{
+			await LoadDropdownsAsync();
+			return View(new DoctorCreateViewModel());
+		}
+
+		[Authorize(Roles = "Admin")]
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Create(DoctorCreateViewModel model)
+		{
+			if (!ModelState.IsValid)
+			{
+				await LoadDropdownsAsync();
+				return View(model);
+			}
+
+			var dto = new DoctorCreateDto
+			{
+				UserID = model.UserID,
+				SpecializationID = model.SpecializationID,
+				ShiftID = model.ShiftID,
+				IsAccepted = model.IsAccepted,
+				Image = model.Image
+			};
+
+			await doctorService.CreateAsync(dto);
+			return RedirectToAction(nameof(Index));
+		}
+
+		[Authorize(Roles = "Admin")]
+		[HttpGet]
+		public async Task<IActionResult> Edit(Guid id)
+		{
+			await LoadDropdownsAsync();
+
+			var dto = await doctorService.GetByIdAsync(id);
+			if (dto == null)
+			{
+				return NotFound();
+			}
+
+			var model = new DoctorCreateViewModel
+			{
+				ID = dto.ID,
+				UserID = dto.UserId,
+				SpecializationID = dto.SpecializationId,
+				ShiftID = dto.ShiftId,
+				IsAccepted = dto.IsAccepted,
+				Image = dto.Image
+			};
+
+			return View(model);
+		}
+
+		[Authorize(Roles = "Admin")]
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Edit(DoctorCreateViewModel model)
+		{
+			if (!ModelState.IsValid)
+			{
+				await LoadDropdownsAsync();
+				return View(model);
+			}
+
+			var dto = new DoctorIndexDto
+			{
+				ID = model.ID,
+				UserId = model.UserID,
+				SpecializationId = model.SpecializationID,
+				ShiftId = model.ShiftID,
+				IsAccepted = model.IsAccepted,
+				Image = model.Image
+			};
+
+			await doctorService.UpdateAsync(dto);
+			return RedirectToAction(nameof(Index));
+		}
+
+		[Authorize(Roles = "Admin")]
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Delete(Guid id)
+		{
+			await doctorService.DeleteAsync(id);
+			return RedirectToAction(nameof(Index));
+		}
+
+		private async Task LoadDropdownsAsync()
+		{
+			var users = await userManager.Users
+				.Select(u => new
+				{
+					u.Id,
+					FullName = u.FirstName + " " + u.LastName
+				})
+				.ToListAsync();
+
+			ViewBag.Users = new SelectList(users, "Id", "FullName");
+
+			ViewBag.Specialization = new SelectList(
+				await context.Specializations.ToListAsync(),
+				"ID",
+				"SpecializationName");
+
+			ViewBag.Shift = new SelectList(
+				await context.Shifts.ToListAsync(),
+				"ID",
+				"Type");
+		}
+
+		[HttpGet]
+		[Authorize(Roles = "Admin,Doctor,Nurse")]
+		public async Task<IActionResult> GetDoctorShift(Guid doctorId)
+		{
+			var shift = await context.Doctors
+				.Include(d => d.Shift)
+				.Where(d => d.ID == doctorId)
+				.Select(d => new DoctorShiftViewModel
+				{
+					StartTime = d.Shift.StartTime,
+					EndTime = d.Shift.EndTime
+				})
+				.FirstOrDefaultAsync();
+
+			if (shift == null)
+			{
+				return NotFound();
+			}
+
+			return View(shift);
+		}
+	}
 }

@@ -1,4 +1,6 @@
-﻿using Hospital.Data;
+﻿using Hospital.Core.Contracts;
+using Hospital.Core.DTOs;
+using Hospital.Data;
 using Hospital.Data.Entities;
 using Hospital.Entities;
 using Hospital.WebProject.ViewModels.Doctor;
@@ -11,163 +13,192 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Hospital.WebProject.Controllers
 {
-    [Authorize]
-    public class PatientsController : Controller
-    {
-        private HospitalDbContext Context { get; set; }
-        private readonly UserManager<User> UserManager;
-        public PatientsController(HospitalDbContext context, UserManager<User> userManager)
-        {
-            this.Context = context;
-            this.UserManager = userManager;
-        }
-        [Authorize(Roles = "Admin, Doctor, Patient, Nurse")]
-        [HttpGet]
-        public async Task<IActionResult> Index()
-        {
-            var pat = await Context.Patients.Include(x => x.User).Include(x => x.Doctor).Include(x => x.Room).Select(x => new PatientViewModel
-            {
-                Doctor = x.Doctor,
-                DoctorId = x.DoctorId,
-                HospitalizationDate = x.HospitalizationDate,
+	[Authorize]
+	public class PatientsController : Controller
+	{
+		private readonly IPatientService patientService;
+		private readonly HospitalDbContext context;
+		private readonly UserManager<User> userManager;
+
+		public PatientsController(
+			IPatientService patientService,
+			HospitalDbContext context,
+			UserManager<User> userManager)
+		{
+			this.patientService = patientService;
+			this.context = context;
+			this.userManager = userManager;
+		}
+
+		[Authorize(Roles = "Admin,Doctor,Patient,Nurse")]
+		[HttpGet]
+		public async Task<IActionResult> Index()
+		{
+			var dtos = await patientService.GetAllAsync();
+
+			var model = dtos.Select(x => new PatientIndexViewModel
+			{
+				ID = x.ID,
+				DoctorId = x.DoctorId,
+				DoctorName = x.DoctorName,
+				HospitalizationDate = x.HospitalizationDate,
+				HospitalizationTime = x.HospitalizationTime,
                 DischargeDate = x.DischargeDate,
-                UserID = x.UserId,
-                User = x.User,
-                Room = x.Room,
-                RoomId = x.RoomId,
-                BirthCity = x.BirthCity,
-                DateOfBirth = x.DateOfBirth,
-                PhoneNumber = x.PhoneNumber,
-                UCN = x.UCN,
-                Checkups = x.Checkups,
-                PatientDiagnoses = x.PatientDiagnoses
+				DischargeTime = x.DischargeTime,	
+                UserID = x.UserID,
+				UserName = x.UserName,
+				RoomId = x.RoomId,
+				RoomNumber = x.RoomNumber,
+				BirthCity = x.BirthCity,
+				DateOfBirth = x.DateOfBirth,
+				PhoneNumber = x.PhoneNumber,
+				UCN = x.UCN
+			}).ToList();
 
-            }).ToListAsync();
-            return View(pat);
+			return View(model);
+		}
 
-        }
-        [Authorize(Roles = "Admin, Doctor, Nurse")]
-        [HttpGet]
-        public async Task<IActionResult> Create()
-        {
-            var docRole = await UserManager.GetUsersInRoleAsync("Doctor");
-            var doctors = docRole.Select(d => new
-            {
-                d.Id,
-                FullName = d.FirstName + " " + d.LastName
-            }).ToList();
+		[Authorize(Roles = "Admin,Doctor,Nurse")]
+		[HttpGet]
+		public async Task<IActionResult> Create()
+		{
+			await LoadDropdownsAsync();
+			return View(new PatientCreateViewModel());
+		}
 
-            ViewBag.Doctor = new SelectList(doctors, "Id", "FullName");
+		[Authorize(Roles = "Admin,Doctor,Nurse")]
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Create(PatientCreateViewModel model)
+		{
+			if (!ModelState.IsValid)
+			{
+				await LoadDropdownsAsync();
+				return View(model);
+			}
 
-            ViewBag.Room = new SelectList(Context.Rooms, "ID", "RoomNumber");
-
-            var patientRole = await UserManager.GetUsersInRoleAsync("Patient");
-            var users = patientRole.Select(u => new
-            {
-                u.Id,
-                FullName = u.FirstName + " " + u.LastName
-            }).ToList();
-            ViewBag.Users = new SelectList(users, "Id", "FullName");
-            return View(new PatientViewModel());
-        }
-        [Authorize(Roles = "Admin, Doctor, Nurse")]
-        [HttpPost]
-        public async Task<IActionResult> Create(PatientViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-            var pat = new Patient()
-            {
-                DoctorId = model.DoctorId,
-                HospitalizationDate = model.HospitalizationDate,
+			var dto = new PatientCreateDTO
+			{
+				UserID = model.UserID,
+				DoctorId = model.DoctorId,
+				HospitalizationDate = model.HospitalizationDate,
+				HospitalizationTime = model.HospitalizationTime,
                 DischargeDate = model.DischargeDate,
-                UserId = model.UserID,
+				DischargeTime = model.DischargeTime,
                 RoomId = model.RoomId,
-                BirthCity = model.BirthCity,
-                DateOfBirth = model.DateOfBirth,
-                PhoneNumber = model.PhoneNumber,
-                UCN = model.UCN,
-            };
-            await Context.Patients.AddAsync(pat);
-            await Context.SaveChangesAsync();
-            return RedirectToAction("Index");
-        }
-        [Authorize(Roles = "Admin, Doctor, Nurse")]
-        [HttpGet]
-        public async Task<IActionResult> Edit(Guid id)
-        {
-            var doctors = Context.Doctors.Include(d => d.User).Select(d => new
-            {
-                d.UserId,
-                FullName = d.User.FirstName + " " + d.User.LastName
-            }).ToList();
-            ViewBag.Doctor = new SelectList(doctors, "UserId", "FullName");
-            ViewBag.Room = new SelectList(Context.Rooms, "ID", "RoomNumber");
-            var pat = await Context.Patients.FindAsync(id);
-            if (pat == null)
-            {
-                return NotFound();
-            }
-            var patientRole = await UserManager.GetUsersInRoleAsync("Patient");
-            ViewBag.Users = new SelectList(
-                patientRole.Select(u => new { u.Id, FullName = u.FirstName + " " + u.LastName }),
-                "Id",
-                "FullName",
-                pat.UserId
-            );
-            var model = new PatientViewModel
-            {
-                DoctorId = pat.DoctorId,
-                HospitalizationDate = pat.HospitalizationDate,
-                DischargeDate = pat.DischargeDate,
-                UserID = pat.UserId,
-                RoomId = pat.RoomId,
-                BirthCity = pat.BirthCity,
-                DateOfBirth = pat.DateOfBirth,
-                PhoneNumber = pat.PhoneNumber,
-                UCN = pat.UCN,
-            };
-            return View(model);
-        }
-        [Authorize(Roles = "Admin, Doctor, Nurse")]
-        [HttpPost]
-        public async Task<IActionResult> Edit(PatientViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-            var pat = await Context.Patients.FindAsync(model.UserID);
-            if (pat == null)
-            {
-                return NotFound();
-            }
-            pat.DoctorId = model.DoctorId;
-            pat.HospitalizationDate = model.HospitalizationDate;
-            pat.DischargeDate = model.DischargeDate;
-            pat.UserId = model.UserID;
-            pat.RoomId = model.RoomId;
-            pat.BirthCity = model.BirthCity;
-            pat.DateOfBirth = model.DateOfBirth;
-            pat.PhoneNumber = model.PhoneNumber;
-            pat.UCN = model.UCN;
-            await Context.SaveChangesAsync();
-            return RedirectToAction("Index");
-        }
-        [Authorize(Roles = "Admin, Doctor, Nurse")]
-        [HttpPost]
-        public async Task<IActionResult> Delete(Guid id)
-        {
-            var pat = await Context.Patients.FindAsync(id);
-            if (pat == null)
-            {
-                return NotFound();
-            }
-            Context.Patients.Remove(pat);
-            await Context.SaveChangesAsync();
-            return RedirectToAction("Index");
-        }
-    }
+				BirthCity = model.BirthCity,
+				DateOfBirth = model.DateOfBirth,
+				PhoneNumber = model.PhoneNumber,
+				UCN = model.UCN
+			};
+
+			await patientService.CreateAsync(dto);
+			return RedirectToAction(nameof(Index));
+		}
+
+		[Authorize(Roles = "Admin,Doctor,Nurse")]
+		[HttpGet]
+		public async Task<IActionResult> Edit(Guid id)
+		{
+			await LoadDropdownsAsync();
+
+			var dto = await patientService.GetByIdAsync(id);
+			if (dto == null)
+			{
+				return NotFound();
+			}
+
+			var model = new PatientIndexViewModel
+			{
+				ID = dto.ID,
+				DoctorId = dto.DoctorId,
+				DoctorName = dto.DoctorName,
+				HospitalizationDate = dto.HospitalizationDate,
+				HospitalizationTime	= dto.HospitalizationTime,
+				DischargeDate = dto.DischargeDate,
+				DischargeTime = dto.DischargeTime,
+                UserID = dto.UserID,
+				UserName = dto.UserName,
+				RoomId = dto.RoomId,
+				RoomNumber = dto.RoomNumber,
+				BirthCity = dto.BirthCity,
+				DateOfBirth = dto.DateOfBirth,
+				PhoneNumber = dto.PhoneNumber,
+				UCN = dto.UCN
+			};
+
+			return View(model);
+		}
+
+		[Authorize(Roles = "Admin,Doctor,Nurse")]
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Edit(PatientIndexViewModel model)
+		{
+			if (!ModelState.IsValid)
+			{
+				await LoadDropdownsAsync();
+				return View(model);
+			}
+
+			var dto = new PatientIndexDTO
+			{
+				ID = model.ID,
+				DoctorId = model.DoctorId,
+				DoctorName = model.DoctorName,
+				HospitalizationDate = model.HospitalizationDate,
+				HospitalizationTime = model.HospitalizationTime,
+                DischargeDate = model.DischargeDate,
+				DischargeTime = model.DischargeTime,
+                UserID = model.UserID,
+				UserName = model.UserName,
+				RoomId = model.RoomId,
+				RoomNumber = model.RoomNumber,
+				BirthCity = model.BirthCity,
+				DateOfBirth = model.DateOfBirth,
+				PhoneNumber = model.PhoneNumber,
+				UCN = model.UCN
+			};
+
+			await patientService.UpdateAsync(dto);
+			return RedirectToAction(nameof(Index));
+		}
+
+		[Authorize(Roles = "Admin,Doctor,Nurse")]
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Delete(Guid id)
+		{
+			await patientService.DeleteAsync(id);
+			return RedirectToAction(nameof(Index));
+		}
+
+		private async Task LoadDropdownsAsync()
+		{
+			var doctors = await context.Doctors
+				.Include(d => d.User)
+				.Select(d => new
+				{
+					d.ID,
+					FullName = d.User.FirstName + " " + d.User.LastName
+				})
+				.ToListAsync();
+
+			ViewBag.Doctor = new SelectList(doctors, "ID", "FullName");
+
+			ViewBag.Room = new SelectList(
+				await context.Rooms.ToListAsync(),
+				"ID",
+				"RoomNumber");
+
+			var patientUsers = await userManager.GetUsersInRoleAsync("Patient");
+			var users = patientUsers.Select(u => new
+			{
+				u.Id,
+				FullName = u.FirstName + " " + u.LastName
+			}).ToList();
+
+			ViewBag.Users = new SelectList(users, "Id", "FullName");
+		}
+	}
 }

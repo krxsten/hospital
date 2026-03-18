@@ -1,37 +1,44 @@
-﻿<link rel="stylesheet" href="/css/styles.css">
-@using Hospital.WebProject.ViewModels.Medication
-@model List<MedicationViewModel>
+﻿@using Hospital.WebProject.ViewModels.Medication
+@model List<MedicationIndexViewModel>
+
+<link rel="stylesheet" href="/css/styles.css">
+
 <div class="mb-3">
-    <h2 style="text-align:center">Medications</h2>
+    <h2 style="text-align:center">———— Medications ————</h2>
 </div>
+
+<div class="mb-3 d-flex justify-content-end" style="font-family: 'Times New Roman'; font-size: 24px">
+    @if (User.IsInRole("Admin"))
+    {
+        <a asp-action="Create" class="btn btn-success" style="font-family: 'Times New Roman'; font-size: 20px">+ Create</a>
+    }
+    <a asp-action="Index" asp-controller="Home" class="btn btn-secondary ms-3" style="font-family: 'Times New Roman'; font-size: 20px">← Back</a>
+</div>
+
+<p>
+    <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target=".medicationCollapse" aria-expanded="false">
+        All medications
+    </button>
+</p>
+
 @foreach (var item in Model)
 {
-    <div class="accordion accordion-flush" id="accordionFlushExample">
-        <div class="accordion-item">
-            <h2 class="accordion-header">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapseOne" aria-expanded="false" aria-controls="flush-collapseOne">
-                    @item.Name
-                </button>
-            </h2>
-            <div id="flush-collapseOne" class="accordion-collapse collapse" data-bs-parent="#accordionFlushExample">
-                <div class="accordion-body">@item.Description</div>
+    <div style="min-height:120px;">
+        <div class="collapse collapse-horizontal medicationCollapse">
+            <div class="card card-body text-black" style="width:300px;">
+                <b>@item.Name</b> <br />
+                Description: @item.Description <br />
+                Side effects: @item.SideEffects <br />
+                Diagnose: @(item.DiagnoseName ?? "No diagnose assigned") <br /><br />
+
+                @if (User.IsInRole("Admin"))
+                {
+                    <a asp-action="Edit" asp-route-id="@item.ID" class="btn btn-warning mb-2">Edit</a>
+                    <form asp-action="Delete" asp-route-id="@item.ID" method="post" style="display:inline">
+                        <button class="btn btn-danger">Delete</button>
+                    </form>
+                }
             </div>
         </div>
     </div>
-    @if (User.IsInRole("Admin"))
-    {
-        <a asp-action="Edit" asp-route-id="@item.ID" style="display:inline" class="btn btn-warning mb-3">Edit</a>
-        <form asp-action="Delete" class="mb-3" asp-route-id="@item.ID" method="post" style="display:inline">
-            <button class="btn btn-danger">Delete</button>
-        </form>
-    }
 }
-
-
-<div class="mb-3" style="font-family: 'Times New Roman'; font-size: 24px">
-    @if (User.IsInRole("Admin"))
-    {
-        <a asp-action="Create" class="btn btn-success" style="display: inline; font-family: 'Times New Roman'; font-size: 20px">Create</a>
-    }
-    <a asp-action="Index" asp-controller="Home" class="btn btn-secondary" style="display: inline; font-family: 'Times New Roman'; font-size: 20px">Back</a>
-</div>

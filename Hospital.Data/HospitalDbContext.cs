@@ -37,21 +37,21 @@ namespace Hospital.Data
                 .HasOne(d => d.User)
                 .WithOne(u => u.Doctor)
                 .HasForeignKey<Doctor>(d => d.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
 
             modelBuilder.Entity<Nurse>()
                 .HasOne(n => n.User)
                 .WithOne(u => u.Nurse)
                 .HasForeignKey<Nurse>(n => n.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
 
             modelBuilder.Entity<Patient>()
                 .HasOne(p => p.User)
                 .WithOne(u => u.Patient)
                 .HasForeignKey<Patient>(p => p.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
 
             modelBuilder.Entity<Patient>()
@@ -68,18 +68,24 @@ namespace Hospital.Data
                 .OnDelete(DeleteBehavior.Restrict);
 
 
-            modelBuilder.Entity<DoctorAndNurse>()
-                .HasOne(x => x.Doctor)
-                .WithMany(d => d.DoctorNurses)
-                .HasForeignKey(x => x.DoctorID);
+			modelBuilder.Entity<DoctorAndNurse>()
+	             .HasOne(x => x.Doctor)
+	             .WithMany(d => d.DoctorNurses)
+	             .HasForeignKey(x => x.DoctorID)
+	             .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<DoctorAndNurse>()
-                .HasOne(x => x.Nurse)
-                .WithMany(n => n.DoctorNurses)
-                .HasForeignKey(x => x.NurseID);
+			modelBuilder.Entity<DoctorAndNurse>()
+				.HasOne(x => x.Nurse)
+				.WithMany(n => n.DoctorNurses)
+				.HasForeignKey(x => x.NurseID)
+				.OnDelete(DeleteBehavior.Restrict);
+
+			modelBuilder.Entity<DoctorAndNurse>()
+				.HasIndex(x => new { x.DoctorID, x.NurseID })
+				.IsUnique();
 
 
-            modelBuilder.Entity<PatientAndDiagnose>()
+			modelBuilder.Entity<PatientAndDiagnose>()
                 .HasOne(x => x.Patient)
                 .WithMany(p => p.PatientDiagnoses)
                 .HasForeignKey(x => x.PatientId);
@@ -90,9 +96,7 @@ namespace Hospital.Data
                 .HasForeignKey(x => x.DiagnoseId);
 
 
-            modelBuilder.Entity<DoctorAndNurse>()
-                .HasIndex(x => new { x.DoctorID, x.NurseID })
-                .IsUnique();
+           
 
             modelBuilder.Entity<PatientAndDiagnose>()
                 .HasIndex(x => new { x.PatientId, x.DiagnoseId })

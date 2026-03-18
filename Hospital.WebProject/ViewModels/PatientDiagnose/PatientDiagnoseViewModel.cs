@@ -6,12 +6,12 @@ namespace Hospital.WebProject.ViewModels.PatientDiagnose
 {
     public class PatientDiagnoseViewModel
     {
-        [Required]
         public Guid PatientId { get; set; }
-        public Hospital.Data.Entities.Patient Patient { get; set; }
+        [Required(ErrorMessage = "This field is required!")]
+        public string PatientName { get; set; } = null!;
 
-        [Required]
         public Guid DiagnoseId { get; set; }
-        public Hospital.Entities.Diagnose Diagnose { get; set; }
+        [Required(ErrorMessage = "This field is required!")]
+        public string DiagnoseName { get; set; } = null!;
     }
 }

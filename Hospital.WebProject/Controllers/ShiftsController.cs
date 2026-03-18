@@ -1,4 +1,6 @@
-﻿using Hospital.Data;
+﻿using Hospital.Core.Contracts;
+using Hospital.Core.DTOs;
+using Hospital.Data;
 using Hospital.Data.Entities;
 using Hospital.Entities;
 using Hospital.WebProject.ViewModels.Diagnose;
@@ -12,106 +14,127 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Hospital.WebProject.Controllers
 {
-    [Authorize]
-    public class ShiftsController : Controller
-    {
-        private readonly HospitalDbContext Context;
-        private readonly UserManager<User> UserManager;
-        public ShiftsController(HospitalDbContext context, UserManager<User> userManager)
-        {
-            this.Context = context;
-            this.UserManager = userManager;
-        }
-        [AllowAnonymous]
-        [HttpGet]
-        public async Task<IActionResult> Index()
-        {
-            var shifts = await Context.Shifts.Select(x => new ShiftViewModel
-            {
-                Type = x.Type,
-                StartTime = x.StartTime,
-                EndTime = x.EndTime,
-                ID = x.ID,  
-                
-            }).ToListAsync();
-            return View(shifts);
-        }
-        [Authorize(Roles = "Admin")]
-        [HttpGet]
-        public IActionResult Create()
-        {
-            return View(new ShiftViewModel());
-        }
-        [Authorize(Roles = "Admin")]
-        [HttpPost]
-        public async Task<IActionResult> Create(ShiftViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-            var shift = new Data.Entities.Shift()
-            {
-                ID = Guid.NewGuid(),
-                Type = model.Type,
-                StartTime = model.StartTime,
-                EndTime = model.EndTime,
-            };
-            await Context.Shifts.AddAsync(shift);
-            await Context.SaveChangesAsync();
-            return RedirectToAction("Index");
-        }
-        [Authorize(Roles = "Admin")]
-        [HttpGet]
-        public async Task<IActionResult> Edit(Guid id)
-        {
-            var shift = await Context.Shifts.FindAsync(id);
-            if (shift == null)
-            {
-                return NotFound();
-            }
-            var model = new ShiftViewModel
-            {
-                ID = shift.ID,
-                Type = shift.Type,
-                StartTime = shift.StartTime,
-                EndTime = shift.EndTime,
-            };
-            return View(model);
-        }
-        [Authorize(Roles = "Admin")]
-        [HttpPost]
-        public async Task<IActionResult> Edit(ShiftViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-            var shift = await Context.Shifts.FindAsync(model.ID);
-            if (shift == null)
-            {
-                return NotFound();
-            }
-            shift.ID = model.ID;
-            shift.Type = model.Type;
-            shift.StartTime = model.StartTime;
-            shift.EndTime = model.EndTime;
-            await Context.SaveChangesAsync();
-            return RedirectToAction("Index");
-        }
-        [Authorize(Roles = "Admin")]
-        [HttpPost]
-        public async Task<IActionResult> Delete(Guid id)
-        {
-            var shift = await Context.Shifts.FindAsync(id);
-            if (shift == null)
-            {
-                return NotFound();
-            }
-            Context.Shifts.Remove(shift);
-            await Context.SaveChangesAsync();
-            return RedirectToAction("Index");
-        }
+	[Authorize]
+	public class ShiftsController : Controller
+	{
+		private readonly IShiftService shiftService;
 
-    }
+		public ShiftsController(IShiftService shiftService)
+		{
+			this.shiftService = shiftService;
+		}
+
+		[AllowAnonymous]
+		[HttpGet]
+		public async Task<IActionResult> Index()
+		{
+			var dtos = await shiftService.GetAllAsync();
+
+			var model = dtos.Select(x => new ShiftIndexViewModel
+			{
+				ID = x.ID,
+				Type = x.Type,
+				StartTime = x.StartTime,
+				EndTime = x.EndTime
+			}).ToList();
+
+			return View(model);
+		}
+
+		[Authorize(Roles = "Admin")]
+		[HttpGet]
+		public IActionResult Create()
+		{
+			return View(new ShiftCreateViewModel());
+		}
+
+		[Authorize(Roles = "Admin")]
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Create(ShiftCreateViewModel model)
+		{
+			if (!ModelState.IsValid)
+			{
+				return View(model);
+			}
+
+			try
+			{
+				var dto = new ShiftCreateDTO
+				{
+					Type = model.Type,
+					StartTime = model.StartTime,
+					EndTime = model.EndTime
+				};
+
+				await shiftService.CreateAsync(dto);
+				return RedirectToAction(nameof(Index));
+			}
+			catch (Exception)
+			{
+				ModelState.AddModelError(string.Empty, "Something went wrong.");
+				return View(model);
+			}
+		}
+
+		[Authorize(Roles = "Admin")]
+		[HttpGet]
+		public async Task<IActionResult> Edit(Guid id)
+		{
+			var dto = await shiftService.GetByIdAsync(id);
+			if (dto == null)
+			{
+				return NotFound();
+			}
+
+			var model = new ShiftIndexViewModel
+			{
+				ID = dto.ID,
+				Type = dto.Type,
+				StartTime = dto.StartTime,
+				EndTime = dto.EndTime
+			};
+
+			return View(model);
+		}
+
+		[Authorize(Roles = "Admin")]
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Edit(ShiftIndexViewModel model)
+		{
+			if (!ModelState.IsValid)
+			{
+				return View(model);
+			}
+
+			try
+			{
+				var dto = new ShiftIndexDTO
+				{
+					ID = model.ID,
+					Type = model.Type,
+					StartTime = model.StartTime,
+					EndTime = model.EndTime
+				};
+
+				await shiftService.UpdateAsync(dto);
+				return RedirectToAction(nameof(Index));
+			}
+			catch (Exception)
+			{
+				ModelState.AddModelError(string.Empty, "Something went wrong.");
+				return View(model);
+			}
+		}
+
+		[Authorize(Roles = "Admin")]
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Delete(Guid id)
+		{
+			await shiftService.DeleteAsync(id);
+			return RedirectToAction(nameof(Index));
+		}
+	}
 }

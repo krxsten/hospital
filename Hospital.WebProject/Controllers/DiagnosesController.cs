@@ -2,111 +2,141 @@
 using Hospital.Data.Entities;
 using Hospital.Entities;
 using Hospital.WebProject.ViewModels.Diagnose;
-using Hospital.WebProject.ViewModels.Room;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using System.IO;
+using Hospital.Core.Contracts;
+using Hospital.Core.DTOs;
+using System.Security.Claims;
 
 namespace Hospital.WebProject.Controllers
 {
-    [Authorize]
-    public class DiagnosesController : Controller
-    {
-        private readonly HospitalDbContext Context;
-        private readonly UserManager<User> UserManager;
-        public DiagnosesController(HospitalDbContext context, UserManager<User> userManager)
-        {
-            this.Context = context;
-            this.UserManager = userManager;
-        }
-        [AllowAnonymous]
-        [HttpGet]
-        public async Task<IActionResult> Index()
-        {
-            var diagnoses = await Context.Diagnoses.Select(x => new DiagnoseViewModel
-            {
-                ID = x.ID,
-                Name = x.Name,
-                Image=x.Image
-            }).ToListAsync();
-            return View(diagnoses);
+	[Authorize]
+	public class DiagnosesController : Controller
+	{
+		private readonly IDiagnoseService diagnoseService;
 
-        }
-        [Authorize(Roles = "Admin, Doctor")]
-        [HttpGet]
-        public IActionResult Create()
-        {
-            return View(new DiagnoseViewModel());
-        }
-        [Authorize(Roles = "Admin, Doctor")]
-        [HttpPost]
-        public async Task<IActionResult> Create(DiagnoseViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-            var diagnose = new Diagnose()
-            {
-                ID = Guid.NewGuid(),
-                Name = model.Name,
-                Image = model.Image
-            };
-            await Context.Diagnoses.AddAsync(diagnose);
-            await Context.SaveChangesAsync();
-            return RedirectToAction("Index");
-        }
-        [Authorize(Roles = "Admin, Doctor")]
-        [HttpGet]
-        public async Task<IActionResult> Edit(Guid id)
-        {
-            var diagnose = await Context.Diagnoses.FindAsync(id);
-            if (diagnose == null)
-            {
-                return NotFound();
-            }
-            var model = new DiagnoseViewModel
-            {
-                ID = diagnose.ID,
-                Name = diagnose.Name,
-                Image = diagnose.Image
-            };
-            return View(model);
-        }
-        [Authorize(Roles = "Admin, Doctor")]
-        [HttpPost]
-        public async Task<IActionResult> Edit(DiagnoseViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-            var diagnose = await Context.Diagnoses.FindAsync(model.ID);
-            if (diagnose == null)
-            {
-                return NotFound();
-            }
-            diagnose.ID = model.ID;
-            diagnose.Name = model.Name;
-            diagnose.Image = model.Image;
-            await Context.SaveChangesAsync();
-            return RedirectToAction("Index");
-        }
-        [Authorize(Roles = "Admin, Doctor")]
-        [HttpPost]
-        public async Task<IActionResult> Delete(Guid id)
-        {
-            var diagnose = await Context.Diagnoses.FindAsync(id);
-            if (diagnose == null)
-            {
-                return NotFound();
-            }
-            Context.Diagnoses.Remove(diagnose);
-            await Context.SaveChangesAsync();
-            return RedirectToAction("Index");
-        }
-    }
+		public DiagnosesController(IDiagnoseService diagnoseService)
+		{
+			this.diagnoseService = diagnoseService;
+		}
+
+		[AllowAnonymous]
+		[HttpGet]
+		public async Task<IActionResult> Index()
+		{
+			var dtos = await diagnoseService.GetAllAsync();
+
+			var model = dtos.Select(x => new DiagnoseIndexViewModel
+			{
+				ID = x.ID,
+				Name = x.Name,
+				Image = x.Image
+			}).ToList();
+
+			return View(model);
+		}
+
+		[Authorize(Roles = "Admin,Doctor")]
+		[HttpGet]
+		public IActionResult Create()
+		{
+			return View(new DiagnoseCreateViewModel());
+		}
+
+		[Authorize(Roles = "Admin,Doctor")]
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Create(DiagnoseCreateViewModel model)
+		{
+			if (!ModelState.IsValid)
+			{
+				return View(model);
+			}
+
+			try
+			{
+				var dto = new DiagnoseCreateDTO
+				{
+					Name = model.Name,
+					Image = model.Image
+				};
+
+				await diagnoseService.CreateAsync(dto);
+				return RedirectToAction(nameof(Index));
+			}
+			catch (Exception)
+			{
+				ModelState.AddModelError(string.Empty, "Something went wrong");
+				return View(model);
+			}
+		}
+
+		[Authorize(Roles = "Admin,Doctor")]
+		[HttpGet]
+		public async Task<IActionResult> Edit(Guid id)
+		{
+			var dto = await diagnoseService.GetByIdAsync(id);
+			if (dto == null)
+			{
+				return NotFound();
+			}
+
+			var model = new DiagnoseIndexViewModel
+			{
+				ID = dto.ID,
+				Name = dto.Name,
+				Image = dto.Image
+			};
+
+			return View(model);
+		}
+
+		[Authorize(Roles = "Admin,Doctor")]
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Edit(DiagnoseIndexViewModel model)
+		{
+			if (!ModelState.IsValid)
+			{
+				return View(model);
+			}
+
+			try
+			{
+				var dto = new DiagnoseIndexDTO
+				{
+					ID = model.ID,
+					Name = model.Name,
+					Image = model.Image
+				};
+
+				await diagnoseService.UpdateAsync(dto);
+				return RedirectToAction(nameof(Index));
+			}
+			catch (Exception)
+			{
+				ModelState.AddModelError(string.Empty, "Something went wrong");
+				return View(model);
+			}
+		}
+
+		[Authorize(Roles = "Admin,Doctor")]
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Delete(Guid id)
+		{
+			try
+			{
+				await diagnoseService.DeleteAsync(id);
+			}
+			catch (Exception)
+			{
+				TempData["ErrorMessage"] = "Unable to delete diagnose.";
+			}
+
+			return RedirectToAction(nameof(Index));
+		}
+	}
 }

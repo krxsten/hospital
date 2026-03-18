@@ -1,9 +1,12 @@
 ﻿<link rel="stylesheet" href="/css/styles.css">
 @using Hospital.WebProject.ViewModels.Checkup
-@model CheckupViewModel
+@model CheckupIndexViewModel
 
 @if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse") || User.IsInRole("Patient"))
 {
+    <div class="mb-3">
+        <h2 style="text-align:center">———— Check ups ————</h2>
+    </div>
     <form asp-action="Edit" method="post">
         <div class="mb-3">
             <label asp-for="PatientID" class="form-label">Patient: </label>

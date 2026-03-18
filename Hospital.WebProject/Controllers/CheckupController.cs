@@ -1,4 +1,6 @@
-﻿using Hospital.Data;
+﻿using Hospital.Core.Contracts;
+using Hospital.Core.DTOs;
+using Hospital.Data;
 using Hospital.Data.Entities;
 using Hospital.Entities;
 using Hospital.WebProject.ViewModels.Checkup;
@@ -11,162 +13,184 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Hospital.WebProject.Controllers
 {
-    [Authorize]
-    public class CheckupController : Controller
-    {
-        private readonly HospitalDbContext Context;
-        private readonly UserManager<User> UserManager;
-        public CheckupController(HospitalDbContext context, UserManager<User> userManager)
-        {
-            this.Context = context;
-            this.UserManager = userManager;
-        }
-        [Authorize(Roles = "Admin, Doctor, Nurse, Patient")]
-        [HttpGet]
-        public async Task<IActionResult> Index()
-        {
-            var checkup = await Context.Checkups.Select(x => new CheckupViewModel
-            {
-                ID = x.ID,
-                Date = x.Date,
-                Doctor = x.Doctor,
-                DoctorID = x.DoctorID,
-                PatientID = x.PatientID,
-                Patient = x.Patient
+	[Authorize]
+	public class CheckupController : Controller
+	{
+		private readonly ICheckupService checkupService;
+		private readonly HospitalDbContext context;
 
-            }).ToListAsync();
-            return View(checkup);
+		public CheckupController(ICheckupService checkupService, HospitalDbContext context)
+		{
+			this.checkupService = checkupService;
+			this.context = context;
+		}
 
-        }
-        [Authorize(Roles = "Admin, Doctor, Nurse, Patient")]
-        [HttpGet]
-        public async Task< IActionResult> Create()
-        {
-            var docRole = await UserManager.GetUsersInRoleAsync("Doctor");
-            var doctors = docRole.Select(d => new
-            {
-                d.Id,
-                FullName = d.FirstName + " " + d.LastName
-            }).ToList();
-            ViewBag.Doctor = new SelectList(doctors, "Id", "FullName");
+		[Authorize(Roles = "Admin,Doctor,Nurse,Patient")]
+		[HttpGet]
+		public async Task<IActionResult> Index()
+		{
+			var checkups = await checkupService.GetAllAsync();
 
-            var patientRole = await UserManager.GetUsersInRoleAsync("Patient");
-            var users = patientRole.Select(u => new
-            {
-                u.Id,
-                FullName = u.FirstName + " " + u.LastName
-            }).ToList();
-            ViewBag.Users = new SelectList(users, "Id", "FullName");
+			var model = checkups.Select(x => new CheckupIndexViewModel
+			{
+				ID = x.ID,
+				Date = x.Date,
+				DoctorID = x.DoctorID,
+				DoctorName = x.DoctorName,
+				Time = x.Time,
+				PatientID = x.PatientID,
+				PatientName = x.PatientName
+			}).ToList();
 
-            return View(new CheckupViewModel());
-        }
-        [Authorize(Roles = "Admin, Doctor, Nurse, Patient")]
-        [HttpPost]
-        public async Task<IActionResult> Create(CheckupViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-            var checkup = new Checkup()
-            {
-                ID = Guid.NewGuid(),
-                Date = model.Date,
+			return View(model);
+		}
+
+		[Authorize(Roles = "Admin,Doctor,Nurse,Patient")]
+		[HttpGet]
+		public async Task<IActionResult> Create()
+		{
+			await LoadDropdownsAsync();
+			return View(new CheckupCreateViewModel());
+		}
+
+		[Authorize(Roles = "Admin,Doctor,Nurse,Patient")]
+		[HttpPost]
+		public async Task<IActionResult> Create(CheckupCreateViewModel model)
+		{
+			if (!ModelState.IsValid)
+			{
+				await LoadDropdownsAsync();
+				return View(model);
+			}
+
+			var dto = new CheckupCreateDTO
+			{
+				Date = model.Date,
+				Time = model.Time,
                 DoctorID = model.DoctorID,
-                PatientID = model.PatientID,
-            };
-            await Context.Checkups.AddAsync(checkup);
-            await Context.SaveChangesAsync();
-            return RedirectToAction("Index");
-        }
-        [Authorize(Roles = "Admin, Doctor, Nurse, Patient")]
-        [HttpGet]
-        public async Task<IActionResult> Edit(Guid id)
-        {
+				PatientID = model.PatientID
+			};
 
-            var doctors = Context.Doctors.Include(d => d.User).Select(d => new
-            {
-                d.UserId,
-                FullName = d.User.FirstName + " " + d.User.LastName
-            }).ToList();
+			await checkupService.CreateAsync(dto);
+			return RedirectToAction(nameof(Index));
+		}
 
-            ViewBag.Doctor = new SelectList(doctors, "UserId", "FullName");
+		[Authorize(Roles = "Admin,Doctor,Nurse,Patient")]
+		[HttpGet]
+		public async Task<IActionResult> Edit(Guid id)
+		{
+			await LoadDropdownsAsync();
 
-            var patients = Context.Patients.Include(p => p.User).Select(p => new
-            {
-                p.UserId,
-                FullName = p.User.FirstName + " " + p.User.LastName
-            }).ToList();
+			var checkup = await checkupService.GetByIdAsync(id);
+			if (checkup == null)
+			{
+				return NotFound();
+			}
 
-            ViewBag.Patients = new SelectList(patients, "UserId", "FullName");
-
-            var checkup = await Context.Checkups.FindAsync(id);
-            if (checkup == null)
-            {
-                return NotFound();
-            }
-            var model = new CheckupViewModel
-            {
-                ID = checkup.ID,
-                Date = checkup.Date,
+			var model = new CheckupIndexViewModel
+			{
+				ID = checkup.ID,
+				Date = checkup.Date,
+				Time = checkup.Time,
                 DoctorID = checkup.DoctorID,
-                PatientID = checkup.PatientID,
-            };
-            return View(model);
-        }
-        [Authorize(Roles = "Admin, Doctor, Nurse")]
-        [HttpPost]
-        public async Task<IActionResult> Edit(CheckupViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-            var checkup = await Context.Checkups.FindAsync(model.ID);
-            if (checkup == null)
-            {
-                return NotFound();
-            }
-            checkup.Date = model.Date;
-            checkup.ID = model.ID;
-            checkup.DoctorID = model.DoctorID;
-            checkup.PatientID = model.PatientID;
-            await Context.SaveChangesAsync();
-            return RedirectToAction("Index");
-        }
-        [Authorize(Roles = "Admin, Doctor, Nurse")]
-        [HttpPost]
-        public async Task<IActionResult> Delete(Guid id)
-        {
-            var checkup = await Context.Checkups.FindAsync(id);
-            if (checkup == null)
-            {
-                return NotFound();
-            }
-            Context.Checkups.Remove(checkup);
-            await Context.SaveChangesAsync();
-            return RedirectToAction("Index");
-        }
-        [Authorize(Roles = "Admin, Doctor, Nurse")]
-        [HttpGet]
-        public async Task<IActionResult> GetBusyTimes(Guid doctorId, DateTime date)
-        {
-            var busy = await Context.Checkups.Where(c => c.DoctorID == doctorId && c.Date.Date == date.Date)
-            .Select(c => c.Date).ToListAsync();
-            return View(busy);
-        }
-        [Authorize(Roles = "Admin, Doctor, Nurse")]
-        [HttpGet]
-        public async Task<IActionResult> GetDoctorShift(Guid doctorId)
-        {
-            var shift = await Context.Doctors.Include(d => d.Shift).Where(d => d.UserId == doctorId)
-                .Select(d => new
-                {
-                    d.Shift.StartTime,
-                    d.Shift.EndTime
-                }).FirstOrDefaultAsync();
-            return View(shift);
-        }
+				DoctorName = checkup.DoctorName,
+				PatientID = checkup.PatientID,
+				PatientName = checkup.PatientName
+			};
 
-    }
+			return View(model);
+		}
+
+		[Authorize(Roles = "Admin,Doctor,Nurse")]
+		[HttpPost]
+		public async Task<IActionResult> Edit(CheckupIndexViewModel model)
+		{
+			if (!ModelState.IsValid)
+			{
+				await LoadDropdownsAsync();
+				return View(model);
+			}
+
+			var dto = new CheckupIndexDTO
+			{
+				ID = model.ID,
+				Date = model.Date,
+				Time = model.Time,
+                DoctorID = model.DoctorID,
+				PatientID = model.PatientID,
+				DoctorName = model.DoctorName,
+				PatientName = model.PatientName
+			};
+
+			await checkupService.UpdateAsync(dto);
+			return RedirectToAction(nameof(Index));
+		}
+
+		[Authorize(Roles = "Admin,Doctor,Nurse")]
+		[HttpPost]
+		public async Task<IActionResult> Delete(Guid id)
+		{
+			await checkupService.DeleteAsync(id);
+			return RedirectToAction(nameof(Index));
+		}
+
+		[Authorize(Roles = "Admin,Doctor,Nurse")]
+		[HttpGet]
+		public async Task<IActionResult> GetBusyTimes(Guid doctorId, DateTime date)
+		{
+			var busy = await context.Checkups
+				.Where(c => c.DoctorID == doctorId && c.Date.Day == date.Date.Day && c.Date.Month == date.Date.Month && c.Date.Year == date.Date.Year)
+				.Select(c => c.Date)
+				.ToListAsync();
+
+			return Json(busy);
+		}
+
+		[Authorize(Roles = "Admin,Doctor,Nurse")]
+		[HttpGet]
+		public async Task<IActionResult> GetDoctorShift(Guid doctorId)
+		{
+			var shift = await context.Doctors
+				.Include(d => d.Shift)
+				.Where(d => d.ID == doctorId)
+				.Select(d => new
+				{
+					d.Shift.StartTime,
+					d.Shift.EndTime
+				})
+				.FirstOrDefaultAsync();
+
+			if (shift == null)
+			{
+				return NotFound();
+			}
+
+			return Json(shift);
+		}
+
+		private async Task LoadDropdownsAsync()
+		{
+			var doctors = await context.Doctors
+				.Include(d => d.User)
+				.Select(d => new
+				{
+					d.ID,
+					FullName = d.User.FirstName + " " + d.User.LastName
+				})
+				.ToListAsync();
+
+			ViewBag.Doctors = new SelectList(doctors, "ID", "FullName");
+
+			var patients = await context.Patients
+				.Include(p => p.User)
+				.Select(p => new
+				{
+					p.ID,
+					FullName = p.User.FirstName + " " + p.User.LastName
+				})
+				.ToListAsync();
+
+			ViewBag.Patients = new SelectList(patients, "ID", "FullName");
+		}
+	}
 }

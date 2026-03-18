@@ -1,28 +1,36 @@
-﻿<link rel="stylesheet" href="/css/styles.css">
-@using Hospital.WebProject.ViewModels.Nurse
-@model List<NurseViewModel>
+﻿@using Hospital.WebProject.ViewModels.Nurse
+@model List<NurseIndexViewModel>
+
 <div class="mb-3">
-    <h2 style="text-align:center">Nurses</h2>
+    <h2 style="text-align:center">———— Nurses ————</h2>
 </div>
+
+<div class="mb-3 d-flex justify-content-end" style="font-family: 'Times New Roman'; font-size: 24px">
+    @if (User.IsInRole("Admin"))
+    {
+        <a asp-action="Create" class="btn btn-success" style="font-family: 'Times New Roman'; font-size: 20px">+ Create</a>
+    }
+    <a asp-action="Index" asp-controller="Home" class="btn btn-secondary ms-3" style="font-family: 'Times New Roman'; font-size: 20px">← Back</a>
+</div>
+
 <div class="nurse-grid">
     @foreach (var nurse in Model)
     {
         <div class="nurse-card">
-
             <img src="@nurse.Image"
                  alt="Nurse photo"
                  class="nurse-image" />
 
             <h5 class="nurse-name">
-                @nurse.User.FirstName @nurse.User.LastName
+                @nurse.UserName
             </h5>
 
             <p class="nurse-field">
-                <strong>Specialization:</strong> @nurse.Specialization.SpecializationName
+                <strong>Specialization:</strong> @nurse.SpecializationName
             </p>
 
             <p class="nurse-field">
-                <strong>Shift:</strong> @nurse.Shift.Type
+                <strong>Shift:</strong> @nurse.ShiftName
             </p>
 
             <p class="nurse-field">
@@ -41,27 +49,18 @@
             {
                 <div class="nurse-actions">
                     <a asp-action="Edit"
-                       asp-route-id="@nurse.UserID"
+                       asp-route-id="@nurse.ID"
                        class="btn btn-warning">Edit</a>
 
                     <form asp-action="Delete"
-                          asp-route-id="@nurse.UserID"
+                          asp-route-id="@nurse.ID"
                           method="post"
                           style="display:inline">
-
                         <button class="btn btn-danger">Delete</button>
                     </form>
                 </div>
             }
-
         </div>
     }
 </div>
 
-<div class="mb-3" style="font-family: 'Times New Roman'; font-size: 24px">
-    @if (User.IsInRole("Admin"))
-    {
-        <a asp-action="Create" class="btn btn-success" style="display: inline; font-family: 'Times New Roman'; font-size: 20px">Create</a>
-    }
-    <a asp-action="Index" asp-controller="Home" class="btn btn-secondary" style="display:inline; font-family: 'Times New Roman'; font-size: 20px">Back</a>
-</div>

@@ -1,4 +1,6 @@
-﻿using Hospital.Data;
+﻿using Hospital.Core.Contracts;
+using Hospital.Core.DTOs;
+using Hospital.Data;
 using Hospital.Data.Entities;
 using Hospital.Entities;
 using Hospital.WebProject.ViewModels.Patient;
@@ -11,118 +13,127 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Hospital.WebProject.Controllers
 {
-    [Authorize]
-    public class RoomsController : Controller
-    {
-        private readonly HospitalDbContext Context;
-        private readonly UserManager<User> UserManager;
-        public RoomsController(HospitalDbContext context, UserManager<User> userManager)
-        {
-            this.Context = context;
-            this.UserManager = userManager;
-        }
-        [Authorize(Roles ="Admin, Patient, Doctor, Nurse")]
-        [HttpGet]
-        public async Task<IActionResult> Index()
-        {
-            var rooms = await Context.Rooms.Select(x => new RoomViewModel
-            {
-                ID = x.ID,
-                RoomNumber = x.RoomNumber,
-                IsTaken = x.IsTaken,
-            }).ToListAsync();
-            return View(rooms);
-        }
-        [Authorize(Roles = "Admin")]
-        [HttpGet]
-        public IActionResult Create()
-        {
-            return View(new RoomViewModel());
-        }
-        [Authorize(Roles = "Admin")]
-        [HttpPost]
-        public async Task<IActionResult> Create(RoomViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-            var room = new Room()
-            {
-                ID = Guid.NewGuid(),
-                RoomNumber = model.RoomNumber,
-                IsTaken = model.IsTaken,
-            };
-            await Context.Rooms.AddAsync(room);
-            await Context.SaveChangesAsync();
-            return RedirectToAction("Index");
-        }
-        [Authorize(Roles = "Admin, Patient, Doctor, Nurse")]
-        [HttpGet]
-        public async Task<IActionResult> Details(Guid id)
-        {
-            var room = await Context.Rooms.Where(x => x.ID == id).Select(x=>new RoomViewModel
-            {
-                IsTaken = x.IsTaken,
-                RoomNumber=x.RoomNumber,
-                ID = x.ID,
-            }).FirstOrDefaultAsync();
+	[Authorize]
+	public class RoomsController : Controller
+	{
+		private readonly IRoomService roomService;
 
-            if (room == null)
-            {
-                return NotFound();
-            }
-            return View(room);
-        }
-        [Authorize(Roles = "Admin, Doctor, Nurse")]
-        [HttpGet]
-        public async Task<IActionResult> Edit(Guid id)
-        {
-            var room = await Context.Rooms.FindAsync(id);
-            if (room == null)
-            {
-                return NotFound();
-            }
-            var model = new RoomViewModel
-            {
-                ID = room.ID,
-                RoomNumber = room.RoomNumber,
-                IsTaken = room.IsTaken
-            };
-            return View(model);
-        }
-        [Authorize(Roles = "Admin, Doctor, Nurse")]
-        [HttpPost]
-        public async Task<IActionResult> Edit(RoomViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-            var room = await Context.Rooms.FindAsync(model.ID);
-            if (room == null)
-            {
-                return NotFound();
-            }
-            room.ID = model.ID;
-            room.RoomNumber = model.RoomNumber;
-            room.IsTaken = model.IsTaken;
-            await Context.SaveChangesAsync();
-            return RedirectToAction("Index");
-        }
-        [Authorize(Roles = "Admin")]
-        [HttpPost]
-        public async Task<IActionResult> Delete(Guid id)
-        {
-            var pat = await Context.Patients.FindAsync(id);
-            if (pat == null)
-            {
-                return NotFound();
-            }
-            Context.Patients.Remove(pat);
-            await Context.SaveChangesAsync();
-            return RedirectToAction("Index");
-        }
+		public RoomsController(IRoomService roomService)
+		{
+			this.roomService = roomService;
+		}
 
-    }
+		[Authorize(Roles = "Admin,Patient,Doctor,Nurse")]
+		[HttpGet]
+		public async Task<IActionResult> Index()
+		{
+			var dtos = await roomService.GetAllAsync();
+
+			var model = dtos.Select(x => new RoomIndexViewModel
+			{
+				ID = x.ID,
+				RoomNumber = x.RoomNumber,
+				IsTaken = x.IsTaken
+			}).ToList();
+
+			return View(model);
+		}
+
+		[Authorize(Roles = "Admin")]
+		[HttpGet]
+		public IActionResult Create()
+		{
+			return View(new RoomCreateViewModel());
+		}
+
+		[Authorize(Roles = "Admin")]
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Create(RoomCreateViewModel model)
+		{
+			if (!ModelState.IsValid)
+			{
+				return View(model);
+			}
+
+			var dto = new RoomCreateDTO
+			{
+				RoomNumber = model.RoomNumber,
+				IsTaken = model.IsTaken
+			};
+
+			await roomService.CreateAsync(dto);
+			return RedirectToAction(nameof(Index));
+		}
+
+		[Authorize(Roles = "Admin,Patient,Doctor,Nurse")]
+		[HttpGet]
+		public async Task<IActionResult> Details(Guid id)
+		{
+			var dto = await roomService.GetByIdAsync(id);
+			if (dto == null)
+			{
+				return NotFound();
+			}
+
+			var model = new RoomIndexViewModel
+			{
+				ID = dto.ID,
+				RoomNumber = dto.RoomNumber,
+				IsTaken = dto.IsTaken
+			};
+
+			return View(model);
+		}
+
+		[Authorize(Roles = "Admin,Doctor,Nurse")]
+		[HttpGet]
+		public async Task<IActionResult> Edit(Guid id)
+		{
+			var dto = await roomService.GetByIdAsync(id);
+			if (dto == null)
+			{
+				return NotFound();
+			}
+
+			var model = new RoomIndexViewModel
+			{
+				ID = dto.ID,
+				RoomNumber = dto.RoomNumber,
+				IsTaken = dto.IsTaken
+			};
+
+			return View(model);
+		}
+
+		[Authorize(Roles = "Admin,Doctor,Nurse")]
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Edit(RoomIndexViewModel model)
+		{
+			if (!ModelState.IsValid)
+			{
+				return View(model);
+			}
+
+			var dto = new RoomIndexDTO
+			{
+				ID = model.ID,
+				RoomNumber = model.RoomNumber,
+				IsTaken = model.IsTaken
+			};
+
+			await roomService.UpdateAsync(dto);
+			return RedirectToAction(nameof(Index));
+		}
+
+		[Authorize(Roles = "Admin")]
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Delete(Guid id)
+		{
+			await roomService.DeleteAsync(id);
+			return RedirectToAction(nameof(Index));
+		}
+	}
 }

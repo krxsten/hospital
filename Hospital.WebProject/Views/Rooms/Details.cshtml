@@ -1,9 +1,12 @@
 ﻿<link rel="stylesheet" href="/css/styles.css">
 @using Hospital.WebProject.ViewModels.Room
-@model RoomViewModel
+@model RoomIndexViewModel
 
 @if (User.IsInRole("Admin") || User.IsInRole("Patient") || User.IsInRole("Doctor") || User.IsInRole("Nurse"))
 {
+    <div class="mb-3">
+        <h2 style="text-align:center">———— Rooms ————</h2>
+    </div>
     <div class="card" style="width: 18rem;">
         <div class="card-body">
             <h5 class="card-title">@Model.RoomNumber</h5>

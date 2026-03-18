@@ -1,4 +1,6 @@
-﻿using Hospital.Data;
+﻿using Hospital.Core.Contracts;
+using Hospital.Core.DTOs;
+using Hospital.Data;
 using Hospital.Data.Entities;
 using Hospital.Entities;
 using Hospital.WebProject.ViewModels.Doctor;
@@ -11,112 +13,133 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Hospital.WebProject.Controllers
 {
-    [Authorize]
-    public class MedicationsController : Controller
-    {
-        private readonly HospitalDbContext Context;
-        private readonly UserManager<User> UserManager;
-        public MedicationsController(HospitalDbContext context, UserManager<User> userManager)
-        {
-            this.Context = context;
-            this.UserManager = userManager;
-        }
-        [AllowAnonymous]
-        [HttpGet]
-        public async Task<IActionResult> Index()
-        {
-            var medications = await Context.Medications.Include(x => x.Diagnose).Select(x => new MedicationViewModel
-            {
-                Name = x.Name,
-                DiagnoseID = x.DiagnoseID,
-                Description = x.Description,
-                SideEffects = x.SideEffects,
-                ID = x.ID
+	[Authorize]
+	public class MedicationsController : Controller
+	{
+		private readonly IMedicationService medicationService;
+		private readonly HospitalDbContext context;
 
-            }).ToListAsync();
-            return View(medications);
-        }
-        [Authorize(Roles = "Admin")]
-        [HttpGet]
-        public IActionResult Create()
-        {
-            ViewBag.Diagnose = new SelectList(Context.Diagnoses, "ID", "Name");
-            return View(new MedicationViewModel());
-        }
-        [Authorize(Roles = "Admin")]
-        [HttpPost]
-        public async Task<IActionResult> Create(MedicationViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-            var medication = new Medication()
-            {
-                ID = Guid.NewGuid(),
-                Name = model.Name,
-                DiagnoseID = model.DiagnoseID,
-                Description = model.Description,
-                SideEffects = model.SideEffects
-            };
-            await Context.Medications.AddAsync(medication);
-            await Context.SaveChangesAsync();
-            return RedirectToAction("Index");
-        }
-        [Authorize(Roles = "Admin")]
-        [HttpGet]
-        public async Task<IActionResult> Edit(Guid id)
-        {
-            ViewBag.Diagnose = new SelectList(Context.Diagnoses, "ID", "Name");
-            var medication = await Context.Medications.FindAsync(id);
-            if (medication == null)
-            {
-                return NotFound();
-            }
-            var model = new MedicationViewModel
-            {
-                ID = medication.ID,
-                Name = medication.Name,
-                DiagnoseID = medication.DiagnoseID,
-                Description = medication.Description,
-                SideEffects = medication.SideEffects
+		public MedicationsController(IMedicationService medicationService, HospitalDbContext context)
+		{
+			this.medicationService = medicationService;
+			this.context = context;
+		}
 
-            };
-            return View(model);
-        }
-        [Authorize(Roles = "Admin")]
-        [HttpPost]
-        public async Task<IActionResult> Edit(MedicationViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(model);
-            }
-            var medication = await Context.Medications.FindAsync(model.ID);
-            if (medication == null)
-            {
-                return NotFound();
-            }
-            medication.ID = model.ID;
-            medication.Name = model.Name;
-            medication.DiagnoseID = model.DiagnoseID;
-            medication.Description = model.Description;
-            medication.SideEffects = model.SideEffects;
-            await Context.SaveChangesAsync();
-            return RedirectToAction("Index");
-        }
-        [Authorize(Roles = "Admin")]
-        [HttpPost]
-        public async Task<IActionResult> Delete(Guid id)
-        {
-            var medication = await Context.Medications.FindAsync(id);
-            if (medication == null)
-            {
-                return NotFound();
-            }
-            Context.Medications.Remove(medication);
-            await Context.SaveChangesAsync();
-            return RedirectToAction("Index");
-        }
-    }
+		[AllowAnonymous]
+		[HttpGet]
+		public async Task<IActionResult> Index()
+		{
+			var dtos = await medicationService.GetAllAsync();
+
+			var model = dtos.Select(x => new MedicationIndexViewModel
+			{
+				ID = x.ID,
+				Name = x.Name,
+				DiagnoseID = x.DiagnoseID,
+				DiagnoseName = x.DiagnoseName,
+				Description = x.Description,
+				SideEffects = x.SideEffects
+			}).ToList();
+
+			return View(model);
+		}
+
+		[Authorize(Roles = "Admin")]
+		[HttpGet]
+		public async Task<IActionResult> Create()
+		{
+			await LoadDiagnosesAsync();
+			return View(new MedicationCreateViewModel());
+		}
+
+		[Authorize(Roles = "Admin")]
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Create(MedicationCreateViewModel model)
+		{
+			if (!ModelState.IsValid)
+			{
+				await LoadDiagnosesAsync();
+				return View(model);
+			}
+
+			var dto = new MedicationCreateDTO
+			{
+				Name = model.Name,
+				DiagnoseID = model.DiagnoseID,
+				Description = model.Description,
+				SideEffects = model.SideEffects
+			};
+
+			await medicationService.CreateAsync(dto);
+			return RedirectToAction(nameof(Index));
+		}
+
+		[Authorize(Roles = "Admin")]
+		[HttpGet]
+		public async Task<IActionResult> Edit(Guid id)
+		{
+			await LoadDiagnosesAsync();
+
+			var dto = await medicationService.GetByIdAsync(id);
+			if (dto == null)
+			{
+				return NotFound();
+			}
+
+			var model = new MedicationIndexViewModel
+			{
+				ID = dto.ID,
+				Name = dto.Name,
+				DiagnoseID = dto.DiagnoseID,
+				DiagnoseName = dto.DiagnoseName,
+				Description = dto.Description,
+				SideEffects = dto.SideEffects
+			};
+
+			return View(model);
+		}
+
+		[Authorize(Roles = "Admin")]
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Edit(MedicationIndexViewModel model)
+		{
+			if (!ModelState.IsValid)
+			{
+				await LoadDiagnosesAsync();
+				return View(model);
+			}
+
+			var dto = new MedicationIndexDTO
+			{
+				ID = model.ID,
+				Name = model.Name,
+				DiagnoseID = model.DiagnoseID,
+				DiagnoseName = model.DiagnoseName,
+				Description = model.Description,
+				SideEffects = model.SideEffects
+			};
+
+			await medicationService.UpdateAsync(dto);
+			return RedirectToAction(nameof(Index));
+		}
+
+		[Authorize(Roles = "Admin")]
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> Delete(Guid id)
+		{
+			await medicationService.DeleteAsync(id);
+			return RedirectToAction(nameof(Index));
+		}
+
+		private async Task LoadDiagnosesAsync()
+		{
+			ViewBag.Diagnose = new SelectList(
+				await context.Diagnoses.ToListAsync(),
+				"ID",
+				"Name");
+		}
+	}
 }

@@ -28,14 +28,17 @@ namespace Hospital.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly>("Date")
+                        .HasColumnType("date");
 
                     b.Property<Guid>("DoctorID")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("PatientID")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<TimeOnly>("Time")
+                        .HasColumnType("time");
 
                     b.HasKey("ID");
 
@@ -76,7 +79,8 @@ namespace Hospital.Data.Migrations
 
             modelBuilder.Entity("Hospital.Data.Entities.Patient", b =>
                 {
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("BirthCity")
@@ -84,17 +88,23 @@ namespace Hospital.Data.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<DateTime>("DateOfBirth")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly>("DateOfBirth")
+                        .HasColumnType("date");
 
-                    b.Property<DateTime>("DischargeDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly>("DischargeDate")
+                        .HasColumnType("date");
+
+                    b.Property<TimeOnly>("DischargeTime")
+                        .HasColumnType("time");
 
                     b.Property<Guid>("DoctorId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("HospitalizationDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly>("HospitalizationDate")
+                        .HasColumnType("date");
+
+                    b.Property<TimeOnly>("HospitalizationTime")
+                        .HasColumnType("time");
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
@@ -108,11 +118,17 @@ namespace Hospital.Data.Migrations
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
-                    b.HasKey("UserId");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("ID");
 
                     b.HasIndex("DoctorId");
 
                     b.HasIndex("RoomId");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("Patients");
                 });
@@ -221,7 +237,6 @@ namespace Hospital.Data.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Image")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -236,7 +251,8 @@ namespace Hospital.Data.Migrations
 
             modelBuilder.Entity("Hospital.Entities.Doctor", b =>
                 {
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Image")
@@ -252,11 +268,17 @@ namespace Hospital.Data.Migrations
                     b.Property<Guid>("SpecializationId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("UserId");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("ID");
 
                     b.HasIndex("ShiftId");
 
                     b.HasIndex("SpecializationId");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("Doctors");
                 });
@@ -285,7 +307,8 @@ namespace Hospital.Data.Migrations
 
             modelBuilder.Entity("Hospital.Entities.Nurse", b =>
                 {
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid>("ID")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Image")
@@ -301,11 +324,17 @@ namespace Hospital.Data.Migrations
                     b.Property<Guid>("SpecializationId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("UserId");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("ID");
 
                     b.HasIndex("ShiftId");
 
                     b.HasIndex("SpecializationId");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
 
                     b.ToTable("Nurses");
                 });
@@ -547,7 +576,7 @@ namespace Hospital.Data.Migrations
                     b.HasOne("Hospital.Data.Entities.User", "User")
                         .WithOne("Patient")
                         .HasForeignKey("Hospital.Data.Entities.Patient", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Doctor");
@@ -574,7 +603,7 @@ namespace Hospital.Data.Migrations
                     b.HasOne("Hospital.Data.Entities.User", "User")
                         .WithOne("Doctor")
                         .HasForeignKey("Hospital.Entities.Doctor", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Shift");
@@ -589,13 +618,13 @@ namespace Hospital.Data.Migrations
                     b.HasOne("Hospital.Entities.Doctor", "Doctor")
                         .WithMany("DoctorNurses")
                         .HasForeignKey("DoctorID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Hospital.Entities.Nurse", "Nurse")
                         .WithMany("DoctorNurses")
                         .HasForeignKey("NurseID")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Doctor");
@@ -620,7 +649,7 @@ namespace Hospital.Data.Migrations
                     b.HasOne("Hospital.Data.Entities.User", "User")
                         .WithOne("Nurse")
                         .HasForeignKey("Hospital.Entities.Nurse", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Shift");
@@ -716,14 +745,11 @@ namespace Hospital.Data.Migrations
 
             modelBuilder.Entity("Hospital.Data.Entities.User", b =>
                 {
-                    b.Navigation("Doctor")
-                        .IsRequired();
+                    b.Navigation("Doctor");
 
-                    b.Navigation("Nurse")
-                        .IsRequired();
+                    b.Navigation("Nurse");
 
-                    b.Navigation("Patient")
-                        .IsRequired();
+                    b.Navigation("Patient");
                 });
 
             modelBuilder.Entity("Hospital.Entities.Diagnose", b =>

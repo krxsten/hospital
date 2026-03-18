@@ -10,4 +10,8 @@
     <PackageReference Include="jQuery" Version="3.7.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Hospital.Data\Hospital.Data.csproj" />
+  </ItemGroup>
+
 </Project>

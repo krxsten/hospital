@@ -11,7 +11,8 @@ namespace Hospital.Data.Entities
 {
     public class Checkup
     {
-        public Guid ID { get; set; }
+		[Key]
+		public Guid ID { get; set; }
         [ForeignKey("Patient")]
         public Guid PatientID { get; set; }
         public Patient Patient { get; set; }
@@ -19,7 +20,9 @@ namespace Hospital.Data.Entities
         public Guid DoctorID { get; set; }
         public Doctor Doctor { get; set; }
         [DataType(DataType.Date)]
-        public DateTime Date { get; set; }
+        public DateOnly Date { get; set; }
+        [DataType(DataType.Time)]
+        public TimeOnly Time { get; set; }
 
     }
 }

@@ -1,6 +1,7 @@
-﻿<link rel="stylesheet" href="/css/styles.css">
-@using Hospital.WebProject.ViewModels.Doctor
-@model DoctorCreateViewModel
+﻿@using Hospital.WebProject.ViewModels.Doctor
+<link rel="stylesheet" href="/css/styles.css">
+@model DoctorShiftViewModel
+
 @{
     ViewData["Title"] = "Doctor Shift";
 }
@@ -16,11 +17,11 @@ else
     <table class="table table-striped">
         <tr>
             <th>Start Time</th>
-            <td>@Model.Shift.StartTime.ToString(@"hh\:mm")</td>
+            <td>@Model.StartTime.ToString(@"hh\:mm")</td>
         </tr>
         <tr>
             <th>End Time</th>
-            <td>@Model.Shift.EndTime.ToString(@"hh\:mm")</td>
+            <td>@Model.EndTime.ToString(@"hh\:mm")</td>
         </tr>
     </table>
 }

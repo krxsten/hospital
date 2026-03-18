@@ -7,12 +7,13 @@ namespace Hospital.WebProject.ViewModels.DoctorNurse
 {
     public class DoctorNurseViewModel
     {
-        [Required]
         public Guid DoctorID { get; set; }
-        public Hospital.Entities.Doctor Doctor { get; set; }
+        [Required(ErrorMessage = "This field is required!")]
+        public string DoctorName { get; set; } = null!;
 
-        [Required]
         public Guid NurseID { get; set; }
-        public Hospital.Entities.Nurse Nurse { get; set; }
+        [Required(ErrorMessage = "This field is required!")]
+        public string NurseName { get; set; } = null!;
     }
 }
+

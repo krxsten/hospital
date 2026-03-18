@@ -11,14 +11,22 @@ namespace Hospital.Data.Entities
     public class Patient
     {
         [Key]
+        public Guid ID { get; set; }
+        [Required]
         public Guid UserId { get; set; }
         public User User { get; set; }
         [Required]
         public Guid DoctorId { get; set; }
         public Doctor Doctor { get; set; }
 
-        public DateTime HospitalizationDate { get; set; }
-        public DateTime DischargeDate { get; set; }
+        [DataType(DataType.Date)]
+        public DateOnly HospitalizationDate { get; set; }
+        [DataType(DataType.Time)]
+        public TimeOnly HospitalizationTime { get; set; }
+        [DataType(DataType.Date)]
+        public DateOnly DischargeDate { get; set; }
+        [DataType(DataType.Time)]
+        public TimeOnly DischargeTime { get; set; }
 
         [Required]
         public Guid RoomId { get; set; }
@@ -27,7 +35,9 @@ namespace Hospital.Data.Entities
         [StringLength(100, MinimumLength = 2)]
         public string BirthCity { get; set; }
 
-        public DateTime DateOfBirth { get; set; }
+        [DataType(DataType.Date)]
+        public DateOnly DateOfBirth { get; set; }
+        
 
         [Required]
         [Phone(ErrorMessage = "Невалиден телефон")]

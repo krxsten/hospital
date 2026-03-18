@@ -1,8 +1,11 @@
 ﻿<link rel="stylesheet" href="/css/styles.css">
 @using Hospital.WebProject.ViewModels.Nurse
-@model NurseViewModel
+@model NurseCreateViewModel
 @if (User.IsInRole("Admin"))
 {
+    <div class="mb-3">
+        <h2 style="text-align:center">———— Nurses ————</h2>
+    </div>
     <form asp-action="Create" method="post">
         <div class="mb-3">
             <label asp-for="@Model.UserID" class="form-label">Nurses: </label>

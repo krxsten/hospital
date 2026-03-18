@@ -1,11 +1,15 @@
 ﻿<link rel="stylesheet" href="/css/styles.css">
 @using Hospital.WebProject.ViewModels.Medication
-@model MedicationViewModel
+@model MedicationIndexViewModel
 @if (User.IsInRole("Admin"))
 {
+
+    <div class="mb-3">
+        <h2 style="text-align:center">———— Medications ————</h2>
+    </div>
     <form asp-action="Edit" method="post">
         <div class="mb-3">
-            <label asp-for="Name" class="form-label">Diagnose: </label>
+            <label asp-for="Name" class="form-label">Medication: </label>
             <input asp-for="Name" class="form-control" />
         </div>
 
@@ -25,8 +29,8 @@
         </div>
 
         <div class="mb-3">
-            <button type="submit" class="btn-hospital">Update</button>
-            <a asp-action="Index" class="btn-hospital-secondary" style="display:inline">Back</a>
+            <button type="submit" class="btn btn-primary">Update</button>
+            <a asp-action="Index" class="btn btn-secondary" style="display:inline">Back</a>
         </div>
     </form>
 }

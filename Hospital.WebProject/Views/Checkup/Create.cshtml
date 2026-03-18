@@ -1,8 +1,11 @@
 ﻿<link rel="stylesheet" href="/css/styles.css">
 @using Hospital.WebProject.ViewModels.Checkup
-@model CheckupViewModel
+@model CheckupCreateViewModel
 @if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse") || User.IsInRole("Patient"))
 {
+    <div class="mb-3">
+        <h2 style="text-align:center">———— Check ups ————</h2>
+    </div>
     <form asp-action="Create" method="post">
         <div class="mb-3">
             <label asp-for="@Model.PatientID" class="form-label">Patient: </label>
@@ -17,9 +20,18 @@
         </div>
 
         <div class="mb-3">
-            <label asp-for="@Model.Date" class="form-label">Checkup Date & Time</label>
-            <input asp-for="@Model.Date" type="datetime-local" class="form-control" id="checkupDate" />
-            <span class="text-danger" asp-validation-for="@Model.Date"></span>
+            <label asp-for="Date" class="form-label"></label>
+            <input asp-for="Date" id="Date" type="date" class="form-control" />
+            <span asp-validation-for="Date" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Available Time</label>
+
+            <select asp-for="Date" id="Time" class="form-select">
+                <option>Select time</option>
+            </select>
+
+            <span asp-validation-for="Date" class="text-danger"></span>
         </div>
 
         <div class="mb-3">
@@ -31,4 +43,54 @@
 }
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+
+        function loadSlots(){
+
+            var barberId = $("#BarberId").val();
+
+            var serviceId = $("#ServiceId").val();
+
+            var date = $("#Date").val();
+
+            if(!barberId || !serviceId || !date)
+
+                return;
+
+            $.get("/Reservations/GetAvailableSlots", {
+
+                barberId: barberId,
+
+                serviceId: serviceId,
+
+                date: date
+
+            }, function(data){
+
+                $("#Time").empty();
+
+                $("#Time").append(`<option>Select time</option>`);
+
+                data.forEach(function(time){
+
+                    $("#Time").append(
+
+                        `<option value="${time}">${time}</option>`
+
+                    );
+
+                });
+
+            });
+
+        }
+
+        $("#BarberId").change(loadSlots);
+
+        $("#ServiceId").change(loadSlots);
+
+        $("#Date").change(loadSlots);
+
+    </script>
+
 }

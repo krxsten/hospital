@@ -1,20 +1,31 @@
-﻿<link rel="stylesheet" href="/css/styles.css">
-@using Hospital.WebProject.ViewModels.Checkup
-@model List<CheckupViewModel>
+﻿@using Hospital.WebProject.ViewModels.Checkup
+@model List<CheckupIndexViewModel>
 
 <div class="mb-3">
-    <h2 style="text-align:center">Check ups</h2>
+    <h2 style="text-align:center">———— Check ups ————</h2>
 </div>
+
+<div class="mb-3 d-flex justify-content-end" style="font-family: 'Times New Roman'; font-size: 24px">
+    @if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse") || User.IsInRole("Patient"))
+    {
+        <a asp-action="Create" class="btn btn-success" style="font-family: 'Times New Roman'; font-size: 20px">+ Create</a>
+    }
+    <a asp-action="Index" asp-controller="Home" class="btn btn-secondary ms-3" style="font-family: 'Times New Roman'; font-size: 20px">← Back</a>
+</div>
+
 @if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse") || User.IsInRole("Patient"))
 {
-    <table class="table">
+    <table class="table table-striped table-bordered" style="text-align:center">
         <thead>
             <tr>
                 <th scope="col">ID</th>
                 <th scope="col">Patient name</th>
-                <th scope="col">Patient's doctor</th>
+                <th scope="col">Doctor name</th>
                 <th scope="col">Date of checkup</th>
-                <th scope="col"></th>
+                @if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse"))
+                {
+                    <th scope="col">Actions</th>
+                }
             </tr>
         </thead>
         <tbody class="table-group-divider">
@@ -22,30 +33,38 @@
             {
                 <tr>
                     <th scope="row">@item.ID</th>
-                    <td>@item.Patient.User.FirstName + " " + @item.Patient.User.LastName</td>
-                    <td>@item.Patient.Doctor.User.FirstName + " " + @item.Patient.Doctor.User.LastName</td>
-                    <td>
-                        @if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse"))
-                        {
-                            <a asp-action="Edit" asp-route-id="@item.ID" style="display:inline" class="btn btn-warning mb-3">Edit</a>
-                            <form asp-action="Delete" class="mb-3" asp-route-id="@item.ID" method="post" style="display:inline">
+                    <td>@item.PatientName</td>
+                    <td>@item.DoctorName</td>
+                    <td>@item.Date</td>
+
+                    @if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse"))
+                    {
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.ID" class="btn btn-warning mb-3">Edit</a>
+
+                            <form asp-action="Delete" asp-route-id="@item.ID" method="post" style="display:inline">
                                 <button class="btn btn-danger">Delete</button>
-                                <a asp-action="GetBusyTimes" asp-route-id="@item.ID" style="display:inline" class="btn btn-warning mb-3">Busy times</a>
-                                <a asp-action="GetDoctorShift" asp-route-id="@item.ID" style="display:inline" class="btn btn-warning mb-3">Doctor shifts</a>
                             </form>
-                        }
-                    </td>
+
+                            <a asp-action="GetBusyTimes"
+                               asp-route-doctorId="@item.DoctorID"
+                               asp-route-date="@item.Date.ToString("yyyy-MM-ddTHH:mm:ss")"
+                               class="btn btn-warning mb-3">
+                                Busy times
+                            </a>
+
+                            <a asp-controller="Doctors"
+                               asp-action="GetDoctorShift"
+                               asp-route-doctorId="@item.DoctorID"
+                               class="btn btn-warning mb-3">
+                                Doctor shift
+                            </a>
+                        </td>
+                    }
                 </tr>
             }
         </tbody>
     </table>
 }
 
-<div class="mb-3" style="font-family: 'Times New Roman'; font-size: 24px">
-    @if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse") || User.IsInRole("Patient"))
-    {
-        <a asp-action="Create" class="btn btn-success" style="display: inline; font-family: 'Times New Roman'; font-size: 20px">Create</a>
-    }
-    <a asp-action="Index" asp-controller="Home" class="btn btn-secondary" style="display:inline; font-family: 'Times New Roman'; font-size: 20px">Back</a>
-</div>
 

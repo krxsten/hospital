@@ -15,6 +15,37 @@
         box-shadow: 0 8px 32px rgba(0,0,0,0.25);
         color: white;
     }
+
+    .top-header {
+        padding: 20px 10px 10px 10px;
+        color: white;
+    }
+
+    .logo {
+        width: 70px;
+        height: auto;
+        margin-bottom: 10px;
+    }
+
+    .hospital-title {
+        margin: 0;
+        font-size: 1.8rem;
+        letter-spacing: 1px;
+    }
+
+    .custom-navbar {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+    }
+
+    .nav-link {
+        color: white !important;
+    }
+
+        .nav-link:hover {
+            color: whitesmoke !important;
+        }
 </style>
 <!DOCTYPE html>
 <html lang="en">
@@ -32,7 +63,11 @@
 
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <div class="top-header text-center">
+            <img src="https://www.clipartmax.com/png/middle/336-3367082_all-photo-png-clipart-logo-hospital-symbol.png" alt="logo" class="logo" />
+            <h2 class="hospital-title fw-bold">'Saint Anna' Medical Center</h2>
+        </div>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm custom-navbar border-bottom mb-3">
             <div class="container-fluid">
                 <a class="navbar-brand fw-semibold" asp-area="" asp-controller="Home" asp-action="Index">Hospital "Saint Anna"</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -42,21 +77,21 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1 nav nav-underline">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-light" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Diagnoses" asp-action="Index">Diagnoses</a>
+                            <a class="nav-link text-light" asp-controller="Diagnoses" asp-action="Index">Diagnoses</a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Specializations" asp-action="Index">Specializations</a>
+                            <a class="nav-link text-light" asp-controller="Specializations" asp-action="Index">Specializations</a>
                         </li>
                         @if (User.IsInRole("Admin") || User.IsInRole("Doctor") ||
                                                 User.IsInRole("Nurse") || User.IsInRole("Patient"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Checkup" asp-action="Index">
+                                <a class="nav-link text-light" asp-controller="Checkup" asp-action="Index">
                                     Checkups
                                 </a>
                             </li>
@@ -66,7 +101,7 @@
                                                 User.IsInRole("Nurse") || User.IsInRole("Patient"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Patients" asp-action="Index">
+                                <a class="nav-link text-light" asp-controller="Patients" asp-action="Index">
                                     Patients
                                 </a>
                             </li>
@@ -76,7 +111,7 @@
                                                 User.IsInRole("Nurse") || User.IsInRole("Patient"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Rooms" asp-action="Index">
+                                <a class="nav-link text-light" asp-controller="Rooms" asp-action="Index">
                                     Rooms
                                 </a>
                             </li>
@@ -86,7 +121,7 @@
                                                 User.IsInRole("Nurse"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Medications" asp-action="Index">
+                                <a class="nav-link text-light" asp-controller="Medications" asp-action="Index">
                                     Medications
                                 </a>
                             </li>
@@ -95,7 +130,7 @@
                         @if (User.IsInRole("Admin"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Shifts" asp-action="Index">
+                                <a class="nav-link text-light" asp-controller="Shifts" asp-action="Index">
                                     Shifts
                                 </a>
                             </li>
@@ -104,7 +139,7 @@
                         @if (User.IsInRole("Admin"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark"
+                                <a class="nav-link text-light"
                                    asp-controller="Admin" asp-action="PendingUsers">
                                     Admin Panel
                                 </a>

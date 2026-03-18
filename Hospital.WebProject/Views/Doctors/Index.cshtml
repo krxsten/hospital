@@ -1,26 +1,37 @@
 ﻿<link rel="stylesheet" href="/css/styles.css">
 @using Hospital.WebProject.ViewModels.Doctor
 @model List<DoctorIndexViewModel>
+
 <div class="mb-3">
-    <h2 style="text-align:center">Doctors</h2>
+    <h2 style="text-align:center">———— Doctors ————</h2>
 </div>
+
+<div class="mb-3 d-flex justify-content-end" style="font-family: 'Times New Roman'; font-size: 24px">
+    @if (User.IsInRole("Admin"))
+    {
+        <a asp-action="Create" class="btn btn-success">+ Create</a>
+    }
+    <a asp-action="Index" asp-controller="Home" class="btn btn-secondary ms-3">← Back</a>
+</div>
+
 <div class="doctor-grid">
     @foreach (var doctor in Model)
     {
-        <input type="hidden" asp-for="@doctor.UserId" />
         <div class="doctor-card">
-            <img src="@doctor.Image"
-                 alt="Doctor photo"
-                 class="doctor-image" />
+            <img src="@doctor.Image" class="doctor-image" />
+
             <h5 class="doctor-name">
-                @doctor.User.FirstName @doctor.User.LastName
+                @doctor.UserName
             </h5>
+
             <p class="doctor-field">
-                <strong>Specialization:</strong> @doctor.Specialization.SpecializationName
+                <strong>Specialization:</strong> @doctor.SpecializationName
             </p>
+
             <p class="doctor-field">
-                <strong>Shift:</strong> @doctor.Shift.Type
+                <strong>Shift:</strong> @doctor.ShiftName
             </p>
+
             <p class="doctor-field">
                 <strong>Status:</strong>
                 @if (doctor.IsAccepted)
@@ -36,19 +47,13 @@
             <div class="doctor-actions">
                 @if (User.IsInRole("Admin"))
                 {
-                    <a asp-action="Edit" asp-route-id="@doctor.User.Id" style="display:inline" class="btn btn-warning mb-3">Edit</a>
-                    <form asp-action="Delete" class="mb-3" asp-route-id="@doctor.User.Id" method="post" style="display:inline">
+                    <a asp-action="Edit" asp-route-id="@doctor.ID" class="btn btn-warning mb-3">Edit</a>
+
+                    <form asp-action="Delete" asp-route-id="@doctor.ID" method="post" style="display:inline">
                         <button class="btn btn-danger">Delete</button>
                     </form>
                 }
             </div>
         </div>
     }
-</div>
-<div class="mb-3" style="font-family: 'Times New Roman'; font-size: 24px">
-    @if (User.IsInRole("Admin"))
-    {
-        <a asp-action="Create" class="btn btn-success" style="display: inline; font-family: 'Times New Roman'; font-size: 20px">Create</a>
-    }
-    <a asp-action="Index" asp-controller="Home" class="btn btn-secondary" style="display:inline; font-family: 'Times New Roman'; font-size: 20px">Back</a>
 </div>
