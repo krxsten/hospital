@@ -1,4 +1,5 @@
-﻿using Hospital.Data.Entities;
+﻿using Hospital.Data.Configurations;
+using Hospital.Data.Entities;
 using Hospital.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -30,14 +31,10 @@ namespace Hospital.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.ApplyConfiguration(new UserConfiguration());
             base.OnModelCreating(modelBuilder);
 
-
-            modelBuilder.Entity<Doctor>()
-                .HasOne(d => d.User)
-                .WithOne(u => u.Doctor)
-                .HasForeignKey<Doctor>(d => d.UserId)
-                .OnDelete(DeleteBehavior.Restrict);
+           
 
 
             modelBuilder.Entity<Nurse>()
@@ -68,21 +65,7 @@ namespace Hospital.Data
                 .OnDelete(DeleteBehavior.Restrict);
 
 
-			modelBuilder.Entity<DoctorAndNurse>()
-	             .HasOne(x => x.Doctor)
-	             .WithMany(d => d.DoctorNurses)
-	             .HasForeignKey(x => x.DoctorID)
-	             .OnDelete(DeleteBehavior.Restrict);
-
-			modelBuilder.Entity<DoctorAndNurse>()
-				.HasOne(x => x.Nurse)
-				.WithMany(n => n.DoctorNurses)
-				.HasForeignKey(x => x.NurseID)
-				.OnDelete(DeleteBehavior.Restrict);
-
-			modelBuilder.Entity<DoctorAndNurse>()
-				.HasIndex(x => new { x.DoctorID, x.NurseID })
-				.IsUnique();
+			
 
 
 			modelBuilder.Entity<PatientAndDiagnose>()
@@ -102,16 +85,6 @@ namespace Hospital.Data
                 .HasIndex(x => new { x.PatientId, x.DiagnoseId })
                 .IsUnique();
 
-            modelBuilder.Entity<Checkup>().HasOne(c => c.Patient)
-                      .WithMany(p => p.Checkups)
-                      .HasForeignKey(c => c.PatientID)
-                      .OnDelete(DeleteBehavior.Restrict);
-
-            modelBuilder.Entity<Checkup>().HasOne(c => c.Doctor)
-                      .WithMany(d => d.Checkups)
-                      .HasForeignKey(c => c.DoctorID)
-
-                      .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
