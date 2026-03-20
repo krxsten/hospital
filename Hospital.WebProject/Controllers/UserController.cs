@@ -47,7 +47,7 @@ namespace Hospital.WebProject.Controllers
             var user = new User()
             {
                 Email = model.Email,
-                UserName = model.FirstName + model.LastName,
+                UserName = model.FirstName + " " + model.LastName,
                 FirstName = model.FirstName,
                 LastName = model.LastName
             };
@@ -96,24 +96,24 @@ namespace Hospital.WebProject.Controllers
 
                 if (result.Succeeded)
                 {
-                    var doctor = Context.Doctors.FirstOrDefault(d => d.UserId == user.Id);
-                    if (doctor != null && !doctor.IsAccepted)
-                    {
-                        await signManager.SignOutAsync();
-                        ModelState.AddModelError("", "Waiting for admin approval.");
-                        return View(model);
-                    }
+                    //var doctor = Context.Doctors.FirstOrDefault(d => d.UserId == user.Id);
+                    //if (doctor != null && !doctor.IsAccepted)
+                    //{
+                    //    await signManager.SignOutAsync();
+                    //    ModelState.AddModelError("", "Waiting for admin approval.");
+                    //    return View(model);
+                    //}
 
-                    var nurse = Context.Nurses.FirstOrDefault(n => n.UserId == user.Id);
-                    if (nurse != null && !nurse.IsAccepted)
-                    {
-                        await signManager.SignOutAsync();
-                        ModelState.AddModelError("", "Waiting for admin approval.");
-                        return View(model);
-                    }
+                    //var nurse = Context.Nurses.FirstOrDefault(n => n.UserId == user.Id);
+                    //if (nurse != null && !nurse.IsAccepted)
+                    //{
+                    //    await signManager.SignOutAsync();
+                    //    ModelState.AddModelError("", "Waiting for admin approval.");
+                    //    return View(model);
+                    //}
                     return RedirectToAction("Index", "Home");
                 }
-                await signManager.SignInAsync(user, isPersistent:true);
+                //await signManager.SignInAsync(user, isPersistent:true);
                 return RedirectToAction("Index", "Home");
             }
             ModelState.AddModelError("", "Invalid login");

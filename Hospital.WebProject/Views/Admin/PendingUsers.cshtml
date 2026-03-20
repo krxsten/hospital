@@ -1,39 +1,65 @@
-﻿
-<div class="mb-3">
-
-    <h2 style="text-align:center">———— Pending Doctors & Nurses————</h2>
+﻿<div class="mb-3">
+    <h2 style="text-align:center">———— Pending Doctors & Nurses ————</h2>
 </div>
-<table class="table table-striped table-bordered">
+<br />
+@if (User.IsInRole("Admin"))
+{
+    <div class="row">
+        <div class="col-md-6">
+            <table class="table table-striped table-bordered" style="text-align:center">
+                <thead>
+                    <tr>
+                        <th>Doctors</th>
+                        <th>Accept</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var d in ViewBag.Doctors)
+                    {
+                        <tr>
+                            <td>@d.User.FirstName @d.User.LastName</td>
+                            <td>
+                                <form asp-action="AcceptDoctor" method="post">
+                                    <input type="hidden" name="id" value="@d.UserId" />
+                                    <button class="btn btn-success">Accept</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
 
-    <thead>
-        <tr>
-            <th>Doctors</th>
-            <th>Nurses</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var d in ViewBag.Doctors)
-        {
-            <tr>
-                <td>@d.User.FirstName @d.User.LastName </td>
-                <form asp-action="AcceptDoctor" method="post">
-                    <input type="hidden" name="id" value="@d.UserId" />
-                    <button class="btn btn-success">Accept</button>
-                </form>
-            </tr>
-        }
-        @foreach (var d in ViewBag.Nurses)
-        {
-            <tr>
-                <td>@d.User.FirstName @d.User.LastName </td>
-                <form asp-action="AcceptNurse" method="post">
-                    <input type="hidden" name="id" value="@d.UserId" />
-                    <button class="btn btn-success">Accept</button>
-                </form>
-            </tr>
-        }
-    </tbody>
-</table>
+        <div class="col-md-6">
+            <table class="table table-striped table-bordered" style="text-align:center">
+                <thead>
+                    <tr>
+                        <th>Nurses</th>
+                        <th>Accept</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var n in ViewBag.Nurses)
+                    {
+                        <tr>
+                            <td>@n.User.FirstName @n.User.LastName</td>
+                            <td>
+                                <form asp-action="AcceptNurse" method="post">
+                                    <input type="hidden" name="id" value="@n.UserId" />
+                                    <button class="btn btn-success">Accept</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
 
-
-
+    </div>
+}
+else
+{
+    <h1 style="text-align:center; font-family:'Times New Roman'">
+        Only administrator can pend users!
+    </h1>
+}

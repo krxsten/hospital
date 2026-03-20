@@ -36,35 +36,33 @@ public class AdminController : Controller
     public async Task<IActionResult> AcceptDoctor(Guid id)
     {
         var doctor = await context.Doctors.FirstOrDefaultAsync(d => d.UserId == id);
-        if (doctor != null && !doctor.IsAccepted)
-        {
-            ModelState.AddModelError("", "You are not approved yet.");
-            return View();
-        }
+
         if (doctor == null)
-        {
             return NotFound();
-        }
+
+        if (doctor.IsAccepted)
+            return RedirectToAction("PendingUsers");
+
         doctor.IsAccepted = true;
         await context.SaveChangesAsync();
+
         return RedirectToAction("PendingUsers");
     }
 
     [HttpPost]
     public async Task<IActionResult> AcceptNurse(Guid id)
     {
-        var nurse = await context.Nurses.FirstOrDefaultAsync(d => d.UserId == id);
-        if (nurse != null && !nurse.IsAccepted)
-        {
-            ModelState.AddModelError("", "You are not approved yet.");
-            return View();
-        }
+        var nurse = await context.Nurses.FirstOrDefaultAsync(n => n.UserId == id);
+
         if (nurse == null)
-        {
             return NotFound();
-        }
+
+        if (nurse.IsAccepted)
+            return RedirectToAction("PendingUsers");
+
         nurse.IsAccepted = true;
         await context.SaveChangesAsync();
+
         return RedirectToAction("PendingUsers");
     }
 }

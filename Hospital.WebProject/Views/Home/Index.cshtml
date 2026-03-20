@@ -120,7 +120,7 @@
     <p class="display-6 text-white subtitle" style="font-family: 'Times New Roman'">Where advanced medicine meets exceptional care.</p>
     <div class="content-wrapper">
         <div class="image-frame">
-            <img src="~/img/saintAnna.jpg" alt="Saint Anna Hospital" />
+            <img src="~/img/index.jpg" alt="Saint Anna Hospital" />
         </div>
         <div class="history-text">
             <h2>Our History</h2>
@@ -136,5 +136,61 @@
                 to evolve while maintaining its commitment to saving lives and improving health.
             </p>
         </div>
+    </div>
+</div>
+<!-- SERVICES -->
+<div class="container mt-5 text-white">
+    <h2 class="text-center mb-4">Our Services</h2>
+
+    <div class="row text-center">
+        <div class="col-md-4">
+            <div class="p-4 border rounded shadow-sm bg-dark">
+                <h4>Cardiology</h4>
+                <p>Advanced heart care with modern diagnostics and treatment.</p>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="p-4 border rounded shadow-sm bg-dark">
+                <h4>Neurology</h4>
+                <p>Comprehensive care for brain and nervous system disorders.</p>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="p-4 border rounded shadow-sm bg-dark">
+                <h4>Emergency Care</h4>
+                <p>24/7 emergency services with rapid response teams.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- STATS -->
+<div class="container mt-5 text-center text-white">
+    <div class="row">
+        <div class="col-md-4">
+            <h1>25+</h1>
+            <p>Years of Experience</p>
+        </div>
+        <div class="col-md-4">
+            <h1>100+</h1>
+            <p>Qualified Doctors</p>
+        </div>
+        <div class="col-md-4">
+            <h1>10K+</h1>
+            <p>Happy Patients</p>
+        </div>
+    </div>
+</div>
+
+
+<div class="container mt-5 text-center">
+    <div class="p-5 rounded" style="background: rgba(255,255,255,0.1); backdrop-filter: blur(10px);">
+        <h2 class="text-white mb-3">Need Medical Assistance?</h2>
+        <p class="text-white mb-4">Our specialists are here to help you anytime.</p>
+
+        <a asp-action="Create" asp-controller="Checkup" class="btn btn-primary btn-lg me-2">Book Appointment</a>
+        <a asp-action="Contacts" asp-controller="Home" class="btn btn-outline-light btn-lg">Contact Us</a>
     </div>
 </div>

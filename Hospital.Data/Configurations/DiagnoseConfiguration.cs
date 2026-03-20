@@ -10,7 +10,7 @@ namespace Hospital.WebProject.Seed
         {
             builder.HasData(CreateDiagnoses());
         }
-        public List<Diagnose> CreateDiagnoses()
+        public IEnumerable<Diagnose> CreateDiagnoses()
         {
             List<Diagnose> diagnoses = new List<Diagnose>()
             {
@@ -26,6 +26,7 @@ namespace Hospital.WebProject.Seed
                 new Diagnose { ID = new Guid("49a578fc-5f30-40b6-810f-3ca54b0e2a02"), Name = "Hashimoto's disease", Image = "hashimoto.jpg" },
                 new Diagnose { ID = new Guid("2dfdf306-41d8-4aca-abd6-91ed7d4adc8a"), Name = "Bronchitis", Image = "bronchitis.jpg" }
             };
+
             return diagnoses;
         }
     }

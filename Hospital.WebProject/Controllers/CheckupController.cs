@@ -175,18 +175,20 @@ namespace Hospital.WebProject.Controllers
 				.Select(d => new
 				{
 					d.ID,
-					FullName = d.User.FirstName + " " + d.User.LastName
+					FullName = d.User.FirstName + " " + d.User.LastName,
+					Specialization =  d.Specialization.SpecializationName
 				})
 				.ToListAsync();
 
-			ViewBag.Doctors = new SelectList(doctors, "ID", "FullName");
+			ViewBag.Doctors = new SelectList(doctors, "ID", "FullName", "Specialization");
 
 			var patients = await context.Patients
 				.Include(p => p.User)
 				.Select(p => new
 				{
 					p.ID,
-					FullName = p.User.FirstName + " " + p.User.LastName
+					FullName = p.User.FirstName + " " + p.User.LastName,
+				
 				})
 				.ToListAsync();
 

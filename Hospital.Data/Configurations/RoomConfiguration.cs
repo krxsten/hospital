@@ -9,13 +9,7 @@ namespace Hospital.WebProject.Seed
     {
         public void Configure(EntityTypeBuilder<Room> builder)
         {
-            builder.HasData(CreateRooms());
-        }
-        public List<Room> CreateRooms()
-        {
-            List<Room> rooms = new List<Room>()
-            {
-                new Room { ID = new Guid("5b8e402c-ec9e-4e74-9cf2-ed1c05948e2a"), RoomNumber = 101, IsTaken = false },
+            builder.HasData(new Room { ID = new Guid("5b8e402c-ec9e-4e74-9cf2-ed1c05948e2a"), RoomNumber = 101, IsTaken = false },
                 new Room { ID = new Guid("bb9bb784-dd42-4541-9ed2-01e7929a61ab"), RoomNumber = 102, IsTaken = true },
                 new Room { ID = new Guid("1ba934d0-494e-431a-a7d6-2fff62af342a"), RoomNumber = 103, IsTaken = false },
                 new Room { ID = new Guid("e748053a-f20a-4f80-a314-fbd9c2ac4e8a"), RoomNumber = 104, IsTaken = true },
@@ -33,7 +27,13 @@ namespace Hospital.WebProject.Seed
                 new Room { ID = new Guid("85242158-d3c2-4542-bc27-88caf4a131c6"), RoomNumber = 207, IsTaken = false },
                 new Room { ID = new Guid("44a7a821-54c8-4d2c-acf3-efbfbd75c18e"), RoomNumber = 208, IsTaken = true },
                 new Room { ID = new Guid("88b657b6-c9c3-41eb-a26f-5d637c704533"), RoomNumber = 209, IsTaken = false },
-                new Room { ID = new Guid("53546e3d-53ee-4e2c-861a-3cf5a3584893"), RoomNumber = 301, IsTaken = true }
+                new Room { ID = new Guid("53546e3d-53ee-4e2c-861a-3cf5a3584893"), RoomNumber = 301, IsTaken = true });
+        }
+        public List<Room> CreateRooms()
+        {
+            List<Room> rooms = new List<Room>()
+            {
+               
             };
             return rooms;
         }

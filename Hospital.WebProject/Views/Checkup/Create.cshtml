@@ -9,13 +9,13 @@
     <form asp-action="Create" method="post">
         <div class="mb-3">
             <label asp-for="@Model.PatientID" class="form-label">Patient: </label>
-            <select asp-for="@Model.PatientID" asp-items="ViewBag.Users" class="form-select"></select>
+            <select asp-for="@Model.PatientID" asp-items="@ViewBag.Patients" class="form-select"></select>
             <span class="text-danger" asp-validation-for="@Model.PatientID"></span>
         </div>
 
         <div class="mb-3">
             <label asp-for="@Model.DoctorID" class="form-label">Doctor: </label>
-            <select asp-for="@Model.DoctorID" id="DoctorID" asp-items="ViewBag.Doctor" class="form-select"></select>
+            <select asp-for="@Model.DoctorID" id="DoctorID" asp-items="@ViewBag.Doctors" class="form-select"></select>
             <span class="text-danger" asp-validation-for="@Model.DoctorID"></span>
         </div>
 

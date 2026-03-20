@@ -100,7 +100,7 @@ namespace Hospital.WebProject.Controllers
 				return NotFound();
 			}
 
-			var model = new NurseCreateViewModel
+			var model = new NurseIndexViewModel
 			{
 				ID = dto.ID,
 				UserID = dto.UserID,
@@ -116,7 +116,7 @@ namespace Hospital.WebProject.Controllers
 		[Authorize(Roles = "Admin")]
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Edit(NurseCreateViewModel model)
+		public async Task<IActionResult> Edit(NurseIndexViewModel model)
 		{
 			if (!ModelState.IsValid)
 			{

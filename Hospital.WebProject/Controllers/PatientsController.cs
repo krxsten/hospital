@@ -199,6 +199,18 @@ namespace Hospital.WebProject.Controllers
 			}).ToList();
 
 			ViewBag.Users = new SelectList(users, "Id", "FullName");
-		}
-	}
+
+            var patients = await context.Patients
+                .Include(d => d.User)
+                .Select(d => new
+                {
+                    d.ID,
+                    FullName = d.User.FirstName + " " + d.User.LastName
+                })
+                .ToListAsync();
+
+            ViewBag.Patients = new SelectList(patients, "ID", "FullName");
+
+        }
+    }
 }

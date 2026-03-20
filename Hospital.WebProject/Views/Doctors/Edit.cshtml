@@ -1,6 +1,6 @@
 ﻿<link rel="stylesheet" href="/css/styles.css">
 @using Hospital.WebProject.ViewModels.Doctor
-@model DoctorCreateViewModel
+@model DoctorIndexViewModel
 @if (User.IsInRole("Admin"))
 {
     <div class="mb-3">
@@ -8,19 +8,19 @@
     </div>
     <form asp-action="Edit" method="post">
         <div class="mb-3">
-            <label asp-for="UserID" class="form-label">Doctor: </label>
-            <select asp-for="UserID" asp-items="ViewBag.Doctors" class="form-select" />
+            <label asp-for="UserId" class="form-label">Doctor: </label>
+            <select asp-for="UserId" asp-items="ViewBag.Doctors" class="form-select" />
         </div>
 
         <div class="mb-3">
-            <label asp-for="SpecializationID" class="form-label">Specialization</label>
-            <select asp-for="SpecializationID" asp-items="ViewBag.Specializations" class="form-select">
+            <label asp-for="SpecializationId" class="form-label">Specialization</label>
+            <select asp-for="SpecializationId" asp-items="ViewBag.Specializations" class="form-select">
             </select>
         </div>
 
         <div class="mb-3">
-            <label asp-for="ShiftID" class="form-label">Shift</label>
-            <select asp-for="ShiftID" asp-items="ViewBag.Shifts" class="form-select">
+            <label asp-for="ShiftId" class="form-label">Shift</label>
+            <select asp-for="ShiftId" asp-items="ViewBag.Shifts" class="form-select">
             </select>
         </div>
 
@@ -29,7 +29,7 @@
             <input asp-for="Image" class="form-control" />
         </div>
 
-        <button type="submit" class="btn-hospital">Update</button>
-        <a asp-action="Index" class="btn-hospital-secondary" style="display:inline">Back</a>
+        <button type="submit" class="btn btn-success">Update</button>
+        <a asp-action="Index" class="btn btn-secondary" style="display:inline">Back</a>
     </form>
 }
