@@ -38,27 +38,16 @@ namespace Hospital.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // 1. IDENTITY & USERS (The foundation for all roles)
             modelBuilder.ApplyConfiguration(new UserConfiguration());
-
-            // 2. INDEPENDENT TABLES (No foreign keys to Doctors/Patients)
             modelBuilder.ApplyConfiguration(new SpecializationConfiguration());
             modelBuilder.ApplyConfiguration(new RoomConfiguration());
             modelBuilder.ApplyConfiguration(new ShiftConfiguration());
             modelBuilder.ApplyConfiguration(new MedicationConfiguration());
             modelBuilder.ApplyConfiguration(new DiagnoseConfiguration());
-
-            // 3. STAFF (Depends on Users & Specializations)
             modelBuilder.ApplyConfiguration(new DoctorConfiguration());
             modelBuilder.ApplyConfiguration(new NurseConfiguration());
-
-            // 4. STAFF RELATIONSHIPS (Depends on Doctors & Nurses existing FIRST)
-            modelBuilder.ApplyConfiguration(new DoctorAndNurseConfiguration()); // <--- FIX IS HERE
-
-            // 5. PATIENTS (Depends on Users, Rooms, and Doctors)
+            modelBuilder.ApplyConfiguration(new DoctorAndNurseConfiguration());
             modelBuilder.ApplyConfiguration(new PatientConfiguration());
-
-            // 6. PATIENT ACTIVITY (Depends on Patients & Doctors/Diagnoses)
             modelBuilder.ApplyConfiguration(new CheckupConfiguration());
             modelBuilder.ApplyConfiguration(new PatientDiagnoseConfiguration());
 

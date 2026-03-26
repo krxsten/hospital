@@ -33,7 +33,7 @@ namespace Hospital.Core.Services
 					ShiftId = x.ShiftId,
 					ShiftName = x.Shift.Type,
 					IsAccepted = x.IsAccepted,
-					Image = x.Image
+					Image = x.ImageURL
 				})
 				.ToListAsync();
 		}
@@ -52,7 +52,7 @@ namespace Hospital.Core.Services
 					ShiftId = x.ShiftId,
 					ShiftName = x.Shift.Type,
 					IsAccepted = x.IsAccepted,
-					Image = x.Image
+					Image = x.ImageURL
 				})
 				.FirstOrDefaultAsync();
 		}
@@ -66,7 +66,7 @@ namespace Hospital.Core.Services
 				SpecializationId = model.SpecializationId,
 				ShiftId = model.ShiftId,
 				IsAccepted = model.IsAccepted,
-				Image = model.Image
+				ImageURL = model.File
 			};
 
 			await context.Nurses.AddAsync(nurse);
@@ -84,7 +84,7 @@ namespace Hospital.Core.Services
 			nurse.SpecializationId = model.SpecializationId;
 			nurse.ShiftId = model.ShiftId;
 			nurse.IsAccepted = model.IsAccepted;
-			nurse.Image = model.Image;
+			nurse.ImageURL = model.Image;
 
 			await context.SaveChangesAsync();
 		}

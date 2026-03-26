@@ -26,7 +26,7 @@ namespace Hospital.Core.Services
 				{
 					ID = x.ID,
 					SpecializationName = x.SpecializationName,
-					Image = x.Image
+					Image = x.ImageURL
 				})
 				.ToListAsync();
 		}
@@ -39,7 +39,7 @@ namespace Hospital.Core.Services
 				{
 					ID = x.ID,
 					SpecializationName = x.SpecializationName,
-					Image = x.Image
+					Image = x.ImageURL
 				})
 				.FirstOrDefaultAsync();
 		}
@@ -50,7 +50,7 @@ namespace Hospital.Core.Services
 			{
 				ID = Guid.NewGuid(),
 				SpecializationName = model.SpecializationName,
-				Image = model.Image
+				ImageURL = model.File
 			};
 
 			await context.Specializations.AddAsync(specialization);
@@ -66,7 +66,7 @@ namespace Hospital.Core.Services
 			}
 
 			specialization.SpecializationName = model.SpecializationName;
-			specialization.Image = model.Image;
+			specialization.ImageURL = model.Image;
 
 			await context.SaveChangesAsync();
 		}

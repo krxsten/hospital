@@ -1,4 +1,6 @@
-﻿namespace Hospital.WebProject.ViewModels.Doctor
+﻿using Microsoft.AspNetCore.Http;
+
+namespace Hospital.WebProject.ViewModels.Doctor
 {
     public class DoctorIndexViewModel
     {
@@ -15,6 +17,6 @@
 
 		public bool IsAccepted { get; set; }
 
-		public string Image { get; set; } = null!;
-	}
+        public string ImageURL { get; set; } = null!;
+    }
 }

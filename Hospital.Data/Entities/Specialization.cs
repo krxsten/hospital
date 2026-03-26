@@ -16,7 +16,9 @@ namespace Hospital.Entities
         [StringLength(100, MinimumLength = 5)]
         public string SpecializationName { get; set; }
         [Required]
-        public string Image { get; set; }
+        public string ImageURL { get; set; } = null!;
+        [Required]
+        public string PublicID { get; set; } = null!;
 
         public List<Doctor> ListOfDoctors { get; set; } = new List<Doctor>();
         public List<Nurse> ListOfNurses { get; set; } = new List<Nurse>();

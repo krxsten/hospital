@@ -50,7 +50,7 @@ namespace Hospital.WebProject.Controllers
 				UserID = x.UserID,
 				UserName = x.UserName,
 				IsAccepted = x.IsAccepted,
-				Image = x.Image
+				ImageURL = x.Image
 			}).ToList();
 
 			return View(model);
@@ -81,7 +81,7 @@ namespace Hospital.WebProject.Controllers
 				SpecializationId = model.SpecializationId,
 				ShiftId = model.ShiftId,
 				IsAccepted = model.IsAccepted,
-				Image = model.Image
+				File = model.File
 			};
 
 			await nurseService.CreateAsync(dto);
@@ -107,7 +107,7 @@ namespace Hospital.WebProject.Controllers
 				SpecializationId = dto.SpecializationId,
 				ShiftId = dto.ShiftId,
 				IsAccepted = dto.IsAccepted,
-				Image = dto.Image
+				ImageURL = dto.Image
 			};
 
 			return View(model);
@@ -131,7 +131,7 @@ namespace Hospital.WebProject.Controllers
 				SpecializationId = model.SpecializationId,
 				ShiftId = model.ShiftId,
 				IsAccepted = model.IsAccepted,
-				Image = model.Image
+				Image = model.ImageURL
 			};
 
 			await nurseService.UpdateAsync(dto);

@@ -1,4 +1,5 @@
 ﻿using Hospital.Entities;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -13,6 +14,8 @@ namespace Hospital.Core.DTOs
         public Guid ID { get; set; }
         public string Name { get; set; } = null!;
         public string Image { get; set; } = null!;
-        
+
+        public string ImageURL { get; set; } = null!;
+
     }
 }

@@ -18,6 +18,6 @@ namespace Hospital.WebProject.ViewModels.Nurse
 		public bool IsAccepted { get; set; }
 
 		[Required(ErrorMessage = "This field is required!")]
-		public string Image { get; set; } = null!;
-	}
+        public string File { get; set; } = null!;
+    }
 }

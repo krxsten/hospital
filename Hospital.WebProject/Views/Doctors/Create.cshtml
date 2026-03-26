@@ -6,7 +6,7 @@
     <div class="mb-3">
         <h2 style="text-align:center">———— Doctors ————</h2>
     </div>
-    <form asp-controller="Doctors" asp-action="Create" method="post">
+    <form asp-controller="Doctors" asp-action="Create" method="post" enctype="multipart/form-data">
         <div class="mb-3">
             <label asp-for="@Model.UserID" class="form-label">Doctor: </label>
             <select asp-for="@Model.UserID" asp-items="ViewBag.Users" class="form-select">
@@ -29,9 +29,9 @@
         </div>
 
         <div class="mb-3">
-            <label asp-for="@Model.Image" class="form-label">Image URL</label>
-            <input asp-for="@Model.Image" class="form-control" />
-            <span class="text-danger" asp-validation-for="@Model.Image"></span>
+            <label asp-for="@Model.File" class="form-label">Upload Image</label>
+            <input asp-for="@Model.File" class="form-control" type="file"/>
+            <span class="text-danger" asp-validation-for="@Model.File"></span>
         </div>
 
         <div class="mb-3">

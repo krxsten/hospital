@@ -47,7 +47,7 @@ namespace Hospital.WebProject.Controllers
             var user = new User()
             {
                 Email = model.Email,
-                UserName = model.FirstName + " " + model.LastName,
+                UserName = model.FirstName + model.LastName,
                 FirstName = model.FirstName,
                 LastName = model.LastName
             };

@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Versioning;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -14,13 +15,16 @@ namespace Hospital.Core.Services
     public class DoctorService : IDoctorService
     {
         private readonly HospitalDbContext context;
+        private readonly IImageService imageService;
 
-        public DoctorService(HospitalDbContext context)
+        public DoctorService(HospitalDbContext context, IImageService _imageService)
         {
             this.context = context;
+            this.imageService = _imageService;
         }
         async Task IDoctorService.CreateAsync(DoctorCreateDto dto)
         {
+            var uploadResult = await imageService.UploadImageAsync(dto.File, dto.File.FileName, "images");
 
             var doctor = new Doctor
             {
@@ -28,7 +32,8 @@ namespace Hospital.Core.Services
                 SpecializationId = dto.SpecializationID,
                 ShiftId = dto.ShiftID,
                 IsAccepted = dto.IsAccepted,
-                Image = dto.Image
+                ImageURL = uploadResult.Url,
+                CloudinaryID = uploadResult.PublicId
             };
 
             await context.Doctors.AddAsync(doctor);
@@ -59,7 +64,7 @@ namespace Hospital.Core.Services
                    ShiftId = d.ShiftId,
                    ShiftName = d.Shift.Type,
                    IsAccepted = d.IsAccepted,
-                   Image = d.Image
+                   ImageURL = d.ImageURL
                })
                .ToListAsync();
         }
@@ -78,8 +83,9 @@ namespace Hospital.Core.Services
 					ShiftId = d.ShiftId,
 					ShiftName = d.Shift.Type,
 					IsAccepted = d.IsAccepted,
-					Image = d.Image
-				})
+                    ImageURL = d.ImageURL
+                    
+                })
 				.FirstOrDefaultAsync();
 		}
 
@@ -94,7 +100,8 @@ namespace Hospital.Core.Services
 			doctor.SpecializationId = dto.SpecializationId;
 			doctor.ShiftId = dto.ShiftId;
 			doctor.IsAccepted = dto.IsAccepted;
-			doctor.Image = dto.Image;
+			doctor.ImageURL = dto.ImageURL;
+			//doctor.PublicID = dto.PublicID;
 
 			await context.SaveChangesAsync();
 		}

@@ -32,7 +32,7 @@ namespace Hospital.WebProject.Controllers
 			{
 				ID = x.ID,
 				Name = x.Name,
-				Image = x.Image
+				ImageURL = x.ImageURL
 			}).ToList();
 
 			return View(model);
@@ -60,7 +60,7 @@ namespace Hospital.WebProject.Controllers
 				var dto = new DiagnoseCreateDTO
 				{
 					Name = model.Name,
-					Image = model.Image
+					//Image = model.Image
 				};
 
 				await diagnoseService.CreateAsync(dto);
@@ -87,7 +87,7 @@ namespace Hospital.WebProject.Controllers
 			{
 				ID = dto.ID,
 				Name = dto.Name,
-				Image = dto.Image
+				ImageURL = dto.Image
 			};
 
 			return View(model);
@@ -109,7 +109,8 @@ namespace Hospital.WebProject.Controllers
 				{
 					ID = model.ID,
 					Name = model.Name,
-					Image = model.Image
+                    // File = model.File,
+                    Image = model.ImageURL
 				};
 
 				await diagnoseService.UpdateAsync(dto);

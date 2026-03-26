@@ -8,6 +8,6 @@ namespace Hospital.WebProject.ViewModels.Specialization
 		public string SpecializationName { get; set; } = null!;
 
 		[Required(ErrorMessage = "This field is required!")]
-		public string Image { get; set; } = null!;
-	}
+        public string File { get; set; } = null!;
+    }
 }

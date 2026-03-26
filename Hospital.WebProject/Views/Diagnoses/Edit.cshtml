@@ -6,11 +6,18 @@
     <div class="mb-3">
         <h2 style="text-align:center">———— Diagnoses ————</h2>
     </div>
-    <form asp-action="Edit" method="post">
+    <form asp-action="Edit" asp-controller="Diagnoses" method="post">
         <div class="mb-3">
             <label asp-for="Name" class="form-label">Diagnose: </label>
             <input asp-for="Name" class="form-control" />
         </div>
+
+        <div class="mb-3">
+            <label asp-for="ImageURL" class="form-label">Upload image:</label>
+            <input asp-for="ImageURL" accept="image/jpeg image/gif image/png" class="form-control" />
+            <span asp-validation-for="ImageURL" class="text-danger"></span>
+        </div>
+
         <div class="mb-3">
             <button type="submit" class="btn btn-primary">Update</button>
             <a asp-action="Index" class="btn btn-secondary" style="display:inline">Back</a>

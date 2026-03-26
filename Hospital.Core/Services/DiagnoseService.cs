@@ -24,7 +24,7 @@ namespace Hospital.Core.Services
             {
                 ID = x.ID,
                 Name = x.Name,
-                Image = x.Image
+                Image = x.ImageURL
             }).ToListAsync();
         }
 
@@ -34,7 +34,7 @@ namespace Hospital.Core.Services
             {
                 ID = x.ID,
                 Name = x.Name,
-                Image = x.Image
+                Image = x.ImageURL
             }).FirstOrDefaultAsync();
             return diagnose;
         }
@@ -45,7 +45,7 @@ namespace Hospital.Core.Services
             {
                 ID = Guid.NewGuid(),
                 Name = model.Name,
-                Image = model.Image
+                ImageURL = model.Image
             };
             await context.Diagnoses.AddAsync(diagnose);
             await context.SaveChangesAsync();
@@ -59,7 +59,10 @@ namespace Hospital.Core.Services
                 return;
             }
             diagnose.Name = model.Name;
-            diagnose.Image = model.Image;
+            diagnose.ImageURL = model.Image;
+            //var uploadResult = await imageService.UploadImageAsync(model.ImageFile, model.ImageFile.FileName, "images");
+            //imageURL = uploadResult.Url;
+            //publicId = uploadResult.PublicId;
             await context.SaveChangesAsync();
         }
 

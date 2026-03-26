@@ -1,8 +1,10 @@
+using CloudinaryDotNet;
 using Hospital.Core.Contracts;
 using Hospital.Core.Services;
 using Hospital.Data;
 using Hospital.Data.Entities;
 using Hospital.Entities;
+using Hospital.WebProject.Cloudinary;
 using Hospital.WebProject.Controllers;
 using Hospital.WebProject.Seed;
 using Microsoft.AspNetCore.Identity;
@@ -15,6 +17,16 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<HospitalDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+var cloudinarySettings = builder.Configuration.GetSection("CloudinarySettings")
+    .Get<CloudinarySettings>();
+builder.Services.AddSingleton<Cloudinary>((sp) =>
+{
+    return new Cloudinary(new Account(
+        cloudinarySettings.CloudName,
+        cloudinarySettings.ApiKey,
+        cloudinarySettings.ApiSecret));
+});
 
 builder.Services.AddIdentity<User, IdentityRole<Guid>>(options =>
 {
@@ -43,6 +55,7 @@ builder.Services.AddScoped<IPatientService, PatientService>();
 builder.Services.AddScoped<IRoomService, RoomService>();
 builder.Services.AddScoped<IShiftService, ShiftService>();
 builder.Services.AddScoped<ISpecializationService, SpecializationService>();
+builder.Services.AddScoped<IImageService, ImageService>();
 
 var app = builder.Build();
 

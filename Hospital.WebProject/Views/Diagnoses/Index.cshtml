@@ -17,9 +17,9 @@
     {
         <div class="col">
             <div class="card h-100 diagnose-card">
-                <div class="card-body">
+                <div class="card-body mb-3">
+                    <img src="@item.ImageURL" class="card-img-top" alt="diagnose">
                     <h5 class="card-title">@item.Name</h5>
-                    <p class="card-text">@item.Image</p>
                 </div>
                 @if (User.IsInRole("Admin") || User.IsInRole("Doctor"))
                 {

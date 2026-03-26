@@ -27,7 +27,10 @@ namespace Hospital.Entities
         public Shift Shift { get; set; }
 
         public bool IsAccepted { get; set; } = false;
-        public string Image { get; set; }
+        [Required]
+        public string ImageURL { get; set; } = null!;
+        [Required]
+        public string CloudinaryID { get; set; } = null!;
         public List<Patient> Patients { get; set; } = new List<Patient>();
         public List<DoctorAndNurse> DoctorNurses { get; set; } = new List<DoctorAndNurse>();
 

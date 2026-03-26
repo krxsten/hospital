@@ -1,4 +1,5 @@
 ﻿using Hospital.Data.Entities;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -15,7 +16,10 @@ namespace Hospital.Entities
         [StringLength(100, MinimumLength = 5)]
         [Required]
         public string Name { get; set; }
-        public string? Image { get; set; }
+        [Required]
+        public string ImageURL { get; set; } = null!;
+        [Required]
+        public string PublicID { get; set; } = null!;
         public List<PatientAndDiagnose> ListOfPatientsAndDiagnoses { get; set; } = new List<PatientAndDiagnose>();
         public List<Medication> ListOfMedication { get; set; } = new List<Medication>();
 

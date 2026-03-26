@@ -16,7 +16,7 @@ namespace Hospital.WebProject.ViewModels.Nurse
 		public Guid ShiftId { get; set; }
 		public string ShiftName { get; set; } = null!;
 		public bool IsAccepted { get; set; }
-		public string Image { get; set; } = null!;
-	}
+        public string ImageURL { get; set; } = null!;
+    }
 }
 

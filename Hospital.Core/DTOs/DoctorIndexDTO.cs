@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,7 +17,7 @@ namespace Hospital.Core.DTOs
         public Guid UserId { get; set; }
         public string UserName { get; set; } = null!;
         public bool IsAccepted { get; set; } = false;
-        public string Image { get; set; } = null!;
+        public string ImageURL { get; set; } = null!;
         
     }
 }
