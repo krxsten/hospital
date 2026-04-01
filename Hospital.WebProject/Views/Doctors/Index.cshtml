@@ -1,12 +1,97 @@
-﻿<link rel="stylesheet" href="/css/styles.css">
+﻿<style>
+    .title {
+        font-family: 'Times New Roman';
+        font-size: 32px;
+        font-weight: bold;
+    }
+
+    .actions-bar {
+        font-family: 'Times New Roman';
+        font-size: 20px;
+    }
+
+    .doctor-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 25px;
+        padding: 20px;
+    }
+
+    .doctor-card {
+        background: white;
+        border-radius: 15px;
+        padding: 20px;
+        text-align: center;
+        box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+        transition: 0.3s;
+    }
+
+        .doctor-card:hover {
+            transform: translateY(-5px);
+        }
+
+    .doctor-image {
+        width: 100%;
+        height: 220px;
+        object-fit: cover;
+        border-radius: 10px;
+        margin-bottom: 15px;
+    }
+
+    .doctor-name {
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .badge {
+        padding: 5px 10px;
+        border-radius: 10px;
+        font-size: 14px;
+    }
+
+    .accepted {
+        background: #28a745;
+        color: black;
+    }
+
+    .pending {
+        background: #ffc107;
+        color: black;
+    }
+
+    .doctor-actions {
+        margin-top: 15px;
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .doctor-actions {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+    }
+
+        .doctor-actions form {
+            margin: 0;
+        }
+
+    .action-btn {
+        width: 90px;
+        height: 45px;
+        font-weight: bold;
+        border-radius: 10px;
+    }
+</style>
 @using Hospital.WebProject.ViewModels.Doctor
 @model List<DoctorIndexViewModel>
+
 
 <div class="mb-3">
     <h2 style="text-align:center">———— Doctors ————</h2>
 </div>
 
-<div class="mb-3 d-flex justify-content-end" style="font-family: 'Times New Roman'; font-size: 24px">
+<div class="mb-3 d-flex justify-content-end actions-bar">
     @if (User.IsInRole("Admin"))
     {
         <a asp-action="Create" class="btn btn-success">+ Create</a>
@@ -14,42 +99,34 @@
     <a asp-action="Index" asp-controller="Home" class="btn btn-secondary ms-3">← Back</a>
 </div>
 
-<div class="doctor-grid">
+<div class="doctor-grid text-dark">
     @foreach (var doctor in Model)
     {
         <div class="doctor-card">
             <img src="@doctor.ImageURL" class="doctor-image" />
 
-            <h5 class="doctor-name">
-                @doctor.UserName
-            </h5>
+            <h4 class="doctor-name">@doctor.UserName</h4>
 
-            <p class="doctor-field">
-                <strong>Specialization:</strong> @doctor.SpecializationName
-            </p>
+            <p><strong>Specialization:</strong> @doctor.SpecializationName</p>
+            <p><strong>Shift:</strong> @doctor.ShiftName</p>
 
-            <p class="doctor-field">
-                <strong>Shift:</strong> @doctor.ShiftName
-            </p>
-
-            <p class="doctor-field">
+            <p>
                 <strong>Status:</strong>
                 @if (doctor.IsAccepted)
                 {
-                    <span class="badge-accepted">Accepted</span>
+                    <span class="badge accepted">Accepted</span>
                 }
                 else
                 {
-                    <span class="badge-pending">Pending</span>
+                    <span class="badge pending">Pending</span>
                 }
             </p>
 
             <div class="doctor-actions">
                 @if (User.IsInRole("Admin"))
                 {
-                    <a asp-action="Edit" asp-route-id="@doctor.ID" class="btn btn-warning mb-3">Edit</a>
-
-                    <form asp-action="Delete" asp-route-id="@doctor.ID" method="post" style="display:inline">
+                    <a asp-action="Edit" asp-route-id="@doctor.ID" class="btn btn-danger action-button">Edit</a>
+                    <form asp-action="Delete" asp-route-id="@doctor.ID" method="post">
                         <button class="btn btn-danger">Delete</button>
                     </form>
                 }

@@ -18,5 +18,6 @@ namespace Hospital.Core.Contracts
         Task UpdateAsync(DoctorIndexDto model);
 
         Task DeleteAsync(Guid id);
+        Task<List<DoctorIndexDto>> FilterBySpecialization(string specialization);
     }
 }

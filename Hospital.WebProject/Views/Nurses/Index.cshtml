@@ -1,11 +1,124 @@
-﻿@using Hospital.WebProject.ViewModels.Nurse
-@model List<NurseIndexViewModel>
+﻿<style>
+    .nurse-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 25px;
+        padding: 20px;
+    }
 
+    .nurse-card {
+        background: white;
+        border-radius: 15px;
+        padding: 20px;
+        text-align: center;
+        box-shadow: 0 6px 15px rgba(0,0,0,0.1);
+        transition: 0.3s;
+    }
+
+        .nurse-card:hover {
+            transform: translateY(-5px);
+        }
+
+    .nurse-image {
+        width: 100%;
+        height: 220px;
+        object-fit: cover;
+        border-radius: 10px;
+        margin-bottom: 15px;
+    }
+
+    .nurse-name {
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .badge {
+        padding: 5px 10px;
+        border-radius: 10px;
+        font-size: 14px;
+    }
+
+    .accepted {
+        background: #28a745;
+        color: black;
+    }
+
+    .pending {
+        background: #ffc107;
+        color: black;
+    }
+
+    .nurse-actions {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+    }
+
+        .nurse-actions form {
+            margin: 0;
+        }
+
+    .action-btn {
+        width: 90px;
+        height: 45px;
+        font-weight: bold;
+        border-radius: 10px;
+    }
+</style>
+@using Hospital.WebProject.ViewModels.Nurse
+@model List<NurseIndexViewModel>
 <div class="mb-3">
     <h2 style="text-align:center">———— Nurses ————</h2>
 </div>
 
-<div class="mb-3 d-flex justify-content-end" style="font-family: 'Times New Roman'; font-size: 24px">
+<div class="mb-3 d-flex justify-content-end actions-bar">
+    @if (User.IsInRole("Admin"))
+    {
+        <a asp-action="Create" class="btn btn-success">+ Create</a>
+    }
+    <a asp-action="Index" asp-controller="Home" class="btn btn-secondary ms-3">← Back</a>
+</div>
+
+<div class="nurse-grid text-dark">
+    @foreach (var nurse in Model)
+    {
+        <div class="nurse-card">
+            <img src="@nurse.ImageURL" class="nurse-image" />
+
+            <h4 class="nurse-name">@nurse.UserName</h4>
+
+            <p><strong>Specialization:</strong> @nurse.SpecializationName</p>
+            <p><strong>Shift:</strong> @nurse.ShiftName</p>
+
+            <p>
+                <strong>Status:</strong>
+                @if (nurse.IsAccepted)
+                {
+                    <span class="badge accepted">Accepted</span>
+                }
+                else
+                {
+                    <span class="badge pending">Pending</span>
+                }
+            </p>
+
+            <div class="nurse-actions">
+                @if (User.IsInRole("Admin"))
+                {
+                    <a asp-action="Edit" asp-route-id="@nurse.ID" class="btn btn-danger action-btn">Edit</a>
+
+                    <form asp-action="Delete" asp-route-id="@nurse.ID" method="post">
+                        <button type="submit" class="btn btn-danger action-btn">Delete</button>
+                    </form>
+                }
+            </div>
+        </div>
+    }
+</div>
+
+
+
+@* <div class="mb-3 d-flex justify-content-end" style="font-family: 'Times New Roman'; font-size: 24px">
     @if (User.IsInRole("Admin"))
     {
         <a asp-action="Create" class="btn btn-success" style="font-family: 'Times New Roman'; font-size: 20px">+ Create</a>
@@ -63,4 +176,4 @@
         </div>
     }
 </div>
-
+ *@

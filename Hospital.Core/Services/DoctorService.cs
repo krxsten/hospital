@@ -105,5 +105,21 @@ namespace Hospital.Core.Services
 
 			await context.SaveChangesAsync();
 		}
-	}
+        public Task<List<DoctorIndexDto>> FilterBySpecialization(string specialization)
+        {
+            return context.Doctors.Where(d => d.Specialization.SpecializationName==specialization.ToLower())
+                .Select(d => new DoctorIndexDto
+                {
+                    ID = d.ID,
+                    UserId = d.UserId,
+                    UserName = d.User.FirstName + " " + d.User.LastName,
+                    SpecializationId = d.SpecializationId,
+                    SpecializationName = d.Specialization.SpecializationName,
+                    ShiftId = d.ShiftId,
+                    ShiftName = d.Shift.Type,
+                    IsAccepted = d.IsAccepted,
+                    ImageURL = d.ImageURL
+                }).ToListAsync();
+        }
+    }
 }

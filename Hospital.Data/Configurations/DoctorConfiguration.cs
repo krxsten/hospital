@@ -14,6 +14,7 @@ namespace Hospital.WebProject.Seed
                    .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasData(
+               
                 new Doctor { ID = new Guid("08ccdf4b-02ad-464f-9ef2-fb73ceee1826"), UserId = new Guid("072eae42-46ab-4919-aae5-073aef56c00d"), SpecializationId = new Guid("8a42cdba-ff58-4129-aea8-ae4c3b32f353"), ShiftId = new Guid("3ba89da5-3a0d-44ff-97f9-f049bc9bdbe9"), IsAccepted = true, ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/v1774430017/logo_ro7b24.png", CloudinaryID = "logo_ro7b24" },
                 new Doctor { ID = new Guid("e1ceefa2-e56b-4395-9049-c689bea9417f"), UserId = new Guid("7c425879-d37a-48a6-91d9-2345120a3f6a"), SpecializationId = new Guid("7a67c94b-50fb-4043-83f1-afdade20b451"), ShiftId = new Guid("0288c0db-23d0-4cef-b74c-ef997285b18c"), IsAccepted = true, ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/v1774430017/logo_ro7b24.png", CloudinaryID = "logo_ro7b24" },
 

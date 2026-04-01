@@ -192,5 +192,21 @@ namespace Hospital.WebProject.Controllers
 
 			return View(shift);
 		}
-	}
+        public async Task<IActionResult> FilterBySpecialization(string specialization)
+        {
+            var dtos = await doctorService.FilterBySpecialization(specialization);
+            var model = dtos.Select(x => new DoctorIndexViewModel
+            {
+                ID = x.ID,
+                SpecializationId = x.SpecializationId,
+                SpecializationName = x.SpecializationName,
+                ShiftId = x.ShiftId,
+                ShiftName = x.ShiftName,
+                IsAccepted = x.IsAccepted,
+                UserId = x.UserId,
+                ImageURL = x.ImageURL,
+            }).ToList();
+            return View(model);
+        }
+    }
 }
