@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Hospital.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class KristenMigration : Migration
+    public partial class NewMIg : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -60,7 +60,8 @@ namespace Hospital.Data.Migrations
                 {
                     ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Image = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    ImageURL = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PublicID = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -86,8 +87,8 @@ namespace Hospital.Data.Migrations
                 {
                     ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Type = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    StartTime = table.Column<TimeSpan>(type: "time", nullable: false),
-                    EndTime = table.Column<TimeSpan>(type: "time", nullable: false)
+                    StartTime = table.Column<TimeOnly>(type: "time", nullable: false),
+                    EndTime = table.Column<TimeOnly>(type: "time", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -100,7 +101,8 @@ namespace Hospital.Data.Migrations
                 {
                     ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     SpecializationName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Image = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    ImageURL = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PublicID = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -243,7 +245,8 @@ namespace Hospital.Data.Migrations
                     SpecializationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ShiftId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     IsAccepted = table.Column<bool>(type: "bit", nullable: false),
-                    Image = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    ImageURL = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CloudinaryID = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -277,7 +280,8 @@ namespace Hospital.Data.Migrations
                     SpecializationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ShiftId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     IsAccepted = table.Column<bool>(type: "bit", nullable: false),
-                    Image = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    ImageURL = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PublicID = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -424,44 +428,44 @@ namespace Hospital.Data.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "FirstName", "LastName", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { new Guid("02e72b22-0abd-4ce4-80d1-30b8c13f952b"), 0, "C13", "n2@h.com", false, "Nurse", "Two", false, null, "N2@H.COM", "NURSE2", "HASH", null, false, "S13", false, "nurse2" },
-                    { new Guid("04347895-6b6e-4608-be4c-5f428b759669"), 0, "C17", "p2@h.com", false, "Patient", "Two", false, null, "P2@H.COM", "PATIENT2", "HASH", null, false, "S17", false, "patient2" },
-                    { new Guid("072eae42-46ab-4919-aae5-073aef56c00d"), 0, "C2", "doc1@h.com", false, "John", "Doe", false, null, "DOC1@H.COM", "DOC1", "HASH", null, false, "S2", false, "doc1" },
-                    { new Guid("23b350b4-0dd6-43fc-b5dc-818faf2b74e6"), 0, "C6", "doc5@h.com", false, "Charlie", "Green", false, null, "DOC5@H.COM", "DOC5", "HASH", null, false, "S6", false, "doc5" },
-                    { new Guid("30f2b4ed-e0e3-4443-8595-4dc6e26b3338"), 0, "C8", "doc7@h.com", false, "Eve", "Grey", false, null, "DOC7@H.COM", "DOC7", "HASH", null, false, "S8", false, "doc7" },
-                    { new Guid("354fa92a-6b54-4d12-b90c-9926dc906462"), 0, "C12", "n1@h.com", false, "Nurse", "One", false, null, "N1@H.COM", "NURSE1", "HASH", null, false, "S12", false, "nurse1" },
-                    { new Guid("355ad73e-6b7d-4ade-846d-7cab0da06629"), 0, "C15", "n4@h.com", false, "Nurse", "Four", false, null, "N4@H.COM", "NURSE4", "HASH", null, false, "S15", false, "nurse4" },
-                    { new Guid("3d86822f-0eba-44ce-8484-27addbfe7357"), 0, "C4", "doc3@h.com", false, "Bob", "Brown", false, null, "DOC3@H.COM", "DOC3", "HASH", null, false, "S4", false, "doc3" },
-                    { new Guid("51daaed0-67e7-4c4a-b254-2745af5365df"), 0, "C9", "doc8@h.com", false, "Frank", "Blue", false, null, "DOC8@H.COM", "DOC8", "HASH", null, false, "S9", false, "doc8" },
-                    { new Guid("741d970d-f405-4bd1-94b2-eec2c3fb33e2"), 0, "C14", "n3@h.com", false, "Nurse", "Three", false, null, "N3@H.COM", "NURSE3", "HASH", null, false, "S14", false, "nurse3" },
-                    { new Guid("7c425879-d37a-48a6-91d9-2345120a3f6a"), 0, "C3", "doc2@h.com", false, "Jane", "Smith", false, null, "DOC2@H.COM", "DOC2", "HASH", null, false, "S3", false, "doc2" },
-                    { new Guid("7dca2bf8-df73-4dbf-a602-52e147eafe1e"), 0, "C5", "doc4@h.com", false, "Alice", "White", false, null, "DOC4@H.COM", "DOC4", "HASH", null, false, "S5", false, "doc4" },
-                    { new Guid("865c2545-7806-4857-a621-f035e520a596"), 0, "C19", "p4@h.com", false, "Patient", "Four", false, null, "P4@H.COM", "PATIENT4", "HASH", null, false, "S19", false, "patient4" },
-                    { new Guid("96747275-9c90-449e-a91c-eb6863183a27"), 0, "C18", "p3@h.com", false, "Patient", "Three", false, null, "P3@H.COM", "PATIENT3", "HASH", null, false, "S18", false, "patient3" },
-                    { new Guid("a7e0d718-a822-48db-b8ff-82cff6dbd5c7"), 0, "C16", "p1@h.com", false, "Patient", "One", false, null, "P1@H.COM", "PATIENT1", "HASH", null, false, "S16", false, "patient1" },
-                    { new Guid("c5982307-ef67-4b65-b438-8f9e1e3a240b"), 0, "C20", "p5@h.com", false, "Patient", "Five", false, null, "P5@H.COM", "PATIENT5", "HASH", null, false, "S20", false, "patient5" },
-                    { new Guid("cbdfa704-0f6d-431f-8ede-dd952adacfc9"), 0, "C10", "doc9@h.com", false, "Grace", "Red", false, null, "DOC9@H.COM", "DOC9", "HASH", null, false, "S10", false, "doc9" },
-                    { new Guid("d9ccb374-6b17-4e66-9c11-79412a9e1e93"), 0, "C7", "doc6@h.com", false, "Dave", "Black", false, null, "DOC6@H.COM", "DOC6", "HASH", null, false, "S7", false, "doc6" },
-                    { new Guid("e7d8baba-f7b1-4ed0-9bbb-139dc13e878e"), 0, "C1", "gencheva@gmail.com", false, "Admin", "User", false, null, "GENCHEVA@GMAIL.COM", "GENCHEVA", "HASH", null, false, "S1", false, "gencheva" },
-                    { new Guid("f6662c6a-414b-4b5c-ae1b-7b31103dd464"), 0, "C11", "doc10@h.com", false, "Hank", "Yellow", false, null, "DOC10@H.COM", "DOC10", "HASH", null, false, "S11", false, "doc10" }
+                    { new Guid("02e72b22-0abd-4ce4-80d1-30b8c13f952b"), 0, "C13", "desid@gmail.com", false, "Desislava", "Dimitrova", false, null, "DESID@GMAIL.COM", "DESISLAVA_DIMITROVA", "HASH", null, false, "S13", false, "desislava_dimitrova" },
+                    { new Guid("04347895-6b6e-4608-be4c-5f428b759669"), 0, "C17", "stefank@gmail.com", false, "Stefan", "Kolev", false, null, "STEFANK@GMAIL.COM", "STEFAN_KOLEV", "HASH", null, false, "S17", false, "stefan_kolev" },
+                    { new Guid("072eae42-46ab-4919-aae5-073aef56c00d"), 0, "C2", "ivanp@gmail.com", false, "Ivan", "Petrov", false, null, "IVANP@GMAIL.COM", "IVAN_PETROV", "HASH", null, false, "S2", false, "ivan_petrov" },
+                    { new Guid("23b350b4-0dd6-43fc-b5dc-818faf2b74e6"), 0, "C6", "aleksandurn@gmail.com", false, "Aleksandur", "Nikolov", false, null, "ALEKSANDURN@GMAIL.COM", "ALEKSANDUR_NIKOLOV", "HASH", null, false, "S6", false, "aleksandur_nikolov" },
+                    { new Guid("30f2b4ed-e0e3-4443-8595-4dc6e26b3338"), 0, "C8", "viktoriyan@gmail.com", false, "Viktoriya", "Nikolova", false, null, "VIKTORIYAN@GMAIL.COM", "VIKTORIYA_NIKOLOVA", "HASH", null, false, "S8", false, "viktoriya_nikolova" },
+                    { new Guid("354fa92a-6b54-4d12-b90c-9926dc906462"), 0, "C12", "mariai@gmail.com", false, "Maria", "Ivanova", false, null, "MARIAI@GMAIL.COM", "MARIA_IVANOVA", "HASH", null, false, "S12", false, "maria_ivanova" },
+                    { new Guid("355ad73e-6b7d-4ade-846d-7cab0da06629"), 0, "C15", "ralitsak@gmail.com", false, "Ralitsa", "Kostova", false, null, "RALITSAK@GMAIL.COM", "RALITSA_KOSTOVA", "HASH", null, false, "S15", false, "ralitsa_kostova" },
+                    { new Guid("3d86822f-0eba-44ce-8484-27addbfe7357"), 0, "C4", "nikolaii@gmail.com", false, "Nikolai", "Ivanov", false, null, "NIKOLAII@GMAIL.COM", "NIKOLAI_IVANOV", "HASH", null, false, "S4", false, "nikolai_ivanov" },
+                    { new Guid("51daaed0-67e7-4c4a-b254-2745af5365df"), 0, "C9", "annaa@gmail.com", false, "Anna", "Aleksandrova", false, null, "ANNAA@GMAIL.COM", "ANNA_ALEKSANDROVA", "HASH", null, false, "S9", false, "anna_aleksandrova" },
+                    { new Guid("741d970d-f405-4bd1-94b2-eec2c3fb33e2"), 0, "C14", "gerganav@gmail.com", false, "Gergana", "Vasileva", false, null, "GERGANAV@GMAIL.COM", "GERGANA_VASILEVA", "HASH", null, false, "S14", false, "gergana_vasileva" },
+                    { new Guid("7c425879-d37a-48a6-91d9-2345120a3f6a"), 0, "C3", "gergid@gmail.com", false, "Georgi", "Dimitrov", false, null, "GEORGID@GMAIL.COM", "GEORGI_DIMITROV", "HASH", null, false, "S3", false, "georgi_dimitrov" },
+                    { new Guid("7dca2bf8-df73-4dbf-a602-52e147eafe1e"), 0, "C5", "dimiturs@gmail.com", false, "Dimitur", "Stoyanov", false, null, "DIMITURS@GMAIL.COM", "DIMITUR_STOYANOV", "HASH", null, false, "S5", false, "dimitur_stoyanov" },
+                    { new Guid("865c2545-7806-4857-a621-f035e520a596"), 0, "C19", "hristov@gmail.com", false, "Hristo", "Vasilev", false, null, "HRISTOV@GMAIL.COM", "HRISTO_VASILEV", "HASH", null, false, "S19", false, "hristo_vasilev" },
+                    { new Guid("96747275-9c90-449e-a91c-eb6863183a27"), 0, "C18", "borislavt@gmail.com", false, "Borislav", "Todorov", false, null, "BORISLAVT@GMAIL.COM", "BORISLAV_TODOROV", "HASH", null, false, "S18", false, "borislav_todorov" },
+                    { new Guid("a7e0d718-a822-48db-b8ff-82cff6dbd5c7"), 0, "C16", "petarg@gmail.com", false, "Petar", "Georgiev", false, null, "PETARG@GMAIL.COM", "PETAR_GEORGIEV", "HASH", null, false, "S16", false, "petar_georgiev" },
+                    { new Guid("c5982307-ef67-4b65-b438-8f9e1e3a240b"), 0, "C20", "martini@gmail.com", false, "Martin", "Iliev", false, null, "MARTINI@GMAIL.COM", "MARTIN_ILIEV", "HASH", null, false, "S20", false, "martin_iliev" },
+                    { new Guid("cbdfa704-0f6d-431f-8ede-dd952adacfc9"), 0, "C10", "elenap@gmail.com", false, "Elena", "Petrova", false, null, "ELENAP@GMAIL.COM", "ELENA_PETROVA", "HASH", null, false, "S10", false, "elena_petrova" },
+                    { new Guid("d9ccb374-6b17-4e66-9c11-79412a9e1e93"), 0, "C7", "yoanai@gmail.com", false, "Yoana", "Ilieva", false, null, "YOANAI@GMAIL.COM", "YOANA_ILIEVA", "HASH", null, false, "S7", false, "yoana_ilieva" },
+                    { new Guid("e7d8baba-f7b1-4ed0-9bbb-139dc13e878e"), 0, "C1", "kristeng@gmail.com", false, "KRISTEN", "GENCHEVA", false, null, "KRISTENG@GMAIL.COM", "KRISTEN_GENCHEVA", "HASH", null, false, "S1", false, "kristen_gencheva" },
+                    { new Guid("f6662c6a-414b-4b5c-ae1b-7b31103dd464"), 0, "C11", "aleksandrag@gmail.com", false, "Aleksandra", "Georgieva", false, null, "ALEKSANDRAG@GMAIL.COM", "ALEKSANDRA_GEORGIEVA", "HASH", null, false, "S11", false, "aleksandra_georgieva" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Diagnoses",
-                columns: new[] { "ID", "Image", "Name" },
+                columns: new[] { "ID", "ImageURL", "Name", "PublicID" },
                 values: new object[,]
                 {
-                    { new Guid("02ce1c83-0198-4d90-9dc1-d697c61f936e"), "fracture.jpg", "Fracture" },
-                    { new Guid("0b0a943c-4d25-4b22-b21f-ee4f80f8e6b0"), "migraine.jpg", "Migraine" },
-                    { new Guid("2dfdf306-41d8-4aca-abd6-91ed7d4adc8a"), "bronchitis.jpg", "Bronchitis" },
-                    { new Guid("2edd634a-5c31-4f68-b9b5-58c2f5b80216"), "pneumonia.jpg", "Pneumonia" },
-                    { new Guid("46a961d1-e24f-4029-9c13-4ee9a345610c"), "diabetes.jpg", "Diabetes" },
-                    { new Guid("49a578fc-5f30-40b6-810f-3ca54b0e2a02"), "hashimoto.jpg", "Hashimoto's disease" },
-                    { new Guid("732a09fb-ad41-4059-829b-8f32cbf0ce2f"), "hypertension.jpg", "Hypertension" },
-                    { new Guid("885aea72-26c5-48b5-88cc-7128b7e81499"), "asthma.jpg", "Osteoporosis" },
-                    { new Guid("91b25ace-9e01-4c25-b0ea-3c8bad060315"), "flu.jpg", "Influenza" },
-                    { new Guid("c97e4a52-4926-4268-8261-82739340e77b"), "raynauld.jpg", "Raynauld's syndrome" },
-                    { new Guid("d793f73f-51a0-4ff0-b6fa-5ffd4d47cd15"), "asthma.jpg", "Asthma" }
+                    { new Guid("02ce1c83-0198-4d90-9dc1-d697c61f936e"), "https://res.cloudinary.com/dyoxqki3d/image/upload/v1774523396/de9b8762-40d7-459f-9f11-aeb90f41f4a8.png", "Fracture", "de9b8762-40d7-459f-9f11-aeb90f41f4a8" },
+                    { new Guid("0b0a943c-4d25-4b22-b21f-ee4f80f8e6b0"), "https://res.cloudinary.com/dyoxqki3d/image/upload/v1774523421/31435cc9-7c7f-47ba-94c6-8e14a8790876.png", "Migraine", "31435cc9-7c7f-47ba-94c6-8e14a8790876" },
+                    { new Guid("2dfdf306-41d8-4aca-abd6-91ed7d4adc8a"), "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775043330/c4510bbe-5309-4952-9ccd-326308a2c64a_vy0qwz.png", "Bronchitis", "c4510bbe-5309-4952-9ccd-326308a2c64a_vy0qwz" },
+                    { new Guid("2edd634a-5c31-4f68-b9b5-58c2f5b80216"), "https://res.cloudinary.com/dyoxqki3d/image/upload/v1774522988/12f38fbe-0962-464f-89fc-26cf3598a478.png", "Pneumonia", "12f38fbe-0962-464f-89fc-26cf3598a478" },
+                    { new Guid("46a961d1-e24f-4029-9c13-4ee9a345610c"), "https://res.cloudinary.com/dyoxqki3d/image/upload/v1774522900/79aadf40-1666-44d1-8a39-b72d08f433ac.png", "Diabetes", "79aadf40-1666-44d1-8a39-b72d08f433ac" },
+                    { new Guid("49a578fc-5f30-40b6-810f-3ca54b0e2a02"), "https://res.cloudinary.com/dyoxqki3d/image/upload/v1774522872/f83a45f2-58db-4045-99a9-8b5829b13f05.png", "Hashimoto's disease", "f83a45f2-58db-4045-99a9-8b5829b13f05" },
+                    { new Guid("732a09fb-ad41-4059-829b-8f32cbf0ce2f"), "https://res.cloudinary.com/dyoxqki3d/image/upload/v1774523282/5ab0f5a2-2ef5-4769-b2a7-9e485afd8a21.png", "Hypertension", "5ab0f5a2-2ef5-4769-b2a7-9e485afd8a21" },
+                    { new Guid("885aea72-26c5-48b5-88cc-7128b7e81499"), "https://res.cloudinary.com/dyoxqki3d/image/upload/v1774523117/88005d89-b665-4fac-b2a8-1325f75a2809.png", "Osteoporosis", "88005d89-b665-4fac-b2a8-1325f75a2809" },
+                    { new Guid("91b25ace-9e01-4c25-b0ea-3c8bad060315"), "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775043137/716959ed-ecf1-4c3e-a6ad-dfb7caca7863_mxmyot.png", "Influenza", "716959ed-ecf1-4c3e-a6ad-dfb7caca7863" },
+                    { new Guid("c97e4a52-4926-4268-8261-82739340e77b"), "https://res.cloudinary.com/dyoxqki3d/image/upload/v1774523162/1c6fae53-754a-48e0-92ba-309ceaed5972.png", "Raynauld's syndrome", "1c6fae53-754a-48e0-92ba-309ceaed5972" },
+                    { new Guid("d793f73f-51a0-4ff0-b6fa-5ffd4d47cd15"), "https://res.cloudinary.com/dyoxqki3d/image/upload/v1774523070/38a63bdf-b3a2-4719-91d1-e874170d0387.png", "Asthma", "38a63bdf-b3a2-4719-91d1-e874170d0387" }
                 });
 
             migrationBuilder.InsertData(
@@ -495,46 +499,45 @@ namespace Hospital.Data.Migrations
                 columns: new[] { "ID", "EndTime", "StartTime", "Type" },
                 values: new object[,]
                 {
-                    { new Guid("0288c0db-23d0-4cef-b74c-ef997285b18c"), new TimeSpan(0, 14, 0, 0, 0), new TimeSpan(0, 6, 0, 0, 0), "Morning" },
-                    { new Guid("2cd29802-44c5-4559-8cc3-225984ae748f"), new TimeSpan(0, 22, 0, 0, 0), new TimeSpan(0, 14, 0, 0, 0), "Afternoon" },
-                    { new Guid("3ba89da5-3a0d-44ff-97f9-f049bc9bdbe9"), new TimeSpan(0, 8, 0, 0, 0), new TimeSpan(0, 0, 0, 0, 0), "Emergency" },
-                    { new Guid("aaaaaaf9-5059-478c-8df4-db3fd4342b14"), new TimeSpan(0, 16, 0, 0, 0), new TimeSpan(0, 8, 0, 0, 0), "Weekend" },
-                    { new Guid("baaafe92-5c0f-420b-87f0-fb1da4868b41"), new TimeSpan(0, 6, 0, 0, 0), new TimeSpan(0, 22, 0, 0, 0), "Night" }
+                    { new Guid("0288c0db-23d0-4cef-b74c-ef997285b18c"), new TimeOnly(14, 0, 0), new TimeOnly(6, 0, 0), "Morning" },
+                    { new Guid("2cd29802-44c5-4559-8cc3-225984ae748f"), new TimeOnly(22, 0, 0), new TimeOnly(14, 0, 0), "Afternoon" },
+                    { new Guid("3ba89da5-3a0d-44ff-97f9-f049bc9bdbe9"), new TimeOnly(8, 0, 0), new TimeOnly(0, 0, 0), "Emergency" },
+                    { new Guid("aaaaaaf9-5059-478c-8df4-db3fd4342b14"), new TimeOnly(16, 0, 0), new TimeOnly(8, 0, 0), "Weekend" },
+                    { new Guid("baaafe92-5c0f-420b-87f0-fb1da4868b41"), new TimeOnly(6, 0, 0), new TimeOnly(22, 0, 0), "Night" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Specializations",
-                columns: new[] { "ID", "Image", "SpecializationName" },
+                columns: new[] { "ID", "ImageURL", "PublicID", "SpecializationName" },
                 values: new object[,]
                 {
-                    { new Guid("1a298771-7773-4c3b-828c-fff8dcedf0e9"), "endocrinology.jpg", "Endocrinology" },
-                    { new Guid("1d3e1ea9-5265-4ff3-9875-d7ac37a2d8b2"), "neurology.jpg", "Neurology" },
-                    { new Guid("4ee4ce69-da26-4f66-85cf-30623200cbf4"), "orthopedics.jpg", "Orthopedics" },
-                    { new Guid("7a67c94b-50fb-4043-83f1-afdade20b451"), "cardiology.jpg", "Cardiology" },
-                    { new Guid("8a42cdba-ff58-4129-aea8-ae4c3b32f353"), "infections.jpg", "Infectious Disease" },
-                    { new Guid("9cfb1a19-193f-4bf7-bc4b-c744a89f59eb"), "pulmonology.jpg", "Pulmonology" },
-                    { new Guid("a5519f22-cefb-4771-a5e9-de7b40817df8"), "rheumatology.jpg", "Rheumatology" },
-                    { new Guid("c484edec-d525-438a-92c4-ad80a9a41878"), "endocrinology.jpg", "Endocrinology" },
-                    { new Guid("d9daaa5d-2c41-4fa4-b709-709fcfcd5cc0"), "respiratory.jpg", "Respiratory" },
-                    { new Guid("e43cf086-24ad-4a75-b47e-549b8d8e467c"), "Traumatology.jpg", "Traumatology" },
-                    { new Guid("e82cc806-165f-4554-91f8-c9d9ae4909e5"), "allergy.jpg", "Allergy & Immunology" }
+                    { new Guid("1d3e1ea9-5265-4ff3-9875-d7ac37a2d8b2"), "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775117702/Screenshot_2026-04-02_111521_asrj53.png", "Screenshot_2026-04-02_111521_asrj53", "Neurology" },
+                    { new Guid("4ee4ce69-da26-4f66-85cf-30623200cbf4"), "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775117703/Screenshot_2026-04-02_111739_yxp8r4.png", "Screenshot_2026-04-02_111739_yxp8r4", "Orthopedics" },
+                    { new Guid("7a67c94b-50fb-4043-83f1-afdade20b451"), "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775117702/Screenshot_2026-04-02_111310_zgxd8c.png", "Screenshot_2026-04-02_111310_zgxd8c", "Cardiology" },
+                    { new Guid("8a42cdba-ff58-4129-aea8-ae4c3b32f353"), "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775117702/Screenshot_2026-04-02_111137_nbbhc6.png", "Screenshot_2026-04-02_111137_nbbhc6", "Infectious Disease" },
+                    { new Guid("9cfb1a19-193f-4bf7-bc4b-c744a89f59eb"), "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775117702/Screenshot_2026-04-02_111428_ukzxth.png", "Screenshot_2026-04-02_111428_ukzxth", "Pulmonology" },
+                    { new Guid("a5519f22-cefb-4771-a5e9-de7b40817df8"), "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775117703/Screenshot_2026-04-02_111632_kl3iuj.png", "Screenshot_2026-04-02_111632_kl3iuj", "Rheumatology" },
+                    { new Guid("c484edec-d525-438a-92c4-ad80a9a41878"), "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775117702/Screenshot_2026-04-02_111403_uhhj71.png", "Screenshot_2026-04-02_111403_uhhj71", "Endocrinology" },
+                    { new Guid("d9daaa5d-2c41-4fa4-b709-709fcfcd5cc0"), "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775117704/Screenshot_2026-04-02_111758_t9nbmc.png", "Screenshot_2026-04-02_111758_t9nbmc", "Respiratory" },
+                    { new Guid("e43cf086-24ad-4a75-b47e-549b8d8e467c"), "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775117702/Screenshot_2026-04-02_111550_rletvt.png", "Screenshot_2026-04-02_111550_rletvt", "Traumatology" },
+                    { new Guid("e82cc806-165f-4554-91f8-c9d9ae4909e5"), "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775117702/Screenshot_2026-04-02_111610_awmauh.png", "Screenshot_2026-04-02_111610_awmauh", "Allergy & Immunology" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Doctors",
-                columns: new[] { "ID", "Image", "IsAccepted", "ShiftId", "SpecializationId", "UserId" },
+                columns: new[] { "ID", "CloudinaryID", "ImageURL", "IsAccepted", "ShiftId", "SpecializationId", "UserId" },
                 values: new object[,]
                 {
-                    { new Guid("08ccdf4b-02ad-464f-9ef2-fb73ceee1826"), "doctor1.jpg", true, new Guid("3ba89da5-3a0d-44ff-97f9-f049bc9bdbe9"), new Guid("8a42cdba-ff58-4129-aea8-ae4c3b32f353"), new Guid("072eae42-46ab-4919-aae5-073aef56c00d") },
-                    { new Guid("0f6d5fde-bc75-4df5-8886-090806665b82"), "doctor9.jpg", true, new Guid("baaafe92-5c0f-420b-87f0-fb1da4868b41"), new Guid("4ee4ce69-da26-4f66-85cf-30623200cbf4"), new Guid("cbdfa704-0f6d-431f-8ede-dd952adacfc9") },
-                    { new Guid("186296e2-7114-4291-aa3b-897b96c75c21"), "doctor3.jpeg", true, new Guid("baaafe92-5c0f-420b-87f0-fb1da4868b41"), new Guid("c484edec-d525-438a-92c4-ad80a9a41878"), new Guid("3d86822f-0eba-44ce-8484-27addbfe7357") },
-                    { new Guid("26189d95-7ca7-40f7-9384-8454cfb99247"), "doctor7.jpg", true, new Guid("aaaaaaf9-5059-478c-8df4-db3fd4342b14"), new Guid("e82cc806-165f-4554-91f8-c9d9ae4909e5"), new Guid("30f2b4ed-e0e3-4443-8595-4dc6e26b3338") },
-                    { new Guid("2a4e1d97-8411-4cf8-9da2-af9452f16eca"), "doctor4.jpg", true, new Guid("aaaaaaf9-5059-478c-8df4-db3fd4342b14"), new Guid("9cfb1a19-193f-4bf7-bc4b-c744a89f59eb"), new Guid("7dca2bf8-df73-4dbf-a602-52e147eafe1e") },
-                    { new Guid("3480fb00-bfdc-4139-91a3-a975153ab6b3"), "doctor5.jpg", true, new Guid("0288c0db-23d0-4cef-b74c-ef997285b18c"), new Guid("1d3e1ea9-5265-4ff3-9875-d7ac37a2d8b2"), new Guid("23b350b4-0dd6-43fc-b5dc-818faf2b74e6") },
-                    { new Guid("6d3dacc1-3b7a-4e43-8caa-5b82a6f4a21f"), "doctor8.jpg", true, new Guid("2cd29802-44c5-4559-8cc3-225984ae748f"), new Guid("1a298771-7773-4c3b-828c-fff8dcedf0e9"), new Guid("51daaed0-67e7-4c4a-b254-2745af5365df") },
-                    { new Guid("8e296807-75cf-45dd-bdfc-179495465c09"), "doctor6.jpg", true, new Guid("baaafe92-5c0f-420b-87f0-fb1da4868b41"), new Guid("e43cf086-24ad-4a75-b47e-549b8d8e467c"), new Guid("d9ccb374-6b17-4e66-9c11-79412a9e1e93") },
-                    { new Guid("dcd275c5-67c4-423b-a7b2-78ab917a2d5d"), "doctor10.jpg", true, new Guid("2cd29802-44c5-4559-8cc3-225984ae748f"), new Guid("a5519f22-cefb-4771-a5e9-de7b40817df8"), new Guid("f6662c6a-414b-4b5c-ae1b-7b31103dd464") },
-                    { new Guid("e1ceefa2-e56b-4395-9049-c689bea9417f"), "doctor2.jpeg", true, new Guid("0288c0db-23d0-4cef-b74c-ef997285b18c"), new Guid("7a67c94b-50fb-4043-83f1-afdade20b451"), new Guid("7c425879-d37a-48a6-91d9-2345120a3f6a") }
+                    { new Guid("08ccdf4b-02ad-464f-9ef2-fb73ceee1826"), "doctor6_tvjvud", "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775045919/doctor6_tvjvud.jpg", true, new Guid("3ba89da5-3a0d-44ff-97f9-f049bc9bdbe9"), new Guid("8a42cdba-ff58-4129-aea8-ae4c3b32f353"), new Guid("072eae42-46ab-4919-aae5-073aef56c00d") },
+                    { new Guid("0f6d5fde-bc75-4df5-8886-090806665b82"), "doctor8_daewlm", "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775045915/doctor8_daewlm.jpg", true, new Guid("baaafe92-5c0f-420b-87f0-fb1da4868b41"), new Guid("4ee4ce69-da26-4f66-85cf-30623200cbf4"), new Guid("cbdfa704-0f6d-431f-8ede-dd952adacfc9") },
+                    { new Guid("186296e2-7114-4291-aa3b-897b96c75c21"), "doctor4_cnmqpg", "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775045919/doctor4_cnmqpg.jpg", true, new Guid("baaafe92-5c0f-420b-87f0-fb1da4868b41"), new Guid("c484edec-d525-438a-92c4-ad80a9a41878"), new Guid("3d86822f-0eba-44ce-8484-27addbfe7357") },
+                    { new Guid("26189d95-7ca7-40f7-9384-8454cfb99247"), "doctor9_ksvypt", "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775045917/doctor9_ksvypt.jpg", true, new Guid("aaaaaaf9-5059-478c-8df4-db3fd4342b14"), new Guid("e82cc806-165f-4554-91f8-c9d9ae4909e5"), new Guid("30f2b4ed-e0e3-4443-8595-4dc6e26b3338") },
+                    { new Guid("2a4e1d97-8411-4cf8-9da2-af9452f16eca"), "doctor3_djf78l", "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775045922/doctor3_djf78l.jpg", true, new Guid("aaaaaaf9-5059-478c-8df4-db3fd4342b14"), new Guid("9cfb1a19-193f-4bf7-bc4b-c744a89f59eb"), new Guid("7dca2bf8-df73-4dbf-a602-52e147eafe1e") },
+                    { new Guid("3480fb00-bfdc-4139-91a3-a975153ab6b3"), "doctor2_x95tr9", "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775045917/doctor2_x95tr9.jpg", true, new Guid("0288c0db-23d0-4cef-b74c-ef997285b18c"), new Guid("1d3e1ea9-5265-4ff3-9875-d7ac37a2d8b2"), new Guid("23b350b4-0dd6-43fc-b5dc-818faf2b74e6") },
+                    { new Guid("6d3dacc1-3b7a-4e43-8caa-5b82a6f4a21f"), "f4c9ef33d04a22050038e9e53eeb7d85_w2l72d", "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775044425/f4c9ef33d04a22050038e9e53eeb7d85_w2l72d.jpg", true, new Guid("2cd29802-44c5-4559-8cc3-225984ae748f"), new Guid("c484edec-d525-438a-92c4-ad80a9a41878"), new Guid("51daaed0-67e7-4c4a-b254-2745af5365df") },
+                    { new Guid("8e296807-75cf-45dd-bdfc-179495465c09"), "doctor1_jiqipy", "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775045917/doctor1_jiqipy.jpg", true, new Guid("baaafe92-5c0f-420b-87f0-fb1da4868b41"), new Guid("e43cf086-24ad-4a75-b47e-549b8d8e467c"), new Guid("d9ccb374-6b17-4e66-9c11-79412a9e1e93") },
+                    { new Guid("dcd275c5-67c4-423b-a7b2-78ab917a2d5d"), "doctor7_ylf8tt", "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775045915/doctor7_ylf8tt.jpg", true, new Guid("2cd29802-44c5-4559-8cc3-225984ae748f"), new Guid("a5519f22-cefb-4771-a5e9-de7b40817df8"), new Guid("f6662c6a-414b-4b5c-ae1b-7b31103dd464") },
+                    { new Guid("e1ceefa2-e56b-4395-9049-c689bea9417f"), "doctor5_vwg329", "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775045919/doctor5_vwg329.jpg", true, new Guid("0288c0db-23d0-4cef-b74c-ef997285b18c"), new Guid("7a67c94b-50fb-4043-83f1-afdade20b451"), new Guid("7c425879-d37a-48a6-91d9-2345120a3f6a") }
                 });
 
             migrationBuilder.InsertData(
@@ -553,13 +556,13 @@ namespace Hospital.Data.Migrations
 
             migrationBuilder.InsertData(
                 table: "Nurses",
-                columns: new[] { "ID", "Image", "IsAccepted", "ShiftId", "SpecializationId", "UserId" },
+                columns: new[] { "ID", "ImageURL", "IsAccepted", "PublicID", "ShiftId", "SpecializationId", "UserId" },
                 values: new object[,]
                 {
-                    { new Guid("698d0579-913c-42af-8a45-924cd9f740bb"), "nurse1.png", true, new Guid("0288c0db-23d0-4cef-b74c-ef997285b18c"), new Guid("8a42cdba-ff58-4129-aea8-ae4c3b32f353"), new Guid("354fa92a-6b54-4d12-b90c-9926dc906462") },
-                    { new Guid("9fb6048e-03ae-407f-a83e-51b6c5399b41"), "nurse4.png", true, new Guid("2cd29802-44c5-4559-8cc3-225984ae748f"), new Guid("d9daaa5d-2c41-4fa4-b709-709fcfcd5cc0"), new Guid("355ad73e-6b7d-4ade-846d-7cab0da06629") },
-                    { new Guid("e5f97752-f18b-4b36-8c47-4d238cb0e01f"), "nurse2.png", true, new Guid("3ba89da5-3a0d-44ff-97f9-f049bc9bdbe9"), new Guid("a5519f22-cefb-4771-a5e9-de7b40817df8"), new Guid("02e72b22-0abd-4ce4-80d1-30b8c13f952b") },
-                    { new Guid("e6a3850b-7a1e-465c-83fd-57b1134c68d2"), "nurse3.png", true, new Guid("baaafe92-5c0f-420b-87f0-fb1da4868b41"), new Guid("1d3e1ea9-5265-4ff3-9875-d7ac37a2d8b2"), new Guid("741d970d-f405-4bd1-94b2-eec2c3fb33e2") }
+                    { new Guid("698d0579-913c-42af-8a45-924cd9f740bb"), "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775044959/a9da1dea6368ebb099100f489cc37cfe_zfh28g.jpg", true, "a9da1dea6368ebb099100f489cc37cfe_zfh28g", new Guid("0288c0db-23d0-4cef-b74c-ef997285b18c"), new Guid("8a42cdba-ff58-4129-aea8-ae4c3b32f353"), new Guid("354fa92a-6b54-4d12-b90c-9926dc906462") },
+                    { new Guid("9fb6048e-03ae-407f-a83e-51b6c5399b41"), "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775045919/doctor5_vwg329.jpg", true, "doctor5_vwg329", new Guid("2cd29802-44c5-4559-8cc3-225984ae748f"), new Guid("d9daaa5d-2c41-4fa4-b709-709fcfcd5cc0"), new Guid("355ad73e-6b7d-4ade-846d-7cab0da06629") },
+                    { new Guid("e5f97752-f18b-4b36-8c47-4d238cb0e01f"), "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775045913/doctor10_ewtass.jpg", true, "doctor10_ewtass", new Guid("3ba89da5-3a0d-44ff-97f9-f049bc9bdbe9"), new Guid("a5519f22-cefb-4771-a5e9-de7b40817df8"), new Guid("02e72b22-0abd-4ce4-80d1-30b8c13f952b") },
+                    { new Guid("e6a3850b-7a1e-465c-83fd-57b1134c68d2"), "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775045922/doctor3_djf78l.jpg", true, "doctor3_djf78l", new Guid("baaafe92-5c0f-420b-87f0-fb1da4868b41"), new Guid("1d3e1ea9-5265-4ff3-9875-d7ac37a2d8b2"), new Guid("741d970d-f405-4bd1-94b2-eec2c3fb33e2") }
                 });
 
             migrationBuilder.InsertData(

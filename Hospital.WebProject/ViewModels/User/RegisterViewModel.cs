@@ -20,5 +20,12 @@ namespace Hospital.WebProject.ViewModels.User
         public string ConfirmPassword { get; set; } = null!;
         [Required]
         public string Role { get; set; }
+        public string? PhoneNumber { get; set; }
+        public Guid? SpecializationId { get; set; }
+        public Guid? ShiftId { get; set; }
+        public string? ImageURL { get; set; }
+        public string BirthCity { get; set; }
+        public DateOnly DateOfBirth { get; set; }
+        public string UCN { get; set; }
     }
 }

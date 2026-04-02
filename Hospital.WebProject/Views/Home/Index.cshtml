@@ -6,7 +6,7 @@
         max-width: 520px;
         text-align: left;
         color: white;
-        font-family: 'Georgia', 'Times New Roman', serif;
+        font-family: 'Georgia', 'Cambria', serif;
         line-height: 1.8;
         letter-spacing: 0.5px;
     }
@@ -76,6 +76,7 @@
         max-width: 500px;
         text-align: left;
         color: white;
+        font-family: Cambria
     }
 
         .history-text h2 {
@@ -89,7 +90,7 @@
     }
 
     .main-title {
-        font-family: 'Georgia', 'Times New Roman', serif;
+        font-family: 'Georgia', 'Cambria', serif;
         font-size: 3.5rem;
         font-weight: 600;
         letter-spacing: 2px;
@@ -116,8 +117,8 @@
 </style>
 
 <div class="text-center hero-titlesubtitle">
-    <h1 class="display-3 text-white main-title" style="font-family: 'Times New Roman'">"Saint Anna" Medical Center</h1>
-    <p class="display-6 text-white subtitle" style="font-family: 'Times New Roman'">Where advanced medicine meets exceptional care.</p>
+    <h1 class="display-3 text-white main-title" style="font-family: 'Cambria'">"Saint Anna" Medical Center </h1>
+    <p class="display-6 text-white subtitle" style="font-family: 'Cambria'">Where advanced medicine meets exceptional care.</p>
     <div class="content-wrapper">
         <div class="image-frame">
             <img src="~/img/index.jpg" alt="Saint Anna Hospital" />
@@ -189,6 +190,6 @@
         <p class="text-white mb-4">Our specialists are here to help you anytime.</p>
 
         <a asp-action="Create" asp-controller="Checkup" class="btn btn-primary btn-lg me-2">Book Appointment</a>
-        <a asp-action="Contacts" asp-controller="Home" class="btn btn-outline-light btn-lg">Contact Us</a>
+        <a href="/Home/Contacts" class="btn btn-outline-light btn-lg">Contact Us</a>
     </div>
 </div>

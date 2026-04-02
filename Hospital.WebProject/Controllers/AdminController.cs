@@ -25,16 +25,18 @@ public class AdminController : Controller
     public async Task<IActionResult> PendingDoctors()
     {
         var doctors = await context.Doctors
-            .Include(d => d.User)
-            .Where(d => !d.IsAccepted)
-            .ToListAsync();
+        .Include(d => d.User)
+        .Include(d => d.Specialization)
+        .Include(d => d.Shift)
+        .Where(d => !d.IsAccepted)
+        .ToListAsync();
 
 
         ViewBag.Doctors = doctors;
 
         return View(doctors);
     }
-       
+
     public async Task<IActionResult> PendingNurses()
     {
 
@@ -63,31 +65,66 @@ public class AdminController : Controller
         var doctor = await context.Doctors.FirstOrDefaultAsync(d => d.ID == id);
 
         if (doctor == null)
+        {
+            return NotFound();
+        }
+        doctor.IsAccepted = true;
+        await context.SaveChangesAsync();
+
+        return RedirectToAction("PendingDoctors");
+    }
+    [HttpPost]
+    public async Task<IActionResult> AcceptNurse(Guid id)
+    {
+        var nurse = await context.Nurses.FirstOrDefaultAsync(n => n.ID == id); 
+
+        if (nurse == null)
+        {
+            return NotFound();
+        }
+
+        nurse.IsAccepted = true;
+        await context.SaveChangesAsync();
+
+        return RedirectToAction("PendingNurses"); 
+    }
+    [HttpPost]
+    public async Task<IActionResult> RejectDoctor(Guid id)
+    {
+        var doctor = await context.Doctors.FindAsync(id);
+
+        if (doctor == null)
             return NotFound();
 
-        if (doctor.IsAccepted)
-            return RedirectToAction("PendingDoctors");
+        var user = await userManager.FindByIdAsync(doctor.UserId.ToString());
 
-        doctor.IsAccepted = true;
+        context.Doctors.Remove(doctor);
+
+        if (user != null)
+            await userManager.DeleteAsync(user);
+
         await context.SaveChangesAsync();
 
         return RedirectToAction("PendingDoctors");
     }
 
     [HttpPost]
-    public async Task<IActionResult> AcceptNurse(Guid id)
+    public async Task<IActionResult> RejectNurse(Guid id)
     {
-        var nurse = await context.Nurses.FirstOrDefaultAsync(n => n.UserId == id);
+        var nurse = await context.Nurses.FindAsync(id);
 
         if (nurse == null)
             return NotFound();
 
-        if (nurse.IsAccepted)
-            return RedirectToAction("PendingNurses");
+        var user = await userManager.FindByIdAsync(nurse.UserId.ToString());
 
-        nurse.IsAccepted = true;
+        context.Nurses.Remove(nurse);
+
+        if (user != null)
+            await userManager.DeleteAsync(user);
+
         await context.SaveChangesAsync();
 
-        return RedirectToAction("PendingUsers");
+        return RedirectToAction("PendingNurses");
     }
 }

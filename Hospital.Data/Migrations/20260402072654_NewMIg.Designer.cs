@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Hospital.Data.Migrations
 {
     [DbContext(typeof(HospitalDbContext))]
-    [Migration("20260320114930_KristenMigration")]
-    partial class KristenMigration
+    [Migration("20260402072654_NewMIg")]
+    partial class NewMIg
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -319,10 +319,10 @@ namespace Hospital.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<TimeSpan>("EndTime")
+                    b.Property<TimeOnly>("EndTime")
                         .HasColumnType("time");
 
-                    b.Property<TimeSpan>("StartTime")
+                    b.Property<TimeOnly>("StartTime")
                         .HasColumnType("time");
 
                     b.Property<string>("Type")
@@ -337,36 +337,36 @@ namespace Hospital.Data.Migrations
                         new
                         {
                             ID = new Guid("0288c0db-23d0-4cef-b74c-ef997285b18c"),
-                            EndTime = new TimeSpan(0, 14, 0, 0, 0),
-                            StartTime = new TimeSpan(0, 6, 0, 0, 0),
+                            EndTime = new TimeOnly(14, 0, 0),
+                            StartTime = new TimeOnly(6, 0, 0),
                             Type = "Morning"
                         },
                         new
                         {
                             ID = new Guid("2cd29802-44c5-4559-8cc3-225984ae748f"),
-                            EndTime = new TimeSpan(0, 22, 0, 0, 0),
-                            StartTime = new TimeSpan(0, 14, 0, 0, 0),
+                            EndTime = new TimeOnly(22, 0, 0),
+                            StartTime = new TimeOnly(14, 0, 0),
                             Type = "Afternoon"
                         },
                         new
                         {
                             ID = new Guid("baaafe92-5c0f-420b-87f0-fb1da4868b41"),
-                            EndTime = new TimeSpan(0, 6, 0, 0, 0),
-                            StartTime = new TimeSpan(0, 22, 0, 0, 0),
+                            EndTime = new TimeOnly(6, 0, 0),
+                            StartTime = new TimeOnly(22, 0, 0),
                             Type = "Night"
                         },
                         new
                         {
                             ID = new Guid("3ba89da5-3a0d-44ff-97f9-f049bc9bdbe9"),
-                            EndTime = new TimeSpan(0, 8, 0, 0, 0),
-                            StartTime = new TimeSpan(0, 0, 0, 0, 0),
+                            EndTime = new TimeOnly(8, 0, 0),
+                            StartTime = new TimeOnly(0, 0, 0),
                             Type = "Emergency"
                         },
                         new
                         {
                             ID = new Guid("aaaaaaf9-5059-478c-8df4-db3fd4342b14"),
-                            EndTime = new TimeSpan(0, 16, 0, 0, 0),
-                            StartTime = new TimeSpan(0, 8, 0, 0, 0),
+                            EndTime = new TimeOnly(16, 0, 0),
+                            StartTime = new TimeOnly(8, 0, 0),
                             Type = "Weekend"
                         });
                 });
@@ -452,360 +452,360 @@ namespace Hospital.Data.Migrations
                             Id = new Guid("e7d8baba-f7b1-4ed0-9bbb-139dc13e878e"),
                             AccessFailedCount = 0,
                             ConcurrencyStamp = "C1",
-                            Email = "gencheva@gmail.com",
+                            Email = "kristeng@gmail.com",
                             EmailConfirmed = false,
-                            FirstName = "Admin",
-                            LastName = "User",
+                            FirstName = "KRISTEN",
+                            LastName = "GENCHEVA",
                             LockoutEnabled = false,
-                            NormalizedEmail = "GENCHEVA@GMAIL.COM",
-                            NormalizedUserName = "GENCHEVA",
+                            NormalizedEmail = "KRISTENG@GMAIL.COM",
+                            NormalizedUserName = "KRISTEN_GENCHEVA",
                             PasswordHash = "HASH",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "S1",
                             TwoFactorEnabled = false,
-                            UserName = "gencheva"
+                            UserName = "kristen_gencheva"
                         },
                         new
                         {
                             Id = new Guid("072eae42-46ab-4919-aae5-073aef56c00d"),
                             AccessFailedCount = 0,
                             ConcurrencyStamp = "C2",
-                            Email = "doc1@h.com",
+                            Email = "ivanp@gmail.com",
                             EmailConfirmed = false,
-                            FirstName = "John",
-                            LastName = "Doe",
+                            FirstName = "Ivan",
+                            LastName = "Petrov",
                             LockoutEnabled = false,
-                            NormalizedEmail = "DOC1@H.COM",
-                            NormalizedUserName = "DOC1",
+                            NormalizedEmail = "IVANP@GMAIL.COM",
+                            NormalizedUserName = "IVAN_PETROV",
                             PasswordHash = "HASH",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "S2",
                             TwoFactorEnabled = false,
-                            UserName = "doc1"
+                            UserName = "ivan_petrov"
                         },
                         new
                         {
                             Id = new Guid("7c425879-d37a-48a6-91d9-2345120a3f6a"),
                             AccessFailedCount = 0,
                             ConcurrencyStamp = "C3",
-                            Email = "doc2@h.com",
+                            Email = "gergid@gmail.com",
                             EmailConfirmed = false,
-                            FirstName = "Jane",
-                            LastName = "Smith",
+                            FirstName = "Georgi",
+                            LastName = "Dimitrov",
                             LockoutEnabled = false,
-                            NormalizedEmail = "DOC2@H.COM",
-                            NormalizedUserName = "DOC2",
+                            NormalizedEmail = "GEORGID@GMAIL.COM",
+                            NormalizedUserName = "GEORGI_DIMITROV",
                             PasswordHash = "HASH",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "S3",
                             TwoFactorEnabled = false,
-                            UserName = "doc2"
+                            UserName = "georgi_dimitrov"
                         },
                         new
                         {
                             Id = new Guid("3d86822f-0eba-44ce-8484-27addbfe7357"),
                             AccessFailedCount = 0,
                             ConcurrencyStamp = "C4",
-                            Email = "doc3@h.com",
+                            Email = "nikolaii@gmail.com",
                             EmailConfirmed = false,
-                            FirstName = "Bob",
-                            LastName = "Brown",
+                            FirstName = "Nikolai",
+                            LastName = "Ivanov",
                             LockoutEnabled = false,
-                            NormalizedEmail = "DOC3@H.COM",
-                            NormalizedUserName = "DOC3",
+                            NormalizedEmail = "NIKOLAII@GMAIL.COM",
+                            NormalizedUserName = "NIKOLAI_IVANOV",
                             PasswordHash = "HASH",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "S4",
                             TwoFactorEnabled = false,
-                            UserName = "doc3"
+                            UserName = "nikolai_ivanov"
                         },
                         new
                         {
                             Id = new Guid("7dca2bf8-df73-4dbf-a602-52e147eafe1e"),
                             AccessFailedCount = 0,
                             ConcurrencyStamp = "C5",
-                            Email = "doc4@h.com",
+                            Email = "dimiturs@gmail.com",
                             EmailConfirmed = false,
-                            FirstName = "Alice",
-                            LastName = "White",
+                            FirstName = "Dimitur",
+                            LastName = "Stoyanov",
                             LockoutEnabled = false,
-                            NormalizedEmail = "DOC4@H.COM",
-                            NormalizedUserName = "DOC4",
+                            NormalizedEmail = "DIMITURS@GMAIL.COM",
+                            NormalizedUserName = "DIMITUR_STOYANOV",
                             PasswordHash = "HASH",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "S5",
                             TwoFactorEnabled = false,
-                            UserName = "doc4"
+                            UserName = "dimitur_stoyanov"
                         },
                         new
                         {
                             Id = new Guid("23b350b4-0dd6-43fc-b5dc-818faf2b74e6"),
                             AccessFailedCount = 0,
                             ConcurrencyStamp = "C6",
-                            Email = "doc5@h.com",
+                            Email = "aleksandurn@gmail.com",
                             EmailConfirmed = false,
-                            FirstName = "Charlie",
-                            LastName = "Green",
+                            FirstName = "Aleksandur",
+                            LastName = "Nikolov",
                             LockoutEnabled = false,
-                            NormalizedEmail = "DOC5@H.COM",
-                            NormalizedUserName = "DOC5",
+                            NormalizedEmail = "ALEKSANDURN@GMAIL.COM",
+                            NormalizedUserName = "ALEKSANDUR_NIKOLOV",
                             PasswordHash = "HASH",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "S6",
                             TwoFactorEnabled = false,
-                            UserName = "doc5"
+                            UserName = "aleksandur_nikolov"
                         },
                         new
                         {
                             Id = new Guid("d9ccb374-6b17-4e66-9c11-79412a9e1e93"),
                             AccessFailedCount = 0,
                             ConcurrencyStamp = "C7",
-                            Email = "doc6@h.com",
+                            Email = "yoanai@gmail.com",
                             EmailConfirmed = false,
-                            FirstName = "Dave",
-                            LastName = "Black",
+                            FirstName = "Yoana",
+                            LastName = "Ilieva",
                             LockoutEnabled = false,
-                            NormalizedEmail = "DOC6@H.COM",
-                            NormalizedUserName = "DOC6",
+                            NormalizedEmail = "YOANAI@GMAIL.COM",
+                            NormalizedUserName = "YOANA_ILIEVA",
                             PasswordHash = "HASH",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "S7",
                             TwoFactorEnabled = false,
-                            UserName = "doc6"
+                            UserName = "yoana_ilieva"
                         },
                         new
                         {
                             Id = new Guid("30f2b4ed-e0e3-4443-8595-4dc6e26b3338"),
                             AccessFailedCount = 0,
                             ConcurrencyStamp = "C8",
-                            Email = "doc7@h.com",
+                            Email = "viktoriyan@gmail.com",
                             EmailConfirmed = false,
-                            FirstName = "Eve",
-                            LastName = "Grey",
+                            FirstName = "Viktoriya",
+                            LastName = "Nikolova",
                             LockoutEnabled = false,
-                            NormalizedEmail = "DOC7@H.COM",
-                            NormalizedUserName = "DOC7",
+                            NormalizedEmail = "VIKTORIYAN@GMAIL.COM",
+                            NormalizedUserName = "VIKTORIYA_NIKOLOVA",
                             PasswordHash = "HASH",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "S8",
                             TwoFactorEnabled = false,
-                            UserName = "doc7"
+                            UserName = "viktoriya_nikolova"
                         },
                         new
                         {
                             Id = new Guid("51daaed0-67e7-4c4a-b254-2745af5365df"),
                             AccessFailedCount = 0,
                             ConcurrencyStamp = "C9",
-                            Email = "doc8@h.com",
+                            Email = "annaa@gmail.com",
                             EmailConfirmed = false,
-                            FirstName = "Frank",
-                            LastName = "Blue",
+                            FirstName = "Anna",
+                            LastName = "Aleksandrova",
                             LockoutEnabled = false,
-                            NormalizedEmail = "DOC8@H.COM",
-                            NormalizedUserName = "DOC8",
+                            NormalizedEmail = "ANNAA@GMAIL.COM",
+                            NormalizedUserName = "ANNA_ALEKSANDROVA",
                             PasswordHash = "HASH",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "S9",
                             TwoFactorEnabled = false,
-                            UserName = "doc8"
+                            UserName = "anna_aleksandrova"
                         },
                         new
                         {
                             Id = new Guid("cbdfa704-0f6d-431f-8ede-dd952adacfc9"),
                             AccessFailedCount = 0,
                             ConcurrencyStamp = "C10",
-                            Email = "doc9@h.com",
+                            Email = "elenap@gmail.com",
                             EmailConfirmed = false,
-                            FirstName = "Grace",
-                            LastName = "Red",
+                            FirstName = "Elena",
+                            LastName = "Petrova",
                             LockoutEnabled = false,
-                            NormalizedEmail = "DOC9@H.COM",
-                            NormalizedUserName = "DOC9",
+                            NormalizedEmail = "ELENAP@GMAIL.COM",
+                            NormalizedUserName = "ELENA_PETROVA",
                             PasswordHash = "HASH",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "S10",
                             TwoFactorEnabled = false,
-                            UserName = "doc9"
+                            UserName = "elena_petrova"
                         },
                         new
                         {
                             Id = new Guid("f6662c6a-414b-4b5c-ae1b-7b31103dd464"),
                             AccessFailedCount = 0,
                             ConcurrencyStamp = "C11",
-                            Email = "doc10@h.com",
+                            Email = "aleksandrag@gmail.com",
                             EmailConfirmed = false,
-                            FirstName = "Hank",
-                            LastName = "Yellow",
+                            FirstName = "Aleksandra",
+                            LastName = "Georgieva",
                             LockoutEnabled = false,
-                            NormalizedEmail = "DOC10@H.COM",
-                            NormalizedUserName = "DOC10",
+                            NormalizedEmail = "ALEKSANDRAG@GMAIL.COM",
+                            NormalizedUserName = "ALEKSANDRA_GEORGIEVA",
                             PasswordHash = "HASH",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "S11",
                             TwoFactorEnabled = false,
-                            UserName = "doc10"
+                            UserName = "aleksandra_georgieva"
                         },
                         new
                         {
                             Id = new Guid("354fa92a-6b54-4d12-b90c-9926dc906462"),
                             AccessFailedCount = 0,
                             ConcurrencyStamp = "C12",
-                            Email = "n1@h.com",
+                            Email = "mariai@gmail.com",
                             EmailConfirmed = false,
-                            FirstName = "Nurse",
-                            LastName = "One",
+                            FirstName = "Maria",
+                            LastName = "Ivanova",
                             LockoutEnabled = false,
-                            NormalizedEmail = "N1@H.COM",
-                            NormalizedUserName = "NURSE1",
+                            NormalizedEmail = "MARIAI@GMAIL.COM",
+                            NormalizedUserName = "MARIA_IVANOVA",
                             PasswordHash = "HASH",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "S12",
                             TwoFactorEnabled = false,
-                            UserName = "nurse1"
+                            UserName = "maria_ivanova"
                         },
                         new
                         {
                             Id = new Guid("02e72b22-0abd-4ce4-80d1-30b8c13f952b"),
                             AccessFailedCount = 0,
                             ConcurrencyStamp = "C13",
-                            Email = "n2@h.com",
+                            Email = "desid@gmail.com",
                             EmailConfirmed = false,
-                            FirstName = "Nurse",
-                            LastName = "Two",
+                            FirstName = "Desislava",
+                            LastName = "Dimitrova",
                             LockoutEnabled = false,
-                            NormalizedEmail = "N2@H.COM",
-                            NormalizedUserName = "NURSE2",
+                            NormalizedEmail = "DESID@GMAIL.COM",
+                            NormalizedUserName = "DESISLAVA_DIMITROVA",
                             PasswordHash = "HASH",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "S13",
                             TwoFactorEnabled = false,
-                            UserName = "nurse2"
+                            UserName = "desislava_dimitrova"
                         },
                         new
                         {
                             Id = new Guid("741d970d-f405-4bd1-94b2-eec2c3fb33e2"),
                             AccessFailedCount = 0,
                             ConcurrencyStamp = "C14",
-                            Email = "n3@h.com",
+                            Email = "gerganav@gmail.com",
                             EmailConfirmed = false,
-                            FirstName = "Nurse",
-                            LastName = "Three",
+                            FirstName = "Gergana",
+                            LastName = "Vasileva",
                             LockoutEnabled = false,
-                            NormalizedEmail = "N3@H.COM",
-                            NormalizedUserName = "NURSE3",
+                            NormalizedEmail = "GERGANAV@GMAIL.COM",
+                            NormalizedUserName = "GERGANA_VASILEVA",
                             PasswordHash = "HASH",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "S14",
                             TwoFactorEnabled = false,
-                            UserName = "nurse3"
+                            UserName = "gergana_vasileva"
                         },
                         new
                         {
                             Id = new Guid("355ad73e-6b7d-4ade-846d-7cab0da06629"),
                             AccessFailedCount = 0,
                             ConcurrencyStamp = "C15",
-                            Email = "n4@h.com",
+                            Email = "ralitsak@gmail.com",
                             EmailConfirmed = false,
-                            FirstName = "Nurse",
-                            LastName = "Four",
+                            FirstName = "Ralitsa",
+                            LastName = "Kostova",
                             LockoutEnabled = false,
-                            NormalizedEmail = "N4@H.COM",
-                            NormalizedUserName = "NURSE4",
+                            NormalizedEmail = "RALITSAK@GMAIL.COM",
+                            NormalizedUserName = "RALITSA_KOSTOVA",
                             PasswordHash = "HASH",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "S15",
                             TwoFactorEnabled = false,
-                            UserName = "nurse4"
+                            UserName = "ralitsa_kostova"
                         },
                         new
                         {
                             Id = new Guid("a7e0d718-a822-48db-b8ff-82cff6dbd5c7"),
                             AccessFailedCount = 0,
                             ConcurrencyStamp = "C16",
-                            Email = "p1@h.com",
+                            Email = "petarg@gmail.com",
                             EmailConfirmed = false,
-                            FirstName = "Patient",
-                            LastName = "One",
+                            FirstName = "Petar",
+                            LastName = "Georgiev",
                             LockoutEnabled = false,
-                            NormalizedEmail = "P1@H.COM",
-                            NormalizedUserName = "PATIENT1",
+                            NormalizedEmail = "PETARG@GMAIL.COM",
+                            NormalizedUserName = "PETAR_GEORGIEV",
                             PasswordHash = "HASH",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "S16",
                             TwoFactorEnabled = false,
-                            UserName = "patient1"
+                            UserName = "petar_georgiev"
                         },
                         new
                         {
                             Id = new Guid("04347895-6b6e-4608-be4c-5f428b759669"),
                             AccessFailedCount = 0,
                             ConcurrencyStamp = "C17",
-                            Email = "p2@h.com",
+                            Email = "stefank@gmail.com",
                             EmailConfirmed = false,
-                            FirstName = "Patient",
-                            LastName = "Two",
+                            FirstName = "Stefan",
+                            LastName = "Kolev",
                             LockoutEnabled = false,
-                            NormalizedEmail = "P2@H.COM",
-                            NormalizedUserName = "PATIENT2",
+                            NormalizedEmail = "STEFANK@GMAIL.COM",
+                            NormalizedUserName = "STEFAN_KOLEV",
                             PasswordHash = "HASH",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "S17",
                             TwoFactorEnabled = false,
-                            UserName = "patient2"
+                            UserName = "stefan_kolev"
                         },
                         new
                         {
                             Id = new Guid("96747275-9c90-449e-a91c-eb6863183a27"),
                             AccessFailedCount = 0,
                             ConcurrencyStamp = "C18",
-                            Email = "p3@h.com",
+                            Email = "borislavt@gmail.com",
                             EmailConfirmed = false,
-                            FirstName = "Patient",
-                            LastName = "Three",
+                            FirstName = "Borislav",
+                            LastName = "Todorov",
                             LockoutEnabled = false,
-                            NormalizedEmail = "P3@H.COM",
-                            NormalizedUserName = "PATIENT3",
+                            NormalizedEmail = "BORISLAVT@GMAIL.COM",
+                            NormalizedUserName = "BORISLAV_TODOROV",
                             PasswordHash = "HASH",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "S18",
                             TwoFactorEnabled = false,
-                            UserName = "patient3"
+                            UserName = "borislav_todorov"
                         },
                         new
                         {
                             Id = new Guid("865c2545-7806-4857-a621-f035e520a596"),
                             AccessFailedCount = 0,
                             ConcurrencyStamp = "C19",
-                            Email = "p4@h.com",
+                            Email = "hristov@gmail.com",
                             EmailConfirmed = false,
-                            FirstName = "Patient",
-                            LastName = "Four",
+                            FirstName = "Hristo",
+                            LastName = "Vasilev",
                             LockoutEnabled = false,
-                            NormalizedEmail = "P4@H.COM",
-                            NormalizedUserName = "PATIENT4",
+                            NormalizedEmail = "HRISTOV@GMAIL.COM",
+                            NormalizedUserName = "HRISTO_VASILEV",
                             PasswordHash = "HASH",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "S19",
                             TwoFactorEnabled = false,
-                            UserName = "patient4"
+                            UserName = "hristo_vasilev"
                         },
                         new
                         {
                             Id = new Guid("c5982307-ef67-4b65-b438-8f9e1e3a240b"),
                             AccessFailedCount = 0,
                             ConcurrencyStamp = "C20",
-                            Email = "p5@h.com",
+                            Email = "martini@gmail.com",
                             EmailConfirmed = false,
-                            FirstName = "Patient",
-                            LastName = "Five",
+                            FirstName = "Martin",
+                            LastName = "Iliev",
                             LockoutEnabled = false,
-                            NormalizedEmail = "P5@H.COM",
-                            NormalizedUserName = "PATIENT5",
+                            NormalizedEmail = "MARTINI@GMAIL.COM",
+                            NormalizedUserName = "MARTIN_ILIEV",
                             PasswordHash = "HASH",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "S20",
                             TwoFactorEnabled = false,
-                            UserName = "patient5"
+                            UserName = "martin_iliev"
                         });
                 });
 
@@ -815,13 +815,18 @@ namespace Hospital.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Image")
+                    b.Property<string>("ImageURL")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("PublicID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
 
@@ -831,68 +836,79 @@ namespace Hospital.Data.Migrations
                         new
                         {
                             ID = new Guid("91b25ace-9e01-4c25-b0ea-3c8bad060315"),
-                            Image = "flu.jpg",
-                            Name = "Influenza"
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775043137/716959ed-ecf1-4c3e-a6ad-dfb7caca7863_mxmyot.png",
+                            Name = "Influenza",
+                            PublicID = "716959ed-ecf1-4c3e-a6ad-dfb7caca7863"
                         },
                         new
                         {
                             ID = new Guid("732a09fb-ad41-4059-829b-8f32cbf0ce2f"),
-                            Image = "hypertension.jpg",
-                            Name = "Hypertension"
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/v1774523282/5ab0f5a2-2ef5-4769-b2a7-9e485afd8a21.png",
+                            Name = "Hypertension",
+                            PublicID = "5ab0f5a2-2ef5-4769-b2a7-9e485afd8a21"
                         },
                         new
                         {
                             ID = new Guid("46a961d1-e24f-4029-9c13-4ee9a345610c"),
-                            Image = "diabetes.jpg",
-                            Name = "Diabetes"
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/v1774522900/79aadf40-1666-44d1-8a39-b72d08f433ac.png",
+                            Name = "Diabetes",
+                            PublicID = "79aadf40-1666-44d1-8a39-b72d08f433ac"
                         },
                         new
                         {
                             ID = new Guid("2edd634a-5c31-4f68-b9b5-58c2f5b80216"),
-                            Image = "pneumonia.jpg",
-                            Name = "Pneumonia"
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/v1774522988/12f38fbe-0962-464f-89fc-26cf3598a478.png",
+                            Name = "Pneumonia",
+                            PublicID = "12f38fbe-0962-464f-89fc-26cf3598a478"
                         },
                         new
                         {
                             ID = new Guid("0b0a943c-4d25-4b22-b21f-ee4f80f8e6b0"),
-                            Image = "migraine.jpg",
-                            Name = "Migraine"
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/v1774523421/31435cc9-7c7f-47ba-94c6-8e14a8790876.png",
+                            Name = "Migraine",
+                            PublicID = "31435cc9-7c7f-47ba-94c6-8e14a8790876"
                         },
                         new
                         {
                             ID = new Guid("02ce1c83-0198-4d90-9dc1-d697c61f936e"),
-                            Image = "fracture.jpg",
-                            Name = "Fracture"
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/v1774523396/de9b8762-40d7-459f-9f11-aeb90f41f4a8.png",
+                            Name = "Fracture",
+                            PublicID = "de9b8762-40d7-459f-9f11-aeb90f41f4a8"
                         },
                         new
                         {
                             ID = new Guid("d793f73f-51a0-4ff0-b6fa-5ffd4d47cd15"),
-                            Image = "asthma.jpg",
-                            Name = "Asthma"
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/v1774523070/38a63bdf-b3a2-4719-91d1-e874170d0387.png",
+                            Name = "Asthma",
+                            PublicID = "38a63bdf-b3a2-4719-91d1-e874170d0387"
                         },
                         new
                         {
                             ID = new Guid("c97e4a52-4926-4268-8261-82739340e77b"),
-                            Image = "raynauld.jpg",
-                            Name = "Raynauld's syndrome"
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/v1774523162/1c6fae53-754a-48e0-92ba-309ceaed5972.png",
+                            Name = "Raynauld's syndrome",
+                            PublicID = "1c6fae53-754a-48e0-92ba-309ceaed5972"
                         },
                         new
                         {
                             ID = new Guid("885aea72-26c5-48b5-88cc-7128b7e81499"),
-                            Image = "asthma.jpg",
-                            Name = "Osteoporosis"
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/v1774523117/88005d89-b665-4fac-b2a8-1325f75a2809.png",
+                            Name = "Osteoporosis",
+                            PublicID = "88005d89-b665-4fac-b2a8-1325f75a2809"
                         },
                         new
                         {
                             ID = new Guid("49a578fc-5f30-40b6-810f-3ca54b0e2a02"),
-                            Image = "hashimoto.jpg",
-                            Name = "Hashimoto's disease"
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/v1774522872/f83a45f2-58db-4045-99a9-8b5829b13f05.png",
+                            Name = "Hashimoto's disease",
+                            PublicID = "f83a45f2-58db-4045-99a9-8b5829b13f05"
                         },
                         new
                         {
                             ID = new Guid("2dfdf306-41d8-4aca-abd6-91ed7d4adc8a"),
-                            Image = "bronchitis.jpg",
-                            Name = "Bronchitis"
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775043330/c4510bbe-5309-4952-9ccd-326308a2c64a_vy0qwz.png",
+                            Name = "Bronchitis",
+                            PublicID = "c4510bbe-5309-4952-9ccd-326308a2c64a_vy0qwz"
                         });
                 });
 
@@ -902,7 +918,11 @@ namespace Hospital.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Image")
+                    b.Property<string>("CloudinaryID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageURL")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -933,7 +953,8 @@ namespace Hospital.Data.Migrations
                         new
                         {
                             ID = new Guid("08ccdf4b-02ad-464f-9ef2-fb73ceee1826"),
-                            Image = "doctor1.jpg",
+                            CloudinaryID = "doctor6_tvjvud",
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775045919/doctor6_tvjvud.jpg",
                             IsAccepted = true,
                             ShiftId = new Guid("3ba89da5-3a0d-44ff-97f9-f049bc9bdbe9"),
                             SpecializationId = new Guid("8a42cdba-ff58-4129-aea8-ae4c3b32f353"),
@@ -942,7 +963,8 @@ namespace Hospital.Data.Migrations
                         new
                         {
                             ID = new Guid("e1ceefa2-e56b-4395-9049-c689bea9417f"),
-                            Image = "doctor2.jpeg",
+                            CloudinaryID = "doctor5_vwg329",
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775045919/doctor5_vwg329.jpg",
                             IsAccepted = true,
                             ShiftId = new Guid("0288c0db-23d0-4cef-b74c-ef997285b18c"),
                             SpecializationId = new Guid("7a67c94b-50fb-4043-83f1-afdade20b451"),
@@ -951,7 +973,8 @@ namespace Hospital.Data.Migrations
                         new
                         {
                             ID = new Guid("186296e2-7114-4291-aa3b-897b96c75c21"),
-                            Image = "doctor3.jpeg",
+                            CloudinaryID = "doctor4_cnmqpg",
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775045919/doctor4_cnmqpg.jpg",
                             IsAccepted = true,
                             ShiftId = new Guid("baaafe92-5c0f-420b-87f0-fb1da4868b41"),
                             SpecializationId = new Guid("c484edec-d525-438a-92c4-ad80a9a41878"),
@@ -960,7 +983,8 @@ namespace Hospital.Data.Migrations
                         new
                         {
                             ID = new Guid("2a4e1d97-8411-4cf8-9da2-af9452f16eca"),
-                            Image = "doctor4.jpg",
+                            CloudinaryID = "doctor3_djf78l",
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775045922/doctor3_djf78l.jpg",
                             IsAccepted = true,
                             ShiftId = new Guid("aaaaaaf9-5059-478c-8df4-db3fd4342b14"),
                             SpecializationId = new Guid("9cfb1a19-193f-4bf7-bc4b-c744a89f59eb"),
@@ -969,7 +993,8 @@ namespace Hospital.Data.Migrations
                         new
                         {
                             ID = new Guid("3480fb00-bfdc-4139-91a3-a975153ab6b3"),
-                            Image = "doctor5.jpg",
+                            CloudinaryID = "doctor2_x95tr9",
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775045917/doctor2_x95tr9.jpg",
                             IsAccepted = true,
                             ShiftId = new Guid("0288c0db-23d0-4cef-b74c-ef997285b18c"),
                             SpecializationId = new Guid("1d3e1ea9-5265-4ff3-9875-d7ac37a2d8b2"),
@@ -978,7 +1003,8 @@ namespace Hospital.Data.Migrations
                         new
                         {
                             ID = new Guid("8e296807-75cf-45dd-bdfc-179495465c09"),
-                            Image = "doctor6.jpg",
+                            CloudinaryID = "doctor1_jiqipy",
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775045917/doctor1_jiqipy.jpg",
                             IsAccepted = true,
                             ShiftId = new Guid("baaafe92-5c0f-420b-87f0-fb1da4868b41"),
                             SpecializationId = new Guid("e43cf086-24ad-4a75-b47e-549b8d8e467c"),
@@ -987,7 +1013,8 @@ namespace Hospital.Data.Migrations
                         new
                         {
                             ID = new Guid("26189d95-7ca7-40f7-9384-8454cfb99247"),
-                            Image = "doctor7.jpg",
+                            CloudinaryID = "doctor9_ksvypt",
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775045917/doctor9_ksvypt.jpg",
                             IsAccepted = true,
                             ShiftId = new Guid("aaaaaaf9-5059-478c-8df4-db3fd4342b14"),
                             SpecializationId = new Guid("e82cc806-165f-4554-91f8-c9d9ae4909e5"),
@@ -996,16 +1023,18 @@ namespace Hospital.Data.Migrations
                         new
                         {
                             ID = new Guid("6d3dacc1-3b7a-4e43-8caa-5b82a6f4a21f"),
-                            Image = "doctor8.jpg",
+                            CloudinaryID = "f4c9ef33d04a22050038e9e53eeb7d85_w2l72d",
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775044425/f4c9ef33d04a22050038e9e53eeb7d85_w2l72d.jpg",
                             IsAccepted = true,
                             ShiftId = new Guid("2cd29802-44c5-4559-8cc3-225984ae748f"),
-                            SpecializationId = new Guid("1a298771-7773-4c3b-828c-fff8dcedf0e9"),
+                            SpecializationId = new Guid("c484edec-d525-438a-92c4-ad80a9a41878"),
                             UserId = new Guid("51daaed0-67e7-4c4a-b254-2745af5365df")
                         },
                         new
                         {
                             ID = new Guid("0f6d5fde-bc75-4df5-8886-090806665b82"),
-                            Image = "doctor9.jpg",
+                            CloudinaryID = "doctor8_daewlm",
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775045915/doctor8_daewlm.jpg",
                             IsAccepted = true,
                             ShiftId = new Guid("baaafe92-5c0f-420b-87f0-fb1da4868b41"),
                             SpecializationId = new Guid("4ee4ce69-da26-4f66-85cf-30623200cbf4"),
@@ -1014,7 +1043,8 @@ namespace Hospital.Data.Migrations
                         new
                         {
                             ID = new Guid("dcd275c5-67c4-423b-a7b2-78ab917a2d5d"),
-                            Image = "doctor10.jpg",
+                            CloudinaryID = "doctor7_ylf8tt",
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775045915/doctor7_ylf8tt.jpg",
                             IsAccepted = true,
                             ShiftId = new Guid("2cd29802-44c5-4559-8cc3-225984ae748f"),
                             SpecializationId = new Guid("a5519f22-cefb-4771-a5e9-de7b40817df8"),
@@ -1070,12 +1100,16 @@ namespace Hospital.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Image")
+                    b.Property<string>("ImageURL")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsAccepted")
                         .HasColumnType("bit");
+
+                    b.Property<string>("PublicID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("ShiftId")
                         .HasColumnType("uniqueidentifier");
@@ -1101,8 +1135,9 @@ namespace Hospital.Data.Migrations
                         new
                         {
                             ID = new Guid("698d0579-913c-42af-8a45-924cd9f740bb"),
-                            Image = "nurse1.png",
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775044959/a9da1dea6368ebb099100f489cc37cfe_zfh28g.jpg",
                             IsAccepted = true,
+                            PublicID = "a9da1dea6368ebb099100f489cc37cfe_zfh28g",
                             ShiftId = new Guid("0288c0db-23d0-4cef-b74c-ef997285b18c"),
                             SpecializationId = new Guid("8a42cdba-ff58-4129-aea8-ae4c3b32f353"),
                             UserId = new Guid("354fa92a-6b54-4d12-b90c-9926dc906462")
@@ -1110,8 +1145,9 @@ namespace Hospital.Data.Migrations
                         new
                         {
                             ID = new Guid("e5f97752-f18b-4b36-8c47-4d238cb0e01f"),
-                            Image = "nurse2.png",
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775045913/doctor10_ewtass.jpg",
                             IsAccepted = true,
+                            PublicID = "doctor10_ewtass",
                             ShiftId = new Guid("3ba89da5-3a0d-44ff-97f9-f049bc9bdbe9"),
                             SpecializationId = new Guid("a5519f22-cefb-4771-a5e9-de7b40817df8"),
                             UserId = new Guid("02e72b22-0abd-4ce4-80d1-30b8c13f952b")
@@ -1119,8 +1155,9 @@ namespace Hospital.Data.Migrations
                         new
                         {
                             ID = new Guid("e6a3850b-7a1e-465c-83fd-57b1134c68d2"),
-                            Image = "nurse3.png",
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775045922/doctor3_djf78l.jpg",
                             IsAccepted = true,
+                            PublicID = "doctor3_djf78l",
                             ShiftId = new Guid("baaafe92-5c0f-420b-87f0-fb1da4868b41"),
                             SpecializationId = new Guid("1d3e1ea9-5265-4ff3-9875-d7ac37a2d8b2"),
                             UserId = new Guid("741d970d-f405-4bd1-94b2-eec2c3fb33e2")
@@ -1128,8 +1165,9 @@ namespace Hospital.Data.Migrations
                         new
                         {
                             ID = new Guid("9fb6048e-03ae-407f-a83e-51b6c5399b41"),
-                            Image = "nurse4.png",
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775045919/doctor5_vwg329.jpg",
                             IsAccepted = true,
+                            PublicID = "doctor5_vwg329",
                             ShiftId = new Guid("2cd29802-44c5-4559-8cc3-225984ae748f"),
                             SpecializationId = new Guid("d9daaa5d-2c41-4fa4-b709-709fcfcd5cc0"),
                             UserId = new Guid("355ad73e-6b7d-4ade-846d-7cab0da06629")
@@ -1317,7 +1355,11 @@ namespace Hospital.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Image")
+                    b.Property<string>("ImageURL")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PublicID")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -1334,67 +1376,71 @@ namespace Hospital.Data.Migrations
                         new
                         {
                             ID = new Guid("8a42cdba-ff58-4129-aea8-ae4c3b32f353"),
-                            Image = "infections.jpg",
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775117702/Screenshot_2026-04-02_111137_nbbhc6.png",
+                            PublicID = "Screenshot_2026-04-02_111137_nbbhc6",
                             SpecializationName = "Infectious Disease"
                         },
                         new
                         {
                             ID = new Guid("7a67c94b-50fb-4043-83f1-afdade20b451"),
-                            Image = "cardiology.jpg",
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775117702/Screenshot_2026-04-02_111310_zgxd8c.png",
+                            PublicID = "Screenshot_2026-04-02_111310_zgxd8c",
                             SpecializationName = "Cardiology"
                         },
                         new
                         {
                             ID = new Guid("c484edec-d525-438a-92c4-ad80a9a41878"),
-                            Image = "endocrinology.jpg",
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775117702/Screenshot_2026-04-02_111403_uhhj71.png",
+                            PublicID = "Screenshot_2026-04-02_111403_uhhj71",
                             SpecializationName = "Endocrinology"
                         },
                         new
                         {
                             ID = new Guid("9cfb1a19-193f-4bf7-bc4b-c744a89f59eb"),
-                            Image = "pulmonology.jpg",
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775117702/Screenshot_2026-04-02_111428_ukzxth.png",
+                            PublicID = "Screenshot_2026-04-02_111428_ukzxth",
                             SpecializationName = "Pulmonology"
                         },
                         new
                         {
                             ID = new Guid("1d3e1ea9-5265-4ff3-9875-d7ac37a2d8b2"),
-                            Image = "neurology.jpg",
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775117702/Screenshot_2026-04-02_111521_asrj53.png",
+                            PublicID = "Screenshot_2026-04-02_111521_asrj53",
                             SpecializationName = "Neurology"
                         },
                         new
                         {
                             ID = new Guid("e43cf086-24ad-4a75-b47e-549b8d8e467c"),
-                            Image = "Traumatology.jpg",
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775117702/Screenshot_2026-04-02_111550_rletvt.png",
+                            PublicID = "Screenshot_2026-04-02_111550_rletvt",
                             SpecializationName = "Traumatology"
                         },
                         new
                         {
                             ID = new Guid("e82cc806-165f-4554-91f8-c9d9ae4909e5"),
-                            Image = "allergy.jpg",
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775117702/Screenshot_2026-04-02_111610_awmauh.png",
+                            PublicID = "Screenshot_2026-04-02_111610_awmauh",
                             SpecializationName = "Allergy & Immunology"
                         },
                         new
                         {
                             ID = new Guid("a5519f22-cefb-4771-a5e9-de7b40817df8"),
-                            Image = "rheumatology.jpg",
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775117703/Screenshot_2026-04-02_111632_kl3iuj.png",
+                            PublicID = "Screenshot_2026-04-02_111632_kl3iuj",
                             SpecializationName = "Rheumatology"
                         },
                         new
                         {
                             ID = new Guid("4ee4ce69-da26-4f66-85cf-30623200cbf4"),
-                            Image = "orthopedics.jpg",
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775117703/Screenshot_2026-04-02_111739_yxp8r4.png",
+                            PublicID = "Screenshot_2026-04-02_111739_yxp8r4",
                             SpecializationName = "Orthopedics"
                         },
                         new
                         {
-                            ID = new Guid("1a298771-7773-4c3b-828c-fff8dcedf0e9"),
-                            Image = "endocrinology.jpg",
-                            SpecializationName = "Endocrinology"
-                        },
-                        new
-                        {
                             ID = new Guid("d9daaa5d-2c41-4fa4-b709-709fcfcd5cc0"),
-                            Image = "respiratory.jpg",
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775117704/Screenshot_2026-04-02_111758_t9nbmc.png",
+                            PublicID = "Screenshot_2026-04-02_111758_t9nbmc",
                             SpecializationName = "Respiratory"
                         });
                 });

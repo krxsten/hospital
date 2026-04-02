@@ -12,12 +12,11 @@ namespace Hospital.Data.Entities
     {
         [Key]
         public Guid ID { get; set; }
-        [Required]
-        public Guid UserId { get; set; }
-        public User User { get; set; }
-        [Required]
-        public Guid DoctorId { get; set; }
-        public Doctor Doctor { get; set; }
+        public Guid? DoctorId { get; set; }
+        public Doctor? Doctor { get; set; }
+
+        public Guid? RoomId { get; set; }
+        public Room? Room { get; set; }
 
         [DataType(DataType.Date)]
         public DateOnly HospitalizationDate { get; set; }
@@ -28,9 +27,8 @@ namespace Hospital.Data.Entities
         [DataType(DataType.Time)]
         public TimeOnly DischargeTime { get; set; }
 
-        [Required]
-        public Guid RoomId { get; set; }
-        public Room Room { get; set; }
+        public Guid? UserId { get; set; }
+        public User? User { get; set; }
 
         [StringLength(100, MinimumLength = 2)]
         public string BirthCity { get; set; }

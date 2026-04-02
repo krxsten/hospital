@@ -1,5 +1,41 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model List<Hospital.Entities.Doctor>
+
 @{
+    ViewData["Title"] = "Pending Doctors";
 }
+
+<h2 class="text-center">Pending Doctors</h2>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Specialization</th>
+            <th>Shift</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var doctor in Model)
+        {
+            <tr>
+                <td>@doctor.User.FirstName @doctor.User.LastName</td>
+                <td>@doctor.User.Email</td>
+                <td>@doctor.SpecializationId</td>
+                <td>@doctor.ShiftId</td>
+                <td>
+                    <form asp-action="AcceptDoctor" method="post" style="display:inline;">
+                        <input type="hidden" name="id" value="@doctor.ID" />
+                        <button type="submit" class="btn btn-success btn-sm">Accept</button>
+                    </form>
+
+                    <form asp-action="RejectDoctor" method="post" style="display:inline;">
+                        <input type="hidden" name="id" value="@doctor.ID" />
+                        <button type="submit" class="btn btn-danger btn-sm">Reject</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

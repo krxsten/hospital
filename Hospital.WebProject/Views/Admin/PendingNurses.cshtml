@@ -1,0 +1,43 @@
+﻿@model List<Hospital.Entities.Nurse>
+
+@{
+    ViewData["Title"] = "Pending Nurses";
+}
+
+<h2 class="text-center">Pending Nurses</h2>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Specialization</th>
+            <th>Shift</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var nurse in Model)
+        {
+            <tr>
+                <td>@nurse.User.FirstName @nurse.User.LastName</td>
+                <td>@nurse.User.Email</td>
+                <td>@nurse.SpecializationId</td>
+                <td>@nurse.ShiftId</td>
+                <td>
+                    <!-- ACCEPT -->
+                    <form asp-action="AcceptNurse" method="post" style="display:inline;">
+                        <input type="hidden" name="id" value="@nurse.ID" />
+                        <button type="submit" class="btn btn-success btn-sm">Accept</button>
+                    </form>
+
+                    <!-- REJECT -->
+                    <form asp-action="RejectNurse" method="post" style="display:inline;">
+                        <input type="hidden" name="id" value="@nurse.ID" />
+                        <button type="submit" class="btn btn-danger btn-sm">Reject</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

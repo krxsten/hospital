@@ -1,5 +1,6 @@
 ﻿using Hospital.Data;
 using Hospital.Data.Entities;
+using Hospital.Entities;
 using Hospital.WebProject.ViewModels.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -33,6 +34,8 @@ namespace Hospital.WebProject.Controllers
             }
 
             var model = new RegisterViewModel();
+            ViewBag.Specializations = Context.Specializations.ToList();
+            ViewBag.Shifts = Context.Shifts.ToList();
 
             return View(model);
         }
@@ -44,6 +47,15 @@ namespace Hospital.WebProject.Controllers
             {
                 return View(model);
             }
+            if (model.Role == "Doctor" || model.Role == "Nurse")
+            {
+                if (model.SpecializationId == null || model.ShiftId == null)
+                {
+                    ModelState.AddModelError("", "Specialization and shift are required.");
+                    return View(model);
+                }
+            }
+
             var user = new User()
             {
                 Email = model.Email,
@@ -51,20 +63,84 @@ namespace Hospital.WebProject.Controllers
                 FirstName = model.FirstName,
                 LastName = model.LastName
             };
+
             var result = await userManager.CreateAsync(user, model.Password);
 
             if (result.Succeeded)
             {
-                if (model.Role == "Doctor" || model.Role == "Nurse" || model.Role == "Patient" || model.Role=="Admin")
+                await userManager.AddToRoleAsync(user, model.Role);
+
+                if (model.Role == "Patient")
                 {
-                    await userManager.AddToRoleAsync(user, model.Role);
+                    var patient = new Patient
+                    {
+                        ID = Guid.NewGuid(),
+                        UserId = user.Id,
+                        PhoneNumber = model.PhoneNumber,
+                        BirthCity = model.BirthCity,
+                        DateOfBirth = model.DateOfBirth,
+                        UCN = model.UCN,
+                        HospitalizationDate = DateOnly.FromDateTime(DateTime.Now),
+                        HospitalizationTime = TimeOnly.FromDateTime(DateTime.Now),
+                    };
+
+                    Context.Patients.Add(patient);
                 }
+
+                else if (model.Role == "Doctor")
+                {
+                    if (model.SpecializationId == null || model.ShiftId == null)
+                    {
+                        ModelState.AddModelError("", "Doctor must have specialization and shift.");
+                        return View(model);
+                    }
+                    var doctor = new Doctor
+                    {
+                        ID = Guid.NewGuid(),
+                        UserId = user.Id,
+                        SpecializationId = model.SpecializationId.Value,
+                        ShiftId = model.ShiftId.Value,
+                        ImageURL = model.ImageURL,
+                        CloudinaryID = "temp",
+                        IsAccepted = false
+                    };
+
+                    Context.Doctors.Add(doctor);
+                    TempData["Message"] = "Registration successful. Waiting for admin approval.";
+                }
+
+                else if (model.Role == "Nurse")
+                {
+                    if (model.SpecializationId == null || model.ShiftId == null)
+                    {
+                        ModelState.AddModelError("", "Nurse must have specialization and shift.");
+                        return View(model);
+                    }
+                    var nurse = new Nurse
+                    {
+                        ID = Guid.NewGuid(),
+                        UserId = user.Id,
+                        SpecializationId = model.SpecializationId.Value,
+                        ShiftId = model.ShiftId.Value,
+                        ImageURL = model.ImageURL,
+                        PublicID = "temp",
+                        IsAccepted = false
+                    };
+
+                    Context.Nurses.Add(nurse);
+                    TempData["Message"] = "Registration successful. Waiting for admin approval.";
+                }
+
+                await Context.SaveChangesAsync();
+
                 return RedirectToAction("Login", "User");
             }
+
             foreach (var item in result.Errors)
             {
                 ModelState.AddModelError("", item.Description);
             }
+
             return View(model);
         }
 
@@ -96,27 +172,26 @@ namespace Hospital.WebProject.Controllers
 
                 if (result.Succeeded)
                 {
-                    //var doctor = Context.Doctors.FirstOrDefault(d => d.UserId == user.Id);
-                    //if (doctor != null && !doctor.IsAccepted)
-                    //{
-                    //    await signManager.SignOutAsync();
-                    //    ModelState.AddModelError("", "Waiting for admin approval.");
-                    //    return View(model);
-                    //}
+                    var doctor = Context.Doctors.FirstOrDefault(d => d.UserId == user.Id);
+                    if (doctor != null && !doctor.IsAccepted)
+                    {
+                        await signManager.SignOutAsync();
+                        ModelState.AddModelError("", "Doctor not approved yet.");
+                        return View(model);
+                    }
 
-                    //var nurse = Context.Nurses.FirstOrDefault(n => n.UserId == user.Id);
-                    //if (nurse != null && !nurse.IsAccepted)
-                    //{
-                    //    await signManager.SignOutAsync();
-                    //    ModelState.AddModelError("", "Waiting for admin approval.");
-                    //    return View(model);
-                    //}
+                    var nurse = Context.Nurses.FirstOrDefault(n => n.UserId == user.Id);
+                    if (nurse != null && !nurse.IsAccepted)
+                    {
+                        await signManager.SignOutAsync();
+                        ModelState.AddModelError("", "Nurse not approved yet.");
+                        return View(model);
+                    }
+
                     return RedirectToAction("Index", "Home");
                 }
-                //await signManager.SignInAsync(user, isPersistent:true);
-                return RedirectToAction("Index", "Home");
+                ModelState.AddModelError("", "Invalid login");
             }
-            ModelState.AddModelError("", "Invalid login");
             return View(model);
         }
 

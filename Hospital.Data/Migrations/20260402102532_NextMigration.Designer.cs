@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Hospital.Data.Migrations
 {
     [DbContext(typeof(HospitalDbContext))]
-    [Migration("20260330174320_HomeMig")]
-    partial class HomeMig
+    [Migration("20260402102532_NextMigration")]
+    partial class NextMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -200,7 +200,7 @@ namespace Hospital.Data.Migrations
                     b.Property<TimeOnly>("DischargeTime")
                         .HasColumnType("time");
 
-                    b.Property<Guid>("DoctorId")
+                    b.Property<Guid?>("DoctorId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateOnly>("HospitalizationDate")
@@ -213,7 +213,7 @@ namespace Hospital.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("RoomId")
+                    b.Property<Guid?>("RoomId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("UCN")
@@ -221,7 +221,7 @@ namespace Hospital.Data.Migrations
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid?>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("ID");
@@ -231,7 +231,8 @@ namespace Hospital.Data.Migrations
                     b.HasIndex("RoomId");
 
                     b.HasIndex("UserId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[UserId] IS NOT NULL");
 
                     b.ToTable("Patients");
 
@@ -319,10 +320,10 @@ namespace Hospital.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<TimeSpan>("EndTime")
+                    b.Property<TimeOnly>("EndTime")
                         .HasColumnType("time");
 
-                    b.Property<TimeSpan>("StartTime")
+                    b.Property<TimeOnly>("StartTime")
                         .HasColumnType("time");
 
                     b.Property<string>("Type")
@@ -337,36 +338,36 @@ namespace Hospital.Data.Migrations
                         new
                         {
                             ID = new Guid("0288c0db-23d0-4cef-b74c-ef997285b18c"),
-                            EndTime = new TimeSpan(0, 14, 0, 0, 0),
-                            StartTime = new TimeSpan(0, 6, 0, 0, 0),
+                            EndTime = new TimeOnly(14, 0, 0),
+                            StartTime = new TimeOnly(6, 0, 0),
                             Type = "Morning"
                         },
                         new
                         {
                             ID = new Guid("2cd29802-44c5-4559-8cc3-225984ae748f"),
-                            EndTime = new TimeSpan(0, 22, 0, 0, 0),
-                            StartTime = new TimeSpan(0, 14, 0, 0, 0),
+                            EndTime = new TimeOnly(22, 0, 0),
+                            StartTime = new TimeOnly(14, 0, 0),
                             Type = "Afternoon"
                         },
                         new
                         {
                             ID = new Guid("baaafe92-5c0f-420b-87f0-fb1da4868b41"),
-                            EndTime = new TimeSpan(0, 6, 0, 0, 0),
-                            StartTime = new TimeSpan(0, 22, 0, 0, 0),
+                            EndTime = new TimeOnly(6, 0, 0),
+                            StartTime = new TimeOnly(22, 0, 0),
                             Type = "Night"
                         },
                         new
                         {
                             ID = new Guid("3ba89da5-3a0d-44ff-97f9-f049bc9bdbe9"),
-                            EndTime = new TimeSpan(0, 8, 0, 0, 0),
-                            StartTime = new TimeSpan(0, 0, 0, 0, 0),
+                            EndTime = new TimeOnly(8, 0, 0),
+                            StartTime = new TimeOnly(0, 0, 0),
                             Type = "Emergency"
                         },
                         new
                         {
                             ID = new Guid("aaaaaaf9-5059-478c-8df4-db3fd4342b14"),
-                            EndTime = new TimeSpan(0, 16, 0, 0, 0),
-                            StartTime = new TimeSpan(0, 8, 0, 0, 0),
+                            EndTime = new TimeOnly(16, 0, 0),
+                            StartTime = new TimeOnly(8, 0, 0),
                             Type = "Weekend"
                         });
                 });
@@ -836,7 +837,7 @@ namespace Hospital.Data.Migrations
                         new
                         {
                             ID = new Guid("91b25ace-9e01-4c25-b0ea-3c8bad060315"),
-                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/v1774522942/716959ed-ecf1-4c3e-a6ad-dfb7caca7863.png",
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775043137/716959ed-ecf1-4c3e-a6ad-dfb7caca7863_mxmyot.png",
                             Name = "Influenza",
                             PublicID = "716959ed-ecf1-4c3e-a6ad-dfb7caca7863"
                         },
@@ -906,9 +907,9 @@ namespace Hospital.Data.Migrations
                         new
                         {
                             ID = new Guid("2dfdf306-41d8-4aca-abd6-91ed7d4adc8a"),
-                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/v1774523335/c4510bbe-5309-4952-9ccd-326308a2c64a.png",
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775043330/c4510bbe-5309-4952-9ccd-326308a2c64a_vy0qwz.png",
                             Name = "Bronchitis",
-                            PublicID = "c4510bbe-5309-4952-9ccd-326308a2c64a"
+                            PublicID = "c4510bbe-5309-4952-9ccd-326308a2c64a_vy0qwz"
                         });
                 });
 
@@ -953,8 +954,8 @@ namespace Hospital.Data.Migrations
                         new
                         {
                             ID = new Guid("08ccdf4b-02ad-464f-9ef2-fb73ceee1826"),
-                            CloudinaryID = "logo_ro7b24",
-                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/v1774430017/logo_ro7b24.png",
+                            CloudinaryID = "doctor6_tvjvud",
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775045919/doctor6_tvjvud.jpg",
                             IsAccepted = true,
                             ShiftId = new Guid("3ba89da5-3a0d-44ff-97f9-f049bc9bdbe9"),
                             SpecializationId = new Guid("8a42cdba-ff58-4129-aea8-ae4c3b32f353"),
@@ -963,8 +964,8 @@ namespace Hospital.Data.Migrations
                         new
                         {
                             ID = new Guid("e1ceefa2-e56b-4395-9049-c689bea9417f"),
-                            CloudinaryID = "logo_ro7b24",
-                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/v1774430017/logo_ro7b24.png",
+                            CloudinaryID = "doctor5_vwg329",
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775045919/doctor5_vwg329.jpg",
                             IsAccepted = true,
                             ShiftId = new Guid("0288c0db-23d0-4cef-b74c-ef997285b18c"),
                             SpecializationId = new Guid("7a67c94b-50fb-4043-83f1-afdade20b451"),
@@ -973,8 +974,8 @@ namespace Hospital.Data.Migrations
                         new
                         {
                             ID = new Guid("186296e2-7114-4291-aa3b-897b96c75c21"),
-                            CloudinaryID = "logo_ro7b24",
-                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/v1774430017/logo_ro7b24.png",
+                            CloudinaryID = "doctor4_cnmqpg",
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775045919/doctor4_cnmqpg.jpg",
                             IsAccepted = true,
                             ShiftId = new Guid("baaafe92-5c0f-420b-87f0-fb1da4868b41"),
                             SpecializationId = new Guid("c484edec-d525-438a-92c4-ad80a9a41878"),
@@ -983,8 +984,8 @@ namespace Hospital.Data.Migrations
                         new
                         {
                             ID = new Guid("2a4e1d97-8411-4cf8-9da2-af9452f16eca"),
-                            CloudinaryID = "logo_ro7b24",
-                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/v1774430017/logo_ro7b24.png",
+                            CloudinaryID = "doctor3_djf78l",
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775045922/doctor3_djf78l.jpg",
                             IsAccepted = true,
                             ShiftId = new Guid("aaaaaaf9-5059-478c-8df4-db3fd4342b14"),
                             SpecializationId = new Guid("9cfb1a19-193f-4bf7-bc4b-c744a89f59eb"),
@@ -993,8 +994,8 @@ namespace Hospital.Data.Migrations
                         new
                         {
                             ID = new Guid("3480fb00-bfdc-4139-91a3-a975153ab6b3"),
-                            CloudinaryID = "logo_ro7b24",
-                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/v1774430017/logo_ro7b24.png",
+                            CloudinaryID = "doctor2_x95tr9",
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775045917/doctor2_x95tr9.jpg",
                             IsAccepted = true,
                             ShiftId = new Guid("0288c0db-23d0-4cef-b74c-ef997285b18c"),
                             SpecializationId = new Guid("1d3e1ea9-5265-4ff3-9875-d7ac37a2d8b2"),
@@ -1003,8 +1004,8 @@ namespace Hospital.Data.Migrations
                         new
                         {
                             ID = new Guid("8e296807-75cf-45dd-bdfc-179495465c09"),
-                            CloudinaryID = "logo_ro7b24",
-                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/v1774430017/logo_ro7b24.png",
+                            CloudinaryID = "doctor1_jiqipy",
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775045917/doctor1_jiqipy.jpg",
                             IsAccepted = true,
                             ShiftId = new Guid("baaafe92-5c0f-420b-87f0-fb1da4868b41"),
                             SpecializationId = new Guid("e43cf086-24ad-4a75-b47e-549b8d8e467c"),
@@ -1013,8 +1014,8 @@ namespace Hospital.Data.Migrations
                         new
                         {
                             ID = new Guid("26189d95-7ca7-40f7-9384-8454cfb99247"),
-                            CloudinaryID = "logo_ro7b24",
-                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/v1774430017/logo_ro7b24.png",
+                            CloudinaryID = "doctor9_ksvypt",
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775045917/doctor9_ksvypt.jpg",
                             IsAccepted = true,
                             ShiftId = new Guid("aaaaaaf9-5059-478c-8df4-db3fd4342b14"),
                             SpecializationId = new Guid("e82cc806-165f-4554-91f8-c9d9ae4909e5"),
@@ -1023,18 +1024,18 @@ namespace Hospital.Data.Migrations
                         new
                         {
                             ID = new Guid("6d3dacc1-3b7a-4e43-8caa-5b82a6f4a21f"),
-                            CloudinaryID = "logo_ro7b24",
-                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/v1774430017/logo_ro7b24.png",
+                            CloudinaryID = "f4c9ef33d04a22050038e9e53eeb7d85_w2l72d",
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775044425/f4c9ef33d04a22050038e9e53eeb7d85_w2l72d.jpg",
                             IsAccepted = true,
                             ShiftId = new Guid("2cd29802-44c5-4559-8cc3-225984ae748f"),
-                            SpecializationId = new Guid("1a298771-7773-4c3b-828c-fff8dcedf0e9"),
+                            SpecializationId = new Guid("c484edec-d525-438a-92c4-ad80a9a41878"),
                             UserId = new Guid("51daaed0-67e7-4c4a-b254-2745af5365df")
                         },
                         new
                         {
                             ID = new Guid("0f6d5fde-bc75-4df5-8886-090806665b82"),
-                            CloudinaryID = "logo_ro7b24",
-                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/v1774430017/logo_ro7b24.png",
+                            CloudinaryID = "doctor8_daewlm",
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775045915/doctor8_daewlm.jpg",
                             IsAccepted = true,
                             ShiftId = new Guid("baaafe92-5c0f-420b-87f0-fb1da4868b41"),
                             SpecializationId = new Guid("4ee4ce69-da26-4f66-85cf-30623200cbf4"),
@@ -1043,8 +1044,8 @@ namespace Hospital.Data.Migrations
                         new
                         {
                             ID = new Guid("dcd275c5-67c4-423b-a7b2-78ab917a2d5d"),
-                            CloudinaryID = "logo_ro7b24",
-                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/v1774430017/logo_ro7b24.png",
+                            CloudinaryID = "doctor7_ylf8tt",
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775045915/doctor7_ylf8tt.jpg",
                             IsAccepted = true,
                             ShiftId = new Guid("2cd29802-44c5-4559-8cc3-225984ae748f"),
                             SpecializationId = new Guid("a5519f22-cefb-4771-a5e9-de7b40817df8"),
@@ -1135,9 +1136,9 @@ namespace Hospital.Data.Migrations
                         new
                         {
                             ID = new Guid("698d0579-913c-42af-8a45-924cd9f740bb"),
-                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/v1774430017/logo_ro7b24.png",
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775044959/a9da1dea6368ebb099100f489cc37cfe_zfh28g.jpg",
                             IsAccepted = true,
-                            PublicID = "logo_ro7b24",
+                            PublicID = "a9da1dea6368ebb099100f489cc37cfe_zfh28g",
                             ShiftId = new Guid("0288c0db-23d0-4cef-b74c-ef997285b18c"),
                             SpecializationId = new Guid("8a42cdba-ff58-4129-aea8-ae4c3b32f353"),
                             UserId = new Guid("354fa92a-6b54-4d12-b90c-9926dc906462")
@@ -1145,9 +1146,9 @@ namespace Hospital.Data.Migrations
                         new
                         {
                             ID = new Guid("e5f97752-f18b-4b36-8c47-4d238cb0e01f"),
-                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/v1774430017/logo_ro7b24.png",
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775045913/doctor10_ewtass.jpg",
                             IsAccepted = true,
-                            PublicID = "logo_ro7b24",
+                            PublicID = "doctor10_ewtass",
                             ShiftId = new Guid("3ba89da5-3a0d-44ff-97f9-f049bc9bdbe9"),
                             SpecializationId = new Guid("a5519f22-cefb-4771-a5e9-de7b40817df8"),
                             UserId = new Guid("02e72b22-0abd-4ce4-80d1-30b8c13f952b")
@@ -1155,9 +1156,9 @@ namespace Hospital.Data.Migrations
                         new
                         {
                             ID = new Guid("e6a3850b-7a1e-465c-83fd-57b1134c68d2"),
-                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/v1774430017/logo_ro7b24.png",
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775045922/doctor3_djf78l.jpg",
                             IsAccepted = true,
-                            PublicID = "logo_ro7b24",
+                            PublicID = "doctor3_djf78l",
                             ShiftId = new Guid("baaafe92-5c0f-420b-87f0-fb1da4868b41"),
                             SpecializationId = new Guid("1d3e1ea9-5265-4ff3-9875-d7ac37a2d8b2"),
                             UserId = new Guid("741d970d-f405-4bd1-94b2-eec2c3fb33e2")
@@ -1165,9 +1166,9 @@ namespace Hospital.Data.Migrations
                         new
                         {
                             ID = new Guid("9fb6048e-03ae-407f-a83e-51b6c5399b41"),
-                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/v1774430017/logo_ro7b24.png",
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775045919/doctor5_vwg329.jpg",
                             IsAccepted = true,
-                            PublicID = "logo_ro7b24",
+                            PublicID = "doctor5_vwg329",
                             ShiftId = new Guid("2cd29802-44c5-4559-8cc3-225984ae748f"),
                             SpecializationId = new Guid("d9daaa5d-2c41-4fa4-b709-709fcfcd5cc0"),
                             UserId = new Guid("355ad73e-6b7d-4ade-846d-7cab0da06629")
@@ -1376,78 +1377,71 @@ namespace Hospital.Data.Migrations
                         new
                         {
                             ID = new Guid("8a42cdba-ff58-4129-aea8-ae4c3b32f353"),
-                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/v1774430017/logo_ro7b24.png",
-                            PublicID = "logo_ro7b24",
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775117702/Screenshot_2026-04-02_111137_nbbhc6.png",
+                            PublicID = "Screenshot_2026-04-02_111137_nbbhc6",
                             SpecializationName = "Infectious Disease"
                         },
                         new
                         {
                             ID = new Guid("7a67c94b-50fb-4043-83f1-afdade20b451"),
-                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/v1774430017/logo_ro7b24.png",
-                            PublicID = "logo_ro7b24",
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775117702/Screenshot_2026-04-02_111310_zgxd8c.png",
+                            PublicID = "Screenshot_2026-04-02_111310_zgxd8c",
                             SpecializationName = "Cardiology"
                         },
                         new
                         {
                             ID = new Guid("c484edec-d525-438a-92c4-ad80a9a41878"),
-                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/v1774430017/logo_ro7b24.png",
-                            PublicID = "logo_ro7b24",
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775117702/Screenshot_2026-04-02_111403_uhhj71.png",
+                            PublicID = "Screenshot_2026-04-02_111403_uhhj71",
                             SpecializationName = "Endocrinology"
                         },
                         new
                         {
                             ID = new Guid("9cfb1a19-193f-4bf7-bc4b-c744a89f59eb"),
-                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/v1774430017/logo_ro7b24.png",
-                            PublicID = "logo_ro7b24",
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775117702/Screenshot_2026-04-02_111428_ukzxth.png",
+                            PublicID = "Screenshot_2026-04-02_111428_ukzxth",
                             SpecializationName = "Pulmonology"
                         },
                         new
                         {
                             ID = new Guid("1d3e1ea9-5265-4ff3-9875-d7ac37a2d8b2"),
-                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/v1774430017/logo_ro7b24.png",
-                            PublicID = "logo_ro7b24",
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775117702/Screenshot_2026-04-02_111521_asrj53.png",
+                            PublicID = "Screenshot_2026-04-02_111521_asrj53",
                             SpecializationName = "Neurology"
                         },
                         new
                         {
                             ID = new Guid("e43cf086-24ad-4a75-b47e-549b8d8e467c"),
-                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/v1774430017/logo_ro7b24.png",
-                            PublicID = "logo_ro7b24",
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775117702/Screenshot_2026-04-02_111550_rletvt.png",
+                            PublicID = "Screenshot_2026-04-02_111550_rletvt",
                             SpecializationName = "Traumatology"
                         },
                         new
                         {
                             ID = new Guid("e82cc806-165f-4554-91f8-c9d9ae4909e5"),
-                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/v1774430017/logo_ro7b24.png",
-                            PublicID = "logo_ro7b24",
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775117702/Screenshot_2026-04-02_111610_awmauh.png",
+                            PublicID = "Screenshot_2026-04-02_111610_awmauh",
                             SpecializationName = "Allergy & Immunology"
                         },
                         new
                         {
                             ID = new Guid("a5519f22-cefb-4771-a5e9-de7b40817df8"),
-                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/v1774430017/logo_ro7b24.png",
-                            PublicID = "logo_ro7b24",
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775117703/Screenshot_2026-04-02_111632_kl3iuj.png",
+                            PublicID = "Screenshot_2026-04-02_111632_kl3iuj",
                             SpecializationName = "Rheumatology"
                         },
                         new
                         {
                             ID = new Guid("4ee4ce69-da26-4f66-85cf-30623200cbf4"),
-                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/v1774430017/logo_ro7b24.png",
-                            PublicID = "logo_ro7b24",
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775117703/Screenshot_2026-04-02_111739_yxp8r4.png",
+                            PublicID = "Screenshot_2026-04-02_111739_yxp8r4",
                             SpecializationName = "Orthopedics"
                         },
                         new
                         {
-                            ID = new Guid("1a298771-7773-4c3b-828c-fff8dcedf0e9"),
-                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/v1774430017/logo_ro7b24.png",
-                            PublicID = "logo_ro7b24",
-                            SpecializationName = "Endocrinology"
-                        },
-                        new
-                        {
                             ID = new Guid("d9daaa5d-2c41-4fa4-b709-709fcfcd5cc0"),
-                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/v1774430017/logo_ro7b24.png",
-                            PublicID = "logo_ro7b24",
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775117704/Screenshot_2026-04-02_111758_t9nbmc.png",
+                            PublicID = "Screenshot_2026-04-02_111758_t9nbmc",
                             SpecializationName = "Respiratory"
                         });
                 });
@@ -1618,20 +1612,17 @@ namespace Hospital.Data.Migrations
                     b.HasOne("Hospital.Entities.Doctor", "Doctor")
                         .WithMany("Patients")
                         .HasForeignKey("DoctorId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Hospital.Entities.Room", "Room")
                         .WithMany("ListOfPatients")
                         .HasForeignKey("RoomId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Hospital.Data.Entities.User", "User")
                         .WithOne("Patient")
                         .HasForeignKey("Hospital.Data.Entities.Patient", "UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Doctor");
 

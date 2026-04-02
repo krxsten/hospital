@@ -10,9 +10,9 @@ namespace Hospital.WebProject.ViewModels.Shift
 		public string Type { get; set; } = null!;
 
 		[Required(ErrorMessage = "This field is required!")]
-		public TimeSpan StartTime { get; set; }
+		public TimeOnly StartTime { get; set; }
 
 		[Required(ErrorMessage = "This field is required!")]
-		public TimeSpan EndTime { get; set; }
+		public TimeOnly EndTime { get; set; }
 	}
 }

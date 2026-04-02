@@ -1,7 +1,7 @@
 body {
     min-height: 100vh;
     margin: 0;
-    font-family: 'Times New Roman';
+    font-family: 'Cambria';
     background: radial-gradient(circle at top, #1e88e5, #0d47a1);
     font-size: 18px;
 }

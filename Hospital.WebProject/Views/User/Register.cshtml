@@ -22,7 +22,7 @@
             </div>
             <div class="text-center mb-3">
                 <label asp-for="@Model.Email">Email</label>
-                <input class="form-control " autocomplete="username" aria-required="true" asp-for="@Model.Email"/>
+                <input class="form-control " autocomplete="username" aria-required="true" asp-for="@Model.Email" />
                 <span asp-validation-for="@Model.Email" class="text-danger"></span>
             </div>
             <div class="text-center mb-3">
@@ -37,12 +37,65 @@
             </div>
             <div class="text-center mb-3">
                 <label asp-for="Role">Register as</label>
-                <select class="form-control" asp-for="Role">
+                <select id="roleSelect" class="form-control" asp-for="Role">
                     <option value="" style="text-align:center">-- Select role --</option>
                     <option value="Doctor">Doctor</option>
                     <option value="Nurse">Nurse</option>
                     <option value="Patient">Patient</option>
                 </select>
+            </div>
+            <div id="doctorFields" style="display:none;">
+                <div class="text-center mb-3">
+                    <label asp-for="SpecializationId">Specialization</label>
+                    <select asp-for="SpecializationId" class="form-control">
+                        <option value="">-- Select specialization --</option>
+                        @foreach (var s in ViewBag.Specializations)
+                        {
+                            <option value="@s.ID">@s.SpecializationName</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="text-center mb-3">
+                    <label asp-for="ShiftId">Shift</label>
+                    <select asp-for="ShiftId" class="form-control">
+                        <option value="">-- Select shift --</option>
+                        @foreach (var s in ViewBag.Shifts)
+                        {
+                            <option value="@s.ID">@s.Type</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="text-center mb-3">
+                    <label asp-for="ImageURL">Image URL</label>
+                    <input class="form-control" asp-for="ImageURL" />
+                </div>
+            </div>
+
+            <div id="patientFields" style="display:none;">
+
+                <div class="text-center mb-3">
+                    <label asp-for="PhoneNumber"></label>
+                    <input class="form-control" asp-for="PhoneNumber" />
+                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                </div>
+
+                <div class="text-center mb-3">
+                    <label asp-for="BirthCity"></label>
+                    <input class="form-control" asp-for="BirthCity" />
+                </div>
+
+                <div class="text-center mb-3">
+                    <label asp-for="DateOfBirth"></label>
+                    <input class="form-control" type="date" asp-for="DateOfBirth" />
+                </div>
+
+                <div class="text-center mb-3">
+                    <label asp-for="UCN"></label>
+                    <input class="form-control" asp-for="UCN" />
+                </div>
+
             </div>
             <div class="text-center">
                 <button id="registerSubmit" type="submit" class="btn btn-primary">Register</button>
@@ -50,3 +103,18 @@
         </form>
     </div>
 </div>
+<script>
+    const roleSelect = document.getElementById("roleSelect");
+    const doctorFields = document.getElementById("doctorFields");
+    const patientFields = document.getElementById("patientFields");
+
+    roleSelect.addEventListener("change", function () {
+        let role = this.value;
+
+        doctorFields.style.display =
+            (role === "Doctor" || role === "Nurse") ? "block" : "none";
+
+        patientFields.style.display =
+            (role === "Patient") ? "block" : "none";
+    });
+</script>

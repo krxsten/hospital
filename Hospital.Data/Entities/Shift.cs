@@ -15,9 +15,9 @@ namespace Hospital.Data.Entities
         [Required]
         public string Type { get; set; }
         [Required]
-        public TimeSpan StartTime { get; set; }
+        public TimeOnly StartTime { get; set; }
         [Required]
-        public TimeSpan EndTime { get; set; }
+        public TimeOnly EndTime { get; set; }
         public List<Doctor> ListOfDoctors { get; set; } = new List<Doctor>();
         public List<Nurse> ListOfNurses { get; set; } = new List<Nurse>();
     }
