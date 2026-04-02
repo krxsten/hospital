@@ -1,4 +1,4 @@
-﻿using Hospital.Core.DTOs;
+using Hospital.Core.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,5 +18,8 @@ namespace Hospital.Core.Contracts
         Task UpdateAsync(PatientIndexDTO model);
 
         Task DeleteAsync(Guid id);
+
+        Task SelectDoctorAndRoomAsync(Guid userId, Guid doctorId, Guid roomId,
+            string birthCity, DateOnly dateOfBirth, string phoneNumber, string ucn);
     }
 }

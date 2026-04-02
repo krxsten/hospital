@@ -1,4 +1,4 @@
-﻿using Hospital.Core.Contracts;
+using Hospital.Core.Contracts;
 using Hospital.Core.DTOs;
 using Hospital.Data;
 using Hospital.Data.Entities;
@@ -51,6 +51,7 @@ namespace Hospital.WebProject.Controllers
 				ShiftName = x.ShiftName,
 				IsAccepted = x.IsAccepted,
 				UserId = x.UserId,
+				UserName = x.UserName,
 				ImageURL = x.ImageURL,
             }).ToList();
 

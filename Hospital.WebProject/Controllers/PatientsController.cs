@@ -1,4 +1,4 @@
-﻿using Hospital.Core.Contracts;
+using Hospital.Core.Contracts;
 using Hospital.Core.DTOs;
 using Hospital.Data;
 using Hospital.Data.Entities;
@@ -210,7 +210,96 @@ namespace Hospital.WebProject.Controllers
                 .ToListAsync();
 
             ViewBag.Patients = new SelectList(patients, "ID", "FullName");
+		}
 
-        }
+		[Authorize(Roles = "Patient")]
+		[HttpGet]
+		public async Task<IActionResult> SelectDoctorAndRoom()
+		{
+			// Check if the patient already has a record
+			var userId = Guid.Parse(userManager.GetUserId(User)!);
+			var existingPatient = await context.Patients
+				.AnyAsync(p => p.UserId == userId);
+
+			if (existingPatient)
+			{
+				TempData["Error"] = "You have already selected a doctor and room.";
+				return RedirectToAction("Index", "Home");
+			}
+
+			await LoadPatientDropdownsAsync();
+			return View(new SelectDoctorAndRoomViewModel());
+		}
+
+		[Authorize(Roles = "Patient")]
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> SelectDoctorAndRoom(SelectDoctorAndRoomViewModel model)
+		{
+			if (!ModelState.IsValid)
+			{
+				await LoadPatientDropdownsAsync();
+				return View(model);
+			}
+
+			var userId = Guid.Parse(userManager.GetUserId(User)!);
+
+			try
+			{
+				await patientService.SelectDoctorAndRoomAsync(
+					userId,
+					model.DoctorId,
+					model.RoomId,
+					model.BirthCity,
+					model.DateOfBirth,
+					model.PhoneNumber,
+					model.UCN);
+
+				TempData["Success"] = "You have been successfully registered!";
+				return RedirectToAction(nameof(Index));
+			}
+			catch (InvalidOperationException ex)
+			{
+				ModelState.AddModelError(string.Empty, ex.Message);
+				await LoadPatientDropdownsAsync();
+				return View(model);
+			}
+		}
+
+		private async Task LoadPatientDropdownsAsync()
+		{
+			var doctors = await context.Doctors
+				.Include(d => d.User)
+				.Select(d => new
+				{
+					d.ID,
+					FullName = d.User.FirstName + " " + d.User.LastName
+				})
+				.ToListAsync();
+
+			ViewBag.Doctor = new SelectList(doctors, "ID", "FullName");
+
+			var availableRooms = await context.Rooms
+				.Where(r => !r.IsTaken)
+				.Select(r => new
+				{
+					r.ID,
+					r.RoomNumber
+				})
+				.ToListAsync();
+
+			ViewBag.Room = new SelectList(availableRooms, "ID", "RoomNumber");
+
+            var cities = await context.Cities
+                .OrderBy(c => c.Name)
+                .Select(c => new
+                {
+                    c.Id,
+                    c.Name
+                })
+                .ToListAsync();
+
+            ViewBag.Cities = new SelectList(cities, "Id", "Name");
+		}
     }
 }

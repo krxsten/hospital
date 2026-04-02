@@ -9,6 +9,7 @@ namespace Hospital.Core.DTOs
     public class DoctorNurseDto
     {
         public Guid DoctorID { get; set; }
+        //frgbngrfn
         public Guid NurseID { get; set; }
     }
 }

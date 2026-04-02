@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 namespace Hospital.WebProject.ViewModels.User
 {
     public class RegisterViewModel
@@ -27,5 +27,7 @@ namespace Hospital.WebProject.ViewModels.User
         public string BirthCity { get; set; }
         public DateOnly DateOfBirth { get; set; }
         public string UCN { get; set; }
+        public Guid? DoctorId { get; set; }
+        public Guid? RoomId { get; set; }
     }
 }

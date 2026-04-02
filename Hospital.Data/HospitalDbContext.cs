@@ -1,4 +1,4 @@
-﻿using Hospital.Data.Configurations;
+using Hospital.Data.Configurations;
 using Hospital.Data.Entities;
 using Hospital.Entities;
 using Hospital.WebProject.Seed;
@@ -29,6 +29,7 @@ namespace Hospital.Data
         public DbSet<Shift> Shifts { get; set; }
         public DbSet<Specialization> Specializations { get; set; }
         public DbSet<Checkup> Checkups { get; set; }
+        public DbSet<City> Cities { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

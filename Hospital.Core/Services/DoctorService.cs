@@ -1,4 +1,4 @@
-﻿using Hospital.Core.Contracts;
+using Hospital.Core.Contracts;
 using Hospital.Core.DTOs;
 using Hospital.Data;
 using Hospital.Entities;
@@ -58,7 +58,7 @@ namespace Hospital.Core.Services
                .Select(d => new DoctorIndexDto
                {
                    UserId = d.UserId,
-                   UserName = d.User.FirstName + d.User.LastName,
+                   UserName = d.User.FirstName + " " + d.User.LastName,
                    SpecializationId = d.SpecializationId,
                    SpecializationName = d.Specialization.SpecializationName,
                    ShiftId = d.ShiftId,

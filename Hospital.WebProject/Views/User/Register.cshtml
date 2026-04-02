@@ -1,4 +1,4 @@
-﻿<link rel="stylesheet" href="/css/styles.css">
+<link rel="stylesheet" href="/css/styles.css">
 @model RegisterViewModel
 @{
     ViewData["Title"] = "Register";
@@ -76,14 +76,30 @@
             <div id="patientFields" style="display:none;">
 
                 <div class="text-center mb-3">
+                    <label asp-for="DoctorId">Doctor</label>
+                    <select asp-for="DoctorId" class="form-control" asp-items="@ViewBag.Doctors">
+                        <option value="">-- Select a Doctor --</option>
+                    </select>
+                </div>
+
+                <div class="text-center mb-3">
+                    <label asp-for="RoomId">Room</label>
+                    <select asp-for="RoomId" class="form-control" asp-items="@ViewBag.Rooms">
+                        <option value="">-- Select a Room --</option>
+                    </select>
+                </div>
+
+                <div class="text-center mb-3">
                     <label asp-for="PhoneNumber"></label>
                     <input class="form-control" asp-for="PhoneNumber" />
                     <span asp-validation-for="PhoneNumber" class="text-danger"></span>
                 </div>
 
                 <div class="text-center mb-3">
-                    <label asp-for="BirthCity"></label>
-                    <input class="form-control" asp-for="BirthCity" />
+                    <label asp-for="BirthCity">Birth City</label>
+                    <select asp-for="BirthCity" class="form-control" asp-items="@ViewBag.Cities">
+                        <option value="">-- Select a City --</option>
+                    </select>
                 </div>
 
                 <div class="text-center mb-3">
