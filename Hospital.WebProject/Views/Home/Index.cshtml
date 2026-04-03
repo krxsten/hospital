@@ -114,14 +114,92 @@
         letter-spacing: 1px;
         opacity: 0.9;
     }
+
+    .hero-image {
+        position: relative;
+        width: 450px;
+        height: 450px;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    }
+
+        .hero-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: 0.4s;
+        }
+
+        .hero-image:hover img {
+            transform: scale(1.05);
+        }
+
+    .hero-overlay {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        padding: 20px;
+        background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+        color: white;
+    }
+
+    .hospital-gallery {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-auto-rows: 220px;
+        gap: 20px;
+        margin-top: 40px;
+    }
+
+    .gallery-item.large {
+        grid-column: span 2;
+        grid-row: span 2;
+    }
+
+    .gallery-item.wide {
+        grid-column: span 2;
+    }
+
+    .gallery-item {
+        position: relative;
+        overflow: hidden;
+        border-radius: 20px;
+    }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: 0.4s;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.08);
+        }
+
+    .gallery-label {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        padding: 12px;
+        background: linear-gradient(to top, rgba(0,0,0,0.6), transparent);
+        color: white;
+        font-weight: 500;
+        font-size: 28px;
+    }
 </style>
 
 <div class="text-center hero-titlesubtitle">
     <h1 class="display-3 text-white main-title" style="font-family: 'Cambria'">"Saint Anna" Medical Center </h1>
     <p class="display-6 text-white subtitle" style="font-family: 'Cambria'">Where advanced medicine meets exceptional care.</p>
     <div class="content-wrapper">
-        <div class="image-frame">
-            <img src="~/img/index.jpg" alt="Saint Anna Hospital" />
+        <div class="hero-image">
+            <img src="~/img/index.jpg" alt="Hospital" />
+            <div class="hero-overlay">
+                <h2>Modern Facilities</h2>
+                <p>Equipped with advanced medical technology</p>
+            </div>
         </div>
         <div class="history-text">
             <h2>Our History</h2>
@@ -137,59 +215,93 @@
                 to evolve while maintaining its commitment to saving lives and improving health.
             </p>
         </div>
+        <div class="section text-white">
+            <h2 class="text-center">Explore Our Hospital</h2>
+
+            <div class="hospital-gallery">
+
+                <div class="gallery-item large">
+                    <div class="gallery-label">Main Building</div>
+                    <img src="https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775203936/S23683_00_SCH_Forest_B_N390_printmedium-scaled_x1ajv0.jpg" />
+                </div>
+
+                <div class="gallery-item">
+                    <div class="gallery-label">Emergency Unit</div>
+                    <img src="https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775204465/TBO_9315Trauma-scaled_fnfubs.jpg" />
+                </div>
+
+                <div class="gallery-item">
+                    <div class="gallery-label">Operating Room</div>
+                    <img src="https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775204505/Hybrid-OR-1024x683_e010je.jpg" />
+                </div>
+
+                <div class="gallery-item">
+                    <div class="gallery-label">Patient Rooms</div>
+                    <img src="https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775204550/23-0192857_yxakti.jpg" />
+                </div>
+
+                <div class="gallery-item">
+                    <div class="gallery-label">Advanced Equipment</div>
+                    <img src="https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775204593/ghhhjj-scaled_wwnrgf.jpg" />
+                </div>
+
+            </div>
+        </div>
     </div>
 </div>
-<div class="container mt-5 text-white">
-    <h2 class="text-center mb-4">Our Services</h2>
+<div class="section text-center text-white">
+    <h2>Our Services</h2>
 
-    <div class="row text-center">
-        <div class="col-md-4">
-            <div class="p-4 border rounded shadow-sm bg-dark">
-                <h4>Cardiology</h4>
-                <p>Advanced heart care with modern diagnostics and treatment.</p>
-            </div>
+    <div style="display:flex; gap:30px; justify-content:center; flex-wrap:wrap; margin-top:30px;">
+
+        <div class="service-card">
+            <h4>Cardiology</h4>
+            <p>Advanced heart care with modern diagnostics.</p>
         </div>
 
-        <div class="col-md-4">
-            <div class="p-4 border rounded shadow-sm bg-dark">
-                <h4>Neurology</h4>
-                <p>Comprehensive care for brain and nervous system disorders.</p>
-            </div>
+        <div class="service-card">
+            <h4>Neurology</h4>
+            <p>Comprehensive brain and nervous system care.</p>
         </div>
 
-        <div class="col-md-4">
-            <div class="p-4 border rounded shadow-sm bg-dark">
-                <h4>Emergency Care</h4>
-                <p>24/7 emergency services with rapid response teams.</p>
-            </div>
+        <div class="service-card">
+            <h4>Emergency Care</h4>
+            <p>24/7 rapid response teams.</p>
         </div>
+
     </div>
 </div>
 
-<div class="container mt-5 text-center text-white">
-    <div class="row">
-        <div class="col-md-4">
+<div class="section text-center text-white">
+    <div style="display:flex; justify-content:center; gap:80px; flex-wrap:wrap;">
+        <div>
             <h1>25+</h1>
             <p>Years of Experience</p>
         </div>
-        <div class="col-md-4">
+        <div>
             <h1>100+</h1>
             <p>Qualified Doctors</p>
         </div>
-        <div class="col-md-4">
+        <div>
             <h1>10K+</h1>
             <p>Happy Patients</p>
         </div>
     </div>
 </div>
 
+<div class="section text-center">
+    <div style="padding:50px; border-radius:20px; background: rgba(255,255,255,0.1); backdrop-filter: blur(10px);">
+        <h2 class="text-white">Need Medical Assistance?</h2>
+        <p class="text-white">Our specialists are here to help you anytime.</p>
 
-<div class="container mt-5 text-center">
-    <div class="p-5 rounded" style="background: rgba(255,255,255,0.1); backdrop-filter: blur(10px);">
-        <h2 class="text-white mb-3">Need Medical Assistance?</h2>
-        <p class="text-white mb-4">Our specialists are here to help you anytime.</p>
+        <a asp-action="Create" asp-controller="Checkup"
+           class="btn btn-primary btn-lg me-2">
+            Book Appointment
+        </a>
 
-        <a asp-action="Create" asp-controller="Checkup" class="btn btn-primary btn-lg me-2">Book Appointment</a>
-        <a href="/Home/Contacts" class="btn btn-outline-light btn-lg">Contact Us</a>
+        <a href="/Home/Contacts"
+           class="btn btn-outline-light btn-lg">
+            Contact Us
+        </a>
     </div>
 </div>

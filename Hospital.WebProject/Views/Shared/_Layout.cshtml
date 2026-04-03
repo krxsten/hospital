@@ -1,64 +1,72 @@
 ﻿<style>
-    body {
-        min-height: 100vh;
-        margin: 0;
-        font-family: 'Cambria';
-        background: radial-gradient(circle at top, #1e88e5, #0d47a1);
+    .main-wrapper {
+        width: 100%;
+        padding: 40px 80px; 
     }
 
     .container {
-        position: relative;
-        z-index: 1; 
-        background: rgba(255, 255, 255, 0.15);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        border-radius: 16px;
-        padding: 30px;
-        box-shadow: 0 8px 32px rgba(0,0,0,0.25);
-        color: white;
+        max-width: 100% !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        background: none !important;
+        box-shadow: none !important;
     }
 
-    .top-header {
-        padding: 20px 10px 10px 10px;
-        color: white;
+    .section {
+        margin-top: 60px;
     }
 
-    .logo {
-        width: 70px;
-        height: auto;
-        margin-bottom: 10px;
+    h1, h2 {
+        margin-bottom: 20px;
     }
 
-    .hospital-title {
-        margin: 0;
-        font-size: 1.8rem;
+    .service-card {
+        padding: 25px;
+        border-radius: 15px;
+        background: rgba(255,255,255,0.08);
+        backdrop-filter: blur(8px);
+        transition: 0.3s;
+    }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+        }
+    
+
+    .brand-text {
+        font-size: 1.3rem;
         letter-spacing: 1px;
+        color: white;
     }
 
-    .custom-navbar {
-        background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(10px);
-        -webkit-backdrop-filter: blur(10px);
+        .brand-text strong {
+            color: #bbdefb;
+        }
+    .navbar .dropdown-menu {
+        background: white !important;
+        border: none !important;
+        border-radius: 12px !important;
+        padding: 8px 0 !important;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2) !important;
     }
 
-    .nav-link {
-        color: white !important;
-    }
-
-        .nav-link:hover {
-            color: whitesmoke !important;
+        .navbar .dropdown-menu .dropdown-item {
+            color: #0d47a1 !important;
+            font-weight: 500;
+            padding: 10px 20px;
         }
 
-    .navbar {
-        position: relative;
-        z-index: 1000;
-    }
+            .navbar .dropdown-menu .dropdown-item:hover,
+            .navbar .dropdown-menu .dropdown-item:focus {
+                background-color: #e3f2fd !important;
+                color: #0b3c91 !important;
+            }
 
-    .dropdown-menu {
-        z-index: 2000;
-        position: absolute;
-    }
-
+            .navbar .dropdown-menu .dropdown-item.active,
+            .navbar .dropdown-menu .dropdown-item:active {
+                background-color: #bbdefb !important;
+                color: #0b3c91 !important;
+            }
 </style>
 <!DOCTYPE html>
 <html lang="en">
@@ -77,12 +85,14 @@
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm custom-navbar border-bottom mb-3">
-            <div class="container-fluid">
+            <div class="px-5 w-100">
                 <a class="navbar-brand d-flex align-items-center text-white" asp-controller="Home" asp-action="Index">
                     <svg width="32" height="32" fill="white" viewBox="0 0 24 24" style="margin-right:8px;">
                         <path d="M19 11h-6V5h-2v6H5v2h6v6h2v-6h6z" />
                     </svg>
-                    <span style="font-weight:600;">St. Anna</span>
+                    <span class="brand-text">
+                        <strong>St. Anna</strong>
+                    </span>
                 </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -136,8 +146,8 @@
 
                         @if (User.IsInRole("Admin"))
                         {
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <li class="nav-item dropdown text-white">
+                                <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown">
                                     Admin Panel
                                 </a>
                                 <ul class="dropdown-menu">
@@ -151,8 +161,8 @@
                             </li>
                         }
 
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                        <li class="nav-item dropdown text-white">
+                            <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown">
                                 Medical Team
                             </a>
                             <ul class="dropdown-menu">
@@ -164,8 +174,8 @@
                                 </li>
                             </ul>
                         </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                        <li class="nav-item dropdown text-white">
+                            <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown">
                                 Hospital management
                             </a>
                             <ul class="dropdown-menu">
@@ -195,7 +205,7 @@
             </div>
         </nav>
     </header>
-    <div class="container">
+    <div class="main-wrapper">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
