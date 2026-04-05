@@ -19,6 +19,7 @@ namespace Hospital.Core.Contracts
         Task UpdateAsync(DiagnoseIndexDTO model);
 
         Task DeleteAsync(Guid id);
+        Task<List<DiagnoseIndexDTO>> GetDiagnose(string diagnose);
 
     }
 }

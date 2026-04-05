@@ -20,7 +20,7 @@
             <br />
             <input type="radio" asp-for="Type" name="type" value="WeekendShift" />Weekend shift
         </div>
-
+        <span class="text-danger" asp-validation-for="@Model.Type"></span>
         <div class="mb-3">
             <label asp-for="@Model.StartTime" class="form-label">Start time: </label>
             <input asp-for="@Model.StartTime" type="time" step="60" class="form-control"/>

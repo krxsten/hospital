@@ -15,9 +15,10 @@ namespace Hospital.Core.Contracts
 
         Task CreateAsync(DoctorCreateDto model);
 
-        Task UpdateAsync(DoctorIndexDto model);
+        Task UpdateAsync(DoctorEditDTO model);
 
         Task DeleteAsync(Guid id);
         Task<List<DoctorIndexDto>> FilterBySpecialization(string specialization);
+        Task<List<DoctorIndexDto>> SortByFirstName();
     }
 }

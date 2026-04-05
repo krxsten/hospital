@@ -15,19 +15,16 @@
         </div>
 
         <div class="mb-3">
-            <label asp-for="Date" class="form-label"></label>
-            <input asp-for="Date" id="Date" type="date" class="form-control" min="@DateTime.Now.ToString("yyyy-MM-dd")" />
-            <span asp-validation-for="Date" class="text-danger"></span>
+            <label asp-for="@Model.Date" class="form-label">Date: </label>
+            <input asp-for="@Model.Date" id="Date" type="date" class="form-control" min="@DateTime.Now.ToString("yyyy-MM-dd")" />
+            <span asp-validation-for="@Model.Date" class="text-danger"></span>
         </div>
         <div class="mb-3">
-            <label class="form-label">Available Time</label>
-
-            <select asp-for="Time" id="Time" class="form-select">
+            <label asp-for="@Model.Time" class="form-label">Available Time: </label>
+            <select asp-for="@Model.Time" id="Time" class="form-select">
                 <option>Select time</option>
-
-            </select>
-
-            <span asp-validation-for="Date" class="text-danger"></span>
+                    </select>
+            <span asp-validation-for="@Model.Date" class="text-danger"></span>
         </div>
 
         <div class="mb-3">

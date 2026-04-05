@@ -1,0 +1,28 @@
+﻿<link rel="stylesheet" href="/css/styles.css">
+@using Hospital.WebProject.ViewModels.Room
+@model List<RoomIndexViewModel>
+
+<h2>Search Room</h2>
+
+<form method="get" asp-action="GetRoomsAfterNum">
+    <input type="number" name="roomNum" class="form-control" required />
+    <br />
+    <button class="btn btn-primary">Search</button>
+</form>
+
+<hr />
+
+@if (Model != null && Model.Any())
+{
+    @foreach (var r in Model)
+    {
+        <div class="card mb-2 p-3">
+            Room: @r.RoomNumber | Taken: @r.IsTaken
+        </div>
+    }
+}
+else if (Model == null)
+{
+    <p>No rooms where found.</p>
+}
+

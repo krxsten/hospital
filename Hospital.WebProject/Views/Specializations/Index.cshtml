@@ -1,48 +1,110 @@
-﻿@using Hospital.WebProject.ViewModels.Specialization
+﻿<style>
+    .specialization-card {
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        border: 1px solid #f1f5f9;
+        background: #fff;
+    }
+
+        .specialization-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+        }
+
+    .btn-action {
+        width: 110px; 
+        display: inline-block;
+        text-align: center;
+    }
+
+    .btn-warning {
+        background-color: #ffc107;
+        border: none;
+        color: #212529;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        border: none;
+        color: white;
+    }
+
+    .btn-secondary {
+        background-color: #6c757d;
+        border: none;
+    }
+
+    .btn:hover {
+        filter: brightness(92%);
+        transform: scale(1.02);
+    }
+
+    h4 {
+        font-family: 'Segoe UI', sans-serif;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.7); 
+    }
+
+    .action-bar .btn {
+        font-weight: 500;
+    }
+</style>
+
+@using Hospital.WebProject.ViewModels.Specialization
 @model List<SpecializationIndexViewModel>
 
-<div class="mb-3">
-    <h2 style="text-align:center">———— Specializations ————</h2>
-</div>
-<div class="mb-3 d-flex justify-content-end" style="font-family: 'Cambria'; font-size: 24px">
-    @if (User.IsInRole("Admin"))
-    {
-        <a asp-action="Create" class="btn btn-success" style="font-family: 'Cambria'; font-size: 20px">+ Create</a>
-    }
-    <a asp-action="Index" asp-controller="Home" class="btn btn-secondary ms-3" style="font-family: 'Cambria'; font-size: 20px">← Back</a>
-</div>
-<table class="table table-striped table-bordered" style="text-align:center">
-    <thead>
-        <tr>
-            <th scope="col" class="text-center">Name</th>
-            <th scope="col" class="text-center"></th>
-            @if (User.IsInRole("Admin") || User.IsInRole("Nurse") || User.IsInRole("Doctor"))
-            {
-                <th scope="col" class="text-center">Actions</th>
-            }
-        </tr>
-    </thead>
-    <tbody class="table-group-divider">
+<div class="container pb-5">
+    <div class="text-center mb-5">
+        <h2 class="fw-bold">Hospital Specializations</h2>
+        <div class="mx-auto bg-white rounded-pill mt-2" style="height: 4px; width: 60px;"></div>
+    </div>
+
+    <div class="d-flex justify-content-end align-items-center mb-4 gap-2 action-bar">
+        <a asp-action="GetSpecialization" class="btn btn-light border rounded-pill px-4">
+            <i class="bi bi-search"></i> Search
+        </a>
+
+        @if (User.IsInRole("Admin"))
+        {
+            <a asp-action="Create" class="btn btn-success rounded-pill px-4 shadow-sm">
+                + Add Specialization
+            </a>
+        }
+
+        <a asp-action="Index" asp-controller="Home" class="btn btn-secondary rounded-pill px-4 shadow-sm">
+            <i class="bi bi-arrow-left"></i> Back
+        </a>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
         @foreach (var item in Model)
         {
-            <tr>
-                <td>@item.SpecializationName</td>
-                <td><img src="@item.ImageURL" /></td>
-                @if (User.IsInRole("Admin") || User.IsInRole("Nurse") || User.IsInRole("Doctor"))
-                {
-                    <td>
-                        <a asp-action="Edit" asp-controller="Specializations"
-                           asp-route-id="@item.ID"
-                           class="btn btn-warning">Edit</a>
-                        <form asp-action="Delete" asp-controller="Specializations"
-                              asp-route-id="@item.ID"
-                              method="post"
-                              style="display:inline">
-                            <button class="btn btn-danger">Delete</button>
-                        </form>
-                    </td>
-                }
-            </tr>
+            <div class="col">
+                <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden specialization-card">
+
+                    <div class="position-relative">
+                        <img src="@item.ImageURL" class="card-img-top" alt="@item.SpecializationName"
+                             style="height: 250px; object-fit: cover;">
+
+                        <div class="card-img-overlay d-flex align-items-end p-0">
+                            <div class="w-100 p-3" style="background: linear-gradient(transparent, rgba(0,0,0,0.85));">
+                                <h4 class="text-white fw-bold mb-0">@item.SpecializationName</h4>
+                            </div>
+                        </div>
+                    </div>
+
+                    @if (User.IsInRole("Admin") || User.IsInRole("Nurse") || User.IsInRole("Doctor"))
+                    {
+                        <div class="card-footer bg-white border-0 p-3 d-flex justify-content-center gap-2">
+                            <a asp-action="Edit" asp-controller="Specializations" asp-route-id="@item.ID"
+                               class="btn btn-warning btn-action fw-bold rounded-3">Edit</a>
+
+                            <form asp-action="Delete" asp-controller="Specializations" asp-route-id="@item.ID"
+                                  method="post" onsubmit="return confirm('Are you sure you want to delete this?')" class="d-inline">
+                                <button type="submit" class="btn btn-danger btn-action fw-bold rounded-3">Delete</button>
+                            </form>
+                        </div>
+                    }
+                </div>
+            </div>
         }
-    </tbody>
-</table>
+    </div>
+</div>

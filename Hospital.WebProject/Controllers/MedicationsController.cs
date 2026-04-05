@@ -141,5 +141,21 @@ namespace Hospital.WebProject.Controllers
 				"ID",
 				"Name");
 		}
-	}
+		[AllowAnonymous]
+        public async Task<IActionResult> GetMedicationsForSideEffect(string sideEffect)
+        {
+            var dtos = await medicationService.GetMedicationsForSideEffect(sideEffect);
+            var model = dtos.Select(x => new MedicationIndexViewModel
+            {
+                ID = x.ID,
+                Name = x.Name,
+                DiagnoseID = x.DiagnoseID,
+                DiagnoseName = x.DiagnoseName,
+                Description = x.Description,
+                SideEffects = x.SideEffects
+            }).ToList();
+
+            return View(model);
+        }
+    }
 }

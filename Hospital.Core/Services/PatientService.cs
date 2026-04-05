@@ -188,6 +188,44 @@ namespace Hospital.Core.Services
             await context.Patients.AddAsync(patient);
             await context.SaveChangesAsync();
         }
+        public async Task<List<PatientIndexDTO>> PatientsWithSuchDoctor(string doctroName)
+        {
+            var patients = await context.Patients
+              .Include(p => p.Doctor.User)
+              .Include(p => p.Room)
+              .Include(p => p.User)
+              .ToListAsync();
+
+            var cityIdsAsGuids = patients
+                .Select(p => p.BirthCity)
+                .Where(bc => Guid.TryParse(bc, out _))
+                .Select(bc => Guid.Parse(bc))
+                .Distinct()
+                .ToList();
+
+            var cityNames = await context.Cities
+                .Where(c => cityIdsAsGuids.Contains(c.Id))
+                .ToDictionaryAsync(c => c.Id.ToString(), c => c.Name);
+
+            return patients.Where(x=>x.Doctor.User.FirstName==doctroName).Select(x => new PatientIndexDTO
+            {
+                ID = x.ID,
+                DoctorId = x.DoctorId,
+                DoctorName = x.Doctor?.User != null ? x.Doctor.User.FirstName + " " + x.Doctor.User.LastName : "No data",
+                HospitalizationDate = x.HospitalizationDate,
+                HospitalizationTime = x.HospitalizationTime,
+                DischargeDate = x.DischargeDate,
+                DischargeTime = x.DischargeTime,
+                UserID = x.UserId,
+                UserName = x.User != null ? x.User.FirstName + " " + x.User.LastName : "No data",
+                RoomId = x.RoomId,
+                RoomNumber = x.Room?.RoomNumber ?? 0,
+                BirthCity = cityNames.ContainsKey(x.BirthCity) ? cityNames[x.BirthCity] : x.BirthCity,
+                DateOfBirth = x.DateOfBirth,
+                PhoneNumber = x.PhoneNumber,
+                UCN = x.UCN
+            }).ToList();
+        }
         
     }
 }

@@ -1,0 +1,25 @@
+﻿@using Hospital.WebProject.ViewModels.Specialization
+@model List<SpecializationIndexViewModel>
+
+<form method="get" asp-action="GetSpecialization">
+    <div class="form-group">
+        <label>Specializaton:</label>
+    <input type="text" name="specialization" maxlength="1" class="form-control" required />
+    </div>
+    <br />
+    <button class="btn btn-primary">Search</button>
+</form>
+
+@if (Model != null)
+{
+    <div class="row">
+        @foreach (var s in Model)
+        {
+            <div class="col-md-3">
+                <div class="card p-2">
+                    <h6>@s.SpecializationName</h6>
+                </div>
+            </div>
+        }
+    </div>
+}

@@ -18,5 +18,6 @@ namespace Hospital.Core.Contracts
         Task UpdateAsync(CheckupIndexDTO model);
 
         Task DeleteAsync(Guid id);
+        Task<List<CheckupIndexDTO>> GetCheckupsAfterDate(DateOnly date);
     }
 }

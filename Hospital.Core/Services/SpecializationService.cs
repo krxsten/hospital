@@ -82,5 +82,14 @@ namespace Hospital.Core.Services
 			context.Specializations.Remove(specialization);
 			await context.SaveChangesAsync();
 		}
-	}
+		public async Task<List<SpecializationIndexDTO>> GetSpecialization(string specialization)
+        {
+            return await context.Specializations.Where(x => x.SpecializationName==specialization).Select(x => new SpecializationIndexDTO
+            {
+                ID = x.ID,
+                SpecializationName = x.SpecializationName,
+                Image = x.ImageURL
+            }).ToListAsync();
+        }
+    }
 }

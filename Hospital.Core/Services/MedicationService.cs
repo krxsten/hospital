@@ -92,5 +92,20 @@ namespace Hospital.Core.Services
 			context.Medications.Remove(medication);
 			await context.SaveChangesAsync();
 		}
+		public async Task<List<MedicationIndexDTO>> GetMedicationsForSideEffect(string sideEffect)
+		{
+            return await context.Medications
+				.Where(x=>x.SideEffects.Contains(sideEffect))
+                .Select(x => new MedicationIndexDTO
+                {
+                    ID = x.ID,
+                    Name = x.Name,
+                    DiagnoseID = x.DiagnoseID,
+                    DiagnoseName = x.Diagnose.Name,
+                    Description = x.Description,
+                    SideEffects = x.SideEffects
+                })
+                .ToListAsync();
+        }
 	}
 }

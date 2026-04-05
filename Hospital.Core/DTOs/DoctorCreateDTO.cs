@@ -14,7 +14,8 @@ namespace Hospital.Core.DTOs
         public Guid ShiftID { get; set; }
         public Guid UserID { get; set; }
         public bool IsAccepted { get; set; } = false;
-        public IFormFile File { get; set; } = null!;
-       
+        public string ImageURL { get; set; }
+        public string CloudinaryID { get; set; }
+
     }
 }

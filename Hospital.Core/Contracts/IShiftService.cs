@@ -18,5 +18,6 @@ namespace Hospital.Core.Contracts
         Task UpdateAsync(ShiftIndexDTO model);
 
         Task DeleteAsync(Guid id);
+        Task<ShiftIndexDTO?> GetShiftByTime(TimeOnly time);
     }
 }

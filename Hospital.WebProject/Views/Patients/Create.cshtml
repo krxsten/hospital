@@ -10,16 +10,14 @@
     <form asp-action="Create" method="post">
         <div class="mb-3">
             <label asp-for="@Model.UserID" class="form-label">Patient: </label>
-            <select asp-for="@Model.UserID" asp-items="@ViewBag.Patients" class="form-select">
-            </select>
-                <span class="text-danger" asp-validation-for="@Model.UserID"></span>
+            <select asp-for="@Model.UserID" asp-items="@ViewBag.Patients" class="form-select"></select>
+            <span class="text-danger" asp-validation-for="@Model.UserID"></span>
         </div>
 
         <div class="mb-3">
             <label asp-for="@Model.UserID" class="form-label">Doctor: </label>
-            <select asp-for="@Model.UserID" asp-items="@ViewBag.Doctor" class="form-select">
-            </select>
-                <span class="text-danger" asp-validation-for="@Model.DoctorId"></span>
+            <select asp-for="@Model.UserID" asp-items="@ViewBag.Doctor" class="form-select"></select>
+            <span class="text-danger" asp-validation-for="@Model.DoctorId"></span>
         </div>
 
         <div class="mb-3">
@@ -29,9 +27,21 @@
         </div>
 
         <div class="mb-3">
+            <label asp-for="@Model.HospitalizationTime" class="form-label">Hospitalization time: </label>
+            <input asp-for="@Model.HospitalizationTime" type="time" class="form-control" />
+            <span class="text-danger" asp-validation-for="@Model.HospitalizationTime"></span>
+        </div>
+
+        <div class="mb-3">
             <label asp-for="@Model.DischargeDate" class="form-label">Discharge date: </label>
             <input asp-for="@Model.DischargeDate" type="date" class="form-control" />
             <span class="text-danger" asp-validation-for="@Model.DischargeDate"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="@Model.DischargeTime" class="form-label">Discharge time: </label>
+            <input asp-for="@Model.DischargeTime" type="date" class="form-control" />
+            <span class="text-danger" asp-validation-for="@Model.DischargeTime"></span>
         </div>
 
         <div class="mb-3">

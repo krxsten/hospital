@@ -1,5 +1,6 @@
 using Hospital.Core.Contracts;
 using Hospital.Core.DTOs;
+using Hospital.Core.Services;
 using Hospital.Data;
 using Hospital.Data.Entities;
 using Hospital.Entities;
@@ -25,15 +26,17 @@ namespace Hospital.WebProject.Controllers
 		private readonly IDoctorService doctorService;
 		private readonly HospitalDbContext context;
 		private readonly UserManager<User> userManager;
+		private readonly IImageService imageService;
 
 		public DoctorsController(
 			IDoctorService doctorService,
 			HospitalDbContext context,
-			UserManager<User> userManager)
+			UserManager<User> userManager, IImageService imageService)
 		{
 			this.doctorService = doctorService;
 			this.context = context;
 			this.userManager = userManager;
+			this.imageService = imageService;
 		}
 
 		[AllowAnonymous]
@@ -69,28 +72,42 @@ namespace Hospital.WebProject.Controllers
 		[Authorize(Roles = "Admin")]
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Create(DoctorCreateViewModel model)
-		{
-			if (!ModelState.IsValid)
-			{
-				await LoadDropdownsAsync();
-				return View(model);
-			}
+        [HttpPost]
+        public async Task<IActionResult> Create(DoctorCreateViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                await LoadDropdownsAsync();
+                return View(model);
+            }
 
-			var dto = new DoctorCreateDto
-			{
-				UserID = model.UserID,
-				SpecializationID = model.SpecializationID,
-				ShiftID = model.ShiftID,
-				IsAccepted = model.IsAccepted,
-				File = model.File
-			};
+            string imageUrl = null;
+            string publicId = null;
 
-			await doctorService.CreateAsync(dto);
-			return RedirectToAction(nameof(Index));
-		}
+            if (model.File != null)
+            {
+                var uploadResult = await imageService.UploadImageAsync(model.File);
 
-		[Authorize(Roles = "Admin")]
+                imageUrl = uploadResult.Url;
+                publicId = uploadResult.PublicId;
+            }
+
+            var dto = new DoctorCreateDto
+            {
+                UserID = model.UserID,
+                SpecializationID = model.SpecializationID,
+                ShiftID = model.ShiftID,
+                IsAccepted = model.IsAccepted,
+                ImageURL = imageUrl,
+                CloudinaryID = publicId
+            };
+
+            await doctorService.CreateAsync(dto);
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        [Authorize(Roles = "Admin")]
 		[HttpGet]
 		public async Task<IActionResult> Edit(Guid id)
 		{
@@ -102,23 +119,22 @@ namespace Hospital.WebProject.Controllers
 				return NotFound();
 			}
 
-			var model = new DoctorCreateViewModel
-			{
-				ID = dto.ID,
-				UserID = dto.UserId,
-				SpecializationID = dto.SpecializationId,
-				ShiftID = dto.ShiftId,
-				IsAccepted = dto.IsAccepted,
-				//Image = dto.Image
-			};
+            var model = new DoctorEditViewModel
+            {
+                ID = dto.ID,
+                SpecializationId = dto.SpecializationId,
+                ShiftId = dto.ShiftId,
+                IsAccepted = dto.IsAccepted,
+                ExistingImage = dto.ImageURL
+            };
 
-			return View(model);
+            return View(model);
 		}
 
 		[Authorize(Roles = "Admin")]
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Edit(DoctorCreateViewModel model)
+		public async Task<IActionResult> Edit(DoctorEditViewModel model)
 		{
 			if (!ModelState.IsValid)
 			{
@@ -126,17 +142,18 @@ namespace Hospital.WebProject.Controllers
 				return View(model);
 			}
 
-			var dto = new DoctorIndexDto
-			{
-				ID = model.ID,
-				UserId = model.UserID,
-				SpecializationId = model.SpecializationID,
-				ShiftId = model.ShiftID,
-				IsAccepted = model.IsAccepted,
-				//Image = model.Image
-			};
+            var dto = new DoctorEditDTO
+            {
+                ID = model.ID,
+                SpecializationId = model.SpecializationId,
+                ShiftId = model.ShiftId,
+                IsAccepted = model.IsAccepted,
+                ImageURL = model.ExistingImage,
+                //CloudinaryID = model.File
+            };
 
-			await doctorService.UpdateAsync(dto);
+
+            await doctorService.UpdateAsync(dto);
 			return RedirectToAction(nameof(Index));
 		}
 
@@ -193,10 +210,28 @@ namespace Hospital.WebProject.Controllers
 
 			return View(shift);
 		}
+		[AllowAnonymous]
         public async Task<IActionResult> FilterBySpecialization(string specialization)
         {
             var dtos = await doctorService.FilterBySpecialization(specialization);
             var model = dtos.Select(x => new DoctorIndexViewModel
+            {
+                ID = x.ID,
+                SpecializationId = x.SpecializationId,
+                SpecializationName = x.SpecializationName,
+                ShiftId = x.ShiftId,
+                ShiftName = x.ShiftName,
+                IsAccepted = x.IsAccepted,
+                UserId = x.UserId,
+                ImageURL = x.ImageURL,
+            }).ToList();
+            return View(model);
+        }
+        [AllowAnonymous]
+        public async Task<IActionResult> SortByFirstName()
+        {
+           var result = await doctorService.SortByFirstName();
+            var model = result.Select(x => new DoctorIndexViewModel
             {
                 ID = x.ID,
                 SpecializationId = x.SpecializationId,

@@ -14,21 +14,19 @@
         </div>
 
         <div class="mb-3">
-            <label asp-for="@Model.SpecializationId" class="form-label">Specialization</label>
-            <select asp-for="@Model.SpecializationId" asp-items="ViewBag.Specializations" class="form-select">
-            </select>
+            <label asp-for="@Model.SpecializationId" class="form-label">Specialization: </label>
+            <select asp-for="@Model.SpecializationId" asp-items="ViewBag.Specializations" class="form-select"></select>
                 <span class="text-danger" asp-validation-for="@Model.SpecializationId"></span>
         </div>
 
         <div class="mb-3">
-            <label asp-for="@Model.ShiftId" class="form-label">Shift</label>
-            <select asp-for="@Model.ShiftId" asp-items="ViewBag.Shifts" class="form-select">
-            </select>
-                <span class="text-danger" asp-validation-for="@Model.ShiftId"></span>
+            <label asp-for="@Model.ShiftId" class="form-label">Shift: </label>
+            <select asp-for="@Model.ShiftId" asp-items="ViewBag.Shifts" class="form-select"></select>
+            <span class="text-danger" asp-validation-for="@Model.ShiftId"></span>
         </div>
 
         <div class="mb-3">
-            <label asp-for="@Model.File" class="form-label">Image URL</label>
+            <label asp-for="@Model.File" class="form-label">Upload Image: </label>
             <input asp-for="@Model.File" class="form-control" />
             <span class="text-danger" asp-validation-for="@Model.File"></span>
         </div>

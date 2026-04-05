@@ -8,14 +8,15 @@
     </div>
     <form asp-action="Edit" asp-controller="Diagnoses" method="post">
         <div class="mb-3">
-            <label asp-for="Name" class="form-label">Diagnose: </label>
-            <input asp-for="Name" class="form-control" />
+            <label asp-for="@Model.Name" class="form-label">Diagnose: </label>
+            <input asp-for="@Model.Name" class="form-control" />
+            <span asp-validation-for="@Model.Name" class="text-danger"></span>
         </div>
 
         <div class="mb-3">
-            <label asp-for="ImageURL" class="form-label">Upload image:</label>
-            <input asp-for="ImageURL" accept="image/jpeg image/gif image/png" class="form-control" />
-            <span asp-validation-for="ImageURL" class="text-danger"></span>
+            <label asp-for="@Model.ImageURL" class="form-label">Upload image:</label>
+            <input asp-for="@Model.ImageURL" accept="image/jpeg image/gif image/png" class="form-control" />
+            <span asp-validation-for="@Model.ImageURL" class="text-danger"></span>
         </div>
 
         <div class="mb-3">
@@ -23,4 +24,7 @@
             <a asp-action="Index" class="btn btn-secondary" style="display:inline">Back</a>
         </div>
     </form>
+}
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
 }

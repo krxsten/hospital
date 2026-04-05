@@ -14,127 +14,145 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Hospital.WebProject.Controllers
 {
-	[Authorize]
-	public class ShiftsController : Controller
-	{
-		private readonly IShiftService shiftService;
+    [Authorize]
+    public class ShiftsController : Controller
+    {
+        private readonly IShiftService shiftService;
 
-		public ShiftsController(IShiftService shiftService)
-		{
-			this.shiftService = shiftService;
-		}
+        public ShiftsController(IShiftService shiftService)
+        {
+            this.shiftService = shiftService;
+        }
 
-		[AllowAnonymous]
-		[HttpGet]
-		public async Task<IActionResult> Index()
-		{
-			var dtos = await shiftService.GetAllAsync();
+        [AllowAnonymous]
+        [HttpGet]
+        public async Task<IActionResult> Index()
+        {
+            var dtos = await shiftService.GetAllAsync();
 
-			var model = dtos.Select(x => new ShiftIndexViewModel
-			{
-				ID = x.ID,
-				Type = x.Type,
-				StartTime = x.StartTime,
-				EndTime = x.EndTime
-			}).ToList();
+            var model = dtos.Select(x => new ShiftIndexViewModel
+            {
+                ID = x.ID,
+                Type = x.Type,
+                StartTime = x.StartTime,
+                EndTime = x.EndTime
+            }).ToList();
 
-			return View(model);
-		}
+            return View(model);
+        }
 
-		[Authorize(Roles = "Admin")]
-		[HttpGet]
-		public IActionResult Create()
-		{
-			return View(new ShiftCreateViewModel());
-		}
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View(new ShiftCreateViewModel());
+        }
 
-		[Authorize(Roles = "Admin")]
-		[HttpPost]
-		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Create(ShiftCreateViewModel model)
-		{
-			if (!ModelState.IsValid)
-			{
-				return View(model);
-			}
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(ShiftCreateViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
 
-			try
-			{
-				var dto = new ShiftCreateDTO
-				{
-					Type = model.Type,
-					StartTime = model.StartTime,
-					EndTime = model.EndTime
-				};
+            try
+            {
+                var dto = new ShiftCreateDTO
+                {
+                    Type = model.Type,
+                    StartTime = model.StartTime,
+                    EndTime = model.EndTime
+                };
 
-				await shiftService.CreateAsync(dto);
-				return RedirectToAction(nameof(Index));
-			}
-			catch (Exception)
-			{
-				ModelState.AddModelError(string.Empty, "Something went wrong.");
-				return View(model);
-			}
-		}
+                await shiftService.CreateAsync(dto);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception)
+            {
+                ModelState.AddModelError(string.Empty, "Something went wrong.");
+                return View(model);
+            }
+        }
 
-		[Authorize(Roles = "Admin")]
-		[HttpGet]
-		public async Task<IActionResult> Edit(Guid id)
-		{
-			var dto = await shiftService.GetByIdAsync(id);
-			if (dto == null)
-			{
-				return NotFound();
-			}
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public async Task<IActionResult> Edit(Guid id)
+        {
+            var dto = await shiftService.GetByIdAsync(id);
+            if (dto == null)
+            {
+                return NotFound();
+            }
 
-			var model = new ShiftIndexViewModel
-			{
-				ID = dto.ID,
-				Type = dto.Type,
-				StartTime = dto.StartTime,
-				EndTime = dto.EndTime
-			};
+            var model = new ShiftIndexViewModel
+            {
+                ID = dto.ID,
+                Type = dto.Type,
+                StartTime = dto.StartTime,
+                EndTime = dto.EndTime
+            };
 
-			return View(model);
-		}
+            return View(model);
+        }
 
-		[Authorize(Roles = "Admin")]
-		[HttpPost]
-		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Edit(ShiftIndexViewModel model)
-		{
-			if (!ModelState.IsValid)
-			{
-				return View(model);
-			}
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(ShiftIndexViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
 
-			try
-			{
-				var dto = new ShiftIndexDTO
-				{
-					ID = model.ID,
-					Type = model.Type,
-					StartTime = model.StartTime,
-					EndTime = model.EndTime
-				};
+            try
+            {
+                var dto = new ShiftIndexDTO
+                {
+                    ID = model.ID,
+                    Type = model.Type,
+                    StartTime = model.StartTime,
+                    EndTime = model.EndTime
+                };
 
-				await shiftService.UpdateAsync(dto);
-				return RedirectToAction(nameof(Index));
-			}
-			catch (Exception)
-			{
-				ModelState.AddModelError(string.Empty, "Something went wrong.");
-				return View(model);
-			}
-		}
+                await shiftService.UpdateAsync(dto);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception)
+            {
+                ModelState.AddModelError(string.Empty, "Something went wrong.");
+                return View(model);
+            }
+        }
 
-		[Authorize(Roles = "Admin")]
-		[HttpPost]
-		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Delete(Guid id)
-		{
-			await shiftService.DeleteAsync(id);
-			return RedirectToAction(nameof(Index));
-		}
-	}
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            await shiftService.DeleteAsync(id);
+            return RedirectToAction(nameof(Index));
+        }
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetShiftByTime(TimeOnly time)
+        {
+            var result = await shiftService.GetShiftByTime(time);
+            if (result == null)
+            {
+                return NotFound();
+            }
+            var model = new ShiftIndexViewModel
+            {
+                ID = result.ID,
+                Type = result.Type,
+                StartTime = result.StartTime,
+                EndTime = result.EndTime
+            };
+            return View(model);
+        }
+    }
 }

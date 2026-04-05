@@ -1,43 +1,131 @@
-﻿<link rel="stylesheet" href="/css/styles.css">
+﻿<style>
+    .shift-card {
+        border: 1px solid #e2e8f0;
+        border-radius: 16px;
+        background: #fff;
+        transition: all 0.3s ease;
+        border-left: 5px solid #0d6efd;
+    }
+
+        .shift-card:hover {
+            transform: translateX(10px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05) !important;
+        }
+
+    .time-block {
+        background: #f8fafc;
+        border-radius: 10px;
+        padding: 10px 20px;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        border: 1px solid #edf2f7;
+    }
+
+    .shift-type-label {
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        color: #475569;
+        font-size: 14px;
+    }
+
+    .btn-shift-action {
+        width: 100px !important;
+        height: 38px !important;
+        display: inline-flex !important;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700 !important;
+        border-radius: 8px !important;
+        font-size: 13px !important;
+        border: none !important;
+    }
+
+    .btn-warning {
+        background-color: #ffc107;
+        color: #212529;
+    }
+
+    .btn-danger {
+        background-color: #ef4444;
+        color: white;
+    }
+
+    .btn-secondary {
+        background-color: #64748b;
+    }
+</style>
+
 @using Hospital.WebProject.ViewModels.Shift
 @model List<ShiftIndexViewModel>
-<div class="mb-3">
-    <h2 style="text-align:center">———— Shifts ————</h2>
-</div>
-<div class="mb-3 d-flex justify-content-end" style="font-family: 'Cambria'; font-size: 24px">
-    @if (User.IsInRole("Admin"))
-    {
-        <a asp-action="Create" class="btn btn-success" style="font-family: 'Cambria'; font-size: 20px">+ Create</a>
-    }
-    <a asp-action="Index" asp-controller="Home" class="btn btn-secondary ms-3" style="font-family: 'Cambria'; font-size: 20px">← Back</a>
-</div>
-<table class="table">
-    <thead>
-        <tr>
-            <th scope="col">Type</th>
-            <th scope="col">Start time</th>
-            <th scope="col">End time</th>
-            <th scope="col"></th>
-        </tr>
-    </thead>
-    <tbody class="table-group-divider">
+
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h2 class="fw-bold">Staff Working Shifts</h2>
+        <div class="mx-auto bg-primary rounded-pill mt-2" style="height: 4px; width: 60px;"></div>
+    </div>
+
+    <div class="d-flex justify-content-end align-items-center mb-4 gap-2">
+        @if (User.IsInRole("Admin"))
+        {
+            <a asp-action="Create" class="btn btn-success rounded-pill px-4 shadow-sm">+ Create Shift</a>
+        }
+
+        <a asp-action="GetShiftByTime" class="btn btn-light border rounded-pill px-4 shadow-sm">
+            <i class="bi bi-clock"></i> Search by Time
+        </a>
+
+        <a asp-action="Index" asp-controller="Home" class="btn btn-secondary rounded-pill px-4 shadow-sm">
+            <i class="bi bi-arrow-left"></i> Back
+        </a>
+    </div>
+
+    <div class="row g-3">
         @foreach (var item in Model)
         {
-            <tr>
-                <td>@item.Type</td>
-                <td>@item.StartTime</td>
-                <td>@item.EndTime</td>
-                <td>
-                    @if (User.IsInRole("Admin"))
-                    {
-                        <a asp-action="Edit" asp-route-id="@item.ID" class="btn btn-warning me-2">Edit</a>
-                        <form asp-action="Delete" asp-route-id="@item.ID" method="post" class="d-inline">
-                            <button class="btn btn-danger">Delete</button>
-                        </form>
-                    }
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+            <div class="col-12">
+                <div class="card shift-card shadow-sm border-0">
+                    <div class="card-body d-flex flex-wrap align-items-center justify-content-between p-4">
 
+                        <div class="d-flex align-items-center gap-4">
+                            <div class="text-center">
+                                <div class="shift-type-label">Shift Type</div>
+                                <h4 class="fw-bold mb-0 text-primary">@item.Type</h4>
+                            </div>
+
+                            <div class="vr mx-2 d-none d-md-block" style="height: 40px; opacity: 0.1;"></div>
+
+                            <div class="time-block">
+                                <div class="text-center">
+                                    <div class="info-label text-muted small uppercase fw-bold">Start</div>
+                                    <div class="fw-bold text-dark">@item.StartTime</div>
+                                </div>
+                                <i class="bi bi-arrow-right text-primary"></i>
+                                <div class="text-center">
+                                    <div class="info-label text-muted small uppercase fw-bold">End</div>
+                                    <div class="fw-bold text-dark">@item.EndTime</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <div class="d-flex gap-2 mt-3 mt-lg-0">
+                                <a asp-action="Edit" asp-route-id="@item.ID"
+                                   class="btn btn-warning btn-shift-action">Edit</a>
+
+                                <form asp-action="Delete" asp-route-id="@item.ID" method="post" class="m-0">
+                                    <button type="submit" class="btn btn-danger btn-shift-action"
+                                            onclick="return confirm('Delete this shift definition?')">
+                                        Delete
+                                    </button>
+                                </form>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

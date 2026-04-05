@@ -100,5 +100,39 @@ namespace Hospital.Core.Services
 			context.Nurses.Remove(nurse);
 			await context.SaveChangesAsync();
 		}
-	}
+        public Task<List<NurseIndexDTO>> FilterBySpecialization(string specialization)
+        {
+            return context.Nurses.Where(d => d.Specialization.SpecializationName == specialization)
+               .Select(x => new NurseIndexDTO
+               {
+                   ID = x.ID,
+                   UserID = x.UserId,
+                   UserName = x.User.FirstName + " " + x.User.LastName,
+                   SpecializationId = x.SpecializationId,
+                   SpecializationName = x.Specialization.SpecializationName,
+                   ShiftId = x.ShiftId,
+                   ShiftName = x.Shift.Type,
+                   IsAccepted = x.IsAccepted,
+                   Image = x.ImageURL
+               })
+                .ToListAsync();
+        }
+        public Task<List<NurseIndexDTO>> SortByFirstName()
+        {
+            return context.Nurses.OrderBy(x => x.User.FirstName)
+                .Select(x => new NurseIndexDTO
+                {
+                    ID = x.ID,
+                    UserID = x.UserId,
+                    UserName = x.User.FirstName + " " + x.User.LastName,
+                    SpecializationId = x.SpecializationId,
+                    SpecializationName = x.Specialization.SpecializationName,
+                    ShiftId = x.ShiftId,
+                    ShiftName = x.Shift.Type,
+                    IsAccepted = x.IsAccepted,
+                    Image = x.ImageURL
+                })
+                .ToListAsync();
+        }
+    }
 }

@@ -18,5 +18,7 @@ namespace Hospital.Core.Contracts
         Task UpdateAsync(NurseIndexDTO model);
 
         Task DeleteAsync(Guid id);
+        Task<List<NurseIndexDTO>> FilterBySpecialization(string specialization);
+        Task<List<NurseIndexDTO>> SortByFirstName();
     }
 }

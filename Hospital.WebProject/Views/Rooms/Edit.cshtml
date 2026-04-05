@@ -9,8 +9,9 @@
     </div>
     <form asp-controller="Rooms" asp-action="Edit" method="post">
         <div class="mb-3">
-            <label asp-for="RoomNumber" class="form-label">Room number: </label>
-            <input asp-for="RoomNumber" class="form-control" />
+            <label asp-for="@Model.RoomNumber" class="form-label">Room number: </label>
+            <input asp-for="@Model.RoomNumber" class="form-control" />
+            <span class="text-danger" asp-validation-for="@Model.RoomNumber"></span>
         </div>
         <div class="form-check">
             <input class="form-check-input" type="radio" asp-for="IsTaken" value="true" />
@@ -26,4 +27,7 @@
             <a asp-action="Index" class="btn btn-secondary" style="display:inline">Back</a>
         </div>
     </form>
+}
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
 }

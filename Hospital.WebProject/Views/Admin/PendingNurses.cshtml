@@ -1,43 +1,122 @@
-﻿@model List<Hospital.Entities.Nurse>
+﻿<style>
+    .approval-panel {
+        background: #ffffff;
+        border-radius: 20px;
+        border: 1px solid #e2e8f0;
+        overflow: hidden;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
 
-@{
-    ViewData["Title"] = "Pending Nurses";
-}
+    .panel-header {
+        background: #f8fafc;
+        padding: 15px 25px;
+        border-bottom: 1px solid #e2e8f0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
 
-<h2 class="text-center">Pending Nurses</h2>
+    .panel-title {
+        font-weight: 700;
+        color: #1e293b;
+        margin: 0;
+        font-size: 1.1rem;
+    }
 
-<table class="table table-bordered table-striped">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Specialization</th>
-            <th>Shift</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var nurse in Model)
-        {
-            <tr>
-                <td>@nurse.User.FirstName @nurse.User.LastName</td>
-                <td>@nurse.User.Email</td>
-                <td>@nurse.SpecializationId</td>
-                <td>@nurse.ShiftId</td>
-                <td>
-                    <!-- ACCEPT -->
-                    <form asp-action="AcceptNurse" method="post" style="display:inline;">
-                        <input type="hidden" name="id" value="@nurse.ID" />
-                        <button type="submit" class="btn btn-success btn-sm">Accept</button>
-                    </form>
+    .pending-item {
+        padding: 15px 25px;
+        border-bottom: 1px solid #f1f5f9;
+        transition: background 0.2s;
+    }
 
-                    <!-- REJECT -->
-                    <form asp-action="RejectNurse" method="post" style="display:inline;">
-                        <input type="hidden" name="id" value="@nurse.ID" />
-                        <button type="submit" class="btn btn-danger btn-sm">Reject</button>
-                    </form>
-                </td>
-            </tr>
+        .pending-item:last-child {
+            border-bottom: none;
         }
-    </tbody>
-</table>
+
+        .pending-item:hover {
+            background: #fdfdfd;
+        }
+
+    .staff-meta {
+        font-size: 0.85rem;
+        color: #64748b;
+    }
+
+    .btn-approve {
+        width: 85px !important;
+        height: 34px !important;
+        font-size: 12px !important;
+        font-weight: 700 !important;
+        border-radius: 8px !important;
+        display: inline-flex !important;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .empty-state {
+        padding: 40px;
+        text-align: center;
+        color: #94a3b8;
+    }
+</style>
+
+<div class="page-header-custom text-center">
+    <h2 class="page-title-white">Pending Approvals</h2>
+    <div class="title-divider"></div>
+</div>
+
+            <div class="col-lg-6">
+                <div class="approval-panel">
+                    <div class="panel-header text-info">
+                        <h5 class="panel-title text-info"><i class="bi bi-person-heart me-2"></i>Nurses</h5>
+                        <span class="badge bg-info text-white rounded-pill">@ViewBag.Nurses.Count</span>
+                    </div>
+
+                    @if (ViewBag.Nurses.Count > 0)
+                    {
+                        @foreach (var n in ViewBag.Nurses)
+                        {
+                            <div class="pending-item d-flex align-items-center justify-content-between">
+                                <div>
+                                    <div class="fw-bold text-dark">@n.User.FirstName @n.User.LastName</div>
+                                    <div class="staff-meta">@n.User.Email</div>
+                                </div>
+                                <div class="d-flex gap-2">
+                                    <form asp-action="AcceptNurse" method="post" class="m-0">
+                                        <input type="hidden" name="id" value="@n.UserId" />
+                                        <button class="btn btn-success btn-approve">Accept</button>
+                                    </form>
+                                    <form asp-action="RejectNurse" method="post" class="m-0">
+                                        <input type="hidden" name="id" value="@n.UserId" />
+                                        <button class="btn btn-outline-danger btn-approve">Reject</button>
+                                    </form>
+                                </div>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="empty-state">
+                            <i class="bi bi-check2-circle fs-1 text-success"></i>
+                            <p class="mt-2">No pending nurses</p>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-5">
+            <a asp-action="Index" asp-controller="Home" class="btn btn-outline-secondary rounded-pill px-5">
+                <i class="bi bi-house-door me-2"></i>Return to Dashboard
+            </a>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-danger rounded-4 p-5 text-center shadow">
+            <i class="bi bi-exclamation-octagon fs-1"></i>
+            <h2 class="fw-bold mt-3">Access Denied</h2>
+            <p>Only administrators can access the pending user queue.</p>
+        </div>
+    }
+</div>

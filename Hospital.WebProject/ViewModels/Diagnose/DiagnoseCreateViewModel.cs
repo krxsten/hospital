@@ -6,7 +6,6 @@ namespace Hospital.WebProject.ViewModels.Diagnose
     {
         [Required(ErrorMessage = "This field is required!")]
         public string Name { get; set; } = null!;
-        [Required(ErrorMessage = "This field is required!")]
         public IFormFile? Image { get; set; }
 
     }

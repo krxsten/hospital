@@ -9,7 +9,7 @@ namespace Hospital.Core.Contracts
 {
     public interface IImageService
     {
-        Task<(string Url, string PublicId)> UploadImageAsync(IFormFile imageFile, string name, string folder);
+        Task<(string Url, string PublicId)> UploadImageAsync(IFormFile imageFile);
 
         Task DestroyImageAsync(string publicId);
     }

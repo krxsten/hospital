@@ -1,9 +1,11 @@
 ﻿using Hospital.Core.Contracts;
 using Hospital.Core.DTOs;
+using Hospital.Core.Services;
 using Hospital.Data;
 using Hospital.Data.Entities;
 using Hospital.Entities;
 using Hospital.WebProject.ViewModels.Diagnose;
+using Hospital.WebProject.ViewModels.Doctor;
 using Hospital.WebProject.ViewModels.Medication;
 using Hospital.WebProject.ViewModels.Nurse;
 using Microsoft.AspNetCore.Authorization;
@@ -23,15 +25,17 @@ namespace Hospital.WebProject.Controllers
 		private readonly INurseService nurseService;
 		private readonly HospitalDbContext context;
 		private readonly UserManager<User> userManager;
+        private readonly IImageService imageService;
 
-		public NursesController(
+        public NursesController(
 			INurseService nurseService,
 			HospitalDbContext context,
-			UserManager<User> userManager)
+			UserManager<User> userManager, IImageService imageService)
 		{
 			this.nurseService = nurseService;
 			this.context = context;
 			this.userManager = userManager;
+			this.imageService = imageService;
 		}
 
 		[AllowAnonymous]
@@ -146,8 +150,45 @@ namespace Hospital.WebProject.Controllers
 			await nurseService.DeleteAsync(id);
 			return RedirectToAction(nameof(Index));
 		}
+        [AllowAnonymous]
+        public async Task<IActionResult> FilterBySpecialization(string specialization)
+        {
+            var dtos = await nurseService.FilterBySpecialization(specialization);
+            var model = dtos.Select(x => new NurseIndexViewModel
+            {
+                ID = x.ID,
+                SpecializationId = x.SpecializationId,
+                SpecializationName = x.SpecializationName,
+                ShiftId = x.ShiftId,
+                ShiftName = x.ShiftName,
+                UserID = x.UserID,
+                UserName = x.UserName,
+                IsAccepted = x.IsAccepted,
+                ImageURL = x.Image
+            }).ToList();
 
-		private async Task LoadDropdownsAsync()
+            return View(model);
+        }
+        [AllowAnonymous]
+        public async Task<IActionResult> SortByFirstName()
+        {
+            var result = await nurseService.SortByFirstName();
+            var model = result.Select(x => new NurseIndexViewModel
+            {
+                ID = x.ID,
+                SpecializationId = x.SpecializationId,
+                SpecializationName = x.SpecializationName,
+                ShiftId = x.ShiftId,
+                ShiftName = x.ShiftName,
+                UserID = x.UserID,
+                UserName = x.UserName,
+                IsAccepted = x.IsAccepted,
+                ImageURL = x.Image
+            }).ToList();
+
+            return View(model);
+        }
+        private async Task LoadDropdownsAsync()
 		{
 			ViewBag.Shift = new SelectList(
 				await context.Shifts.ToListAsync(),

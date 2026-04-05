@@ -12,10 +12,12 @@ namespace Hospital.Core.Services
     public class DiagnoseService : IDiagnoseService
     {
         private readonly HospitalDbContext context;
+        private readonly IImageService imageService;
 
-        public DiagnoseService(HospitalDbContext context)
+        public DiagnoseService(HospitalDbContext context, IImageService imageService)
         {
             this.context = context;
+            this.imageService = imageService;
         }
 
         public async Task<List<DiagnoseIndexDTO>> GetAllAsync()
@@ -24,7 +26,7 @@ namespace Hospital.Core.Services
             {
                 ID = x.ID,
                 Name = x.Name,
-                Image = x.ImageURL
+                ImageURL = x.ImageURL
             }).ToListAsync();
         }
 
@@ -34,18 +36,19 @@ namespace Hospital.Core.Services
             {
                 ID = x.ID,
                 Name = x.Name,
-                Image = x.ImageURL
+                ImageURL = x.ImageURL
             }).FirstOrDefaultAsync();
             return diagnose;
         }
 
         public async Task CreateAsync(DiagnoseCreateDTO model)
         {
+            var uploadResult = await imageService.UploadImageAsync(model.ImageFile);
             var diagnose = new Diagnose
             {
                 ID = Guid.NewGuid(),
                 Name = model.Name,
-                ImageURL = model.Image
+                ImageURL = uploadResult.Url
             };
             await context.Diagnoses.AddAsync(diagnose);
             await context.SaveChangesAsync();
@@ -58,11 +61,12 @@ namespace Hospital.Core.Services
             {
                 return;
             }
+            if (model.ImageURL != null)
+            {
+                var uploadResult = await imageService.UploadImageAsync(model.NewImageFile);
+                diagnose.ImageURL = uploadResult.Url;
+            }
             diagnose.Name = model.Name;
-            diagnose.ImageURL = model.Image;
-            //var uploadResult = await imageService.UploadImageAsync(model.ImageFile, model.ImageFile.FileName, "images");
-            //imageURL = uploadResult.Url;
-            //publicId = uploadResult.PublicId;
             await context.SaveChangesAsync();
         }
 
@@ -76,6 +80,15 @@ namespace Hospital.Core.Services
             }
             context.Diagnoses.Remove(diagnose);
             await context.SaveChangesAsync();
+        }
+        public async Task<List<DiagnoseIndexDTO>> GetDiagnose(string diagnose)
+        {
+            return await context.Diagnoses.Where(x => x.Name==diagnose).Select(x => new DiagnoseIndexDTO
+            {
+                ID = x.ID,
+                Name = x.Name,
+                ImageURL = x.ImageURL
+            }).ToListAsync();
         }
     }
 }

@@ -2,6 +2,7 @@
 using Hospital.Core.DTOs;
 using Hospital.Data;
 using Hospital.Data.Entities;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -90,5 +91,18 @@ namespace Hospital.Core.Services
 			context.Shifts.Remove(shift);
 			await context.SaveChangesAsync();
 		}
-	}
+        public async Task<ShiftIndexDTO?> GetShiftByTime(TimeOnly time)
+        {
+            return await context.Shifts
+                .Where(s => (s.StartTime <= s.EndTime && time >= s.StartTime && time <= s.EndTime) || (s.StartTime > s.EndTime && (time >= s.StartTime || time <= s.EndTime)))
+                .Select(s => new ShiftIndexDTO
+                {
+                    ID = s.ID,
+                    Type = s.Type,
+                    StartTime = s.StartTime,
+                    EndTime = s.EndTime
+                })
+                .FirstOrDefaultAsync();
+        }
+    }
 }

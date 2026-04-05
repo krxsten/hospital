@@ -2,32 +2,39 @@
 @using Hospital.WebProject.ViewModels.Checkup
 @model CheckupIndexViewModel
 
-@if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse") || User.IsInRole("Patient"))
+@if (User.IsInRole("Patient"))
 {
     <div class="mb-3">
         <h2 style="text-align:center">———— Check ups ————</h2>
     </div>
     <form asp-action="Edit" method="post">
         <div class="mb-3">
-            <label asp-for="PatientID" class="form-label">Patient: </label>
-            <select asp-for="PatientID" asp-items="ViewBag.Patients" class="form-select" />
+            <label asp-for="@Model.DoctorID" class="form-label">Doctor: </label>
+            <select asp-for="@Model.DoctorID" id="DoctorID" asp-items="@ViewBag.Doctors" class="form-select"></select>
+            <span class="text-danger" asp-validation-for="@Model.DoctorID"></span>
         </div>
 
         <div class="mb-3">
-            <label asp-for="DoctorID" class="form-label">Doctor: </label>
-            <select asp-for="DoctorID" asp-items="ViewBag.Doctor" class="form-select" />
+            <label asp-for="@Model.Date" class="form-label">Date: </label>
+            <input asp-for="@Model.Date" id="Date" type="date" class="form-control" min="@DateTime.Now.ToString("yyyy-MM-dd")" />
+            <span asp-validation-for="@Model.Date" class="text-danger"></span>
         </div>
-
         <div class="mb-3">
-            <label asp-for="Date" class="form-label">Checkup Date & Time</label>
-            <input asp-for="Date" type="datetime-local" class="form-control" id="checkupDate" />
+            <label asp-for="@Model.Time" class="form-label">Available Time: </label>
+
+            <select asp-for="@Model.Time" id="Time" class="form-select">
+                <option>Select time</option>
+            </select>
+            <span asp-validation-for="@Model.Time" class="text-danger"></span>
         </div>
 
         <div class="mb-3">
             <button type="submit" class="btn btn-primary">Update</button>
-            <a asp-action="Index" class="btn btn-secondary" style="display:inline">Back</a>
+            <a asp-action="Index" class="btn btn-secondary">Back</a>
         </div>
     </form>
 }
-
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
 

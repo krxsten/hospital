@@ -1,8 +1,8 @@
 ﻿<link rel="stylesheet" href="/css/styles.css">
-@using Hospital.WebProject.ViewModels.Doctor
-@model List<DoctorIndexViewModel>
+@using Hospital.WebProject.ViewModels.Nurse
+@model List<NurseIndexViewModel>
 
-<h2>Search Doctors by Specialization</h2>
+<h2>Search Nurses by Specialization</h2>
 
 <form method="get" asp-action="FilterBySpecialization">
     <input type="text" name="specialization" class="form-control" placeholder="Enter specialization" required />
@@ -15,15 +15,15 @@
 @if (Model != null && Model.Any())
 {
     <div class="row">
-        @foreach (var d in Model)
+        @foreach (var n in Model)
         {
             <div class="col-md-4 mb-4">
                 <div class="card shadow-sm">
                     <div class="card-body">
-                        <h5>@d.UserName</h5>
+                        <h5>@n.UserName</h5>
                         <p>
-                            <strong>Specialization:</strong> @d.SpecializationName <br />
-                            <strong>Shift:</strong> @d.ShiftName
+                            <strong>Specialization:</strong> @n.SpecializationName <br />
+                            <strong>Shift:</strong> @n.ShiftName
                         </p>
                     </div>
                 </div>
@@ -33,6 +33,6 @@
 }
 else if (Model == null)
 {
-    <p>No doctors where found.</p>
+    <p>No nurses where found.</p>
 }
 

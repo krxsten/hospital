@@ -26,7 +26,7 @@ namespace Hospital.WebProject.Controllers
             this.context = context;
         }
 
-        [Authorize(Roles = "Admin,Doctor,Nurse,Patient")]
+        [Authorize(Roles = "Admin,Doctor,Nurse")]
         [HttpGet]
         public async Task<IActionResult> Index()
         {
@@ -220,6 +220,24 @@ namespace Hospital.WebProject.Controllers
             slots = slots.Where(x => !takenSlots.Contains(x)).ToList();
             return Json(slots);
         }
+        [Authorize(Roles = "Patient")]
+        [HttpGet]
+        public async Task<IActionResult> GetCheckupsAfterDate(DateOnly date)
+        {
+            var result = await checkupService.GetCheckupsAfterDate(date);
+            var model = result.Select(x => new CheckupIndexViewModel
+            {
+                ID = x.ID,
+                Date = x.Date,
+                DoctorID = x.DoctorID,
+                DoctorName = x.DoctorName,
+                Time = x.Time,
+                PatientID = x.PatientID,
+                PatientName = x.PatientName
+            }).ToList();
+
+            return View(model);
+        }
         private async Task LoadDropdownsAsync()
         {
             var doctors = await context.Doctors
@@ -246,6 +264,7 @@ namespace Hospital.WebProject.Controllers
 
             ViewBag.Patients = new SelectList(patients, "ID", "FullName");
         }
+
     }
 }
 

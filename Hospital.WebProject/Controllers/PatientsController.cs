@@ -6,6 +6,7 @@ using Hospital.Entities;
 using Hospital.WebProject.ViewModels.Doctor;
 using Hospital.WebProject.ViewModels.Patient;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -211,12 +212,36 @@ namespace Hospital.WebProject.Controllers
 
             ViewBag.Patients = new SelectList(patients, "ID", "FullName");
 		}
+		[Authorize(Roles ="Admin,Doctor,Nurse")]
+		public async Task<IActionResult> PatientsWithSuchDoctor(string doctorName)
+		{
+			var result = await patientService.PatientsWithSuchDoctor(doctorName);
+            var model = result.Select(x => new PatientIndexViewModel
+            {
+                ID = x.ID,
+                DoctorId = x.DoctorId,
+                DoctorName = x.DoctorName,
+                HospitalizationDate = x.HospitalizationDate,
+                HospitalizationTime = x.HospitalizationTime,
+                DischargeDate = x.DischargeDate,
+                DischargeTime = x.DischargeTime,
+                UserID = x.UserID,
+                UserName = x.UserName,
+                RoomId = x.RoomId,
+                RoomNumber = x.RoomNumber,
+                BirthCity = x.BirthCity,
+                DateOfBirth = x.DateOfBirth,
+                PhoneNumber = x.PhoneNumber,
+                UCN = x.UCN
+            }).ToList();
 
-		[Authorize(Roles = "Patient")]
+            return View(model);
+        }
+
+            [Authorize(Roles = "Patient")]
 		[HttpGet]
 		public async Task<IActionResult> SelectDoctorAndRoom()
 		{
-			// Check if the patient already has a record
 			var userId = Guid.Parse(userManager.GetUserId(User)!);
 			var existingPatient = await context.Patients
 				.AnyAsync(p => p.UserId == userId);

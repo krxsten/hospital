@@ -135,5 +135,17 @@ namespace Hospital.WebProject.Controllers
 			await roomService.DeleteAsync(id);
 			return RedirectToAction(nameof(Index));
 		}
-	}
+        [Authorize(Roles = "Admin,Patient,Doctor,Nurse")]
+        public async Task<IActionResult> GetRoomsAfterNum(int roomNum)
+		{
+			var result = await roomService.GetRoomsAfterNum(roomNum);
+            var model = result.Select(x => new RoomIndexViewModel
+            {
+                ID = x.ID,
+                RoomNumber = x.RoomNumber,
+                IsTaken = x.IsTaken
+            }).ToList();
+			return View(model);
+        }
+    }
 }

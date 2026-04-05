@@ -16,10 +16,12 @@ namespace Hospital.WebProject.Controllers
 	public class SpecializationsController : Controller
 	{
 		private readonly ISpecializationService specializationService;
+        private readonly IImageService imageService;
 
-		public SpecializationsController(ISpecializationService specializationService)
+        public SpecializationsController(ISpecializationService specializationService, IImageService imageService)
 		{
 			this.specializationService = specializationService;
+			this.imageService = imageService;
 		}
 
 		[AllowAnonymous]
@@ -138,5 +140,18 @@ namespace Hospital.WebProject.Controllers
 
 			return RedirectToAction(nameof(Index));
 		}
-	}
+		[AllowAnonymous]
+        public async Task<IActionResult> GetSpecialization(string specialization)
+        {
+           var result = await specializationService.GetSpecialization(specialization);
+            var model = result.Select(x => new SpecializationIndexViewModel
+            {
+                ID = x.ID,
+                SpecializationName = x.SpecializationName,
+                ImageURL = x.Image
+            }).ToList();
+
+            return View(model);
+        }
+    }
 }

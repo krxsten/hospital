@@ -1,44 +1,63 @@
-﻿@using Hospital.WebProject.ViewModels.Medication
+﻿<style>
+    .med-card {
+        border: 1px solid #e2e8f0;
+        border-radius: 16px;
+        transition: transform 0.2s, box-shadow 0.2s;
+        background: #fff;
+    }
+    .med-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.08) !important;
+    }
+    .btn-action-equal {
+        width: 100px !important;
+        height: 38px !important;
+        display: inline-flex !important;
+        align-items: center;
+        justify-content: center;
+        font-weight: 600;
+        border-radius: 8px;
+    }
+</style>
+
+@using Hospital.WebProject.ViewModels.Medication
 @model List<MedicationIndexViewModel>
 
-<link rel="stylesheet" href="/css/styles.css">
-
-<div class="mb-3">
-    <h2 style="text-align:center">———— Medications ————</h2>
-</div>
-
-<div class="mb-3 d-flex justify-content-end" style="font-family: 'Cambria'; font-size: 24px">
-    @if (User.IsInRole("Admin"))
-    {
-        <a asp-action="Create" class="btn btn-success" style="font-family: 'Cambria'; font-size: 20px">+ Create</a>
-    }
-    <a asp-action="Index" asp-controller="Home" class="btn btn-secondary ms-3" style="font-family: 'Cambria'; font-size: 20px">← Back</a>
-</div>
-
-<p>
-    <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target=".medicationCollapse" aria-expanded="false">
-        All medications
-    </button>
-</p>
-
-@foreach (var item in Model)
-{
-    <div style="min-height:120px;">
-        <div class="collapse collapse-horizontal medicationCollapse">
-            <div class="card card-body text-black" style="width:300px;">
-                <b>@item.Name</b> <br />
-                Description: @item.Description <br />
-                Side effects: @item.SideEffects <br />
-                Diagnose: @(item.DiagnoseName ?? "No diagnose assigned") <br /><br />
-
-                @if (User.IsInRole("Admin"))
-                {
-                    <a asp-action="Edit" asp-route-id="@item.ID" class="btn btn-warning mb-2">Edit</a>
-                    <form asp-action="Delete" asp-route-id="@item.ID" method="post" style="display:inline">
-                        <button class="btn btn-danger">Delete</button>
-                    </form>
-                }
-            </div>
-        </div>
+<div class="container pb-5">
+    <div class="text-center mb-5">
+        <h2 class="fw-bold">Pharmaceutical Database</h2>
+        <div class="mx-auto bg-white rounded-pill mt-2" style="height: 4px; width: 50px;"></div>
     </div>
-}
+
+    <div class="d-flex justify-content-end align-items-center mb-4 gap-2">
+        @if (User.IsInRole("Admin")) {
+            <a asp-action="Create" class="btn btn-success rounded-pill px-4 shadow-sm">+ Create</a>
+        }
+        <a asp-action="GetMedicationsForSideEffect" class="btn btn-light border rounded-pill px-4">Search Side Effects</a>
+        <a asp-action="Index" asp-controller="Home" class="btn btn-secondary rounded-pill px-4 shadow-sm">
+            <i class="bi bi-arrow-left"></i> Back
+        </a>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        @foreach (var item in Model) {
+            <div class="col">
+                <div class="card med-card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="text-primary fw-bold mb-3">@item.Name</h5>
+                        <p class="small text-muted mb-2"><strong>Description:</strong> @item.Description</p>
+                        <p class="small text-danger mb-2"><strong>Side Effects:</strong> @item.SideEffects</p>
+                    </div>
+                    @if (User.IsInRole("Admin")) {
+                        <div class="card-footer bg-white border-0 pb-3 d-flex justify-content-center gap-2">
+                            <a asp-action="Edit" asp-route-id="@item.ID" class="btn btn-warning btn-action-equal">Edit</a>
+                            <form asp-action="Delete" asp-route-id="@item.ID" method="post" class="m-0">
+                                <button class="btn btn-danger btn-action-equal">Delete</button>
+                            </form>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+</div>

@@ -9,13 +9,15 @@
     </div>
     <form asp-action="Edit" method="post">
         <div class="mb-3">
-            <label asp-for="SpecializationName" class="form-label">Name of specialization: </label>
-            <input asp-for="SpecializationName" class="form-control" />
+            <label asp-for="@Model.SpecializationName" class="form-label">Name of specialization: </label>
+            <input asp-for="@Model.SpecializationName" class="form-control" />
+            <span class="text-danger" asp-validation-for="@Model.SpecializationName"></span>
         </div>
 
         <div class="mb-3">
-            <label asp-for="ImageURL" class="form-label">Image: </label>
-            <input asp-for="ImageURL" class="form-control" />
+            <label asp-for="@Model.ImageURL" class="form-label">Upload Image: </label>
+            <input asp-for="@Model.ImageURL" class="form-control" />
+            <span class="text-danger" asp-validation-for="@Model.ImageURL"></span>
         </div>
 
         <div class="mb-3">
@@ -23,4 +25,7 @@
             <a asp-action="Index" class="btn btn-secondary" style="display:inline">Back</a>
         </div>
     </form>
+}
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
 }

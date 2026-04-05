@@ -24,22 +24,19 @@ namespace Hospital.Core.Services
         }
         async Task IDoctorService.CreateAsync(DoctorCreateDto dto)
         {
-            var uploadResult = await imageService.UploadImageAsync(dto.File, dto.File.FileName, "images");
-
             var doctor = new Doctor
             {
                 UserId = dto.UserID,
                 SpecializationId = dto.SpecializationID,
                 ShiftId = dto.ShiftID,
                 IsAccepted = dto.IsAccepted,
-                ImageURL = uploadResult.Url,
-                CloudinaryID = uploadResult.PublicId
+                ImageURL = dto.ImageURL,
+                CloudinaryID = dto.CloudinaryID
             };
 
             await context.Doctors.AddAsync(doctor);
             await context.SaveChangesAsync();
         }
-
         async Task IDoctorService.DeleteAsync(Guid id)
         {
             var doctor = await context.Doctors.FindAsync(id);
@@ -89,7 +86,7 @@ namespace Hospital.Core.Services
 				.FirstOrDefaultAsync();
 		}
 
-		async Task IDoctorService.UpdateAsync(DoctorIndexDto dto)
+		async Task IDoctorService.UpdateAsync(DoctorEditDTO dto)
 		{
 			var doctor = await context.Doctors.FindAsync(dto.ID);
 			if (doctor == null)
@@ -107,7 +104,7 @@ namespace Hospital.Core.Services
 		}
         public Task<List<DoctorIndexDto>> FilterBySpecialization(string specialization)
         {
-            return context.Doctors.Where(d => d.Specialization.SpecializationName==specialization.ToLower())
+            return context.Doctors.Where(d => d.Specialization.SpecializationName==specialization)
                 .Select(d => new DoctorIndexDto
                 {
                     ID = d.ID,
@@ -121,5 +118,22 @@ namespace Hospital.Core.Services
                     ImageURL = d.ImageURL
                 }).ToListAsync();
         }
+        public Task<List<DoctorIndexDto>> SortByFirstName()
+        {
+            return context.Doctors.OrderBy(x=>x.User.FirstName)
+                .Select(d => new DoctorIndexDto
+                {
+                    ID = d.ID,
+                    UserId = d.UserId,
+                    UserName = d.User.FirstName + " " + d.User.LastName,
+                    SpecializationId = d.SpecializationId,
+                    SpecializationName = d.Specialization.SpecializationName,
+                    ShiftId = d.ShiftId,
+                    ShiftName = d.Shift.Type,
+                    IsAccepted = d.IsAccepted,
+                    ImageURL = d.ImageURL
+                }).ToListAsync();
+        }
+
     }
 }

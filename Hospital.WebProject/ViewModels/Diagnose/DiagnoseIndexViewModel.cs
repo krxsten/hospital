@@ -10,6 +10,6 @@ namespace Hospital.WebProject.ViewModels.Diagnose
 		public string Name { get; set; } = null!;
 
 		public string ImageURL { get; set; } = null!;
-		public string PublicID { get; set; } = null!;
+		public IFormFile NewImageFile { get; set; } = null!;
 	}
 }

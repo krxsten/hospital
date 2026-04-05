@@ -1,0 +1,44 @@
+﻿@using Hospital.WebProject.ViewModels.Diagnose
+@model List<DiagnoseIndexViewModel>
+@{
+    ViewData["Title"] = "Diagnose with such letter";
+}
+
+<h2>Search Diagnose</h2>
+
+<form method="get" asp-action="GetDiagnose">
+    <div class="form-group">
+        <label>Diagnose:</label>
+        <input type="text" name="diagnose" class="form-control"/>
+    </div>
+
+    <br />
+    <button type="submit" class="btn btn-primary">Search</button>
+</form>
+
+<hr />
+
+@if (Model != null && Model.Any())
+{
+    <h3>Results:</h3>
+
+    <div class="row">
+        @foreach (var diagnose in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-sm rounded-3">
+                    <div class="card-body">
+                        <h5 class="card-title">@diagnose.Name</h5>
+                        <p class="card-text">
+                            <img src="@diagnose.ImageURL" alt="diagnose" />
+                        </p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <p>No diagnoses where found.</p>
+}

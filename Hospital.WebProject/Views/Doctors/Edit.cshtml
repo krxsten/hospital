@@ -8,28 +8,35 @@
     </div>
     <form asp-action="Edit" method="post">
         <div class="mb-3">
-            <label asp-for="UserId" class="form-label">Doctor: </label>
-            <select asp-for="UserId" asp-items="ViewBag.Doctors" class="form-select" />
+            <label asp-for="@Model.UserId" class="form-label">Doctor: </label>
+            <select asp-for="@Model.UserId" asp-items="ViewBag.Users" class="form-select"></select>
+            <span class="text-danger" asp-validation-for="@Model.UserId"></span>
         </div>
 
         <div class="mb-3">
-            <label asp-for="SpecializationId" class="form-label">Specialization</label>
-            <select asp-for="SpecializationId" asp-items="ViewBag.Specializations" class="form-select">
-            </select>
+            <label asp-for="@Model.SpecializationId" class="form-label">Specialization: </label>
+            <select asp-for="@Model.SpecializationId" asp-items="ViewBag.Specializations" class="form-select"></select>
+            <span class="text-danger" asp-validation-for="@Model.SpecializationId"></span>
         </div>
 
         <div class="mb-3">
-            <label asp-for="ShiftId" class="form-label">Shift</label>
-            <select asp-for="ShiftId" asp-items="ViewBag.Shifts" class="form-select">
-            </select>
+            <label asp-for="@Model.ShiftId" class="form-label">Shift: </label>
+            <select asp-for="@Model.ShiftId" asp-items="ViewBag.Shifts" class="form-select"></select>
+            <span class="text-danger" asp-validation-for="@Model.ShiftId"></span>
         </div>
 
         <div class="mb-3">
-            <label asp-for="ImageURL" class="form-label">Image URL</label>
-            <input asp-for="ImageURL" class="form-control" />
+            <label asp-for="@Model.ImageURL" class="form-label">Upload Image: </label>
+            <input asp-for="@Model.ImageURL" class="form-control" type="file" />
+            <span class="text-danger" asp-validation-for="@Model.ImageURL"></span>
         </div>
 
+        <div class="mb-3">
         <button type="submit" class="btn btn-success">Update</button>
         <a asp-action="Index" class="btn btn-secondary" style="display:inline">Back</a>
+        </div>
     </form>
+}
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
 }

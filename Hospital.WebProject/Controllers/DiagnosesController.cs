@@ -16,10 +16,12 @@ namespace Hospital.WebProject.Controllers
 	public class DiagnosesController : Controller
 	{
 		private readonly IDiagnoseService diagnoseService;
+        private readonly IImageService imageService;
 
-		public DiagnosesController(IDiagnoseService diagnoseService)
+        public DiagnosesController(IDiagnoseService diagnoseService,  IImageService imageService)
 		{
 			this.diagnoseService = diagnoseService;
+			this.imageService = imageService;
 		}
 
 		[AllowAnonymous]
@@ -60,7 +62,7 @@ namespace Hospital.WebProject.Controllers
 				var dto = new DiagnoseCreateDTO
 				{
 					Name = model.Name,
-					//Image = model.Image
+					ImageFile = model.Image
 				};
 
 				await diagnoseService.CreateAsync(dto);
@@ -87,7 +89,7 @@ namespace Hospital.WebProject.Controllers
 			{
 				ID = dto.ID,
 				Name = dto.Name,
-				ImageURL = dto.Image
+				ImageURL = dto.ImageURL
 			};
 
 			return View(model);
@@ -109,8 +111,8 @@ namespace Hospital.WebProject.Controllers
 				{
 					ID = model.ID,
 					Name = model.Name,
-                    // File = model.File,
-                    Image = model.ImageURL
+                    ImageURL = model.ImageURL,
+					NewImageFile = model.NewImageFile
 				};
 
 				await diagnoseService.UpdateAsync(dto);
@@ -139,5 +141,18 @@ namespace Hospital.WebProject.Controllers
 
 			return RedirectToAction(nameof(Index));
 		}
-	}
+		[AllowAnonymous]
+        public async Task<IActionResult> GetDiagnose(string diagnose)
+        {
+           var result = await diagnoseService.GetDiagnose(diagnose);
+            var model = result.Select(x => new DiagnoseIndexViewModel
+            {
+                ID = x.ID,
+                Name = x.Name,
+                ImageURL = x.ImageURL
+            }).ToList();
+
+            return View(model);
+        }
+    }
 }

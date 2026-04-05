@@ -1,0 +1,36 @@
+﻿@using Hospital.WebProject.ViewModels.Medication
+@model List<MedicationIndexViewModel>
+<h2>Search Medications by Side Effect</h2>
+
+<form method="get" asp-action="GetMedicationsForSideEffect">
+    <input type="text" name="sideEffect" class="form-control" placeholder="Enter side effect" required />
+    <br />
+    <button class="btn btn-primary">Search</button>
+</form>
+
+<hr />
+
+@if (Model != null && Model.Any())
+{
+    <div class="row">
+        @foreach (var m in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h5>@m.Name</h5>
+                        <p>
+                            <strong>Diagnose:</strong> @m.DiagnoseName <br />
+                            <strong>Side Effects:</strong> @m.SideEffects
+                        </p>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+else if (Model == null)
+{
+    <p>No medications where found.</p>
+}
+

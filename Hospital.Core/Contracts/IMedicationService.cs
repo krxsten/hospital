@@ -18,5 +18,6 @@ namespace Hospital.Core.Contracts
         Task UpdateAsync(MedicationIndexDTO model);
 
         Task DeleteAsync(Guid id);
+        Task<List<MedicationIndexDTO>> GetMedicationsForSideEffect(string sideEffect);
     }
 }

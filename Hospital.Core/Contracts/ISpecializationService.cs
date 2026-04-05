@@ -18,5 +18,6 @@ namespace Hospital.Core.Contracts
         Task UpdateAsync(SpecializationIndexDTO model);
 
         Task DeleteAsync(Guid id);
+        Task<List<SpecializationIndexDTO>> GetSpecialization(string specialization);
     }
 }
