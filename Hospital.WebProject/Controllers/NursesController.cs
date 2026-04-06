@@ -54,7 +54,7 @@ namespace Hospital.WebProject.Controllers
 				UserID = x.UserID,
 				UserName = x.UserName,
 				IsAccepted = x.IsAccepted,
-				ImageURL = x.Image
+				ImageURL = x.ImageURL
 			}).ToList();
 
 			return View(model);
@@ -78,18 +78,25 @@ namespace Hospital.WebProject.Controllers
 				await LoadDropdownsAsync();
 				return View(model);
 			}
+            try
+            {
+                var dto = new NurseCreateDTO
+                {
+                    UserID = model.UserID,
+                    SpecializationId = model.SpecializationId,
+                    ShiftId = model.ShiftId,
+                    IsAccepted = model.IsAccepted,
+                    ImageFile = model.Image
+                };
 
-			var dto = new NurseCreateDTO
-			{
-				UserID = model.UserID,
-				SpecializationId = model.SpecializationId,
-				ShiftId = model.ShiftId,
-				IsAccepted = model.IsAccepted,
-				File = model.File
-			};
-
-			await nurseService.CreateAsync(dto);
-			return RedirectToAction(nameof(Index));
+                await nurseService.CreateAsync(dto);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception)
+            {
+                ModelState.AddModelError(string.Empty, "Something went wrong");
+                return View(model);
+            }
 		}
 
 		[Authorize(Roles = "Admin")]
@@ -111,7 +118,7 @@ namespace Hospital.WebProject.Controllers
 				SpecializationId = dto.SpecializationId,
 				ShiftId = dto.ShiftId,
 				IsAccepted = dto.IsAccepted,
-				ImageURL = dto.Image
+				ImageURL = dto.ImageURL
 			};
 
 			return View(model);
@@ -127,19 +134,28 @@ namespace Hospital.WebProject.Controllers
 				await LoadDropdownsAsync();
 				return View(model);
 			}
+            try
+            {
+                var dto = new NurseIndexDTO
+                {
+                    ID = model.ID,
+                    UserID = model.UserID,
+                    SpecializationId = model.SpecializationId,
+                    ShiftId = model.ShiftId,
+                    IsAccepted = model.IsAccepted,
+                    ImageURL = model.ImageURL,
+                    NewImageFile = model.NewImageFile
+                };
 
-			var dto = new NurseIndexDTO
-			{
-				ID = model.ID,
-				UserID = model.UserID,
-				SpecializationId = model.SpecializationId,
-				ShiftId = model.ShiftId,
-				IsAccepted = model.IsAccepted,
-				Image = model.ImageURL
-			};
-
-			await nurseService.UpdateAsync(dto);
-			return RedirectToAction(nameof(Index));
+                await nurseService.UpdateAsync(dto);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception)
+            {
+                ModelState.AddModelError(string.Empty, "Something went wrong");
+                return View(model);
+            }
+           
 		}
 
 		[Authorize(Roles = "Admin")]
@@ -164,7 +180,7 @@ namespace Hospital.WebProject.Controllers
                 UserID = x.UserID,
                 UserName = x.UserName,
                 IsAccepted = x.IsAccepted,
-                ImageURL = x.Image
+                ImageURL = x.ImageURL
             }).ToList();
 
             return View(model);
@@ -183,7 +199,7 @@ namespace Hospital.WebProject.Controllers
                 UserID = x.UserID,
                 UserName = x.UserName,
                 IsAccepted = x.IsAccepted,
-                ImageURL = x.Image
+                ImageURL = x.ImageURL
             }).ToList();
 
             return View(model);

@@ -11,6 +11,6 @@ namespace Hospital.Core.DTOs
     public class SpecializationCreateDTO
     {
         public string SpecializationName { get; set; } = null!;
-        public string File { get; set; } = null!;
+        public IFormFile ImageFile { get; set; } = null!;
     }
 }

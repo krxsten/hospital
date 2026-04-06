@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,7 +13,7 @@ namespace Hospital.Core.DTOs
         public Guid SpecializationId { get; set; }
         public Guid ShiftId { get; set; }
         public bool IsAccepted { get; set; }
-        public string ImageURL { get; set; }
-        public string CloudinaryID { get; set; }
+        public string ImageURL { get; set; } = null!;
+        public IFormFile? NewImageFile { get; set; }
     }
 }

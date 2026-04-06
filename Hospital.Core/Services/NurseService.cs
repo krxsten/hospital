@@ -14,10 +14,12 @@ namespace Hospital.Core.Services
     public class NurseService : INurseService
     {
 		private readonly HospitalDbContext context;
+        private readonly IImageService imageService;
 
-		public NurseService(HospitalDbContext context)
+        public NurseService(HospitalDbContext context, IImageService imageService)
 		{
 			this.context = context;
+			this.imageService = imageService;
 		}
 
 		public async Task<List<NurseIndexDTO>> GetAllAsync()
@@ -33,7 +35,7 @@ namespace Hospital.Core.Services
 					ShiftId = x.ShiftId,
 					ShiftName = x.Shift.Type,
 					IsAccepted = x.IsAccepted,
-					Image = x.ImageURL
+					ImageURL = x.ImageURL
 				})
 				.ToListAsync();
 		}
@@ -52,22 +54,24 @@ namespace Hospital.Core.Services
 					ShiftId = x.ShiftId,
 					ShiftName = x.Shift.Type,
 					IsAccepted = x.IsAccepted,
-					Image = x.ImageURL
+					ImageURL = x.ImageURL
 				})
 				.FirstOrDefaultAsync();
 		}
 
 		public async Task CreateAsync(NurseCreateDTO model)
 		{
-			var nurse = new Nurse
+            var uploadResult = await imageService.UploadImageAsync(model.ImageFile);
+            var nurse = new Nurse
 			{
 				ID = Guid.NewGuid(),
 				UserId = model.UserID,
 				SpecializationId = model.SpecializationId,
 				ShiftId = model.ShiftId,
 				IsAccepted = model.IsAccepted,
-				ImageURL = model.File
-			};
+                ImageURL = uploadResult.Url,
+                PublicID = uploadResult.PublicId
+            };
 
 			await context.Nurses.AddAsync(nurse);
 			await context.SaveChangesAsync();
@@ -80,11 +84,14 @@ namespace Hospital.Core.Services
 			{
 				return;
 			}
-
-			nurse.SpecializationId = model.SpecializationId;
+            if (model.ImageURL != null)
+            {
+                var uploadResult = await imageService.UploadImageAsync(model.NewImageFile);
+                nurse.ImageURL = uploadResult.Url;
+            }
+            nurse.SpecializationId = model.SpecializationId;
 			nurse.ShiftId = model.ShiftId;
 			nurse.IsAccepted = model.IsAccepted;
-			nurse.ImageURL = model.Image;
 
 			await context.SaveChangesAsync();
 		}
@@ -113,7 +120,7 @@ namespace Hospital.Core.Services
                    ShiftId = x.ShiftId,
                    ShiftName = x.Shift.Type,
                    IsAccepted = x.IsAccepted,
-                   Image = x.ImageURL
+                   ImageURL = x.ImageURL
                })
                 .ToListAsync();
         }
@@ -130,7 +137,7 @@ namespace Hospital.Core.Services
                     ShiftId = x.ShiftId,
                     ShiftName = x.Shift.Type,
                     IsAccepted = x.IsAccepted,
-                    Image = x.ImageURL
+                    ImageURL = x.ImageURL
                 })
                 .ToListAsync();
         }

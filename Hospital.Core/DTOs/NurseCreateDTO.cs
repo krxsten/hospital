@@ -14,7 +14,7 @@ namespace Hospital.Core.DTOs
         public Guid SpecializationId { get; set; }
         public Guid ShiftId { get; set; }
         public bool IsAccepted { get; set; }
-        public string File { get; set; } = null!;
-        
+        public IFormFile ImageFile { get; set; } = null!;
+
     }
 }

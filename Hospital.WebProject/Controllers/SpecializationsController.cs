@@ -34,7 +34,7 @@ namespace Hospital.WebProject.Controllers
 			{
 				ID = x.ID,
 				SpecializationName = x.SpecializationName,
-				ImageURL = x.Image
+				ImageURL = x.ImageURL
 			}).ToList();
 
 			return View(model);
@@ -62,7 +62,7 @@ namespace Hospital.WebProject.Controllers
 				var dto = new SpecializationCreateDTO
 				{
 					SpecializationName = model.SpecializationName,
-					File = model.File
+					ImageFile = model.Image
 				};
 
 				await specializationService.CreateAsync(dto);
@@ -89,7 +89,7 @@ namespace Hospital.WebProject.Controllers
 			{
 				ID = dto.ID,
 				SpecializationName = dto.SpecializationName,
-				ImageURL = dto.Image
+				ImageURL = dto.ImageURL
 			};
 
 			return View(model);
@@ -111,8 +111,9 @@ namespace Hospital.WebProject.Controllers
 				{
 					ID = model.ID,
 					SpecializationName = model.SpecializationName,
-					Image = model.ImageURL
-				};
+                    ImageURL = model.ImageURL,
+                    NewImageFile = model.NewImageFile
+                };
 
 				await specializationService.UpdateAsync(dto);
 				return RedirectToAction(nameof(Index));
@@ -148,7 +149,7 @@ namespace Hospital.WebProject.Controllers
             {
                 ID = x.ID,
                 SpecializationName = x.SpecializationName,
-                ImageURL = x.Image
+                ImageURL = x.ImageURL
             }).ToList();
 
             return View(model);

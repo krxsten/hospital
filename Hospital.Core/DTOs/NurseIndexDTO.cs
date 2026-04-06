@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,7 +17,8 @@ namespace Hospital.Core.DTOs
         public Guid ShiftId { get; set; }
         public string ShiftName { get; set; } = null!;
         public bool IsAccepted { get; set; }
-        public string Image { get; set; } = null!;
-        
+        public string ImageURL { get; set; } = null!;
+        public IFormFile? NewImageFile { get; set; }
+
     }
 }

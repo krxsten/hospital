@@ -48,7 +48,8 @@ namespace Hospital.Core.Services
             {
                 ID = Guid.NewGuid(),
                 Name = model.Name,
-                ImageURL = uploadResult.Url
+                ImageURL = uploadResult.Url,
+                PublicID = uploadResult.PublicId
             };
             await context.Diagnoses.AddAsync(diagnose);
             await context.SaveChangesAsync();

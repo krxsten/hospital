@@ -24,14 +24,15 @@ namespace Hospital.Core.Services
         }
         async Task IDoctorService.CreateAsync(DoctorCreateDto dto)
         {
+            var uploadResult = await imageService.UploadImageAsync(dto.ImageFile);
             var doctor = new Doctor
             {
                 UserId = dto.UserID,
                 SpecializationId = dto.SpecializationID,
                 ShiftId = dto.ShiftID,
                 IsAccepted = dto.IsAccepted,
-                ImageURL = dto.ImageURL,
-                CloudinaryID = dto.CloudinaryID
+                ImageURL = uploadResult.Url,
+                CloudinaryID = uploadResult.PublicId
             };
 
             await context.Doctors.AddAsync(doctor);
@@ -93,13 +94,14 @@ namespace Hospital.Core.Services
 			{
 				return;
 			}
-
-			doctor.SpecializationId = dto.SpecializationId;
+            if (dto.ImageURL != null)
+            {
+                var uploadResult = await imageService.UploadImageAsync(dto.NewImageFile);
+                doctor.ImageURL = uploadResult.Url;
+            }
+            doctor.SpecializationId = dto.SpecializationId;
 			doctor.ShiftId = dto.ShiftId;
 			doctor.IsAccepted = dto.IsAccepted;
-			doctor.ImageURL = dto.ImageURL;
-			//doctor.PublicID = dto.PublicID;
-
 			await context.SaveChangesAsync();
 		}
         public Task<List<DoctorIndexDto>> FilterBySpecialization(string specialization)

@@ -17,7 +17,8 @@ namespace Hospital.Core.DTOs
         public Guid UserId { get; set; }
         public string UserName { get; set; } = null!;
         public bool IsAccepted { get; set; } = false;
-        public string ImageURL { get; set; }
+        public string ImageURL { get; set; } = null!;
+        public IFormFile? NewImageFile { get; set; }
 
     }
 }

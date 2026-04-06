@@ -14,10 +14,13 @@ namespace Hospital.Core.Services
     public class SpecializationService : ISpecializationService
     {
         private readonly HospitalDbContext context;
+        private readonly IImageService imageService;
 
-        public SpecializationService(HospitalDbContext context)
+
+        public SpecializationService(HospitalDbContext context, IImageService imageService)
         {
             this.context = context;
+			this.imageService = imageService;
         }
 		public async Task<List<SpecializationIndexDTO>> GetAllAsync()
 		{
@@ -26,7 +29,7 @@ namespace Hospital.Core.Services
 				{
 					ID = x.ID,
 					SpecializationName = x.SpecializationName,
-					Image = x.ImageURL
+					ImageURL = x.ImageURL
 				})
 				.ToListAsync();
 		}
@@ -39,19 +42,21 @@ namespace Hospital.Core.Services
 				{
 					ID = x.ID,
 					SpecializationName = x.SpecializationName,
-					Image = x.ImageURL
+					ImageURL = x.ImageURL
 				})
 				.FirstOrDefaultAsync();
 		}
 
 		public async Task CreateAsync(SpecializationCreateDTO model)
 		{
-			var specialization = new Specialization
+            var uploadResult = await imageService.UploadImageAsync(model.ImageFile);
+            var specialization = new Specialization
 			{
 				ID = Guid.NewGuid(),
 				SpecializationName = model.SpecializationName,
-				ImageURL = model.File
-			};
+                ImageURL = uploadResult.Url,
+                PublicID = uploadResult.PublicId
+            };
 
 			await context.Specializations.AddAsync(specialization);
 			await context.SaveChangesAsync();
@@ -64,10 +69,12 @@ namespace Hospital.Core.Services
 			{
 				return;
 			}
-
-			specialization.SpecializationName = model.SpecializationName;
-			specialization.ImageURL = model.Image;
-
+            if (model.ImageURL != null)
+            {
+                var uploadResult = await imageService.UploadImageAsync(model.NewImageFile);
+                specialization.ImageURL = uploadResult.Url;
+            }
+            specialization.SpecializationName = model.SpecializationName;
 			await context.SaveChangesAsync();
 		}
 
@@ -88,7 +95,7 @@ namespace Hospital.Core.Services
             {
                 ID = x.ID,
                 SpecializationName = x.SpecializationName,
-                Image = x.ImageURL
+                ImageURL = x.ImageURL
             }).ToListAsync();
         }
     }

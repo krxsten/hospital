@@ -17,6 +17,7 @@ namespace Hospital.WebProject.ViewModels.Nurse
 		public string ShiftName { get; set; } = null!;
 		public bool IsAccepted { get; set; }
         public string ImageURL { get; set; } = null!;
+        public IFormFile NewImageFile { get; set; } = null!;
     }
 }
 

@@ -81,30 +81,27 @@ namespace Hospital.WebProject.Controllers
                 return View(model);
             }
 
-            string imageUrl = null;
-            string publicId = null;
-
-            if (model.File != null)
+            try
             {
-                var uploadResult = await imageService.UploadImageAsync(model.File);
+                var dto = new DoctorCreateDto
+                {
+                    UserID = model.UserID,
+                    SpecializationID = model.SpecializationID,
+                    ShiftID = model.ShiftID,
+                    IsAccepted = model.IsAccepted,
+                    ImageFile = model.Image,
+                };
 
-                imageUrl = uploadResult.Url;
-                publicId = uploadResult.PublicId;
+                await doctorService.CreateAsync(dto);
+
+                return RedirectToAction(nameof(Index));
             }
-
-            var dto = new DoctorCreateDto
+            catch (Exception)
             {
-                UserID = model.UserID,
-                SpecializationID = model.SpecializationID,
-                ShiftID = model.ShiftID,
-                IsAccepted = model.IsAccepted,
-                ImageURL = imageUrl,
-                CloudinaryID = publicId
-            };
-
-            await doctorService.CreateAsync(dto);
-
-            return RedirectToAction(nameof(Index));
+                ModelState.AddModelError(string.Empty, "Something went wrong");
+                return View(model);
+            }
+           
         }
 
         [Authorize(Roles = "Admin")]
@@ -142,19 +139,28 @@ namespace Hospital.WebProject.Controllers
 				return View(model);
 			}
 
-            var dto = new DoctorEditDTO
+            try
             {
-                ID = model.ID,
-                SpecializationId = model.SpecializationId,
-                ShiftId = model.ShiftId,
-                IsAccepted = model.IsAccepted,
-                ImageURL = model.ExistingImage,
-                //CloudinaryID = model.File
-            };
+                var dto = new DoctorEditDTO
+                {
+                    ID = model.ID,
+                    SpecializationId = model.SpecializationId,
+                    ShiftId = model.ShiftId,
+                    IsAccepted = model.IsAccepted,
+                    ImageURL = model.ExistingImage,
+                    NewImageFile = model.File
+                };
 
 
-            await doctorService.UpdateAsync(dto);
-			return RedirectToAction(nameof(Index));
+                await doctorService.UpdateAsync(dto);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception)
+            {
+                ModelState.AddModelError(string.Empty, "Something went wrong");
+                return View(model);
+            }
+           
 		}
 
 		[Authorize(Roles = "Admin")]

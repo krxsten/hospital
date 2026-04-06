@@ -18,5 +18,6 @@ namespace Hospital.WebProject.ViewModels.Doctor
 		public bool IsAccepted { get; set; }
 
         public string ImageURL { get; set; } = null!;
+        public IFormFile NewImageFile { get; set; } = null!;
     }
 }

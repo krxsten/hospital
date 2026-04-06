@@ -17,7 +17,7 @@ namespace Hospital.WebProject.ViewModels.Nurse
 
 		public bool IsAccepted { get; set; }
 
-		[Required(ErrorMessage = "This field is required!")]
-        public string File { get; set; } = null!;
+        [Required(ErrorMessage = "This field is required!")]
+        public IFormFile? Image { get; set; }
     }
 }
