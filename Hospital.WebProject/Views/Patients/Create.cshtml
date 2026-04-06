@@ -22,25 +22,25 @@
 
         <div class="mb-3">
             <label asp-for="@Model.HospitalizationDate" class="form-label">Hospitalization date: </label>
-            <input asp-for="@Model.HospitalizationDate" type="date" class="form-control" />
+            <input asp-for="@Model.HospitalizationDate" id="Date" type="date" class="form-control" min="@DateTime.Now.ToString("yyyy-MM-dd")" />
             <span class="text-danger" asp-validation-for="@Model.HospitalizationDate"></span>
         </div>
 
         <div class="mb-3">
             <label asp-for="@Model.HospitalizationTime" class="form-label">Hospitalization time: </label>
-            <input asp-for="@Model.HospitalizationTime" type="time" class="form-control" />
+             <input asp-for="@Model.HospitalizationTime" id="Time" class="form-control"/>
             <span class="text-danger" asp-validation-for="@Model.HospitalizationTime"></span>
         </div>
 
         <div class="mb-3">
             <label asp-for="@Model.DischargeDate" class="form-label">Discharge date: </label>
-            <input asp-for="@Model.DischargeDate" type="date" class="form-control" />
+            <input asp-for="@Model.DischargeDate" id="Date" type="date" class="form-control" min="@DateTime.Now.ToString("yyyy-MM-dd")" />
             <span class="text-danger" asp-validation-for="@Model.DischargeDate"></span>
         </div>
 
         <div class="mb-3">
             <label asp-for="@Model.DischargeTime" class="form-label">Discharge time: </label>
-            <input asp-for="@Model.DischargeTime" type="date" class="form-control" />
+             <input asp-for="@Model.DischargeTime" id="Time" class="form-control"/>
             <span class="text-danger" asp-validation-for="@Model.DischargeTime"></span>
         </div>
 
@@ -83,4 +83,34 @@
 }
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        function loadSlots(){
+
+            var doctorId = $("#DoctorID").val();
+            var date = $("#Date").val();
+
+            if(!doctorId || !date)
+                return;
+
+            $.get("/Checkup/GetAvailableSlots", {
+                doctorId: doctorId,
+                date: date
+            }, function(data){
+
+                $("#Time").empty();
+                $("#Time").append(`<option>Select time</option>`);
+
+                data.forEach(function(time){
+                    $("#Time").append(
+                        `<option value="${time}">${time}</option>`
+                    );
+                });
+
+            });
+        }
+
+        $("#DoctorID").change(loadSlots);
+        $("#Date").change(loadSlots);
+    </script>
 }

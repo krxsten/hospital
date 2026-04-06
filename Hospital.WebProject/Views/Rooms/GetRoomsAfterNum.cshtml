@@ -2,14 +2,16 @@
 @using Hospital.WebProject.ViewModels.Room
 @model List<RoomIndexViewModel>
 
-<h2>Search Room</h2>
-
+<h2 class="text-white">Search Room</h2>
+<div class="mb-3">
 <form method="get" asp-action="GetRoomsAfterNum">
-    <input type="number" name="roomNum" class="form-control" required />
+    <input type="number" placeholder="Enter room number..." name="roomNum" class="form-control" required />
     <br />
     <button class="btn btn-primary">Search</button>
-</form>
+    <a asp-action="Index" class="btn btn-secondary" style="display:inline">Back</a>
 
+</form>
+</div>
 <hr />
 
 @if (Model != null && Model.Any())

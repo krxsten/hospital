@@ -32,6 +32,7 @@ namespace Hospital.WebProject.ViewModels.Patient
 		public string BirthCity { get; set; } = null!;
 
         [DataType(DataType.Date)]
+        [Range(typeof(DateOnly), "1920-01-01", "2100-12-31", ErrorMessage = "Date of birth must be after 1920.")]
         public DateOnly DateOfBirth { get; set; }
 
         [Required(ErrorMessage = "This field is required!")]

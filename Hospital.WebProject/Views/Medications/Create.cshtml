@@ -9,7 +9,7 @@
     </div>
     <form asp-action="Create" method="post">
         <div class="mb-3">
-            <label asp-for="@Model.Name" class="form-label">Diagnose: </label>
+            <label asp-for="@Model.Name" class="form-label">Medication: </label>
             <input asp-for="@Model.Name" class="form-control" />
             <span class="text-danger" asp-validation-for="@Model.Name"></span>
         </div>

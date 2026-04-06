@@ -31,7 +31,7 @@ namespace Hospital.WebProject.Controllers
 			this.userManager = userManager;
 		}
 
-		[Authorize(Roles = "Admin,Doctor,Patient,Nurse")]
+		[Authorize(Roles = "Admin,Doctor,Nurse")]
 		[HttpGet]
 		public async Task<IActionResult> Index()
 		{

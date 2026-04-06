@@ -1,14 +1,16 @@
 ﻿<link rel="stylesheet" href="/css/styles.css">
 @using Hospital.WebProject.ViewModels.Patient
 @model List<PatientIndexViewModel>
-<h2>Search Patients by Doctor</h2>
-
+<h2 class="text-white">Search Patients by Doctor</h2>
+<div class="mb-3">
 <form method="get" asp-action="PatientsWithSuchDoctor">
-    <input type="text" name="doctorName" class="form-control" placeholder="Doctor's first name" required />
+    <input type="text" name="doctorName" class="form-control" placeholder="Enter doctor's first name..." required />
     <br />
     <button class="btn btn-primary">Search</button>
-</form>
+    <a asp-action="Index" class="btn btn-secondary" style="display:inline">Back</a>
 
+</form>
+</div>
 <hr />
 
 @if (Model != null && Model.Any())

@@ -2,14 +2,16 @@
 @using Hospital.WebProject.ViewModels.Doctor
 @model List<DoctorIndexViewModel>
 
-<h2>Search Doctors by Specialization</h2>
-
+<h2 class="text-white">Search Doctors by Specialization</h2>
+<div class="mb-3">
 <form method="get" asp-action="FilterBySpecialization">
-    <input type="text" name="specialization" class="form-control" placeholder="Enter specialization" required />
+    <input type="text" name="specialization" class="form-control" placeholder="Enter specialization..." required />
     <br />
     <button class="btn btn-primary">Search</button>
-</form>
+    <a asp-action="Index" class="btn btn-secondary" style="display:inline">Back</a>
 
+</form>
+</div>
 <hr />
 
 @if (Model != null && Model.Any())

@@ -1,11 +1,26 @@
 ﻿<style>
+    .main-title,
+    .subtitle,
+    .history-text h2,
+    .history-text p,
+    .history-text strong,
+    .stat-box h1,
+    .stat-box p,
+    .service-card h4,
+    .service-card p,
+    .service-card i,
+    .glass-panel h2,
+    .glass-panel p {
+        color: #ffffff !important;
+        opacity: 1 !important;
+    }
+
     .main-title {
         font-size: 4rem;
         font-weight: 900;
         letter-spacing: -1px;
-        color: #ffffff !important;
-        margin-bottom: 0.5rem;
         text-transform: uppercase;
+        margin-bottom: 0.5rem;
     }
 
     .subtitle {
@@ -13,37 +28,34 @@
         font-weight: 300;
         letter-spacing: 3px;
         text-transform: uppercase;
-        color: rgba(255, 255, 255, 0.7) !important;
         margin-bottom: 3rem;
     }
 
     .glass-panel {
-        background: rgba(255, 255, 255, 0.03);
+        background: rgba(255, 255, 255, 0.05);
         backdrop-filter: blur(15px);
-        border: 1px solid rgba(255, 255, 255, 0.2); 
+        border: 2px solid #ffffff; 
         border-radius: 24px;
         padding: 40px;
     }
 
     .history-text h2 {
         font-weight: 800;
-        color: #ffffff;
         font-size: 2.5rem;
         margin-bottom: 1.5rem;
-        border-bottom: 3px solid #ffffff; 
+        border-bottom: 4px solid #ffffff;
         display: inline-block;
         padding-bottom: 10px;
     }
 
     .history-text p {
-        color: rgba(255, 255, 255, 0.9);
         line-height: 1.8;
+        font-size: 1.1rem;
     }
 
     .stat-box h1 {
         font-size: 3.5rem;
         font-weight: 900;
-        color: #ffffff !important;
         margin-bottom: 0;
     }
 
@@ -51,12 +63,11 @@
         text-transform: uppercase;
         letter-spacing: 2px;
         font-size: 0.9rem;
-        color: rgba(255, 255, 255, 0.6);
     }
 
     .service-card {
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: rgba(255, 255, 255, 0.08);
+        border: 2px solid #ffffff;
         padding: 30px;
         border-radius: 20px;
         width: 280px;
@@ -65,35 +76,26 @@
     }
 
         .service-card:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: #ffffff;
+            background: rgba(255, 255, 255, 0.2);
             transform: translateY(-10px);
         }
 
-        .service-card h4 {
-            color: #ffffff;
-            font-weight: 700;
-            margin-top: 15px;
-        }
-
-        .service-card i {
-            color: #ffffff !important; 
-        }
-
     .btn-primary-white {
-        background-color: #ffffff;
-        color: #0f172a !important;
-        font-weight: 800;
+        background-color: #ffffff !important;
+        color: #000000 !important; 
+        font-weight: 900;
         border: none;
+        text-transform: uppercase;
     }
 
-        .btn-primary-white:hover {
-            background-color: rgba(255, 255, 255, 0.9);
-            transform: scale(1.05);
-        }
+    .btn-outline-light {
+        border: 2px solid #ffffff !important;
+        color: #ffffff !important;
+        font-weight: 700;
+    }
 </style>
 
-<div class="container py-5 mt-4">
+<div class="container pb-5 mt-4">
     <div class="text-center mb-5">
         <h1 class="main-title">Saint Anna</h1>
         <p class="subtitle">Medical Excellence • Exceptional Care</p>
@@ -101,18 +103,18 @@
 
     <div class="row align-items-center g-5 mb-5">
         <div class="col-lg-6">
-            <div class="hero-image-container" style="border: 2px solid rgba(255,255,255,0.3); border-radius: 30px; overflow: hidden;">
+            <div class="hero-image-container" style="border: 3px solid #ffffff; border-radius: 30px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
                 <img src="~/img/index.jpg" class="img-fluid" alt="Hospital Main" />
             </div>
         </div>
         <div class="col-lg-6">
             <div class="history-text">
-                <h2>Our Legacy</h2>
-                <p>
-                    Established with a vision for healing, <strong>Saint Anna Medical Center</strong> combines
+                <h2 class="text-white">Our Legacy</h2>
+                <p class="text-white">
+                    Established with a vision for healing, <strong class="text-white">Saint Anna Medical Center</strong> combines
                     decades of tradition with modern medical innovation.
                 </p>
-                <p>
+                <p class="text-white">
                     We provide a sanctuary of health where every patient is treated with dignity.
                     Our facility houses the finest specialists and the most dedicated staff in the region.
                 </p>
@@ -121,18 +123,18 @@
     </div>
 
     <div class="glass-panel text-center my-5">
-        <div class="row g-4">
+        <div class="row g-4 text-white">
             <div class="col-md-4 stat-box">
-                <h1>25+</h1>
-                <p>Years in Service</p>
+                <h1 class="text-white">25+</h1>
+                <p class="text-white">Years in Service</p>
             </div>
             <div class="col-md-4 stat-box">
-                <h1>100+</h1>
-                <p>Specialists</p>
+                <h1 class="text-white">100+</h1>
+                <p class="text-white">Specialists</p>
             </div>
             <div class="col-md-4 stat-box">
-                <h1>10K+</h1>
-                <p>Patient Successes</p>
+                <h1 class="text-white">10K+</h1>
+                <p class="text-white">Happy Patients</p>
             </div>
         </div>
     </div>
@@ -140,27 +142,31 @@
     <div class="text-center py-5">
         <h2 class="text-white fw-bold mb-5">Our Services</h2>
         <div class="d-flex flex-wrap justify-content-center gap-4">
+
             <div class="service-card">
-                <i class="bi bi-heart-pulse fs-1"></i>
-                <h4>Cardiology</h4>
-                <p class="text-white-50 small">Advanced heart care diagnostics.</p>
+                <i class="bi bi-heart-pulse fs-1 text-white"></i>
+                <h4 class="text-white fw-bold mt-3">Cardiology</h4>
+                <p class="text-white">Advanced heart care diagnostics.</p>
             </div>
+
             <div class="service-card">
-                <i class="bi bi-brain fs-1"></i>
-                <h4>Neurology</h4>
-                <p class="text-white-50 small">Brain and nervous system care.</p>
+                <i class="bi bi-brain fs-1 text-white"></i>
+                <h4 class="text-white fw-bold mt-3">Neurology</h4>
+                <p class="text-white">Brain and nervous system care.</p>
             </div>
+
             <div class="service-card">
-                <i class="bi bi-lightning-charge fs-1"></i>
-                <h4>Emergency</h4>
-                <p class="text-white-50 small">24/7 rapid response unit.</p>
+                <i class="bi bi-lightning-charge fs-1 text-white"></i>
+                <h4 class="text-white fw-bold mt-3">Emergency</h4>
+                <p class="text-white">24/7 rapid response unit.</p>
             </div>
+
         </div>
     </div>
 
     <div class="glass-panel text-center mt-5 py-5">
         <h2 class="text-white fw-bold mb-3">Professional Medical Assistance</h2>
-        <p class="text-white-50 mb-4 fs-5">Book your consultation with our world-class team today.</p>
+        <p class="text-white mb-4 fs-5">Book your consultation with our world-class team today.</p>
         <div class="d-flex justify-content-center gap-3">
             <a asp-action="Create" asp-controller="Checkup" class="btn btn-primary-white btn-lg rounded-pill px-5">
                 Book Appointment

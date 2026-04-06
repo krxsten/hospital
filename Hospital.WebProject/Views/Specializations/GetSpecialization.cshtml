@@ -1,16 +1,19 @@
 ﻿@using Hospital.WebProject.ViewModels.Specialization
 @model List<SpecializationIndexViewModel>
 
+<h2 class="text-white">Search Specialization</h2>
+<div class="mb-3">
 <form method="get" asp-action="GetSpecialization">
     <div class="form-group">
-        <label>Specializaton:</label>
-    <input type="text" name="specialization" maxlength="1" class="form-control" required />
+            <input type="text" name="specialization" placeholder="Enter specialization..." class="form-control" required />
     </div>
     <br />
     <button class="btn btn-primary">Search</button>
-</form>
+    <a asp-action="Index" class="btn btn-secondary" style="display:inline">Back</a>
 
-@if (Model != null)
+</form>
+</div>
+@if (Model != null && Model.Any())
 {
     <div class="row">
         @foreach (var s in Model)
@@ -22,4 +25,8 @@
             </div>
         }
     </div>
+}
+else if (Model == null)
+{
+    <p>No specializations found.</p>
 }

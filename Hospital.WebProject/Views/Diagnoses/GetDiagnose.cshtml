@@ -4,23 +4,24 @@
     ViewData["Title"] = "Diagnose with such letter";
 }
 
-<h2>Search Diagnose</h2>
+<h2 class="text-white">Search Diagnose</h2>
+<div class="mb-3">
+    <form method="get" asp-action="GetDiagnose">
+        <div class="form-group">
+            <input type="text" name="diagnose" placeholder="Enter diagnose..." class="form-control" />
+        </div>
 
-<form method="get" asp-action="GetDiagnose">
-    <div class="form-group">
-        <label>Diagnose:</label>
-        <input type="text" name="diagnose" class="form-control"/>
-    </div>
+        <br />
+        <button type="submit" class="btn btn-primary">Search</button>
+        <a asp-action="Index" class="btn btn-secondary" style="display:inline">Back</a>
 
-    <br />
-    <button type="submit" class="btn btn-primary">Search</button>
-</form>
-
+    </form>
+</div>
 <hr />
 
 @if (Model != null && Model.Any())
 {
-    <h3>Results:</h3>
+    <h3 class="text-white">Results:</h3>
 
     <div class="row">
         @foreach (var diagnose in Model)
@@ -38,7 +39,7 @@
         }
     </div>
 }
-else
+else if (Model == null)
 {
     <p>No diagnoses where found.</p>
 }

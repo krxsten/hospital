@@ -26,7 +26,7 @@ namespace Hospital.WebProject.Controllers
             this.context = context;
         }
 
-        [Authorize(Roles = "Admin,Doctor,Nurse")]
+        [Authorize(Roles = "Admin,Doctor,Nurse,Patient")]
         [HttpGet]
         public async Task<IActionResult> Index()
         {
@@ -128,7 +128,7 @@ namespace Hospital.WebProject.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Patient")]
+        [Authorize(Roles = "Admin,Doctor,Nurse")]
         [HttpPost]
         public async Task<IActionResult> Edit(CheckupIndexViewModel model)
         {
@@ -170,7 +170,7 @@ namespace Hospital.WebProject.Controllers
                 .Select(c => c.Date)
                 .ToListAsync();
 
-            return Json(busy);
+            return View(busy);
         }
 
         [Authorize(Roles = "Admin,Doctor,Nurse")]
@@ -192,7 +192,7 @@ namespace Hospital.WebProject.Controllers
                 return NotFound();
             }
 
-            return Json(shift);
+            return View(shift);
         }
         [HttpGet]
         public async Task<IActionResult> GetAvailableSlots(Guid doctorId, DateOnly date)
@@ -220,11 +220,11 @@ namespace Hospital.WebProject.Controllers
             slots = slots.Where(x => !takenSlots.Contains(x)).ToList();
             return Json(slots);
         }
-        [Authorize(Roles = "Patient")]
+        [Authorize(Roles = "Patient,Doctor,Nurse,Admin")]
         [HttpGet]
-        public async Task<IActionResult> GetCheckupsAfterDate(DateOnly date)
+        public async Task<IActionResult> GetCheckupsDate(DateOnly date)
         {
-            var result = await checkupService.GetCheckupsAfterDate(date);
+            var result = await checkupService.GetCheckupsDate(date);
             var model = result.Select(x => new CheckupIndexViewModel
             {
                 ID = x.ID,

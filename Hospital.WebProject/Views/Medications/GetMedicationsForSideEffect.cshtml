@@ -1,13 +1,14 @@
 ﻿@using Hospital.WebProject.ViewModels.Medication
 @model List<MedicationIndexViewModel>
-<h2>Search Medications by Side Effect</h2>
-
-<form method="get" asp-action="GetMedicationsForSideEffect">
-    <input type="text" name="sideEffect" class="form-control" placeholder="Enter side effect" required />
+<h2 class="text-white">Search Medications by Side Effect</h2>
+<div class="mb-3">
+<form method="get" asp-controller="Medications" asp-action="GetMedicationsForSideEffect">
+    <input type="text" name="sideEffect" class="form-control" placeholder="Enter side effect..." required />
     <br />
     <button class="btn btn-primary">Search</button>
+    <a asp-action="Index" class="btn btn-secondary" style="display:inline">Back</a>
 </form>
-
+</div>
 <hr />
 
 @if (Model != null && Model.Any())

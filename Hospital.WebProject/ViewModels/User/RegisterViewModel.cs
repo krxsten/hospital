@@ -23,7 +23,8 @@ namespace Hospital.WebProject.ViewModels.User
         public string? PhoneNumber { get; set; }
         public Guid? SpecializationId { get; set; }
         public Guid? ShiftId { get; set; }
-        public string? ImageURL { get; set; }
+        public IFormFile? ImageURL { get; set; }
+        public string? Image { get; set; }
         public string BirthCity { get; set; }
         public DateOnly DateOfBirth { get; set; }
         public string UCN { get; set; }

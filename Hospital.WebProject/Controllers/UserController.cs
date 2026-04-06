@@ -133,7 +133,7 @@ namespace Hospital.WebProject.Controllers
                         UserId = user.Id,
                         SpecializationId = model.SpecializationId.Value,
                         ShiftId = model.ShiftId.Value,
-                        ImageURL = model.ImageURL,
+                        ImageURL = model.Image,
                         CloudinaryID = "temp",
                         IsAccepted = false
                     };
@@ -155,7 +155,7 @@ namespace Hospital.WebProject.Controllers
                         UserId = user.Id,
                         SpecializationId = model.SpecializationId.Value,
                         ShiftId = model.ShiftId.Value,
-                        ImageURL = model.ImageURL,
+                        ImageURL = model.Image,
                         PublicID = "temp",
                         IsAccepted = false
                     };

@@ -1,16 +1,17 @@
 ﻿<link rel="stylesheet" href="/css/styles.css">
 @using Hospital.WebProject.ViewModels.Shift
 @model ShiftIndexViewModel
-
-<form method="get">
-    <input type="time" name="time" class="form-control" required />
+<form method="get" asp-action="GetShiftByTime">
+    <input type="time" placeholder="Enter time" name="time" class="form-control" required />
     <br />
     <button class="btn btn-primary">Search</button>
+    <a asp-action="Index" class="btn btn-secondary" style="display:inline">Back</a>
+
 </form>
 
 <hr />
 
-@if (Model != null)
+@if (Model != null )
 {
     <div class="card p-3">
         <h4>@Model.Type</h4>
@@ -20,7 +21,7 @@
         </p>
     </div>
 }
-else
+else if (Model == null)
 {
     <p>No shift found.</p>
 }

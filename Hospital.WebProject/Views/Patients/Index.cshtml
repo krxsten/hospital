@@ -61,7 +61,8 @@
 
 @using Hospital.WebProject.ViewModels.Patient
 @model List<PatientIndexViewModel>
-
+ @if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse"))
+                    {
 <div class="container pb-5">
     <div class="text-center mb-5">
         <h2 class="fw-bold">Comprehensive Patient Records</h2>
@@ -139,3 +140,4 @@
         }
     </div>
 </div>
+}

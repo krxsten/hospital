@@ -1,0 +1,50 @@
+﻿@using Hospital.WebProject.ViewModels.Checkup
+@model List<CheckupIndexViewModel>
+@{
+    ViewData["Title"] = "Checkups After Date";
+}
+@if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse") || User.IsInRole("Patient"))
+{
+    <h2 class="text-white">Search Checkups</h2>
+    <div class="mb-3">
+        <form method="get" asp-action="GetCheckupsDate">
+        <div class="form-group">
+            <input type="date" name="date" placeholder="Enter date..." class="form-control"
+                   value="@Context.Request.Query["date"]" required />
+        </div>
+
+        <br />
+        <button type="submit" class="btn btn-primary">Search</button>
+        <a asp-action="Index" class="btn btn-secondary" style="display:inline">Back</a>
+
+    </form>
+    </div>
+    <hr />
+
+    @if (Model != null && Model.Any())
+    {
+        <h3 class="text-white">Results:</h3>
+
+        <div class="row">
+            @foreach (var checkup in Model)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-sm rounded-3">
+                        <div class="card-body">
+                            <h5 class="card-title">@checkup.Date</h5>
+                            <p class="card-text">
+                                <strong>Time:</strong> @checkup.Time <br />
+                                <strong>Doctor:</strong> @checkup.DoctorName <br />
+                                <strong>Patient:</strong> @checkup.PatientName
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+    else if (Model == null)
+    {
+        <p>No checkups found for the selected date.</p>
+    }
+}

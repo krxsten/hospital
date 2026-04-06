@@ -79,7 +79,7 @@ namespace Hospital.Core.Services
 		public async Task<List<RoomIndexDTO>> GetRoomsAfterNum(int roomNum)
 		{
             return await context.Rooms
-				.Where(x=>x.RoomNumber == roomNum)
+				.Where(x=>x.RoomNumber > roomNum)
                 .Select(r => new RoomIndexDTO
                 {
                     ID = r.ID,

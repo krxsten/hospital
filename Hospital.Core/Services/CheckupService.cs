@@ -95,9 +95,9 @@ namespace Hospital.Core.Services
             context.Checkups.Remove(checkup);
             await context.SaveChangesAsync();
         }
-        public async Task<List<CheckupIndexDTO>> GetCheckupsAfterDate(DateOnly date)
+        public async Task<List<CheckupIndexDTO>> GetCheckupsDate(DateOnly date)
         {
-            return await context.Checkups.Where(x => x.Date > date)
+            return await context.Checkups.Where(x => x.Date == date)
                 .Select(x => new CheckupIndexDTO
                 {
                     ID = x.ID,

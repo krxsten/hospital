@@ -43,6 +43,7 @@
                     <option value="Nurse">Nurse</option>
                     <option value="Patient">Patient</option>
                 </select>
+                <span asp-validation-for="@Model.Role" class="text-danger"></span>
             </div>
             <div id="doctorFields" style="display:none;">
                 <div class="text-center mb-3">
@@ -54,6 +55,7 @@
                             <option value="@s.ID">@s.SpecializationName</option>
                         }
                     </select>
+                    <span asp-validation-for="@Model.SpecializationId" class="text-danger"></span>
                 </div>
 
                 <div class="text-center mb-3">
@@ -65,11 +67,13 @@
                             <option value="@s.ID">@s.Type</option>
                         }
                     </select>
+                    <span asp-validation-for="@Model.ShiftId" class="text-danger"></span>
                 </div>
 
                 <div class="text-center mb-3">
-                    <label asp-for="ImageURL">Image URL</label>
-                    <input class="form-control" asp-for="ImageURL" />
+                    <label asp-for="@Model.ImageURL" class="form-label">Upload image:</label>
+                    <input asp-for="@Model.ImageURL" accept="image/jpeg image/gif image/png" class="form-control" />
+                    <span asp-validation-for="@Model.ImageURL" class="text-danger"></span>
                 </div>
             </div>
 
@@ -80,6 +84,7 @@
                     <select asp-for="DoctorId" class="form-control" asp-items="@ViewBag.Doctors">
                         <option value="">-- Select a Doctor --</option>
                     </select>
+                    <span asp-validation-for="@Model.DoctorId" class="text-danger"></span>
                 </div>
 
                 <div class="text-center mb-3">
@@ -87,12 +92,13 @@
                     <select asp-for="RoomId" class="form-control" asp-items="@ViewBag.Rooms">
                         <option value="">-- Select a Room --</option>
                     </select>
+                    <span asp-validation-for="@Model.RoomId" class="text-danger"></span>
                 </div>
 
                 <div class="text-center mb-3">
                     <label asp-for="PhoneNumber"></label>
                     <input class="form-control" asp-for="PhoneNumber" />
-                    <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                    <span asp-validation-for="@Model.PhoneNumber" class="text-danger"></span>
                 </div>
 
                 <div class="text-center mb-3">
@@ -100,16 +106,19 @@
                     <select asp-for="BirthCity" class="form-control" asp-items="@ViewBag.Cities">
                         <option value="">-- Select a City --</option>
                     </select>
+                    <span asp-validation-for="@Model.BirthCity" class="text-danger"></span>
                 </div>
 
                 <div class="text-center mb-3">
                     <label asp-for="DateOfBirth"></label>
                     <input class="form-control" type="date" asp-for="DateOfBirth" />
+                    <span asp-validation-for="@Model.DateOfBirth" class="text-danger"></span>
                 </div>
 
                 <div class="text-center mb-3">
                     <label asp-for="UCN"></label>
                     <input class="form-control" asp-for="UCN" />
+                    <span asp-validation-for="@Model.UCN" class="text-danger"></span>
                 </div>
 
             </div>

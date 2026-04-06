@@ -33,7 +33,7 @@
         @if (User.IsInRole("Admin")) {
             <a asp-action="Create" class="btn btn-success rounded-pill px-4 shadow-sm">+ Create</a>
         }
-        <a asp-action="GetMedicationsForSideEffect" class="btn btn-light border rounded-pill px-4">Search Side Effects</a>
+        <a asp-action="GetMedicationsForSideEffect" asp-controller="Medications" class="btn btn-light border rounded-pill px-4">Search Side Effects</a>
         <a asp-action="Index" asp-controller="Home" class="btn btn-secondary rounded-pill px-4 shadow-sm">
             <i class="bi bi-arrow-left"></i> Back
         </a>
