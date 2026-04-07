@@ -10,6 +10,7 @@ namespace Hospital.Core.DTOs
     public class DoctorEditDTO
     {
         public Guid ID { get; set; }
+        public string DoctorName { get; set; } = null!;
         public Guid SpecializationId { get; set; }
         public Guid ShiftId { get; set; }
         public bool IsAccepted { get; set; }

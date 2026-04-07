@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-
-namespace Hospital.WebProject.ViewModels.Doctor
+﻿namespace Hospital.WebProject.ViewModels.Doctor
 {
     public class DoctorIndexViewModel
     {

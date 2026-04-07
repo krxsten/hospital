@@ -2,7 +2,7 @@
 @using Hospital.WebProject.ViewModels.Checkup
 @model CheckupIndexViewModel
 
-@if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse"))
+@if (User.IsInRole("Patient"))
 {
     <div class="mb-3">
         <h2 style="text-align:center">———— Check ups ————</h2>

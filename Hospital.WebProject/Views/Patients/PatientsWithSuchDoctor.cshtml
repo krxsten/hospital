@@ -1,39 +1,42 @@
 ﻿<link rel="stylesheet" href="/css/styles.css">
 @using Hospital.WebProject.ViewModels.Patient
 @model List<PatientIndexViewModel>
-<h2 class="text-white">Search Patients by Doctor</h2>
-<div class="mb-3">
-<form method="get" asp-action="PatientsWithSuchDoctor">
-    <input type="text" name="doctorName" class="form-control" placeholder="Enter doctor's first name..." required />
-    <br />
-    <button class="btn btn-primary">Search</button>
-    <a asp-action="Index" class="btn btn-secondary" style="display:inline">Back</a>
-
-</form>
-</div>
-<hr />
-
-@if (Model != null && Model.Any())
+@if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse"))
 {
-    <div class="row">
-        @foreach (var p in Model)
-        {
-            <div class="col-md-4 mb-4">
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        <h5>@p.UserName</h5>
-                        <p>
-                            <strong>Doctor:</strong> @p.DoctorName <br />
-                            <strong>Hospitalization date:</strong> @p.HospitalizationDate
-                            <strong>Hospitalization time:</strong> @p.HospitalizationTime
-                        </p>
+    <h2 class="text-white">Search Patients by Doctor</h2>
+    <div class="mb-3">
+        <form method="get" asp-action="PatientsWithSuchDoctor">
+            <input type="text" name="doctorName" class="form-control" placeholder="Enter doctor's first name..." required />
+            <br />
+            <button class="btn btn-primary">Search</button>
+            <a asp-action="Index" class="btn btn-secondary" style="display:inline">Back</a>
+
+        </form>
+    </div>
+    <hr />
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="row">
+            @foreach (var p in Model)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h5>@p.UserName</h5>
+                            <p>
+                                <strong>Doctor:</strong> @p.DoctorName <br />
+                                <strong>Hospitalization date:</strong> @p.HospitalizationDate
+                                <strong>Hospitalization time:</strong> @p.HospitalizationTime
+                            </p>
+                        </div>
                     </div>
                 </div>
-            </div>
-        }
-    </div>
-}
-else if (Model == null)
-{
-    <p>No patients where found.</p>
+            }
+        </div>
+    }
+    else if (Model == null)
+    {
+        <p>No patients where found.</p>
+    }
 }

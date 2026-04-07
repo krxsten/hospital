@@ -111,7 +111,6 @@ namespace Hospital.WebProject.Controllers
 				{
 					ID = model.ID,
 					SpecializationName = model.SpecializationName,
-                    ImageURL = model.ImageURL,
                     NewImageFile = model.NewImageFile
                 };
 
@@ -141,6 +140,7 @@ namespace Hospital.WebProject.Controllers
 
 			return RedirectToAction(nameof(Index));
 		}
+		[HttpGet]
 		[AllowAnonymous]
         public async Task<IActionResult> GetSpecialization(string specialization)
         {

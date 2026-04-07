@@ -1,30 +1,32 @@
 ﻿<link rel="stylesheet" href="/css/styles.css">
 @using Hospital.WebProject.ViewModels.Room
 @model List<RoomIndexViewModel>
-
-<h2 class="text-white">Search Room</h2>
-<div class="mb-3">
-<form method="get" asp-action="GetRoomsAfterNum">
-    <input type="number" placeholder="Enter room number..." name="roomNum" class="form-control" required />
-    <br />
-    <button class="btn btn-primary">Search</button>
-    <a asp-action="Index" class="btn btn-secondary" style="display:inline">Back</a>
-
-</form>
-</div>
-<hr />
-
-@if (Model != null && Model.Any())
+@if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse") || User.IsInRole("Patient"))
 {
-    @foreach (var r in Model)
+    <h2 class="text-white">Search Room</h2>
+    <div class="mb-3">
+        <form method="get" asp-action="GetRoomsAfterNum">
+            <input type="number" placeholder="Enter room number..." name="roomNum" class="form-control" required />
+            <br />
+            <button class="btn btn-primary">Search</button>
+            <a asp-action="Index" class="btn btn-secondary" style="display:inline">Back</a>
+
+        </form>
+    </div>
+    <hr />
+
+    @if (Model != null && Model.Any())
     {
-        <div class="card mb-2 p-3">
-            Room: @r.RoomNumber | Taken: @r.IsTaken
-        </div>
+        @foreach (var r in Model)
+        {
+            <div class="card mb-2 p-3">
+                Room: @r.RoomNumber | Taken: @r.IsTaken
+            </div>
+        }
     }
-}
-else if (Model == null)
-{
-    <p>No rooms where found.</p>
-}
+    else if (Model == null)
+    {
+        <p>No rooms where found.</p>
+    }
 
+}

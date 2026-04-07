@@ -8,7 +8,7 @@ namespace Hospital.WebProject.ViewModels.Specialization
 
 		public string SpecializationName { get; set; } = null!;
 
-        public string ImageURL { get; set; } = null!;
-        public IFormFile NewImageFile { get; set; } = null!;
+        public string? ImageURL { get; set; } = null!;
+        public IFormFile? NewImageFile { get; set; } = null!;
     }
 }

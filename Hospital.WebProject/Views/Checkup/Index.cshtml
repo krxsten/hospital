@@ -108,7 +108,7 @@
                                 <th>Patient</th>
                                 <th>Doctor</th>
                                 <th>Appointment Date</th>
-                                @if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse"))
+                                @if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse") || User.IsInRole("Patient"))
                                 {
                                     <th>Actions</th>
                                 }
@@ -124,10 +124,11 @@
                                     </td>
                                     <td class="text-muted">@item.Date</td>
 
-                                    @if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse"))
-                                    {
-                                        <td>
-                                            <div class="d-flex justify-content-center gap-2 flex-wrap">
+                                    <td>
+
+                                        <div class="d-flex justify-content-center gap-2 flex-wrap">
+                                            @if (User.IsInRole("Patient"))
+                                            {
                                                 <a asp-action="Edit" asp-route-id="@item.ID"
                                                    class="btn btn-warning btn-action-sm">Edit</a>
                                                 <form asp-action="Delete" asp-route-id="@item.ID" method="post" class="m-0">
@@ -136,7 +137,9 @@
                                                         Delete
                                                     </button>
                                                 </form>
-
+                                            }
+                                            @if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse"))
+                                            {
                                                 <a asp-action="GetBusyTimes"
                                                    asp-route-doctorId="@item.DoctorID"
                                                    asp-route-date="@item.Date"
@@ -146,8 +149,9 @@
                                                    asp-action="GetDoctorShift"
                                                    asp-route-doctorId="@item.DoctorID"
                                                    class="btn btn-warning btn-action-sm">Doctor Shift</a>
-                                            </div>
-                                        </td>
+                                            }
+                                        </div>
+                                    </td>
                                     }
                                 </tr>
                             }

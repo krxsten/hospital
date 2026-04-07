@@ -89,7 +89,8 @@ namespace Hospital.WebProject.Controllers
 			{
 				ID = dto.ID,
 				Name = dto.Name,
-				ImageURL = dto.ImageURL
+				//ImageURL = dto.ImageURL
+				NewImageFile = dto.NewImageFile
 			};
 
 			return View(model);
@@ -111,7 +112,7 @@ namespace Hospital.WebProject.Controllers
 				{
 					ID = model.ID,
 					Name = model.Name,
-                    ImageURL = model.ImageURL,
+                    //ImageURL = model.ImageURL,
 					NewImageFile = model.NewImageFile
 				};
 

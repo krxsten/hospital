@@ -47,38 +47,50 @@ namespace Hospital.Core.Services
 				.FirstOrDefaultAsync();
 		}
 
-		public async Task CreateAsync(SpecializationCreateDTO model)
-		{
+        public async Task CreateAsync(SpecializationCreateDTO model)
+        {
             var uploadResult = await imageService.UploadImageAsync(model.ImageFile);
+
             var specialization = new Specialization
-			{
-				ID = Guid.NewGuid(),
-				SpecializationName = model.SpecializationName,
+            {
+                ID = Guid.NewGuid(),
+                SpecializationName = model.SpecializationName,
                 ImageURL = uploadResult.Url,
                 PublicID = uploadResult.PublicId
             };
 
-			await context.Specializations.AddAsync(specialization);
-			await context.SaveChangesAsync();
-		}
+            await context.Specializations.AddAsync(specialization);
+            await context.SaveChangesAsync();
+        }
 
-		public async Task UpdateAsync(SpecializationIndexDTO model)
-		{
-			var specialization = await context.Specializations.FindAsync(model.ID);
-			if (specialization == null)
-			{
-				return;
-			}
-            if (model.ImageURL != null)
+        public async Task UpdateAsync(SpecializationIndexDTO model)
+        {
+            var specialization = await context.Specializations.FindAsync(model.ID);
+
+            if (specialization == null)
             {
-                var uploadResult = await imageService.UploadImageAsync(model.NewImageFile);
-                specialization.ImageURL = uploadResult.Url;
+                return;
             }
-            specialization.SpecializationName = model.SpecializationName;
-			await context.SaveChangesAsync();
-		}
 
-		public async Task DeleteAsync(Guid id)
+            if (model.NewImageFile != null)
+            {
+                if (!string.IsNullOrEmpty(specialization.PublicID))
+                {
+                    await imageService.DestroyImageAsync(specialization.PublicID);
+                }
+
+                var uploadResult = await imageService.UploadImageAsync(model.NewImageFile);
+
+                specialization.ImageURL = uploadResult.Url;
+                specialization.PublicID = uploadResult.PublicId;
+            }
+
+            specialization.SpecializationName = model.SpecializationName;
+
+            await context.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(Guid id)
 		{
 			var specialization = await context.Specializations.FindAsync(id);
 			if (specialization == null)

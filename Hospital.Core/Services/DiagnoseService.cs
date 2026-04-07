@@ -55,19 +55,36 @@ namespace Hospital.Core.Services
             await context.SaveChangesAsync();
         }
 
-        public async Task UpdateAsync(DiagnoseIndexDTO model)
+        public async Task UpdateAsync(DiagnoseIndexDTO dto)
         {
-            var diagnose = await context.Diagnoses.FindAsync(model.ID);
+            var diagnose = await context.Diagnoses.FindAsync(dto.ID);
+
             if (diagnose == null)
+                throw new Exception("Diagnose not found");
+
+            diagnose.Name = dto.Name;
+
+            if (dto.NewImageFile != null)
             {
-                return;
+                var fileName = Guid.NewGuid().ToString() + Path.GetExtension(dto.NewImageFile.FileName);
+
+                var folderPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images");
+
+                if (!Directory.Exists(folderPath))
+                {
+                    Directory.CreateDirectory(folderPath);
+                }
+
+                var filePath = Path.Combine(folderPath, fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await dto.NewImageFile.CopyToAsync(stream);
+                }
+
+                diagnose.ImageURL = "/images/" + fileName;
             }
-            if (model.ImageURL != null)
-            {
-                var uploadResult = await imageService.UploadImageAsync(model.NewImageFile);
-                diagnose.ImageURL = uploadResult.Url;
-            }
-            diagnose.Name = model.Name;
+
             await context.SaveChangesAsync();
         }
 

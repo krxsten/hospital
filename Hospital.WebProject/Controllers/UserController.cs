@@ -48,6 +48,14 @@ namespace Hospital.WebProject.Controllers
                 PopulateRegisterDropdowns();
                 return View(model);
             }
+
+            if(userManager.FindByEmailAsync(model.Email) != null)
+            {
+                ModelState.AddModelError("", "User with that email address already exists!");
+                PopulateRegisterDropdowns();
+                return View(model);
+            }
+
             if (model.Role == "Doctor" || model.Role == "Nurse")
             {
                 if (model.SpecializationId == null || model.ShiftId == null)
@@ -59,6 +67,24 @@ namespace Hospital.WebProject.Controllers
             }
             if (model.Role == "Patient")
             {
+                if (model.BirthCity == null)
+                {
+                    ModelState.AddModelError("", "Birth city is required for patients..");
+                    PopulateRegisterDropdowns();
+                    return View(model);
+                }
+                if (model.DateOfBirth == null)
+                {
+                    ModelState.AddModelError("", "Date of birth is required for patients..");
+                    PopulateRegisterDropdowns();
+                    return View(model);
+                }
+                if (model.UCN == null)
+                {
+                    ModelState.AddModelError("", "UCN is required for patients..");
+                    PopulateRegisterDropdowns();
+                    return View(model);
+                }
                 if (model.DoctorId == null || model.RoomId == null)
                 {
                     ModelState.AddModelError("", "Doctor and room are required.");

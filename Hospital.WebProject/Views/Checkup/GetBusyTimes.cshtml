@@ -1,25 +1,28 @@
 ﻿<link rel="stylesheet" href="/css/styles.css">
 @model List<DateTime>
-<h2>Busy Times</h2>
-@if (Model == null || !Model.Any())
+@if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse"))
 {
-    <p>No busy times for selected date.</p>
-}
-else
-{
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Busy Time</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var time in Model)
-            {
+    <h2>Busy Times</h2>
+    @if (Model == null || !Model.Any())
+    {
+        <p>No busy times for selected date.</p>
+    }
+    else
+    {
+        <table class="table table-bordered">
+            <thead>
                 <tr>
-                    <td>@time.ToString("hh:mm tt")</td>
+                    <th>Busy Time</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var time in Model)
+                {
+                    <tr>
+                        <td>@time.ToString("hh:mm tt")</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
 }

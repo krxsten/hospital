@@ -1,179 +1,47 @@
-﻿<style>
-    .main-title,
-    .subtitle,
-    .history-text h2,
-    .history-text p,
-    .history-text strong,
-    .stat-box h1,
-    .stat-box p,
-    .service-card h4,
-    .service-card p,
-    .service-card i,
-    .glass-panel h2,
-    .glass-panel p {
-        color: #ffffff !important;
-        opacity: 1 !important;
-    }
+﻿<link rel="stylesheet" href="/css/styles.css">
+@using Hospital.WebProject.ViewModels.Specialization
+@model SpecializationIndexViewModel
 
-    .main-title {
-        font-size: 4rem;
-        font-weight: 900;
-        letter-spacing: -1px;
-        text-transform: uppercase;
-        margin-bottom: 0.5rem;
-    }
 
-    .subtitle {
-        font-size: 1.25rem;
-        font-weight: 300;
-        letter-spacing: 3px;
-        text-transform: uppercase;
-        margin-bottom: 3rem;
-    }
-
-    .glass-panel {
-        background: rgba(255, 255, 255, 0.05);
-        backdrop-filter: blur(15px);
-        border: 2px solid #ffffff; 
-        border-radius: 24px;
-        padding: 40px;
-    }
-
-    .history-text h2 {
-        font-weight: 800;
-        font-size: 2.5rem;
-        margin-bottom: 1.5rem;
-        border-bottom: 4px solid #ffffff;
-        display: inline-block;
-        padding-bottom: 10px;
-    }
-
-    .history-text p {
-        line-height: 1.8;
-        font-size: 1.1rem;
-    }
-
-    .stat-box h1 {
-        font-size: 3.5rem;
-        font-weight: 900;
-        margin-bottom: 0;
-    }
-
-    .stat-box p {
-        text-transform: uppercase;
-        letter-spacing: 2px;
-        font-size: 0.9rem;
-    }
-
-    .service-card {
-        background: rgba(255, 255, 255, 0.08);
-        border: 2px solid #ffffff;
-        padding: 30px;
-        border-radius: 20px;
-        width: 280px;
-        transition: all 0.3s ease;
-        text-align: center;
-    }
-
-        .service-card:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-10px);
-        }
-
-    .btn-primary-white {
-        background-color: #ffffff !important;
-        color: #000000 !important; 
-        font-weight: 900;
-        border: none;
-        text-transform: uppercase;
-    }
-
-    .btn-outline-light {
-        border: 2px solid #ffffff !important;
-        color: #ffffff !important;
-        font-weight: 700;
-    }
-</style>
-
-<div class="container pb-5 mt-4">
-    <div class="text-center mb-5">
-        <h1 class="main-title">Saint Anna</h1>
-        <p class="subtitle">Medical Excellence • Exceptional Care</p>
+@if (User.IsInRole("Admin") || User.IsInRole("Nurse") || User.IsInRole("Doctor"))
+{
+    <div class="mb-3">
+        <h2 style="text-align:center">———— Specializations ————</h2>
     </div>
 
-    <div class="row align-items-center g-5 mb-5">
-        <div class="col-lg-6">
-            <div class="hero-image-container" style="border: 3px solid #ffffff; border-radius: 30px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
-                <img src="~/img/index.jpg" class="img-fluid" alt="Hospital Main" />
-            </div>
+    <form asp-action="Edit" method="post" enctype="multipart/form-data">
+
+        <input type="hidden" asp-for="ID" />
+
+        <div class="mb-3">
+            <label asp-for="SpecializationName" class="form-label"></label>
+            <input asp-for="SpecializationName" class="form-control" />
+            <span class="text-danger" asp-validation-for="SpecializationName"></span>
         </div>
-        <div class="col-lg-6">
-            <div class="history-text">
-                <h2 class="text-white">Our Legacy</h2>
-                <p class="text-white">
-                    Established with a vision for healing, <strong class="text-white">Saint Anna Medical Center</strong> combines
-                    decades of tradition with modern medical innovation.
-                </p>
-                <p class="text-white">
-                    We provide a sanctuary of health where every patient is treated with dignity.
-                    Our facility houses the finest specialists and the most dedicated staff in the region.
-                </p>
-            </div>
+
+        <div class="mb-3">
+            <label asp-for="NewImageFile" class="form-label">Upload Image:</label>
+
+            <input asp-for="NewImageFile" type="file" accept="image/*" class="form-control" />
+
+            <span class="text-danger" asp-validation-for="NewImageFile"></span>
         </div>
-    </div>
 
-    <div class="glass-panel text-center my-5">
-        <div class="row g-4 text-white">
-            <div class="col-md-4 stat-box">
-                <h1 class="text-white">25+</h1>
-                <p class="text-white">Years in Service</p>
+        @* @if (!string.IsNullOrEmpty(Model.ImageURL))
+        {
+            <div class="mb-3">
+                <p>Current image:</p>
+                <img src="@Model.ImageURL" width="200" />
             </div>
-            <div class="col-md-4 stat-box">
-                <h1 class="text-white">100+</h1>
-                <p class="text-white">Specialists</p>
-            </div>
-            <div class="col-md-4 stat-box">
-                <h1 class="text-white">10K+</h1>
-                <p class="text-white">Happy Patients</p>
-            </div>
+        } *@
+
+        <div class="mb-3">
+            <button type="submit" class="btn btn-primary">Submit</button>
+            <a asp-action="Index" class="btn btn-secondary">Back</a>
         </div>
-    </div>
+    </form>
+}
 
-    <div class="text-center py-5">
-        <h2 class="text-white fw-bold mb-5">Our Services</h2>
-        <div class="d-flex flex-wrap justify-content-center gap-4">
-
-            <div class="service-card">
-                <i class="bi bi-heart-pulse fs-1 text-white"></i>
-                <h4 class="text-white fw-bold mt-3">Cardiology</h4>
-                <p class="text-white">Advanced heart care diagnostics.</p>
-            </div>
-
-            <div class="service-card">
-                <i class="bi bi-brain fs-1 text-white"></i>
-                <h4 class="text-white fw-bold mt-3">Neurology</h4>
-                <p class="text-white">Brain and nervous system care.</p>
-            </div>
-
-            <div class="service-card">
-                <i class="bi bi-lightning-charge fs-1 text-white"></i>
-                <h4 class="text-white fw-bold mt-3">Emergency</h4>
-                <p class="text-white">24/7 rapid response unit.</p>
-            </div>
-
-        </div>
-    </div>
-
-    <div class="glass-panel text-center mt-5 py-5">
-        <h2 class="text-white fw-bold mb-3">Professional Medical Assistance</h2>
-        <p class="text-white mb-4 fs-5">Book your consultation with our world-class team today.</p>
-        <div class="d-flex justify-content-center gap-3">
-            <a asp-action="Create" asp-controller="Checkup" class="btn btn-primary-white btn-lg rounded-pill px-5">
-                Book Appointment
-            </a>
-            <a href="/Home/Contacts" class="btn btn-outline-light btn-lg rounded-pill px-5">
-                Contact Us
-            </a>
-        </div>
-    </div>
-</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

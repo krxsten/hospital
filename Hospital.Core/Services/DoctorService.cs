@@ -1,7 +1,9 @@
-using Hospital.Core.Contracts;
+﻿using Hospital.Core.Contracts;
 using Hospital.Core.DTOs;
 using Hospital.Data;
+using Hospital.Data.Entities;
 using Hospital.Entities;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -16,18 +18,43 @@ namespace Hospital.Core.Services
     {
         private readonly HospitalDbContext context;
         private readonly IImageService imageService;
+        private readonly UserManager<User> userManager;
 
-        public DoctorService(HospitalDbContext context, IImageService _imageService)
+        public DoctorService(HospitalDbContext context, 
+            IImageService _imageService,
+            UserManager<User> userManager) 
         {
             this.context = context;
             this.imageService = _imageService;
+            this.userManager = userManager;
         }
         async Task IDoctorService.CreateAsync(DoctorCreateDto dto)
         {
+            var names = dto.DoctorName.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+
+            var firstName = names.Length > 0 ? names[0] : "";
+            var lastName = names.Length > 1 ? names[1] : "";
+
+            var user = new User
+            {
+                Id = Guid.NewGuid(),
+                FirstName = firstName,
+                LastName = lastName,
+                UserName = firstName + "_" + lastName
+            };
+
+            await context.Users.AddAsync(user);
+
+            if (dto.ImageFile == null)
+            {
+                throw new Exception("Image is required");
+            }
+
             var uploadResult = await imageService.UploadImageAsync(dto.ImageFile);
+
             var doctor = new Doctor
             {
-                UserId = dto.UserID,
+                UserId = user.Id,
                 SpecializationId = dto.SpecializationID,
                 ShiftId = dto.ShiftID,
                 IsAccepted = dto.IsAccepted,
@@ -55,6 +82,7 @@ namespace Hospital.Core.Services
             return await context.Doctors
                .Select(d => new DoctorIndexDto
                {
+                   ID = d.ID,
                    UserId = d.UserId,
                    UserName = d.User.FirstName + " " + d.User.LastName,
                    SpecializationId = d.SpecializationId,
@@ -87,23 +115,37 @@ namespace Hospital.Core.Services
 				.FirstOrDefaultAsync();
 		}
 
-		async Task IDoctorService.UpdateAsync(DoctorEditDTO dto)
-		{
-			var doctor = await context.Doctors.FindAsync(dto.ID);
-			if (doctor == null)
-			{
-				return;
-			}
-            if (dto.ImageURL != null)
+        async Task IDoctorService.UpdateAsync(DoctorEditDTO dto)
+        {
+            var doctor = await context.Doctors
+                .Include(d => d.User)
+                .FirstOrDefaultAsync(d => d.ID == dto.ID);
+
+            if (doctor == null)
+            {
+                return;
+            }
+
+            var names = dto.DoctorName.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+
+            doctor.User.FirstName = names.Length > 0 ? names[0] : "";
+            doctor.User.LastName = names.Length > 1 ? names[1] : "";
+
+            if (dto.NewImageFile != null)
             {
                 var uploadResult = await imageService.UploadImageAsync(dto.NewImageFile);
+
                 doctor.ImageURL = uploadResult.Url;
+                doctor.CloudinaryID = uploadResult.PublicId;
             }
+
             doctor.SpecializationId = dto.SpecializationId;
-			doctor.ShiftId = dto.ShiftId;
-			doctor.IsAccepted = dto.IsAccepted;
-			await context.SaveChangesAsync();
-		}
+            doctor.ShiftId = dto.ShiftId;
+            doctor.IsAccepted = dto.IsAccepted;
+
+            await context.SaveChangesAsync();
+        }
+
         public Task<List<DoctorIndexDto>> FilterBySpecialization(string specialization)
         {
             return context.Doctors.Where(d => d.Specialization.SpecializationName==specialization)

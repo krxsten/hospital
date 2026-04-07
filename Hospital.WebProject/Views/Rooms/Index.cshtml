@@ -30,7 +30,7 @@
     }
 
     .btn-room-action {
-        width: 90px !important; 
+        width: 90px !important;
         height: 36px !important;
         display: inline-flex !important;
         align-items: center;
@@ -71,73 +71,78 @@
 
 @using Hospital.WebProject.ViewModels.Room
 @model List<RoomIndexViewModel>
+@if (User.IsInRole("Admin") || User.IsInRole("Patient") || User.IsInRole("Doctor") || User.IsInRole("Nurse"))
+{
 
-<div class="container py-5">
-    <div class="text-center mb-5">
-        <h2 class="fw-bold">Hospital Ward & Rooms</h2>
-        <div class="mx-auto bg-primary rounded-pill mt-2" style="height: 4px; width: 60px;"></div>
-    </div>
+    <div class="container py-5">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Hospital Ward & Rooms</h2>
+            <div class="mx-auto bg-primary rounded-pill mt-2" style="height: 4px; width: 60px;"></div>
+        </div>
 
-    <div class="d-flex justify-content-end align-items-center mb-4 gap-2">
-        @if (User.IsInRole("Admin"))
-        {
-            <a asp-action="Create" class="btn btn-success rounded-pill px-4 shadow-sm">+ Create Room</a>
-        }
+        <div class="d-flex justify-content-end align-items-center mb-4 gap-2">
+            @if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse") || User.IsInRole("Patient"))
+            {
+                <a asp-action="Create" class="btn btn-success rounded-pill px-4 shadow-sm">+ Create Room</a>
+            }
+            @if (User.IsInRole("Admin"))
+            {
+                <a asp-action="GetRoomsAfterNum" class="btn btn-light border rounded-pill px-4 shadow-sm">
+                    <i class="bi bi-search"></i> Search Room
+                </a>
+            }
+            <a asp-action="Index" asp-controller="Home" class="btn btn-secondary rounded-pill px-4 shadow-sm">
+                <i class="bi bi-arrow-left"></i> Back
+            </a>
+        </div>
 
-        <a asp-action="GetRoomsAfterNum" class="btn btn-light border rounded-pill px-4 shadow-sm">
-            <i class="bi bi-search"></i> Search Room
-        </a>
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+            @foreach (var item in Model)
+            {
+                <div class="col">
+                    <div class="card h-100 room-card border-0 shadow-sm p-3">
+                        <div class="card-body text-center">
+                            <div class="mb-2">
+                                @if (item.IsTaken)
+                                {
+                                    <span class="badge bg-danger-subtle text-danger rounded-pill px-3">
+                                        <span class="status-indicator status-taken"></span> Occupied
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-success-subtle text-success rounded-pill px-3">
+                                        <span class="status-indicator status-free"></span> Available
+                                    </span>
+                                }
+                            </div>
 
-        <a asp-action="Index" asp-controller="Home" class="btn btn-secondary rounded-pill px-4 shadow-sm">
-            <i class="bi bi-arrow-left"></i> Back
-        </a>
-    </div>
+                            <div class="room-number-display my-3">
+                                <i class="bi bi-door-closed text-muted me-1"></i> @item.RoomNumber
+                            </div>
 
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
-        @foreach (var item in Model)
-        {
-            <div class="col">
-                <div class="card h-100 room-card border-0 shadow-sm p-3">
-                    <div class="card-body text-center">
-                        <div class="mb-2">
-                            @if (item.IsTaken)
-                            {
-                                <span class="badge bg-danger-subtle text-danger rounded-pill px-3">
-                                    <span class="status-indicator status-taken"></span> Occupied
-                                </span>
-                            }
-                            else
-                            {
-                                <span class="badge bg-success-subtle text-success rounded-pill px-3">
-                                    <span class="status-indicator status-free"></span> Available
-                                </span>
-                            }
-                        </div>
+                            <hr class="text-faded">
 
-                        <div class="room-number-display my-3">
-                            <i class="bi bi-door-closed text-muted me-1"></i> @item.RoomNumber
-                        </div>
-
-                        <hr class="text-faded">
-
-                        <div class="d-flex flex-wrap justify-content-center gap-2 mt-3">
-                            @if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse"))
-                            {
-                                <a asp-action="Edit" asp-route-id="@item.ID" class="btn btn-warning btn-room-action">Edit</a>
-                            }
-
-                            <a asp-action="Details" asp-route-id="@item.ID" class="btn btn-success btn-room-action">Details</a>
-
-                            @if (User.IsInRole("Admin"))
-                            {
-                                <form asp-action="Delete" asp-route-id="@item.ID" method="post" class="m-0">
-                                    <button type="submit" class="btn btn-danger btn-room-action" onclick="return confirm('Delete room?')">Delete</button>
-                                </form>
-                            }
+                            <div class="d-flex flex-wrap justify-content-center gap-2 mt-3">
+                                @if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse"))
+                                {
+                                    <a asp-action="Edit" asp-route-id="@item.ID" class="btn btn-warning btn-room-action">Edit</a>
+                                }
+                                @if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse") || User.IsInRole("Patient"))
+                                {
+                                    <a asp-action="Details" asp-route-id="@item.ID" class="btn btn-success btn-room-action">Details</a>
+                                }
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <form asp-action="Delete" asp-route-id="@item.ID" method="post" class="m-0">
+                                        <button type="submit" class="btn btn-danger btn-room-action" onclick="return confirm('Delete room?')">Delete</button>
+                                    </form>
+                                }
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        }
+            }
+        </div>
     </div>
-</div>
+}

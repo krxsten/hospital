@@ -61,83 +61,83 @@
 
 @using Hospital.WebProject.ViewModels.Patient
 @model List<PatientIndexViewModel>
- @if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse"))
-                    {
-<div class="container pb-5">
-    <div class="text-center mb-5">
-        <h2 class="fw-bold">Comprehensive Patient Records</h2>
-        <div class="mx-auto bg-white rounded-pill mt-2" style="height: 4px; width: 60px;"></div>
-    </div>
+@if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse"))
+{
+    <div class="container pb-5">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">Comprehensive Patient Records</h2>
+            <div class="mx-auto bg-white rounded-pill mt-2" style="height: 4px; width: 60px;"></div>
+        </div>
 
-    <div class="d-flex justify-content-end align-items-center mb-4 gap-2">
-        @if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse"))
-        {
-            <a asp-action="Create" class="btn btn-success rounded-pill px-4 shadow-sm">+ Register Patient</a>
-            <a asp-action="PatientsWithSuchDoctor" class="btn btn-light border rounded-pill px-4 shadow-sm">Search by Doctor</a>
-        }
-        <a asp-action="Index" asp-controller="Home" class="btn btn-secondary rounded-pill px-4 shadow-sm">
-            <i class="bi bi-arrow-left"></i> Back
-        </a>
-    </div>
+        <div class="d-flex justify-content-end align-items-center mb-4 gap-2">
+            @if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse"))
+            {
+                <a asp-action="Create" class="btn btn-success rounded-pill px-4 shadow-sm">+ Register Patient</a>
+                <a asp-action="PatientsWithSuchDoctor" class="btn btn-light border rounded-pill px-4 shadow-sm">Search by Doctor</a>
+            }
+            <a asp-action="Index" asp-controller="Home" class="btn btn-secondary rounded-pill px-4 shadow-sm">
+                <i class="bi bi-arrow-left"></i> Back
+            </a>
+        </div>
 
-    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
-        @foreach (var item in Model)
-        {
-            <div class="col">
-                <div class="card h-100 patient-card border-0 shadow-sm p-4">
+        <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-4">
+            @foreach (var item in Model)
+            {
+                <div class="col">
+                    <div class="card h-100 patient-card border-0 shadow-sm p-4">
 
-                    <div class="d-flex justify-content-between align-items-start mb-4">
-                        <div class="d-flex align-items-center gap-3">
-                            <div>
-                                <h5 class="fw-bold mb-0 text-dark">Patient: @item.UserName</h5>
-                                <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill">Room @item.RoomNumber</span>
+                        <div class="d-flex justify-content-between align-items-start mb-4">
+                            <div class="d-flex align-items-center gap-3">
+                                <div>
+                                    <h5 class="fw-bold mb-0 text-dark">Patient: @item.UserName</h5>
+                                    <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill">Room @item.RoomNumber</span>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="patient-info-grid mb-4">
-                        <div class="info-group">
-                            <div class="info-label">Attending Doctor</div>
-                            <div class="info-value val-highlight">Dr. @item.DoctorName</div>
+                        <div class="patient-info-grid mb-4">
+                            <div class="info-group">
+                                <div class="info-label">Attending Doctor</div>
+                                <div class="info-value val-highlight">Dr. @item.DoctorName</div>
+                            </div>
+                            <div class="info-group">
+                                <div class="info-label">UCN</div>
+                                <div class="info-value">@item.UCN</div>
+                            </div>
+                            <div class="info-group">
+                                <div class="info-label">Hospitalized</div>
+                                <div class="info-value text-success">@item.HospitalizationDate.ToShortDateString() @item.HospitalizationTime.ToShortTimeString()</div>
+                            </div>
+                            <div class="info-group">
+                                <div class="info-label">Discharge Date</div>
+                                <div class="info-value val-danger">@item.DischargeDate.ToShortDateString() @item.DischargeTime.ToShortTimeString()</div>
+                            </div>
+                            <div class="info-group">
+                                <div class="info-label">City of Birth</div>
+                                <div class="info-value">@item.BirthCity</div>
+                            </div>
+                            <div class="info-group">
+                                <div class="info-label">Date of Birth</div>
+                                <div class="info-value">@item.DateOfBirth.ToShortDateString()</div>
+                            </div>
+                            <div class="info-group col-span-2" style="grid-column: span 2;">
+                                <div class="info-label">Phone Number</div>
+                                <div class="info-value"><i class="bi bi-telephone"></i> @item.PhoneNumber</div>
+                            </div>
                         </div>
-                        <div class="info-group">
-                            <div class="info-label">UCN</div>
-                            <div class="info-value">@item.UCN</div>
-                        </div>
-                        <div class="info-group">
-                            <div class="info-label">Hospitalized</div>
-                            <div class="info-value text-success">@item.HospitalizationDate.ToShortDateString() @item.HospitalizationTime.ToShortTimeString()</div>
-                        </div>
-                        <div class="info-group">
-                            <div class="info-label">Discharge Date</div>
-                            <div class="info-value val-danger">@item.DischargeDate.ToShortDateString() @item.DischargeTime.ToShortTimeString()</div>
-                        </div>
-                        <div class="info-group">
-                            <div class="info-label">City of Birth</div>
-                            <div class="info-value">@item.BirthCity</div>
-                        </div>
-                        <div class="info-group">
-                            <div class="info-label">Date of Birth</div>
-                            <div class="info-value">@item.DateOfBirth.ToShortDateString()</div>
-                        </div>
-                        <div class="info-group col-span-2" style="grid-column: span 2;">
-                            <div class="info-label">Phone Number</div>
-                            <div class="info-value"><i class="bi bi-telephone"></i> @item.PhoneNumber</div>
-                        </div>
-                    </div>
 
-                    @if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse"))
-                    {
-                        <div class="mt-auto pt-3 d-flex justify-content-center gap-2 border-top">
-                            <a asp-action="Edit" asp-route-id="@item.ID" class="btn btn-warning btn-patient-action shadow-sm">Edit Profile</a>
-                            <form asp-action="Delete" asp-route-id="@item.ID" method="post" class="m-0">
-                                <button type="submit" class="btn btn-danger btn-patient-action shadow-sm" onclick="return confirm('Archive patient file?')">Delete</button>
-                            </form>
-                        </div>
-                    }
+                        @if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse"))
+                        {
+                            <div class="mt-auto pt-3 d-flex justify-content-center gap-2 border-top">
+                                <a asp-action="Edit" asp-route-id="@item.ID" class="btn btn-warning btn-patient-action shadow-sm">Edit Profile</a>
+                                <form asp-action="Delete" asp-route-id="@item.ID" method="post" class="m-0">
+                                    <button type="submit" class="btn btn-danger btn-patient-action shadow-sm" onclick="return confirm('Archive patient file?')">Delete</button>
+                                </form>
+                            </div>
+                        }
+                    </div>
                 </div>
-            </div>
-        }
+            }
+        </div>
     </div>
-</div>
 }

@@ -1,30 +1,27 @@
-﻿<link rel="stylesheet" href="/css/styles.css">
-@using Hospital.WebProject.ViewModels.Diagnose
+﻿@using Hospital.WebProject.ViewModels.Diagnose
 @model DiagnoseIndexViewModel
-@if (User.IsInRole("Admin") || User.IsInRole("Doctor"))
-{
+
+<form asp-action="Edit" asp-controller="Diagnoses" method="post" enctype="multipart/form-data">
+
+    <input type="hidden" asp-for="ID" />
+
     <div class="mb-3">
-        <h2 style="text-align:center">———— Diagnoses ————</h2>
+        <label asp-for="Name">Diagnose:</label>
+        <input asp-for="Name" class="form-control" />
     </div>
-    <form asp-action="Edit" asp-controller="Diagnoses" method="post">
-        <div class="mb-3">
-            <label asp-for="@Model.Name" class="form-label">Diagnose: </label>
-            <input asp-for="@Model.Name" class="form-control" />
-            <span asp-validation-for="@Model.Name" class="text-danger"></span>
-        </div>
 
-        <div class="mb-3">
-            <label asp-for="@Model.ImageURL" class="form-label">Upload image:</label>
-            <input asp-for="@Model.ImageURL" accept="image/jpeg image/gif image/png" class="form-control" />
-            <span asp-validation-for="@Model.ImageURL" class="text-danger"></span>
-        </div>
+    <div class="mb-3">
+        <label>Upload new image:</label>
+        <input asp-for="NewImageFile" type="file" class="form-control" />
+    </div>
 
+    @if (!string.IsNullOrEmpty(Model.ImageURL))
+    {
         <div class="mb-3">
-            <button type="submit" class="btn btn-primary">Update</button>
-            <a asp-action="Index" class="btn btn-secondary" style="display:inline">Back</a>
+            <p>Current image:</p>
+            <img src="@Model.ImageURL" width="200" />
         </div>
-    </form>
-}
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
-}
+    }
+
+    <button type="submit" class="btn btn-primary">Update</button>
+</form>
