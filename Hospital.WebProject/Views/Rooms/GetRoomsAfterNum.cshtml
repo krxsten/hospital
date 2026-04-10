@@ -1,32 +1,134 @@
-﻿<link rel="stylesheet" href="/css/styles.css">
+﻿<style>
+    .glass-panel {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(15px);
+        border: 2px solid #ffffff;
+        border-radius: 30px;
+        padding: 40px;
+    }
+
+    .room-card {
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid #ffffff;
+        border-radius: 15px;
+        transition: all 0.3s ease;
+        color: #ffffff;
+    }
+
+        .room-card:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: scale(1.02);
+        }
+
+    .custom-input {
+        background-color: transparent !important;
+        border: 1px solid #ffffff !important;
+        color: #ffffff !important;
+        border-radius: 12px;
+        padding: 12px;
+        height: 50px;
+    }
+
+        .custom-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+    .btn-primary-white {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+        font-weight: 800;
+        border-radius: 12px;
+        border: none;
+        transition: all 0.3s ease;
+    }
+
+    .badge-status {
+        padding: 5px 12px;
+        border-radius: 50px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        text-transform: uppercase;
+    }
+
+    .status-occupied {
+        background-color: #ff6b6b;
+        color: #ffffff;
+    }
+
+    .status-available {
+        background-color: #51cf66;
+        color: #ffffff;
+    }
+</style>
+
 @using Hospital.WebProject.ViewModels.Room
 @model List<RoomIndexViewModel>
+
 @if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse") || User.IsInRole("Patient"))
 {
-    <h2 class="text-white">Search Room</h2>
-    <div class="mb-3">
-        <form method="get" asp-action="GetRoomsAfterNum">
-            <input type="number" placeholder="Enter room number..." name="roomNum" class="form-control" required />
-            <br />
-            <button class="btn btn-primary">Search</button>
-            <a asp-action="Index" class="btn btn-secondary" style="display:inline">Back</a>
-
-        </form>
+    <div class="page-header-custom text-center">
+        <h2 class="page-title-white">Room Directory</h2>
+        <div class="title-divider"></div>
     </div>
-    <hr />
 
-    @if (Model != null && Model.Any())
-    {
-        @foreach (var r in Model)
+    <div class="container pb-5">
+        <div class="glass-panel mb-5">
+            <form method="get" asp-action="GetRoomsAfterNum">
+                <div class="row g-3 align-items-end">
+                    <div class="col-md-7">
+                        <label class="text-white mb-2 fw-bold small text-uppercase">Search by Room Number</label>
+                        <input type="number" name="roomNum" class="form-control custom-input"
+                               placeholder="Enter minimum room number..." required />
+                    </div>
+                    <div class="col-md-5 d-flex gap-2">
+                        <button type="submit" class="btn btn-primary-white flex-grow-1" style="height: 50px;">
+                            <i class="bi bi-search me-2"></i>Search
+                        </button>
+                        <a asp-action="Index" class="btn btn-outline-light d-flex align-items-center justify-content-center px-4"
+                           style="height: 50px; border-radius: 12px; flex-grow: 1;">
+                            Back
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        @if (Model != null && Model.Any())
         {
-            <div class="card mb-2 p-3">
-                Room: @r.RoomNumber | Taken: @r.IsTaken
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    @foreach (var r in Model)
+                    {
+                        <div class="room-card mb-3 p-4 d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-door-closed fs-3 me-3"></i>
+                                <div>
+                                    <h5 class="mb-0 fw-bold">Room @r.RoomNumber</h5>
+                                    <span class="small text-white-50">Facility Wing A</span>
+                                </div>
+                            </div>
+
+                            <div>
+                                @if (r.IsTaken)
+                                {
+                                    <span class="badge-status status-occupied">Occupied</span>
+                                }
+                                else
+                                {
+                                    <span class="badge-status status-available">Available</span>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
             </div>
         }
-    }
-    else if (Model == null)
-    {
-        <p>No rooms where found.</p>
-    }
-
+        else if (Model == null)
+        {
+            <div class="text-center py-5">
+                <i class="bi bi-building-exclamation text-white-50" style="font-size: 4rem;"></i>
+                <h4 class="text-white-50 mt-3">No rooms found matching your criteria.</h4>
+            </div>
+        }
+    </div>
 }

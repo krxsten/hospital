@@ -1,43 +1,114 @@
-﻿<link rel="stylesheet" href="/css/styles.css">
+﻿<style>
+    .glass-panel {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(15px);
+        border: 2px solid #ffffff;
+        border-radius: 30px;
+        padding: 40px;
+    }
+
+        .glass-panel label,
+        .glass-panel h4,
+        .page-title-white {
+            color: #ffffff !important;
+            font-weight: 700;
+        }
+
+    .custom-input, .custom-select {
+        background-color: transparent !important;
+        border: 1px solid #ffffff !important;
+        color: #ffffff !important;
+        border-radius: 12px;
+        padding: 12px;
+    }
+
+        .custom-select option {
+            background-color: #0f172a;
+            color: #ffffff;
+        }
+
+        .custom-input:focus, .custom-select:focus {
+            background-color: rgba(255, 255, 255, 0.1) !important;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+            outline: none;
+        }
+
+    .btn-primary-white {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+        font-weight: 800;
+        border-radius: 50px;
+        padding: 12px 40px;
+        text-transform: uppercase;
+        border: none;
+        transition: all 0.3s ease;
+    }
+
+        .btn-primary-white:hover {
+            background-color: rgba(255, 255, 255, 0.9);
+            transform: translateY(-2px);
+        }
+
+    .text-danger {
+        color: #ff6b6b !important;
+        font-weight: 600;
+        font-size: 0.85rem;
+    }
+</style>
+
 @using Hospital.WebProject.ViewModels.Medication
-@model MedicationIndexViewModel
+@model MedicationEditViewModel
+
 @if (User.IsInRole("Admin"))
 {
-
-    <div class="mb-3">
-        <h2 style="text-align:center">———— Medications ————</h2>
+    <div class="page-header-custom text-center">
+        <h2 class="page-title-white">Edit Medication</h2>
+        <div class="title-divider"></div>
     </div>
-    <form asp-action="Edit" method="post">
-        <div class="mb-3">
-            <label asp-for="@Model.Name" class="form-label">Medication: </label>
-            <input asp-for="@Model.Name" class="form-control" />
-            <span class="text-danger" asp-validation-for="@Model.Name"></span>
-        </div>
 
-        <div class="mb-3">
-            <label asp-for="@Model.Description" class="form-label">Description: </label>
-            <input asp-for="@Model.Description" class="form-control" />
-            <span class="text-danger" asp-validation-for="@Model.Description"></span>
-        </div>
+    <div class="container pb-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="glass-panel">
+                    <h4 class="mb-4"><i class="bi bi-pencil-square me-2"></i>Update Pharmaceutical Data</h4>
 
-        <div class="mb-3">
-            <label asp-for="@Model.SideEffects" class="form-label">Side effects: </label>
-            <input asp-for="@Model.SideEffects" class="form-control" />
-            <span class="text-danger" asp-validation-for="@Model.SideEffects"></span>
-        </div>
+                    <form asp-action="Edit" method="post">
 
-        <div class="mb-3">
-            <label asp-for="@Model.DiagnoseID" class="form-label">Medication for diagnose: </label>
-            <select asp-for="@Model.DiagnoseID" asp-items="ViewBag.Diagnose" class="form-select" ></select>
-            <span class="text-danger" asp-validation-for="@Model.DiagnoseID"></span>
-        </div>
+                        <div class="mb-4">
+                            <label asp-for="@Model.Name" class="form-label">Medication Name</label>
+                            <input asp-for="@Model.Name" class="form-control custom-input" />
+                            <span class="text-danger" asp-validation-for="@Model.Name"></span>
+                        </div>
 
-        <div class="mb-3">
-            <button type="submit" class="btn btn-primary">Update</button>
-            <a asp-action="Index" class="btn btn-secondary" style="display:inline">Back</a>
+                        <div class="mb-4">
+                            <label asp-for="@Model.Description" class="form-label">Description</label>
+                            <textarea asp-for="@Model.Description" class="form-control custom-input" rows="3"></textarea>
+                            <span class="text-danger" asp-validation-for="@Model.Description"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="@Model.SideEffects" class="form-label">Side Effects</label>
+                            <input asp-for="@Model.SideEffects" class="form-control custom-input" />
+                            <span class="text-danger" asp-validation-for="@Model.SideEffects"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="@Model.DiagnoseID" class="form-label">Medication for Diagnosis</label>
+                            <select asp-for="@Model.DiagnoseID" asp-items="ViewBag.Diagnose" class="form-select custom-select"></select>
+                            <span class="text-danger" asp-validation-for="@Model.DiagnoseID"></span>
+                        </div>
+
+                        <div class="d-flex gap-3 mt-5 pt-3 border-top border-white border-opacity-25">
+                            <button type="submit" class="btn btn-primary-white flex-grow-1">Update Record</button>
+                            <a asp-action="Index" class="btn btn-outline-light rounded-pill px-5">Back</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-    </form>
+    </div>
 }
+
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }

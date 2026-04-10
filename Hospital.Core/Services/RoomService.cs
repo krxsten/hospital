@@ -28,7 +28,7 @@ namespace Hospital.Core.Services
 					RoomNumber = r.RoomNumber,
 					IsTaken = r.IsTaken
 				})
-				.ToListAsync();
+				.OrderBy(x=>x.RoomNumber).ToListAsync();
 		}
 
 		public async Task<RoomIndexDTO?> GetByIdAsync(Guid id)
@@ -86,7 +86,7 @@ namespace Hospital.Core.Services
                     RoomNumber = r.RoomNumber,
                     IsTaken = r.IsTaken
                 })
-                .ToListAsync();
+                .OrderBy(x => x.RoomNumber).ToListAsync();
         }
 	}
 }

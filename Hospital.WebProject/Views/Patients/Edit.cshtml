@@ -1,85 +1,166 @@
-﻿<link rel="stylesheet" href="/css/styles.css">
+﻿<style>
+    .glass-panel {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(15px);
+        border: 2px solid #ffffff;
+        border-radius: 30px;
+        padding: 40px;
+    }
+
+        .glass-panel label,
+        .glass-panel h4,
+        .page-title-white {
+            color: #ffffff !important;
+            font-weight: 700;
+        }
+
+    .custom-input, .custom-select {
+        background-color: transparent !important;
+        border: 1px solid #ffffff !important;
+        color: #ffffff !important;
+        border-radius: 12px;
+        padding: 12px;
+    }
+
+        .custom-select option {
+            background-color: #0f172a;
+            color: #ffffff;
+        }
+
+        .custom-input:focus, .custom-select:focus {
+            background-color: rgba(255, 255, 255, 0.1) !important;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+            outline: none;
+        }
+
+    .btn-primary-white {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+        font-weight: 800;
+        border-radius: 50px;
+        padding: 12px 40px;
+        text-transform: uppercase;
+        border: none;
+        transition: all 0.3s ease;
+    }
+
+        .btn-primary-white:hover {
+            background-color: rgba(255, 255, 255, 0.9);
+            transform: translateY(-2px);
+        }
+
+    .text-danger {
+        color: #ff6b6b !important;
+        font-weight: 600;
+        font-size: 0.85rem;
+    }
+</style>
+
 @using Hospital.WebProject.ViewModels.Patient
-@model PatientIndexViewModel
+@model PatientEditViewModel
 
 @if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse"))
 {
-    <div class="mb-3">
-        <h2 style="text-align:center">———— Patients ————</h2>
+    <div class="page-header-custom text-center">
+        <h2 class="page-title-white">Edit Patient Profile</h2>
+        <div class="title-divider"></div>
     </div>
-    <form asp-action="Edit" method="post">
-        <div class="mb-3">
-            <label asp-for="@Model.UserID" class="form-label">Patient: </label>
-            <select asp-for="@Model.UserID" asp-items="ViewBag.Users" class="form-select"></select>
-            <span class="text-danger" asp-validation-for="@Model.UserID"></span>
-        </div>
 
-        <div class="mb-3">
-            <label asp-for="@Model.DoctorId" class="form-label">Doctor: </label>
-            <select asp-for="@Model.DoctorId" asp-items="ViewBag.Doctor" class="form-select"></select>
-            <span class="text-danger" asp-validation-for="@Model.DoctorId"></span>
-        </div>
-        <div class="mb-3">
-            <label asp-for="@Model.HospitalizationDate" class="form-label">Hospitalization date: </label>
-            <input asp-for="@Model.HospitalizationDate" type="date" class="form-control" />
-            <span class="text-danger" asp-validation-for="@Model.HospitalizationDate"></span>
-        </div>
+    <div class="container pb-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="glass-panel">
+                    <h4 class="mb-4"><i class="bi bi-person-gear me-2"></i>Update Medical Record</h4>
 
-        <div class="mb-3">
-            <label asp-for="@Model.HospitalizationTime" class="form-label">Hospitalization time: </label>
-            <input asp-for="@Model.HospitalizationTime" type="time" class="form-control" />
-            <span class="text-danger" asp-validation-for="@Model.HospitalizationTime"></span>
-        </div>
+                    <form asp-action="Edit" method="post">
+                        <input type="hidden" asp-for="ID" />
 
-        <div class="mb-3">
-            <label asp-for="@Model.DischargeDate" class="form-label">Discharge date: </label>
-            <input asp-for="@Model.DischargeDate" type="date" class="form-control" />
-            <span class="text-danger" asp-validation-for="@Model.DischargeDate"></span>
-        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <label asp-for="PatientName" class="form-label">Full Name</label>
+                                <input asp-for="PatientName" class="form-control custom-input" placeholder="e.g. Kristen Gencheva" />
+                                <span class="text-danger" asp-validation-for="PatientName"></span>
+                            </div>
 
-        <div class="mb-3">
-            <label asp-for="@Model.DischargeTime" class="form-label">Discharge time: </label>
-            <input asp-for="@Model.DischargeTime" type="date" class="form-control" />
-            <span class="text-danger" asp-validation-for="@Model.DischargeTime"></span>
-        </div>
+                            <div class="col-md-6 mb-4">
+                                <label asp-for="@Model.DoctorId" class="form-label">Assigned Doctor</label>
+                                <select asp-for="@Model.DoctorId" asp-items="ViewBag.Doctor" class="form-select custom-select"></select>
+                                <span class="text-danger" asp-validation-for="@Model.DoctorId"></span>
+                            </div>
+                        </div>
 
-        <div class="mb-3">
-            <label asp-for="@Model.RoomId" class="form-label">Room: </label>
-            <select asp-for="@Model.RoomId" asp-items="ViewBag.Room" class="form-select">
-            </select>
-            <span class="text-danger" asp-validation-for="@Model.RoomId"></span>
-        </div>
+                        <div class="row">
+                            <div class="col-md-3 mb-4">
+                                <label asp-for="@Model.HospitalizationDate" class="form-label">Admit Date</label>
+                                <input asp-for="@Model.HospitalizationDate" type="date" class="form-control custom-input" />
+                                <span class="text-danger" asp-validation-for="@Model.HospitalizationDate"></span>
+                            </div>
 
-        <div class="mb-3">
-            <label asp-for="@Model.BirthCity" class="form-label">Birth city: </label>
-            <input asp-for="@Model.BirthCity" class="form-control" />
-            <span class="text-danger" asp-validation-for="@Model.BirthCity"></span>
-        </div>
+                            <div class="col-md-3 mb-4">
+                                <label asp-for="@Model.HospitalizationTime" class="form-label">Admit Time</label>
+                                <input asp-for="@Model.HospitalizationTime" type="time" class="form-control custom-input" />
+                                <span class="text-danger" asp-validation-for="@Model.HospitalizationTime"></span>
+                            </div>
 
-        <div class="mb-3">
-            <label asp-for="@Model.DateOfBirth" class="form-label">Date of birth: </label>
-            <input asp-for="@Model.DateOfBirth" class="form-control" />
-            <span class="text-danger" asp-validation-for="@Model.DateOfBirth"></span>
-        </div>
+                            <div class="col-md-3 mb-4">
+                                <label asp-for="@Model.DischargeDate" class="form-label">Discharge Date</label>
+                                <input asp-for="@Model.DischargeDate" type="date" class="form-control custom-input" />
+                                <span class="text-danger" asp-validation-for="@Model.DischargeDate"></span>
+                            </div>
 
-        <div class="mb-3">
-            <label asp-for="@Model.PhoneNumber" class="form-label">Phone number: </label>
-            <input asp-for="@Model.PhoneNumber" class="form-control" />
-            <span class="text-danger" asp-validation-for="@Model.PhoneNumber"></span>
-        </div>
+                            <div class="col-md-3 mb-4">
+                                <label asp-for="@Model.DischargeTime" class="form-label">Discharge Time</label>
+                                <input asp-for="@Model.DischargeTime" type="time" class="form-control custom-input" />
+                                <span class="text-danger" asp-validation-for="@Model.DischargeTime"></span>
+                            </div>
+                        </div>
 
-        <div class="mb-3">
-            <label asp-for="@Model.UCN" class="form-label">UCN: </label>
-            <input asp-for="@Model.UCN" class="form-control" />
-            <span class="text-danger" asp-validation-for="@Model.UCN"></span>
-        </div>
+                        <div class="row">
+                            <div class="col-md-4 mb-4">
+                                <label asp-for="@Model.RoomId" class="form-label">Assigned Room</label>
+                                <select asp-for="@Model.RoomId" asp-items="ViewBag.Room" class="form-select custom-select"></select>
+                                <span class="text-danger" asp-validation-for="@Model.RoomId"></span>
+                            </div>
 
-        <div class="mb-3">
-            <button type="submit" class="btn btn-primary">Update</button>
-            <a asp-action="Index" class="btn btn-secondary" style="display:inline">Back</a>
+                            <div class="col-md-4 mb-4">
+                                <label asp-for="BirthCity" class="form-label fw-bold">Select City</label>
+                                <select asp-for="BirthCity" asp-items="ViewBag.Cities" class="form-select custom-select">
+                                    <option value="">-- Select a birth City --</option>
+                                </select>
+                                <span asp-validation-for="BirthCity" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-4 mb-4">
+                                <label asp-for="@Model.DateOfBirth" class="form-label">Date of Birth</label>
+                                <input asp-for="@Model.DateOfBirth" type="date" class="form-control custom-input" />
+                                <span class="text-danger" asp-validation-for="@Model.DateOfBirth"></span>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <label asp-for="@Model.PhoneNumber" class="form-label">Phone Number</label>
+                                <input asp-for="@Model.PhoneNumber" class="form-control custom-input" />
+                                <span class="text-danger" asp-validation-for="@Model.PhoneNumber"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-4">
+                                <label asp-for="@Model.UCN" class="form-label">UCN (Personal ID)</label>
+                                <input asp-for="@Model.UCN" class="form-control custom-input" />
+                                <span class="text-danger" asp-validation-for="@Model.UCN"></span>
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-3 mt-5 pt-3 border-top border-white border-opacity-25">
+                            <button type="submit" class="btn btn-primary-white flex-grow-1">Update Information</button>
+                            <a asp-action="Index" class="btn btn-outline-light rounded-pill px-5">Back</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-    </form>
+    </div>
 }
+
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }

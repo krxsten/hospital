@@ -12,24 +12,27 @@ namespace Hospital.Data.Entities
     {
         [Key]
         public Guid ID { get; set; }
-        public Guid? DoctorId { get; set; }
+        public Guid DoctorId { get; set; }
         public Doctor? Doctor { get; set; }
 
-        public Guid? RoomId { get; set; }
+        public Guid RoomId { get; set; }
         public Room? Room { get; set; }
-
+        [Required]
         [DataType(DataType.Date)]
         public DateOnly HospitalizationDate { get; set; }
+        [Required]
         [DataType(DataType.Time)]
         public TimeOnly HospitalizationTime { get; set; }
+        [Required]
         [DataType(DataType.Date)]
         public DateOnly DischargeDate { get; set; }
+        [Required]
         [DataType(DataType.Time)]
         public TimeOnly DischargeTime { get; set; }
 
-        public Guid? UserId { get; set; }
+        public Guid UserId { get; set; }
         public User? User { get; set; }
-
+        [Required]
         [StringLength(100, MinimumLength = 2)]
         public string BirthCity { get; set; }
 
@@ -37,11 +40,10 @@ namespace Hospital.Data.Entities
         [Range(typeof(DateOnly), "1920-01-01", "2100-12-31", ErrorMessage = "Date of birth must be after 1920.")]
         public DateOnly DateOfBirth { get; set; }
         
-
         [Required]
         [Phone(ErrorMessage = "Невалиден телефон")]
         public string PhoneNumber { get; set; }
-            
+        [Required]
         [StringLength(10)]
         public string UCN { get; set; }
 

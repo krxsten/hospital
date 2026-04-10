@@ -15,10 +15,10 @@ namespace Hospital.Core.Contracts
 
         Task CreateAsync(PatientCreateDTO model);
 
-        Task UpdateAsync(PatientIndexDTO model);
+        Task UpdateAsync(PatientEditDTO model);
 
         Task DeleteAsync(Guid id);
-
+        Task<PatientIndexDTO> Details(Guid id);
         Task SelectDoctorAndRoomAsync(Guid userId, Guid doctorId, Guid roomId,
             string birthCity, DateOnly dateOfBirth, string phoneNumber, string ucn);
         Task<List<PatientIndexDTO>> PatientsWithSuchDoctor(string doctroName);

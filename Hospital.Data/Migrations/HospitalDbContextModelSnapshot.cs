@@ -53,7 +53,7 @@ namespace Hospital.Data.Migrations
                         {
                             ID = new Guid("d44665d6-6b30-4542-b932-cbb7ee71efbe"),
                             Date = new DateOnly(2026, 4, 12),
-                            DoctorID = new Guid("08ccdf4b-02ad-464f-9ef2-fb73ceee1826"),
+                            DoctorID = new Guid("6d3dacc1-3b7a-4e43-8caa-5b82a6f4a21f"),
                             PatientID = new Guid("9783d8b3-014f-477a-b951-6ff87057b44f"),
                             Time = new TimeOnly(16, 30, 0)
                         },
@@ -61,7 +61,7 @@ namespace Hospital.Data.Migrations
                         {
                             ID = new Guid("7f55e59e-5ab2-4e36-92bd-d66f3c453ab9"),
                             Date = new DateOnly(2026, 6, 1),
-                            DoctorID = new Guid("3480fb00-bfdc-4139-91a3-a975153ab6b3"),
+                            DoctorID = new Guid("dcd275c5-67c4-423b-a7b2-78ab917a2d5d"),
                             PatientID = new Guid("06999216-e4e9-4455-856d-5246259b2684"),
                             Time = new TimeOnly(16, 30, 0)
                         },
@@ -69,7 +69,7 @@ namespace Hospital.Data.Migrations
                         {
                             ID = new Guid("5dad99cf-b93a-4376-b772-86fd44246d7e"),
                             Date = new DateOnly(2026, 7, 19),
-                            DoctorID = new Guid("3480fb00-bfdc-4139-91a3-a975153ab6b3"),
+                            DoctorID = new Guid("0f6d5fde-bc75-4df5-8886-090806665b82"),
                             PatientID = new Guid("eac603b7-4022-4fb1-8c04-28db2f0f2162"),
                             Time = new TimeOnly(8, 30, 0)
                         },
@@ -85,7 +85,7 @@ namespace Hospital.Data.Migrations
                         {
                             ID = new Guid("aff1363e-af23-4c5b-a88f-ba81e536333b"),
                             Date = new DateOnly(2026, 5, 23),
-                            DoctorID = new Guid("3480fb00-bfdc-4139-91a3-a975153ab6b3"),
+                            DoctorID = new Guid("2a4e1d97-8411-4cf8-9da2-af9452f16eca"),
                             PatientID = new Guid("718919c3-760f-4a6a-8abf-b1cd1b459d11"),
                             Time = new TimeOnly(15, 30, 0)
                         });
@@ -213,7 +213,7 @@ namespace Hospital.Data.Migrations
                     b.Property<TimeOnly>("DischargeTime")
                         .HasColumnType("time");
 
-                    b.Property<Guid?>("DoctorId")
+                    b.Property<Guid>("DoctorId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateOnly>("HospitalizationDate")
@@ -224,9 +224,9 @@ namespace Hospital.Data.Migrations
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<Guid?>("RoomId")
+                    b.Property<Guid>("RoomId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("UCN")
@@ -234,20 +234,28 @@ namespace Hospital.Data.Migrations
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
-                    b.Property<Guid?>("UserId")
+                    b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("ID");
 
                     b.HasIndex("DoctorId");
 
+                    b.HasIndex("PhoneNumber")
+                        .IsUnique();
+
                     b.HasIndex("RoomId");
 
-                    b.HasIndex("UserId")
-                        .IsUnique()
-                        .HasFilter("[UserId] IS NOT NULL");
+                    b.HasIndex("UCN")
+                        .IsUnique();
 
-                    b.ToTable("Patients");
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("Patients", t =>
+                        {
+                            t.HasCheckConstraint("CK_DateOfBirth_MinYear", "DATEPART(year, [DateOfBirth]) > 1920");
+                        });
 
                     b.HasData(
                         new
@@ -465,17 +473,17 @@ namespace Hospital.Data.Migrations
                         {
                             Id = new Guid("e7d8baba-f7b1-4ed0-9bbb-139dc13e878e"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "C1",
+                            ConcurrencyStamp = "f259740e-7d8a-4c91-9556-54776103b41e",
                             Email = "kristeng@gmail.com",
                             EmailConfirmed = false,
-                            FirstName = "KRISTEN",
-                            LastName = "GENCHEVA",
+                            FirstName = "Kristen",
+                            LastName = "Gencheva",
                             LockoutEnabled = false,
                             NormalizedEmail = "KRISTENG@GMAIL.COM",
                             NormalizedUserName = "KRISTEN_GENCHEVA",
-                            PasswordHash = "HASH",
+                            PasswordHash = "AQAAAAEAACcQAAAAEOMqA8Y8X8V3qYm9Q1j8fR6z8v0w5L2k5R9x4b3v2n1m0A==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "S1",
+                            SecurityStamp = "9699665e-7685-48b4-9f44-846c4f923e3e",
                             TwoFactorEnabled = false,
                             UserName = "kristen_gencheva"
                         },
@@ -483,7 +491,7 @@ namespace Hospital.Data.Migrations
                         {
                             Id = new Guid("072eae42-46ab-4919-aae5-073aef56c00d"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "C2",
+                            ConcurrencyStamp = "a1b2c3d4-e5f6-4a5b-6c7d-8e9f0a1b2c3d",
                             Email = "ivanp@gmail.com",
                             EmailConfirmed = false,
                             FirstName = "Ivan",
@@ -491,9 +499,9 @@ namespace Hospital.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "IVANP@GMAIL.COM",
                             NormalizedUserName = "IVAN_PETROV",
-                            PasswordHash = "HASH",
+                            PasswordHash = "AQAAAAEAACcQAAAAEPv1B8Y8X8V3qYm9Q1j8fR6z8v0w5L2k5R9x4b3v2n1m0B==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "S2",
+                            SecurityStamp = "c4d1f2a3-6b7c-4d8e-9f0a-1b2c3d4e5f6g",
                             TwoFactorEnabled = false,
                             UserName = "ivan_petrov"
                         },
@@ -501,7 +509,7 @@ namespace Hospital.Data.Migrations
                         {
                             Id = new Guid("7c425879-d37a-48a6-91d9-2345120a3f6a"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "C3",
+                            ConcurrencyStamp = "b2c3d4e5-f6a7-4b8c-9d0e-1f2a3b4c5d6e",
                             Email = "gergid@gmail.com",
                             EmailConfirmed = false,
                             FirstName = "Georgi",
@@ -509,9 +517,9 @@ namespace Hospital.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "GEORGID@GMAIL.COM",
                             NormalizedUserName = "GEORGI_DIMITROV",
-                            PasswordHash = "HASH",
+                            PasswordHash = "AQAAAAEAACcQAAAAELk3C8Y8X8V3qYm9Q1j8fR6z8v0w5L2k5R9x4b3v2n1m0C==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "S3",
+                            SecurityStamp = "d5e6f7a8-b9c0-4d1e-2f3a-4b5c6d7e8f9a",
                             TwoFactorEnabled = false,
                             UserName = "georgi_dimitrov"
                         },
@@ -519,7 +527,7 @@ namespace Hospital.Data.Migrations
                         {
                             Id = new Guid("3d86822f-0eba-44ce-8484-27addbfe7357"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "C4",
+                            ConcurrencyStamp = "c3d4e5f6-a7b8-9c0d-1e2f-3a4b5c6d7e8f",
                             Email = "nikolaii@gmail.com",
                             EmailConfirmed = false,
                             FirstName = "Nikolai",
@@ -527,9 +535,9 @@ namespace Hospital.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "NIKOLAII@GMAIL.COM",
                             NormalizedUserName = "NIKOLAI_IVANOV",
-                            PasswordHash = "HASH",
+                            PasswordHash = "AQAAAAEAACcQAAAAEMp4D8Y8X8V3qYm9Q1j8fR6z8v0w5L2k5R9x4b3v2n1m0D==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "S4",
+                            SecurityStamp = "e6f7a8b9-c0d1-2e3f-4a5b-6c7d8e9f0a1b",
                             TwoFactorEnabled = false,
                             UserName = "nikolai_ivanov"
                         },
@@ -537,7 +545,7 @@ namespace Hospital.Data.Migrations
                         {
                             Id = new Guid("7dca2bf8-df73-4dbf-a602-52e147eafe1e"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "C5",
+                            ConcurrencyStamp = "d4e5f6a7-b8c9-0d1e-2f3a-4b5c6d7e8f9a",
                             Email = "dimiturs@gmail.com",
                             EmailConfirmed = false,
                             FirstName = "Dimitur",
@@ -545,9 +553,9 @@ namespace Hospital.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "DIMITURS@GMAIL.COM",
                             NormalizedUserName = "DIMITUR_STOYANOV",
-                            PasswordHash = "HASH",
+                            PasswordHash = "AQAAAAEAACcQAAAAENr5E8Y8X8V3qYm9Q1j8fR6z8v0w5L2k5R9x4b3v2n1m0E==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "S5",
+                            SecurityStamp = "f7a8b9c0-d1e2-3f4a-5b6c-7d8e9f0a1b2c",
                             TwoFactorEnabled = false,
                             UserName = "dimitur_stoyanov"
                         },
@@ -555,7 +563,7 @@ namespace Hospital.Data.Migrations
                         {
                             Id = new Guid("23b350b4-0dd6-43fc-b5dc-818faf2b74e6"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "C6",
+                            ConcurrencyStamp = "e5f6a7b8-c9d0-1e2f-3a4b-5c6d7e8f9a0b",
                             Email = "aleksandurn@gmail.com",
                             EmailConfirmed = false,
                             FirstName = "Aleksandur",
@@ -563,9 +571,9 @@ namespace Hospital.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ALEKSANDURN@GMAIL.COM",
                             NormalizedUserName = "ALEKSANDUR_NIKOLOV",
-                            PasswordHash = "HASH",
+                            PasswordHash = "AQAAAAEAACcQAAAAEOs6F8Y8X8V3qYm9Q1j8fR6z8v0w5L2k5R9x4b3v2n1m0F==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "S6",
+                            SecurityStamp = "a8b9c0d1-e2f3-4a5b-6c7d-8e9f0a1b2c3d",
                             TwoFactorEnabled = false,
                             UserName = "aleksandur_nikolov"
                         },
@@ -573,7 +581,7 @@ namespace Hospital.Data.Migrations
                         {
                             Id = new Guid("d9ccb374-6b17-4e66-9c11-79412a9e1e93"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "C7",
+                            ConcurrencyStamp = "f6a7b8c9-d0e1-2f3a-4b5c-6d7e8f9a0b1c",
                             Email = "yoanai@gmail.com",
                             EmailConfirmed = false,
                             FirstName = "Yoana",
@@ -581,9 +589,9 @@ namespace Hospital.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "YOANAI@GMAIL.COM",
                             NormalizedUserName = "YOANA_ILIEVA",
-                            PasswordHash = "HASH",
+                            PasswordHash = "AQAAAAEAACcQAAAAEPt7G8Y8X8V3qYm9Q1j8fR6z8v0w5L2k5R9x4b3v2n1m0G==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "S7",
+                            SecurityStamp = "b9c0d1e2-f3a4-5b6c-7d8e-9f0a1b2c3d4e",
                             TwoFactorEnabled = false,
                             UserName = "yoana_ilieva"
                         },
@@ -591,7 +599,7 @@ namespace Hospital.Data.Migrations
                         {
                             Id = new Guid("30f2b4ed-e0e3-4443-8595-4dc6e26b3338"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "C8",
+                            ConcurrencyStamp = "a7b8c9d0-e1f2-3a4b-5c6d-7e8f9a0b1c2d",
                             Email = "viktoriyan@gmail.com",
                             EmailConfirmed = false,
                             FirstName = "Viktoriya",
@@ -599,9 +607,9 @@ namespace Hospital.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "VIKTORIYAN@GMAIL.COM",
                             NormalizedUserName = "VIKTORIYA_NIKOLOVA",
-                            PasswordHash = "HASH",
+                            PasswordHash = "AQAAAAEAACcQAAAAEQv8H8Y8X8V3qYm9Q1j8fR6z8v0w5L2k5R9x4b3v2n1m0H==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "S8",
+                            SecurityStamp = "c0d1e2f3-a4b5-6c7d-8e9f-0a1b2c3d4e5f",
                             TwoFactorEnabled = false,
                             UserName = "viktoriya_nikolova"
                         },
@@ -609,7 +617,7 @@ namespace Hospital.Data.Migrations
                         {
                             Id = new Guid("51daaed0-67e7-4c4a-b254-2745af5365df"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "C9",
+                            ConcurrencyStamp = "b8c9d0e1-f2a3-4b5c-6d7e-8f9a0b1c2d3e",
                             Email = "annaa@gmail.com",
                             EmailConfirmed = false,
                             FirstName = "Anna",
@@ -617,9 +625,9 @@ namespace Hospital.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ANNAA@GMAIL.COM",
                             NormalizedUserName = "ANNA_ALEKSANDROVA",
-                            PasswordHash = "HASH",
+                            PasswordHash = "AQAAAAEAACcQAAAAERw9I8Y8X8V3qYm9Q1j8fR6z8v0w5L2k5R9x4b3v2n1m0I==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "S9",
+                            SecurityStamp = "d1e2f3a4-b5c6-7d8e-9f0a-1b2c3d4e5f6a",
                             TwoFactorEnabled = false,
                             UserName = "anna_aleksandrova"
                         },
@@ -627,7 +635,7 @@ namespace Hospital.Data.Migrations
                         {
                             Id = new Guid("cbdfa704-0f6d-431f-8ede-dd952adacfc9"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "C10",
+                            ConcurrencyStamp = "c9d0e1f2-a3b4-5c6d-7e8f-9a0b1c2d3e4f",
                             Email = "elenap@gmail.com",
                             EmailConfirmed = false,
                             FirstName = "Elena",
@@ -635,9 +643,9 @@ namespace Hospital.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ELENAP@GMAIL.COM",
                             NormalizedUserName = "ELENA_PETROVA",
-                            PasswordHash = "HASH",
+                            PasswordHash = "AQAAAAEAACcQAAAAESx0J8Y8X8V3qYm9Q1j8fR6z8v0w5L2k5R9x4b3v2n1m0J==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "S10",
+                            SecurityStamp = "e2f3a4b5-c6d7-8e9f-0a1b-2c3d4e5f6a7b",
                             TwoFactorEnabled = false,
                             UserName = "elena_petrova"
                         },
@@ -645,7 +653,7 @@ namespace Hospital.Data.Migrations
                         {
                             Id = new Guid("f6662c6a-414b-4b5c-ae1b-7b31103dd464"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "C11",
+                            ConcurrencyStamp = "d0e1f2a3-b4c5-6d7e-8f9a-0b1c2d3e4f5a",
                             Email = "aleksandrag@gmail.com",
                             EmailConfirmed = false,
                             FirstName = "Aleksandra",
@@ -653,9 +661,9 @@ namespace Hospital.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ALEKSANDRAG@GMAIL.COM",
                             NormalizedUserName = "ALEKSANDRA_GEORGIEVA",
-                            PasswordHash = "HASH",
+                            PasswordHash = "AQAAAAEAACcQAAAAETy1K8Y8X8V3qYm9Q1j8fR6z8v0w5L2k5R9x4b3v2n1m0K==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "S11",
+                            SecurityStamp = "f3a4b5c6-d7e8-9f0a-1b2c-3d4e5f6a7b8c",
                             TwoFactorEnabled = false,
                             UserName = "aleksandra_georgieva"
                         },
@@ -663,7 +671,7 @@ namespace Hospital.Data.Migrations
                         {
                             Id = new Guid("354fa92a-6b54-4d12-b90c-9926dc906462"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "C12",
+                            ConcurrencyStamp = "e1f2a3b4-c5d6-7e8f-9a0b-1c2d3e4f5a6b",
                             Email = "mariai@gmail.com",
                             EmailConfirmed = false,
                             FirstName = "Maria",
@@ -671,9 +679,9 @@ namespace Hospital.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "MARIAI@GMAIL.COM",
                             NormalizedUserName = "MARIA_IVANOVA",
-                            PasswordHash = "HASH",
+                            PasswordHash = "AQAAAAEAACcQAAAAEUz2L8Y8X8V3qYm9Q1j8fR6z8v0w5L2k5R9x4b3v2n1m0L==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "S12",
+                            SecurityStamp = "a4b5c6d7-e8f9-0a1b-2c3d-4e5f6a7b8c9d",
                             TwoFactorEnabled = false,
                             UserName = "maria_ivanova"
                         },
@@ -681,7 +689,7 @@ namespace Hospital.Data.Migrations
                         {
                             Id = new Guid("02e72b22-0abd-4ce4-80d1-30b8c13f952b"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "C13",
+                            ConcurrencyStamp = "f2a3b4c5-d6e7-8f9a-0b1c-2d3e4f5a6b7c",
                             Email = "desid@gmail.com",
                             EmailConfirmed = false,
                             FirstName = "Desislava",
@@ -689,9 +697,9 @@ namespace Hospital.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "DESID@GMAIL.COM",
                             NormalizedUserName = "DESISLAVA_DIMITROVA",
-                            PasswordHash = "HASH",
+                            PasswordHash = "AQAAAAEAACcQAAAAEV03M8Y8X8V3qYm9Q1j8fR6z8v0w5L2k5R9x4b3v2n1m0M==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "S13",
+                            SecurityStamp = "b5c6d7e8-f9a0-1b2c-3d4e-5f6a7b8c9d0e",
                             TwoFactorEnabled = false,
                             UserName = "desislava_dimitrova"
                         },
@@ -699,7 +707,7 @@ namespace Hospital.Data.Migrations
                         {
                             Id = new Guid("741d970d-f405-4bd1-94b2-eec2c3fb33e2"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "C14",
+                            ConcurrencyStamp = "0d1e2f3a-4b5c-6d7e-8f9a-0b1c2d3e4f5a",
                             Email = "gerganav@gmail.com",
                             EmailConfirmed = false,
                             FirstName = "Gergana",
@@ -707,9 +715,9 @@ namespace Hospital.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "GERGANAV@GMAIL.COM",
                             NormalizedUserName = "GERGANA_VASILEVA",
-                            PasswordHash = "HASH",
+                            PasswordHash = "AQAAAAEAACcQAAAAEW14N8Y8X8V3qYm9Q1j8fR6z8v0w5L2k5R9x4b3v2n1m0N==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "S14",
+                            SecurityStamp = "c6d7e8f9-a0b1-2c3d-4e5f-6a7b8c9d0e1f",
                             TwoFactorEnabled = false,
                             UserName = "gergana_vasileva"
                         },
@@ -717,7 +725,7 @@ namespace Hospital.Data.Migrations
                         {
                             Id = new Guid("355ad73e-6b7d-4ade-846d-7cab0da06629"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "C15",
+                            ConcurrencyStamp = "1e2f3a4b-5c6d-7e8f-9a0b-1c2d3e4f5a6b",
                             Email = "ralitsak@gmail.com",
                             EmailConfirmed = false,
                             FirstName = "Ralitsa",
@@ -725,9 +733,9 @@ namespace Hospital.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "RALITSAK@GMAIL.COM",
                             NormalizedUserName = "RALITSA_KOSTOVA",
-                            PasswordHash = "HASH",
+                            PasswordHash = "AQAAAAEAACcQAAAAEX25O8Y8X8V3qYm9Q1j8fR6z8v0w5L2k5R9x4b3v2n1m0O==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "S15",
+                            SecurityStamp = "d7e8f9a0-b1c2-3d4e-5f6a-7b8c9d0e1f2a",
                             TwoFactorEnabled = false,
                             UserName = "ralitsa_kostova"
                         },
@@ -735,7 +743,7 @@ namespace Hospital.Data.Migrations
                         {
                             Id = new Guid("a7e0d718-a822-48db-b8ff-82cff6dbd5c7"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "C16",
+                            ConcurrencyStamp = "2f3a4b5c-6d7e-8f9a-0b1c-2d3e4f5a6b7c",
                             Email = "petarg@gmail.com",
                             EmailConfirmed = false,
                             FirstName = "Petar",
@@ -743,9 +751,9 @@ namespace Hospital.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "PETARG@GMAIL.COM",
                             NormalizedUserName = "PETAR_GEORGIEV",
-                            PasswordHash = "HASH",
+                            PasswordHash = "AQAAAAEAACcQAAAAEY36P8Y8X8V3qYm9Q1j8fR6z8v0w5L2k5R9x4b3v2n1m0P==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "S16",
+                            SecurityStamp = "e8f9a0b1-c2d3-4e5f-6a7b-8c9d0e1f2a3b",
                             TwoFactorEnabled = false,
                             UserName = "petar_georgiev"
                         },
@@ -753,7 +761,7 @@ namespace Hospital.Data.Migrations
                         {
                             Id = new Guid("04347895-6b6e-4608-be4c-5f428b759669"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "C17",
+                            ConcurrencyStamp = "3a4b5c6d-7e8f-9a0b-1c2d-3e4f5a6b7c8d",
                             Email = "stefank@gmail.com",
                             EmailConfirmed = false,
                             FirstName = "Stefan",
@@ -761,9 +769,9 @@ namespace Hospital.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "STEFANK@GMAIL.COM",
                             NormalizedUserName = "STEFAN_KOLEV",
-                            PasswordHash = "HASH",
+                            PasswordHash = "AQAAAAEAACcQAAAAEZ47Q8Y8X8V3qYm9Q1j8fR6z8v0w5L2k5R9x4b3v2n1m0Q==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "S17",
+                            SecurityStamp = "f9a0b1c2-d3e4-5f6a-7b8c-9d0e1f2a3b4c",
                             TwoFactorEnabled = false,
                             UserName = "stefan_kolev"
                         },
@@ -771,7 +779,7 @@ namespace Hospital.Data.Migrations
                         {
                             Id = new Guid("96747275-9c90-449e-a91c-eb6863183a27"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "C18",
+                            ConcurrencyStamp = "4b5c6d7e-8f9a-0b1c-2d3e-4f5a6b7c8d9e",
                             Email = "borislavt@gmail.com",
                             EmailConfirmed = false,
                             FirstName = "Borislav",
@@ -779,9 +787,9 @@ namespace Hospital.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "BORISLAVT@GMAIL.COM",
                             NormalizedUserName = "BORISLAV_TODOROV",
-                            PasswordHash = "HASH",
+                            PasswordHash = "AQAAAAEAACcQAAAAEa58R8Y8X8V3qYm9Q1j8fR6z8v0w5L2k5R9x4b3v2n1m0R==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "S18",
+                            SecurityStamp = "a0b1c2d3-e4f5-6a7b-8c9d-0e1f2a3b4c5d",
                             TwoFactorEnabled = false,
                             UserName = "borislav_todorov"
                         },
@@ -789,7 +797,7 @@ namespace Hospital.Data.Migrations
                         {
                             Id = new Guid("865c2545-7806-4857-a621-f035e520a596"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "C19",
+                            ConcurrencyStamp = "5c6d7e8f-9a0b-1c2d-3e4f-5a6b7c8d9e0f",
                             Email = "hristov@gmail.com",
                             EmailConfirmed = false,
                             FirstName = "Hristo",
@@ -797,9 +805,9 @@ namespace Hospital.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "HRISTOV@GMAIL.COM",
                             NormalizedUserName = "HRISTO_VASILEV",
-                            PasswordHash = "HASH",
+                            PasswordHash = "AQAAAAEAACcQAAAAEb69S8Y8X8V3qYm9Q1j8fR6z8v0w5L2k5R9x4b3v2n1m0S==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "S19",
+                            SecurityStamp = "b1c2d3e4-f5a6-7b8c-9d0e-1f2a3b4c5d6e",
                             TwoFactorEnabled = false,
                             UserName = "hristo_vasilev"
                         },
@@ -807,7 +815,7 @@ namespace Hospital.Data.Migrations
                         {
                             Id = new Guid("c5982307-ef67-4b65-b438-8f9e1e3a240b"),
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "C20",
+                            ConcurrencyStamp = "6d7e8f9a-0b1c-2d3e-4f5a-6b7c8d9e0f1a",
                             Email = "martini@gmail.com",
                             EmailConfirmed = false,
                             FirstName = "Martin",
@@ -815,9 +823,9 @@ namespace Hospital.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "MARTINI@GMAIL.COM",
                             NormalizedUserName = "MARTIN_ILIEV",
-                            PasswordHash = "HASH",
+                            PasswordHash = "AQAAAAEAACcQAAAAEc70T8Y8X8V3qYm9Q1j8fR6z8v0w5L2k5R9x4b3v2n1m0T==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "S20",
+                            SecurityStamp = "c2d3e4f5-a6b7-8c9d-0e1f-2a3b4c5d6e7f",
                             TwoFactorEnabled = false,
                             UserName = "martin_iliev"
                         });
@@ -850,79 +858,79 @@ namespace Hospital.Data.Migrations
                         new
                         {
                             ID = new Guid("91b25ace-9e01-4c25-b0ea-3c8bad060315"),
-                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775043137/716959ed-ecf1-4c3e-a6ad-dfb7caca7863_mxmyot.png",
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775764569/b992faff-00ff-4c16-9a01-e8aa73b286cc.png",
                             Name = "Influenza",
-                            PublicID = "716959ed-ecf1-4c3e-a6ad-dfb7caca7863"
+                            PublicID = "b992faff-00ff-4c16-9a01-e8aa73b286cc"
                         },
                         new
                         {
                             ID = new Guid("732a09fb-ad41-4059-829b-8f32cbf0ce2f"),
-                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/v1774523282/5ab0f5a2-2ef5-4769-b2a7-9e485afd8a21.png",
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775764927/db29fdde-76a6-4e2d-974c-5bfd4d9bbd71.png",
                             Name = "Hypertension",
-                            PublicID = "5ab0f5a2-2ef5-4769-b2a7-9e485afd8a21"
+                            PublicID = "v1775764927/db29fdde-76a6-4e2d-974c-5bfd4d9bbd71"
                         },
                         new
                         {
                             ID = new Guid("46a961d1-e24f-4029-9c13-4ee9a345610c"),
-                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/v1774522900/79aadf40-1666-44d1-8a39-b72d08f433ac.png",
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775764641/48ae0b79-490c-4fb9-84cd-9c688ac54aea.png",
                             Name = "Diabetes",
-                            PublicID = "79aadf40-1666-44d1-8a39-b72d08f433ac"
+                            PublicID = "48ae0b79-490c-4fb9-84cd-9c688ac54aea"
                         },
                         new
                         {
                             ID = new Guid("2edd634a-5c31-4f68-b9b5-58c2f5b80216"),
-                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/v1774522988/12f38fbe-0962-464f-89fc-26cf3598a478.png",
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775764945/0f4c597f-8d2c-4a88-b923-fe49d824b5e6.png",
                             Name = "Pneumonia",
-                            PublicID = "12f38fbe-0962-464f-89fc-26cf3598a478"
+                            PublicID = "0f4c597f-8d2c-4a88-b923-fe49d824b5e6"
                         },
                         new
                         {
                             ID = new Guid("0b0a943c-4d25-4b22-b21f-ee4f80f8e6b0"),
-                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/v1774523421/31435cc9-7c7f-47ba-94c6-8e14a8790876.png",
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775764975/328d764d-3a97-4933-8f28-a89c2f8805b7.png",
                             Name = "Migraine",
-                            PublicID = "31435cc9-7c7f-47ba-94c6-8e14a8790876"
+                            PublicID = "328d764d-3a97-4933-8f28-a89c2f8805b7"
                         },
                         new
                         {
                             ID = new Guid("02ce1c83-0198-4d90-9dc1-d697c61f936e"),
-                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/v1774523396/de9b8762-40d7-459f-9f11-aeb90f41f4a8.png",
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775764961/a72a5e9e-61ae-442b-8853-5bc76a336170.png",
                             Name = "Fracture",
-                            PublicID = "de9b8762-40d7-459f-9f11-aeb90f41f4a8"
+                            PublicID = "a72a5e9e-61ae-442b-8853-5bc76a336170"
                         },
                         new
                         {
                             ID = new Guid("d793f73f-51a0-4ff0-b6fa-5ffd4d47cd15"),
-                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/v1774523070/38a63bdf-b3a2-4719-91d1-e874170d0387.png",
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775764810/51b2718c-af7a-41f3-96fb-aba23237bb9a.png",
                             Name = "Asthma",
-                            PublicID = "38a63bdf-b3a2-4719-91d1-e874170d0387"
+                            PublicID = "51b2718c-af7a-41f3-96fb-aba23237bb9a"
                         },
                         new
                         {
                             ID = new Guid("c97e4a52-4926-4268-8261-82739340e77b"),
-                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/v1774523162/1c6fae53-754a-48e0-92ba-309ceaed5972.png",
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775764908/9dfa36a2-4cc8-4319-acf1-1382c3766327.png",
                             Name = "Raynauld's syndrome",
-                            PublicID = "1c6fae53-754a-48e0-92ba-309ceaed5972"
+                            PublicID = "9dfa36a2-4cc8-4319-acf1-1382c3766327"
                         },
                         new
                         {
                             ID = new Guid("885aea72-26c5-48b5-88cc-7128b7e81499"),
-                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/v1774523117/88005d89-b665-4fac-b2a8-1325f75a2809.png",
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775764880/1272e03f-5e20-4989-b638-ebe83f57bf86.png",
                             Name = "Osteoporosis",
-                            PublicID = "88005d89-b665-4fac-b2a8-1325f75a2809"
+                            PublicID = "1272e03f-5e20-4989-b638-ebe83f57bf86"
                         },
                         new
                         {
                             ID = new Guid("49a578fc-5f30-40b6-810f-3ca54b0e2a02"),
-                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/v1774522872/f83a45f2-58db-4045-99a9-8b5829b13f05.png",
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775764602/71e1a51c-2d54-4ea6-8cc1-34b6716d2816.png",
                             Name = "Hashimoto's disease",
-                            PublicID = "f83a45f2-58db-4045-99a9-8b5829b13f05"
+                            PublicID = "71e1a51c-2d54-4ea6-8cc1-34b6716d2816"
                         },
                         new
                         {
                             ID = new Guid("2dfdf306-41d8-4aca-abd6-91ed7d4adc8a"),
-                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775043330/c4510bbe-5309-4952-9ccd-326308a2c64a_vy0qwz.png",
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775764674/82339fab-d0e6-48a4-ba49-5ce412cac822.png",
                             Name = "Bronchitis",
-                            PublicID = "c4510bbe-5309-4952-9ccd-326308a2c64a_vy0qwz"
+                            PublicID = "82339fab-d0e6-48a4-ba49-5ce412cac822z"
                         });
                 });
 
@@ -977,8 +985,8 @@ namespace Hospital.Data.Migrations
                         new
                         {
                             ID = new Guid("e1ceefa2-e56b-4395-9049-c689bea9417f"),
-                            CloudinaryID = "doctor5_vwg329",
-                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775045919/doctor5_vwg329.jpg",
+                            CloudinaryID = "doctor7_ylf8tt",
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775045915/doctor7_ylf8tt.jpg",
                             IsAccepted = true,
                             ShiftId = new Guid("0288c0db-23d0-4cef-b74c-ef997285b18c"),
                             SpecializationId = new Guid("7a67c94b-50fb-4043-83f1-afdade20b451"),
@@ -997,8 +1005,8 @@ namespace Hospital.Data.Migrations
                         new
                         {
                             ID = new Guid("2a4e1d97-8411-4cf8-9da2-af9452f16eca"),
-                            CloudinaryID = "doctor3_djf78l",
-                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775045922/doctor3_djf78l.jpg",
+                            CloudinaryID = "doctor8_daewlm",
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775045915/doctor8_daewlm.jpg",
                             IsAccepted = true,
                             ShiftId = new Guid("aaaaaaf9-5059-478c-8df4-db3fd4342b14"),
                             SpecializationId = new Guid("9cfb1a19-193f-4bf7-bc4b-c744a89f59eb"),
@@ -1007,8 +1015,8 @@ namespace Hospital.Data.Migrations
                         new
                         {
                             ID = new Guid("3480fb00-bfdc-4139-91a3-a975153ab6b3"),
-                            CloudinaryID = "doctor2_x95tr9",
-                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775045917/doctor2_x95tr9.jpg",
+                            CloudinaryID = "f4c9ef33d04a22050038e9e53eeb7d85_w2l72d",
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775044425/f4c9ef33d04a22050038e9e53eeb7d85_w2l72d.jpg",
                             IsAccepted = true,
                             ShiftId = new Guid("0288c0db-23d0-4cef-b74c-ef997285b18c"),
                             SpecializationId = new Guid("1d3e1ea9-5265-4ff3-9875-d7ac37a2d8b2"),
@@ -1037,8 +1045,8 @@ namespace Hospital.Data.Migrations
                         new
                         {
                             ID = new Guid("6d3dacc1-3b7a-4e43-8caa-5b82a6f4a21f"),
-                            CloudinaryID = "f4c9ef33d04a22050038e9e53eeb7d85_w2l72d",
-                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775044425/f4c9ef33d04a22050038e9e53eeb7d85_w2l72d.jpg",
+                            CloudinaryID = "doctor2_x95tr9",
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775045917/doctor2_x95tr9.jpg",
                             IsAccepted = true,
                             ShiftId = new Guid("2cd29802-44c5-4559-8cc3-225984ae748f"),
                             SpecializationId = new Guid("c484edec-d525-438a-92c4-ad80a9a41878"),
@@ -1047,8 +1055,8 @@ namespace Hospital.Data.Migrations
                         new
                         {
                             ID = new Guid("0f6d5fde-bc75-4df5-8886-090806665b82"),
-                            CloudinaryID = "doctor8_daewlm",
-                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775045915/doctor8_daewlm.jpg",
+                            CloudinaryID = "doctor3_djf78l",
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775045922/doctor3_djf78l.jpg",
                             IsAccepted = true,
                             ShiftId = new Guid("baaafe92-5c0f-420b-87f0-fb1da4868b41"),
                             SpecializationId = new Guid("4ee4ce69-da26-4f66-85cf-30623200cbf4"),
@@ -1057,8 +1065,8 @@ namespace Hospital.Data.Migrations
                         new
                         {
                             ID = new Guid("dcd275c5-67c4-423b-a7b2-78ab917a2d5d"),
-                            CloudinaryID = "doctor7_ylf8tt",
-                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775045915/doctor7_ylf8tt.jpg",
+                            CloudinaryID = "doctor5_vwg329",
+                            ImageURL = "https://res.cloudinary.com/dyoxqki3d/image/upload/q_auto/f_auto/v1775045919/doctor5_vwg329.jpg",
                             IsAccepted = true,
                             ShiftId = new Guid("2cd29802-44c5-4559-8cc3-225984ae748f"),
                             SpecializationId = new Guid("a5519f22-cefb-4771-a5e9-de7b40817df8"),
@@ -1625,17 +1633,20 @@ namespace Hospital.Data.Migrations
                     b.HasOne("Hospital.Entities.Doctor", "Doctor")
                         .WithMany("Patients")
                         .HasForeignKey("DoctorId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("Hospital.Entities.Room", "Room")
                         .WithMany("ListOfPatients")
                         .HasForeignKey("RoomId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("Hospital.Data.Entities.User", "User")
                         .WithOne("Patient")
                         .HasForeignKey("Hospital.Data.Entities.Patient", "UserId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("Doctor");
 

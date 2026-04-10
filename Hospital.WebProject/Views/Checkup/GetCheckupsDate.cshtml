@@ -1,50 +1,67 @@
 ﻿@using Hospital.WebProject.ViewModels.Checkup
 @model List<CheckupIndexViewModel>
 @{
-    ViewData["Title"] = "Checkups After Date";
+    ViewData["Title"] = "Checkups Search";
 }
+
 @if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse") || User.IsInRole("Patient"))
 {
-    <h2 class="text-white">Search Checkups</h2>
-    <div class="mb-3">
-        <form method="get" asp-action="GetCheckupsDate">
-        <div class="form-group">
-            <input type="date" name="date" placeholder="Enter date..." class="form-control"
-                   value="@Context.Request.Query["date"]" required />
-        </div>
+    <div class="container mt-4">
+        <h2 class="text-white mb-4">Search Checkups After Date</h2>
 
-        <br />
-        <button type="submit" class="btn btn-primary">Search</button>
-        <a asp-action="Index" class="btn btn-secondary" style="display:inline">Back</a>
+        <div class="card bg-dark p-4 shadow-lg border-0" style="border-radius: 15px;">
+            <form method="get" asp-action="GetCheckupsDate">
+                <div class="row g-3 align-items-end">
+                    <div class="col-md-6">
+                        <label class="text-white mb-2">Select Start Date:</label>
+                        <input type="date" name="date" class="form-control"
+                               value="@Context.Request.Query["date"]" required
+                               style="height: 50px; border-radius: 10px;" />
+                    </div>
 
-    </form>
-    </div>
-    <hr />
-
-    @if (Model != null && Model.Any())
-    {
-        <h3 class="text-white">Results:</h3>
-
-        <div class="row">
-            @foreach (var checkup in Model)
-            {
-                <div class="col-md-4 mb-4">
-                    <div class="card shadow-sm rounded-3">
-                        <div class="card-body">
-                            <h5 class="card-title">@checkup.Date</h5>
-                            <p class="card-text">
-                                <strong>Time:</strong> @checkup.Time <br />
-                                <strong>Doctor:</strong> @checkup.DoctorName <br />
-                                <strong>Patient:</strong> @checkup.PatientName
-                            </p>
-                        </div>
+                    <div class="col-md-6 d-flex gap-2">
+                        <button type="submit" class="btn btn-primary flex-grow-1" style="height: 50px; border-radius: 10px;">
+                            <i class="bi bi-search me-2"></i>Search
+                        </button>
+                        <a asp-action="Index" class="btn btn-outline-light d-flex align-items-center justify-content-center px-4"
+                           style="height: 50px; border-radius: 10px;">
+                            Back
+                        </a>
                     </div>
                 </div>
-            }
+            </form>
         </div>
-    }
-    else if (Model == null)
-    {
-        <p>No checkups found for the selected date.</p>
-    }
+
+        <hr class="text-white my-5" />
+
+        @if (Model != null && Model.Any())
+        {
+            <h3 class="text-white mb-4">Results Found: (@Model.Count)</h3>
+            <div class="row">
+                @foreach (var checkup in Model)
+                {
+                    <div class="col-md-4 mb-4">
+                        <div class="card h-100 shadow-sm border-0 rounded-3">
+                            <div class="card-header bg-primary text-white">
+                                <i class="bi bi-calendar-event me-2"></i> @checkup.Date
+                            </div>
+                            <div class="card-body">
+                                <p class="card-text">
+                                    <strong><i class="bi bi-clock"></i> Time:</strong> @checkup.Time <br />
+                                    <strong><i class="bi bi-person-badge"></i> Doctor:</strong> @checkup.DoctorName <br />
+                                    <strong><i class="bi bi-person"></i> Patient:</strong> @checkup.PatientName
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else if (Context.Request.Query.ContainsKey("date"))
+        {
+            <div class="alert alert-info border-0 shadow-sm rounded-3">
+                <i class="bi bi-info-circle me-2"></i> No checkups found for the selected date or after that.
+            </div>
+        }
+    </div>
 }

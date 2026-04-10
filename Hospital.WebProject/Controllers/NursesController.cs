@@ -51,7 +51,7 @@ namespace Hospital.WebProject.Controllers
 				SpecializationName = x.SpecializationName,
 				ShiftId = x.ShiftId,
 				ShiftName = x.ShiftName,
-				UserID = x.UserID,
+				UserID = x.UserId,
 				UserName = x.UserName,
 				IsAccepted = x.IsAccepted,
 				ImageURL = x.ImageURL
@@ -78,13 +78,27 @@ namespace Hospital.WebProject.Controllers
 				await LoadDropdownsAsync();
 				return View(model);
 			}
+            if (string.IsNullOrWhiteSpace(model.NurseName))
+            {
+                ModelState.AddModelError("DoctorName", "Doctor name is required.");
+                await LoadDropdownsAsync();
+                return View(model);
+            }
+
+            if (model.Image == null)
+            {
+                ModelState.AddModelError("Image", "Image is required.");
+                await LoadDropdownsAsync();
+                return View(model);
+            }
+
             try
             {
                 var dto = new NurseCreateDTO
                 {
-                    UserID = model.UserID,
-                    SpecializationId = model.SpecializationId,
-                    ShiftId = model.ShiftId,
+                    NurseName = model.NurseName,
+                    SpecializationID = model.SpecializationID,
+                    ShiftID = model.ShiftID,
                     IsAccepted = model.IsAccepted,
                     ImageFile = model.Image
                 };
@@ -111,15 +125,15 @@ namespace Hospital.WebProject.Controllers
 				return NotFound();
 			}
 
-			var model = new NurseIndexViewModel
+			var model = new NurseEditViewModel
 			{
-				ID = dto.ID,
-				UserID = dto.UserID,
-				SpecializationId = dto.SpecializationId,
-				ShiftId = dto.ShiftId,
-				IsAccepted = dto.IsAccepted,
-				ImageURL = dto.ImageURL
-			};
+                ID = dto.ID,
+                SpecializationId = dto.SpecializationId,
+                ShiftId = dto.ShiftId,
+                IsAccepted = dto.IsAccepted,
+                ExistingImage = dto.ImageURL,
+                NurseName = dto.UserName
+            };
 
 			return View(model);
 		}
@@ -127,7 +141,7 @@ namespace Hospital.WebProject.Controllers
 		[Authorize(Roles = "Admin")]
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Edit(NurseIndexViewModel model)
+		public async Task<IActionResult> Edit(NurseEditViewModel model)
 		{
 			if (!ModelState.IsValid)
 			{
@@ -136,15 +150,14 @@ namespace Hospital.WebProject.Controllers
 			}
             try
             {
-                var dto = new NurseIndexDTO
+                var dto = new NurseEditDTO
                 {
                     ID = model.ID,
-                    UserID = model.UserID,
                     SpecializationId = model.SpecializationId,
                     ShiftId = model.ShiftId,
                     IsAccepted = model.IsAccepted,
-                    ImageURL = model.ImageURL,
-                    NewImageFile = model.NewImageFile
+                    NewImageFile = model.File,
+                    NurseName = model.NurseName
                 };
 
                 await nurseService.UpdateAsync(dto);
@@ -177,7 +190,7 @@ namespace Hospital.WebProject.Controllers
                 SpecializationName = x.SpecializationName,
                 ShiftId = x.ShiftId,
                 ShiftName = x.ShiftName,
-                UserID = x.UserID,
+                UserID = x.UserId,
                 UserName = x.UserName,
                 IsAccepted = x.IsAccepted,
                 ImageURL = x.ImageURL
@@ -196,7 +209,7 @@ namespace Hospital.WebProject.Controllers
                 SpecializationName = x.SpecializationName,
                 ShiftId = x.ShiftId,
                 ShiftName = x.ShiftName,
-                UserID = x.UserID,
+                UserID = x.UserId,
                 UserName = x.UserName,
                 IsAccepted = x.IsAccepted,
                 ImageURL = x.ImageURL

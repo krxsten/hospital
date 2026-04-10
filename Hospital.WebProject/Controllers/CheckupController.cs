@@ -5,6 +5,7 @@ using Hospital.Data.Entities;
 using Hospital.Entities;
 using Hospital.WebProject.ViewModels.Checkup;
 using Hospital.WebProject.ViewModels.Diagnose;
+using Hospital.WebProject.ViewModels.Doctor;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -89,6 +90,7 @@ namespace Hospital.WebProject.Controllers
             }
             var dto = new CheckupCreateDTO
             {
+                
                 Date = model.Date,
                 Time = model.Time,
                 DoctorID = model.DoctorID,
@@ -99,7 +101,7 @@ namespace Hospital.WebProject.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [Authorize(Roles = "Patient")]
+        [Authorize(Roles = "Admin,Doctor,Nurse")]
         [HttpGet]
         public async Task<IActionResult> Edit(Guid id)
         {
@@ -111,15 +113,13 @@ namespace Hospital.WebProject.Controllers
                 return NotFound();
             }
 
-            var model = new CheckupIndexViewModel
+            var model = new CheckupEditViewModel
             {
                 ID = checkup.ID,
                 Date = checkup.Date,
                 Time = checkup.Time,
                 DoctorID = checkup.DoctorID,
-                DoctorName = checkup.DoctorName,
                 PatientID = checkup.PatientID,
-                PatientName = checkup.PatientName
             };
             if (model.Date < DateOnly.FromDateTime(DateTime.Today))
             {
@@ -130,27 +130,33 @@ namespace Hospital.WebProject.Controllers
 
         [Authorize(Roles = "Admin,Doctor,Nurse")]
         [HttpPost]
-        public async Task<IActionResult> Edit(CheckupIndexViewModel model)
+        public async Task<IActionResult> Edit(CheckupEditViewModel model)
         {
             if (!ModelState.IsValid)
             {
                 await LoadDropdownsAsync();
                 return View(model);
             }
-
-            var dto = new CheckupIndexDTO
+            try
             {
-                ID = model.ID,
-                Date = model.Date,
-                Time = model.Time,
-                DoctorID = model.DoctorID,
-                PatientID = model.PatientID,
-                DoctorName = model.DoctorName,
-                PatientName = model.PatientName
-            };
+                var dto = new CheckupEditDTO
+                {
+                    ID = model.ID,
+                    Date = model.Date,
+                    Time = model.Time,
+                    DoctorID = model.DoctorID,
+                    PatientID = model.PatientID,
+                };
 
-            await checkupService.UpdateAsync(dto);
-            return RedirectToAction(nameof(Index));
+                await checkupService.UpdateAsync(dto);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, ex.Message);
+                await LoadDropdownsAsync();
+                return View(model);
+            }
         }
 
         [Authorize(Roles = "Admin,Doctor,Nurse")]
@@ -180,10 +186,10 @@ namespace Hospital.WebProject.Controllers
             var shift = await context.Doctors
                 .Include(d => d.Shift)
                 .Where(d => d.ID == doctorId)
-                .Select(d => new
+                .Select(d => new DoctorShiftViewModel
                 {
-                    d.Shift.StartTime,
-                    d.Shift.EndTime
+                    EndTime = d.Shift.EndTime,
+                    StartTime = d.Shift.StartTime
                 })
                 .FirstOrDefaultAsync();
 

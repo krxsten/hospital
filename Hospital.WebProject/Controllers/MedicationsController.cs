@@ -87,14 +87,14 @@ namespace Hospital.WebProject.Controllers
 				return NotFound();
 			}
 
-			var model = new MedicationIndexViewModel
+			var model = new MedicationEditViewModel
 			{
 				ID = dto.ID,
 				Name = dto.Name,
 				DiagnoseID = dto.DiagnoseID,
-				DiagnoseName = dto.DiagnoseName,
 				Description = dto.Description,
 				SideEffects = dto.SideEffects
+				
 			};
 
 			return View(model);
@@ -103,7 +103,7 @@ namespace Hospital.WebProject.Controllers
 		[Authorize(Roles = "Admin")]
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Edit(MedicationIndexViewModel model)
+		public async Task<IActionResult> Edit(MedicationEditViewModel model)
 		{
 			if (!ModelState.IsValid)
 			{
@@ -111,14 +111,14 @@ namespace Hospital.WebProject.Controllers
 				return View(model);
 			}
 
-			var dto = new MedicationIndexDTO
+			var dto = new MedicationEditDTO
 			{
 				ID = model.ID,
 				Name = model.Name,
 				DiagnoseID = model.DiagnoseID,
-				DiagnoseName = model.DiagnoseName,
 				Description = model.Description,
 				SideEffects = model.SideEffects
+				
 			};
 
 			await medicationService.UpdateAsync(dto);
@@ -153,6 +153,7 @@ namespace Hospital.WebProject.Controllers
                 DiagnoseName = x.DiagnoseName,
                 Description = x.Description,
                 SideEffects = x.SideEffects
+				
             }).ToList();
 
             return View(model);

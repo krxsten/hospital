@@ -67,6 +67,33 @@
                 background-color: #bbdefb !important;
                 color: #0b3c91 !important;
             }
+    .navbar-nav .nav-link {
+        border: 1px solid transparent; 
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        margin: 0 2px;
+    }
+
+        .navbar-nav .nav-link:hover {
+            border-color: rgba(255, 255, 255, 0.5); 
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+    .navbar .dropdown-menu {
+        border: 1px solid transparent;
+        border-radius: 8px;
+        margin: 2px 8px; 
+        transition: all 0.2s ease;
+    }
+
+        .navbar .dropdown-menu :hover {
+            border-color: #0d47a1 !important; 
+            background-color: #f8f9fa !important;
+        }
+
+    .nav-link.active {
+        border-color: #bbdefb !important;
+    }
 </style>
 <!DOCTYPE html>
 <html lang="en">
@@ -188,7 +215,7 @@
                                     </li>
                                 }
                                 @if (User.IsInRole("Admin") || User.IsInRole("Doctor") ||
-                                                                User.IsInRole("Nurse") || User.IsInRole("Patient"))
+                                                                User.IsInRole("Nurse"))
                                 {
                                     <li class="nav-item">
                                         <a class="dropdown-item" asp-controller="Rooms" asp-action="Index">

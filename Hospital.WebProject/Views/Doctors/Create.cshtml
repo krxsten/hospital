@@ -1,42 +1,122 @@
-﻿@using Hospital.WebProject.ViewModels.Doctor
+﻿<style>
+    .glass-panel {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(15px);
+        border: 2px solid #ffffff;
+        border-radius: 30px;
+        padding: 40px;
+    }
+
+        .glass-panel label,
+        .glass-panel h4,
+        .page-title-white {
+            color: #ffffff !important;
+            font-weight: 700;
+        }
+
+    .custom-input, .custom-select {
+        background-color: transparent !important;
+        border: 1px solid #ffffff !important;
+        color: #ffffff !important;
+        border-radius: 10px;
+        padding: 12px;
+    }
+
+        .custom-select option {
+            background-color: #0f172a;
+            color: #ffffff;
+        }
+
+        .custom-input:focus, .custom-select:focus {
+            background-color: rgba(255, 255, 255, 0.1) !important;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+
+    .upload-area {
+        border: 1px dashed #ffffff;
+        padding: 15px;
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.02);
+    }
+
+    .btn-primary-white {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+        font-weight: 800;
+        border-radius: 50px;
+        padding: 12px 40px;
+        text-transform: uppercase;
+        border: none;
+        transition: all 0.3s ease;
+    }
+
+        .btn-primary-white:hover {
+            background-color: rgba(255, 255, 255, 0.9);
+            transform: scale(1.02);
+        }
+
+    .text-danger {
+        color: #ff6b6b !important;
+        font-weight: 600;
+        font-size: 0.85rem;
+    }
+</style>
+
+@using Hospital.WebProject.ViewModels.Doctor
 @model DoctorCreateViewModel
 
 @if (User.IsInRole("Admin"))
 {
-    <div class="mb-3">
-        <h2 style="text-align:center">———— Doctors ————</h2>
+    <div class="page-header-custom text-center">
+        <h2 class="page-title-white">Register New Specialist</h2>
+        <div class="title-divider"></div>
     </div>
 
-    <form asp-controller="Doctors" asp-action="Create" method="post" enctype="multipart/form-data">
-        <div class="mb-3">
-            <label asp-for="DoctorName" class="form-label">Doctor Name:</label>
-            <input asp-for="DoctorName" class="form-control" />
-            <span class="text-danger" asp-validation-for="DoctorName"></span>
-        </div>
+    <div class="container pb-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-7">
+                <div class="glass-panel">
+                    <h4 class="mb-4"><i class="bi bi-person-plus-fill me-2"></i>Doctor Profile</h4>
 
-        <div class="mb-3">
-            <label asp-for="SpecializationID" class="form-label">Specialization:</label>
-            <select asp-for="SpecializationID" asp-items="ViewBag.Specialization" class="form-select"></select>
-            <span class="text-danger" asp-validation-for="SpecializationID"></span>
-        </div>
+                    <form asp-controller="Doctors" asp-action="Create" method="post" enctype="multipart/form-data">
 
-        <div class="mb-3">
-            <label asp-for="ShiftID" class="form-label">Shift:</label>
-            <select asp-for="ShiftID" asp-items="ViewBag.Shift" class="form-select"></select>
-            <span class="text-danger" asp-validation-for="ShiftID"></span>
-        </div>
+                        <div class="mb-4">
+                            <label asp-for="DoctorName" class="form-label">Full Name</label>
+                            <input asp-for="DoctorName" class="form-control custom-input" placeholder="e.g. John Doe" />
+                            <span class="text-danger" asp-validation-for="DoctorName"></span>
+                        </div>
 
-        <div class="mb-3">
-            <label asp-for="Image" class="form-label">Upload Image:</label>
-            <input asp-for="Image" type="file" accept="image/*" class="form-control" />
-            <span class="text-danger" asp-validation-for="Image"></span>
-        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <label asp-for="SpecializationID" class="form-label">Field of Expertise</label>
+                                <select asp-for="SpecializationID" asp-items="ViewBag.Specialization" class="form-select custom-select"></select>
+                                <span class="text-danger" asp-validation-for="SpecializationID"></span>
+                            </div>
 
-        <div class="mb-3">
-            <button type="submit" class="btn btn-primary">Submit</button>
-            <a asp-action="Index" class="btn btn-secondary">Back</a>
+                            <div class="col-md-6 mb-4">
+                                <label asp-for="ShiftID" class="form-label">Assigned Shift</label>
+                                <select asp-for="ShiftID" asp-items="ViewBag.Shift" class="form-select custom-select"></select>
+                                <span class="text-danger" asp-validation-for="ShiftID"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="Image" class="form-label">Professional Photo</label>
+                            <div class="upload-area">
+                                <input asp-for="Image" type="file" accept="image/*" class="form-control custom-input border-0" />
+                            </div>
+                            <span class="text-danger" asp-validation-for="Image"></span>
+                        </div>
+
+                        <div class="d-flex gap-3 mt-5 pt-3 border-top border-white border-opacity-25">
+                            <button type="submit" class="btn btn-primary-white flex-grow-1">Create Specialist</button>
+                            <a asp-action="Index" class="btn btn-outline-light rounded-pill px-4">Back</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-    </form>
+    </div>
 }
 
 @section Scripts {

@@ -11,10 +11,10 @@ namespace Hospital.WebProject.ViewModels.Patient
     {
 		public Guid ID { get; set; }
 
-		public Guid? UserID { get; set; }
+		public Guid UserID { get; set; }
 		public string UserName { get; set; } = null!;
 
-		public Guid? DoctorId { get; set; }
+		public Guid DoctorId { get; set; }
 		public string DoctorName { get; set; } = null!;
 
         public DateOnly HospitalizationDate { get; set; }
@@ -22,7 +22,7 @@ namespace Hospital.WebProject.ViewModels.Patient
         public DateOnly DischargeDate { get; set; }
         public TimeOnly DischargeTime { get; set; }
 
-        public Guid? RoomId { get; set; }
+        public Guid RoomId { get; set; }
 		public int RoomNumber { get; set; }
 
 		[StringLength(100, MinimumLength = 2)]

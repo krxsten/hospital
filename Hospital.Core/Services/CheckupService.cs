@@ -68,7 +68,7 @@ namespace Hospital.Core.Services
             await context.SaveChangesAsync();
         }
 
-        public async Task UpdateAsync(CheckupIndexDTO model)
+        public async Task UpdateAsync(CheckupEditDTO model)
         {
             var checkup = await context.Checkups.FindAsync(model.ID);
             if (checkup == null)
@@ -79,8 +79,6 @@ namespace Hospital.Core.Services
             checkup.Date = model.Date;
             checkup.Time = model.Time;
             checkup.DoctorID = model.DoctorID;
-            checkup.PatientID = model.PatientID;
-
             await context.SaveChangesAsync();
         }
 

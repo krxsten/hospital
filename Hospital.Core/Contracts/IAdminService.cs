@@ -1,4 +1,6 @@
 ﻿using Hospital.Core.DTOs;
+using Hospital.Entities;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,14 +11,13 @@ namespace Hospital.Core.Contracts
 {
     public interface IAdminService
     {
-        Task<List<UserDTO>> GetAllAsync();
+        Task<IEnumerable<Doctor>> GetPendingDoctorsAsync();
+        Task<IEnumerable<Nurse>> GetPendingNursesAsync();
 
-        Task<UserDTO?> GetByIdAsync(Guid id);
+        Task<Doctor?> AcceptDoctorAsync(Guid id);
+        Task<Doctor?> RejectDoctorAsync(Guid id);
 
-        Task CreateAsync(UserDTO model);
-
-        Task UpdateAsync(UserDTO model);
-
-        Task DeleteAsync(Guid id);
+        Task<Nurse?> AcceptNurseAsync(Guid id);
+        Task<Nurse?> RejectNurseAsync(Guid id);
     }
 }

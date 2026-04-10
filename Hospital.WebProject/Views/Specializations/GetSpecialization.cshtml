@@ -1,33 +1,145 @@
-﻿@using Hospital.WebProject.ViewModels.Specialization
+﻿<style>
+    .glass-panel {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(15px);
+        border: 2px solid #ffffff;
+        border-radius: 30px;
+        padding: 40px;
+    }
+
+    .spec-card {
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid #ffffff;
+        border-radius: 20px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        height: 100%;
+        cursor: pointer;
+    }
+
+        .spec-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.2);
+        }
+
+    .spec-image {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .btn-primary-white {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+        font-weight: 800;
+        border-radius: 10px;
+        transition: 0.3s;
+    }
+
+        .btn-primary-white:hover {
+            background-color: rgba(255,255,255,0.8) !important;
+        }
+
+    .custom-search-input {
+        height: 50px;
+        border-radius: 10px;
+        background: rgba(255,255,255,0.1) !important;
+        color: white !important;
+        border: 1px solid #ffffff !important;
+    }
+
+        .custom-search-input::placeholder {
+            color: rgba(255,255,255,0.5);
+        }
+</style>
+
+@using Hospital.WebProject.ViewModels.Specialization
 @model List<SpecializationIndexViewModel>
 
-<h2 class="text-white">Search Specialization</h2>
-<div class="mb-3">
-<form method="get" asp-action="GetSpecialization">
-    <div class="form-group">
-            <input type="text" name="specialization" placeholder="Enter specialization..." class="form-control" required />
-    </div>
-    <br />
-    <button class="btn btn-primary">Search</button>
-    <a asp-action="Index" class="btn btn-secondary" style="display:inline">Back</a>
-
-</form>
+<div class="page-header-custom text-center">
+    <h2 class="page-title-white">Specialization Directory</h2>
+    <div class="title-divider"></div>
 </div>
-@if (Model != null && Model.Any())
-{
-    <div class="row">
-        @foreach (var s in Model)
-        {
-            <div class="col-md-3">
-                <div class="card p-2">
-                    <h6>@s.SpecializationName</h6>
-                    <img src="@s.ImageURL" alt="specialization"/> 
+
+<div class="container pb-5">
+    <div class="glass-panel mb-5">
+        <form method="get" asp-action="GetSpecialization" id="searchForm">
+            <div class="row g-3">
+                <div class="col-md-8">
+                    <input type="text" id="specInput" name="specialization"
+                           class="form-control custom-search-input"
+                           placeholder="Search by department name (e.g. Cardiology)..."
+                           autocomplete="off" />
                 </div>
+                <div class="col-md-4 d-flex gap-2">
+                    <button type="submit" class="btn btn-primary-white flex-grow-1">Search</button>
+                    <a asp-action="Index" class="btn btn-outline-light d-flex align-items-center px-4" style="border-radius: 10px;">Back</a>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="row" id="specResults">
+        @if (Model != null && Model.Any())
+        {
+            @foreach (var s in Model)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="spec-card text-center p-0">
+                        <img src="@s.ImageURL" class="spec-image mb-3" alt="@s.SpecializationName" />
+                        <div class="p-3">
+                            <h4 class="text-white mb-0">@s.SpecializationName</h4>
+                            <p class="text-white-50 small mt-2 text-uppercase">Medical Department</p>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-12 text-center py-5">
+                <p class="text-white-50 fs-5">Start typing to see hospital departments...</p>
             </div>
         }
     </div>
-}
-else if (Model == null)
-{
-    <p>No specializations found.</p>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $("#specInput").on("input", function () {
+                var searchVal = $(this).val();
+                var resultsDiv = $("#specResults");
+
+                if (searchVal.length >= 1) {
+                    $.get("/Specializations/GetSpecialization", { specialization: searchVal }, function (data) {
+                        resultsDiv.empty();
+
+                        if(data.length === 0) {
+                            resultsDiv.append('<div class="col-12 text-center"><p class="text-white-50">No departments match your search.</p></div>');
+                            return;
+                        }
+
+                        data.forEach(function (s) {
+                            resultsDiv.append(`
+                                <div class="col-md-4 mb-4">
+                                    <div class="spec-card text-center p-0">
+                                        <img src="${s.imageURL}" class="spec-image mb-3" />
+                                        <div class="p-3">
+                                            <h4 class="text-white mb-0">${s.specializationName}</h4>
+                                            <p class="text-white-50 small mt-2 text-uppercase">Medical Department</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            `);
+                        });
+                    });
+                } else if (searchVal.length === 0) {
+                    location.reload();
+                }
+            });
+        });
+    </script>
 }

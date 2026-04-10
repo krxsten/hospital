@@ -4,19 +4,24 @@
 
 <h2 class="text-white">Search Doctors by Specialization</h2>
 <div class="mb-3">
-<form method="get" asp-action="FilterBySpecialization">
-    <input type="text" name="specialization" class="form-control" placeholder="Enter specialization..." required />
-    <br />
-    <button class="btn btn-primary">Search</button>
-    <a asp-action="Index" class="btn btn-secondary" style="display:inline">Back</a>
+    <form method="get" asp-action="FilterBySpecialization">
+        <input type="text" id="doctorSearchInput" class="form-control custom-input" placeholder="Search specializations..." />
+        <br />
+        <button type="submit" class="btn btn-primary-white flex-grow-1" style="height: 50px; border-radius: 10px;">
+            <i class="bi bi-search me-2"></i>Search
+        </button>
+        <a asp-action="Index" class="btn btn-outline-light d-flex align-items-center justify-content-center px-4"
+           style="height: 50px; border-radius: 10px;">
+            Back
+        </a>
 
-</form>
+    </form>
 </div>
 <hr />
 
 @if (Model != null && Model.Any())
 {
-    <div class="row">
+    <div class="row" id="doctorResultsContainer">
         @foreach (var d in Model)
         {
             <div class="col-md-4 mb-4">
@@ -38,3 +43,40 @@ else if (Model == null)
     <p>No doctors where found.</p>
 }
 
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $("#doctorSearchInput").on("input", function () {
+                var searchVal = $(this).val();
+                var resultsDiv = $("#doctorResultsContainer");
+
+                if (searchVal.length >= 1) {
+                    $.get("/Doctors/GetDoctorBySpecialization", { specialization: searchVal }, function (data) {
+                        resultsDiv.empty();
+                        if (data.length === 0) {
+                            resultsDiv.append('<div class="col-12 text-center"><p class="text-white-50">No doctors match your search.</p></div>');
+                            return;
+                        }
+                        data.forEach(function (d) {
+                            resultsDiv.append(`
+                                <div class="col-md-4 mb-4">
+                                    <div class="card shadow-sm patient-card p-3">
+                                        <div class="card-body">
+                                            <strong>Doctor </strong><h5 class="text-white" style="display:inline;">${d.userName}</h5>
+                                            <p class="text-white-50 mt-2">
+                                                <strong>Specialization:</strong> ${d.specializationName} <br />
+                                                <strong>Shift:</strong> ${d.shiftName}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            `);
+                        });
+                    });
+                } else if (searchVal.length === 0) {
+                    location.reload();
+                }
+            });
+        });
+    </script>
+}

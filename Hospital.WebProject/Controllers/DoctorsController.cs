@@ -149,7 +149,7 @@ namespace Hospital.WebProject.Controllers
                 };
 
                 await doctorService.UpdateAsync(dto);
-
+                TempData["Success"] = "Doctor updated successfully by Admin.";
                 return RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
@@ -245,5 +245,6 @@ namespace Hospital.WebProject.Controllers
 
             return View(model);
         }
+       
     }
 }

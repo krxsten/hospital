@@ -1,29 +1,86 @@
-﻿@using Hospital.WebProject.ViewModels.Doctor
-<link rel="stylesheet" href="/css/styles.css">
+﻿<style>
+    .fw-900 {
+        font-weight: 900;
+    }
+
+    .letter-spacing-2 {
+        letter-spacing: 2px;
+    }
+
+    .italic {
+        font-style: italic;
+    }
+
+    .glass-panel {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(15px);
+        border: 2px solid #ffffff;
+        border-radius: 30px;
+        padding: 50px;
+    }
+
+    .section-divider {
+        border-top: 1px solid rgba(255, 255, 255, 0.2);
+    }
+</style>
+@using Hospital.WebProject.ViewModels.Doctor
 @model DoctorShiftViewModel
 
 @{
     ViewData["Title"] = "Doctor Shift";
 }
+
 @if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse"))
 {
-    <h2>Doctor Shift</h2>
+    <div class="page-header-custom text-center">
+        <h2 class="page-title-white">Doctor Shift Schedule</h2>
+        <div class="title-divider"></div>
+    </div>
 
-    @if (Model == null)
-    {
-        <p>No shift assigned to this doctor.</p>
-    }
-    else
-    {
-        <table class="table table-striped">
-            <tr>
-                <th>Start Time</th>
-                <td>@Model.StartTime.ToString(@"hh\:mm")</td>
-            </tr>
-            <tr>
-                <th>End Time</th>
-                <td>@Model.EndTime.ToString(@"hh\:mm")</td>
-            </tr>
-        </table>
-    }
+    <div class="container pb-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h4 class="text-white fw-bold mb-0">
+                <i class="bi bi-calendar2-week me-2"></i>Current Assignment
+            </h4>
+            <a asp-action="Index" class="btn btn-outline-light rounded-pill px-4">
+                <i class="bi bi-arrow-left me-2"></i>Back to List
+            </a>
+        </div>
+
+        @if (Model == null)
+        {
+            <div class="glass-panel text-center py-5">
+                <i class="bi bi-calendar-x text-white fs-1"></i>
+                <h3 class="text-white mt-3">No Shift Assigned</h3>
+                <p class="text-white mb-0">This doctor currently has no active shift hours recorded.</p>
+            </div>
+        }
+        else
+        {
+            <div class="glass-panel">
+                <div class="row align-items-center text-center">
+                    
+                    <div class="col-md-5">
+                        <p class="text-white-50 text-uppercase letter-spacing-2 mb-2">Shift Begins</p>
+                        <h1 class="display-3 text-white fw-900 mb-0">@Model.StartTime.ToString(@"hh\:mm")</h1>
+                        <span class="text-white badge border border-white mt-2 px-3">START</span>
+                    </div>
+
+                    <div class="col-md-2 d-none d-md-block">
+                        <div style="height: 2px; background: rgba(255,255,255,0.3); position: relative;">
+                            <i class="bi bi-chevron-right text-white" style="position: absolute; top: -10px; left: 45%;"></i>
+                        </div>
+                    </div>
+
+                    <div class="col-md-5">
+                        <p class="text-white-50 text-uppercase letter-spacing-2 mb-2">Shift Ends</p>
+                        <h1 class="display-3 text-white fw-900 mb-0">@Model.EndTime.ToString(@"hh\:mm")</h1>
+                        <span class="text-white badge border border-white mt-2 px-3">FINISH</span>
+                    </div>
+
+                </div>
+            </div>
+        }
+    </div>
 }
+

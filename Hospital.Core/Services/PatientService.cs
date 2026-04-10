@@ -2,6 +2,8 @@ using Hospital.Core.Contracts;
 using Hospital.Core.DTOs;
 using Hospital.Data;
 using Hospital.Data.Entities;
+using Hospital.Entities;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -98,10 +100,23 @@ namespace Hospital.Core.Services
 
         public async Task CreateAsync(PatientCreateDTO model)
         {
+            var names = model.PatientName.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+
+            var firstName = names.Length > 0 ? names[0] : "";
+            var lastName = names.Length > 1 ? names[1] : "";
+
+            var user = new User
+            {
+                Id = Guid.NewGuid(),
+                FirstName = firstName,
+                LastName = lastName,
+                UserName = firstName + "_" + lastName
+            };
+            await context.Users.AddAsync(user);
+            
             var patient = new Patient
             {
-                ID = Guid.NewGuid(),
-                UserId = model.UserID,
+                UserId = user.Id,
                 DoctorId = model.DoctorId,
                 HospitalizationDate = model.HospitalizationDate,
                 HospitalizationTime = model.HospitalizationTime,
@@ -118,13 +133,22 @@ namespace Hospital.Core.Services
             await context.SaveChangesAsync();
         }
 
-        public async Task UpdateAsync(PatientIndexDTO model)
+        public async Task UpdateAsync(PatientEditDTO model)
         {
-            var patient = await context.Patients.FindAsync(model.ID);
+            var patient = await context.Patients
+              .Include(d => d.User)
+              .FirstOrDefaultAsync(d => d.ID == model.ID);
+
             if (patient == null)
             {
                 return;
             }
+
+            var names = model.PatientName.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+
+            patient.User.FirstName = names.Length > 0 ? names[0] : "";
+            patient.User.LastName = names.Length > 1 ? names[1] : "";
+
 
             patient.DoctorId = model.DoctorId;
             patient.HospitalizationDate = model.HospitalizationDate;
@@ -145,7 +169,7 @@ namespace Hospital.Core.Services
             var patient = await context.Patients.FindAsync(id);
             if (patient == null)
             {
-                return;
+                throw new InvalidOperationException("Couldn't remove the patient.");
             }
 
             context.Patients.Remove(patient);
@@ -190,6 +214,11 @@ namespace Hospital.Core.Services
         }
         public async Task<List<PatientIndexDTO>> PatientsWithSuchDoctor(string doctroName)
         {
+            if (string.IsNullOrWhiteSpace(doctroName))
+            {
+                return new List<PatientIndexDTO>();
+            }
+            string pattern = $"%{doctroName}%";
             var patients = await context.Patients
               .Include(p => p.Doctor.User)
               .Include(p => p.Room)
@@ -207,7 +236,7 @@ namespace Hospital.Core.Services
                 .Where(c => cityIdsAsGuids.Contains(c.Id))
                 .ToDictionaryAsync(c => c.Id.ToString(), c => c.Name);
 
-            return patients.Where(x=>x.Doctor.User.FirstName==doctroName).Select(x => new PatientIndexDTO
+            return patients.Where(x => EF.Functions.Like(x.Doctor.User.FirstName, doctroName)).Select(x => new PatientIndexDTO
             {
                 ID = x.ID,
                 DoctorId = x.DoctorId,
@@ -226,6 +255,43 @@ namespace Hospital.Core.Services
                 UCN = x.UCN
             }).ToList();
         }
-        
+
+        public async Task<PatientIndexDTO> Details(Guid id)
+        {
+            var patient = await context.Patients
+                .Include(p => p.User)
+                .Include(p => p.Doctor)
+                .ThenInclude(d => d.User)
+                .Include(p => p.Room)
+                .FirstOrDefaultAsync(p => p.ID == id);
+
+            if (patient == null)
+            {
+                throw new InvalidOperationException($"Patient was not found.");
+            }
+
+            return new PatientIndexDTO
+            {
+                ID = patient.ID,
+                DoctorId = patient.DoctorId,
+                DoctorName = patient.Doctor?.User != null
+                    ? $"{patient.Doctor.User.FirstName} {patient.Doctor.User.LastName}"
+                    : "No Doctor Assigned",
+                HospitalizationDate = patient.HospitalizationDate,
+                HospitalizationTime = patient.HospitalizationTime,
+                DischargeDate = patient.DischargeDate,
+                DischargeTime = patient.DischargeTime,
+                UserID = patient.UserId,
+                UserName = patient.User != null
+                    ? $"{patient.User.FirstName} {patient.User.LastName}"
+                    : "Unknown User",
+                RoomId = patient.RoomId,
+                RoomNumber = patient.Room?.RoomNumber ?? 0,
+                BirthCity = patient.BirthCity,
+                DateOfBirth = patient.DateOfBirth,
+                PhoneNumber = patient.PhoneNumber,
+                UCN = patient.UCN
+            };
+        }
     }
 }

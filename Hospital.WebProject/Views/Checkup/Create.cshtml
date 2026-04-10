@@ -1,65 +1,161 @@
-﻿<link rel="stylesheet" href="/css/styles.css">
+﻿<style>
+    :root {
+        --primary-accent: #3b82f6; /* Modern medical blue */
+        --dark-bg: #0f172a;
+        --card-bg: #1e293b;
+        --input-bg: #334155;
+    }
+
+    .scheme-dark {
+        color-scheme: dark;
+    }
+
+    /* Solid Dark Slate Panel */
+    .slate-panel {
+        background: var(--card-bg);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        padding: 40px;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+
+    /* Focus States with Neon Glow */
+    .form-control:focus, .form-select:focus {
+        background-color: var(--input-bg) !important;
+        border-color: var(--primary-accent) !important;
+        color: white !important;
+        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+    }
+
+    .form-select, .form-control {
+        background-color: var(--input-bg) !important;
+        border: 1px solid #475569 !important;
+        color: #f8fafc !important;
+        transition: all 0.2s ease-in-out;
+    }
+
+        .form-select option {
+            background-color: var(--card-bg);
+            color: white;
+        }
+
+    .input-group-text {
+        background-color: #475569 !important;
+        border: 1px solid #475569 !important;
+        color: #cbd5e1 !important;
+    }
+
+    /* Custom button style to match slate theme */
+    .btn-action-primary {
+        background-color: var(--primary-accent) !important;
+        color: white !important;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        border: none;
+        transition: transform 0.2s, background-color 0.2s;
+    }
+
+        .btn-action-primary:hover {
+            background-color: #2563eb !important;
+            transform: translateY(-2px);
+        }
+
+    .title-divider {
+        height: 3px;
+        width: 50px;
+        background: var(--primary-accent);
+        margin: 15px auto 30px;
+        border-radius: 10px;
+    }
+</style>
+
 @using Hospital.WebProject.ViewModels.Checkup
 @model CheckupCreateViewModel
+
 @if (User.IsInRole("Patient"))
 {
-    <div class="mb-3">
-        <h2 style="text-align:center">———— Check ups ————</h2>
+    <div class="page-header-custom text-center pt-5">
+        <h2 class="text-white fw-bold">Schedule a Check-up</h2>
+        <div class="title-divider"></div>
     </div>
-    <form asp-action="Create" method="post">
 
-        <div class="mb-3">
-            <label asp-for="@Model.DoctorID" class="form-label">Doctor: </label>
-            <select asp-for="@Model.DoctorID" id="DoctorID" asp-items="@ViewBag.Doctors" class="form-select"></select>
-            <span class="text-danger" asp-validation-for="@Model.DoctorID"></span>
-        </div>
+    <div class="container pb-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-7">
+                <div class="slate-panel">
+                    <h4 class="text-white fw-bold mb-4">
+                        <i class="bi bi-calendar-plus me-2 text-primary"></i>Appointment Details
+                    </h4>
 
-        <div class="mb-3">
-            <label asp-for="@Model.Date" class="form-label">Date: </label>
-            <input asp-for="@Model.Date" id="Date" type="date" class="form-control" min="@DateTime.Now.ToString("yyyy-MM-dd")" />
-            <span asp-validation-for="@Model.Date" class="text-danger"></span>
-        </div>
-        <div class="mb-3">
-            <label asp-for="@Model.Time" class="form-label">Available Time: </label>
-            <select asp-for="@Model.Time" id="Time" class="form-select">
-                <option>Select time</option>
-                    </select>
-            <span asp-validation-for="@Model.Date" class="text-danger"></span>
-        </div>
+                    <form asp-action="Create" method="post">
+                        <div class="mb-4">
+                            <label asp-for="@Model.DoctorID" class="form-label text-white-50 small text-uppercase fw-bold">Select Specialist</label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <i class="bi bi-person-badge"></i>
+                                </span>
+                                <select asp-for="@Model.DoctorID" id="DoctorID" asp-items="@ViewBag.Doctors"
+                                        class="form-select">
+                                    <option value="">-- Choose a Doctor --</option>
+                                </select>
+                            </div>
+                            <span class="text-danger small" asp-validation-for="@Model.DoctorID"></span>
+                        </div>
 
-        <div class="mb-3">
-            <button type="submit" class="btn btn-primary">Submit</button>
-            <a asp-action="Index" class="btn btn-secondary">Back</a>
-        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <label asp-for="@Model.Date" class="form-label text-white-50 small text-uppercase fw-bold">Preferred Date</label>
+                                <input asp-for="@Model.Date" id="Date" type="date"
+                                       class="form-control scheme-dark"
+                                       min="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                                <span asp-validation-for="@Model.Date" class="text-danger small"></span>
+                            </div>
 
-    </form>
+                            <div class="col-md-6 mb-4">
+                                <label asp-for="@Model.Time" class="form-label text-white-50 small text-uppercase fw-bold">Available Slots</label>
+                                <select asp-for="@Model.Time" id="Time" class="form-select">
+                                    <option>Select time</option>
+                                </select>
+                                <span asp-validation-for="@Model.Time" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 pt-4 border-top border-secondary border-opacity-25 d-flex gap-3">
+                            <button type="submit" class="btn btn-action-primary btn-lg flex-grow-1 rounded-pill">
+                                CONFIRM APPOINTMENT
+                            </button>
+                            <a asp-action="Index" class="btn btn-outline-secondary btn-lg rounded-pill px-4 text-white">
+                                CANCEL
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 }
+
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 
     <script>
         function loadSlots(){
-
             var doctorId = $("#DoctorID").val();
             var date = $("#Date").val();
 
-            if(!doctorId || !date)
-                return;
+            if(!doctorId || !date) return;
+
+            $("#Time").empty().append(`<option>Loading...</option>`);
 
             $.get("/Checkup/GetAvailableSlots", {
                 doctorId: doctorId,
                 date: date
             }, function(data){
-
                 $("#Time").empty();
                 $("#Time").append(`<option>Select time</option>`);
-
                 data.forEach(function(time){
-                    $("#Time").append(
-                        `<option value="${time}">${time}</option>`
-                    );
+                    $("#Time").append(`<option value="${time}">${time}</option>`);
                 });
-
             });
         }
 

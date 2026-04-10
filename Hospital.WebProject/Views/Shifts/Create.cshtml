@@ -1,43 +1,146 @@
-﻿<link rel="stylesheet" href="/css/styles.css">
+﻿<style>
+    .glass-panel {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(15px);
+        border: 2px solid #ffffff;
+        border-radius: 30px;
+        padding: 40px;
+    }
+
+        .glass-panel label,
+        .glass-panel h4,
+        .page-title-white {
+            color: #ffffff !important;
+            font-weight: 700;
+        }
+
+    .custom-input {
+        background-color: transparent !important;
+        border: 1px solid #ffffff !important;
+        color: #ffffff !important;
+        border-radius: 12px;
+        padding: 12px;
+    }
+
+        .custom-input:focus {
+            background-color: rgba(255, 255, 255, 0.1) !important;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+            outline: none;
+        }
+
+    .shift-option {
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        border-radius: 12px;
+        padding: 10px 15px;
+        margin-bottom: 8px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: block;
+        color: white;
+    }
+
+        .shift-option:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+    .form-check-input:checked + .shift-option {
+        background: #ffffff;
+        color: #000000;
+        border-color: #ffffff;
+        font-weight: 600;
+    }
+
+    .btn-primary-white {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+        font-weight: 800;
+        border-radius: 50px;
+        padding: 12px 40px;
+        text-transform: uppercase;
+        border: none;
+        transition: all 0.3s ease;
+    }
+
+        .btn-primary-white:hover {
+            background-color: rgba(255, 255, 255, 0.9);
+            transform: translateY(-2px);
+        }
+
+    .text-danger {
+        color: #ff6b6b !important;
+        font-weight: 600;
+        font-size: 0.85rem;
+    }
+</style>
+
 @using Hospital.WebProject.ViewModels.Shift
 @model ShiftCreateViewModel
+
 @if (User.IsInRole("Admin"))
 {
-    <div class="mb-3">
-        <h2 style="text-align:center">———— Shifts ————</h2>
+    <div class="page-header-custom text-center">
+        <h2 class="page-title-white">Shift Scheduling</h2>
+        <div class="title-divider"></div>
     </div>
-    <form asp-action="Create" method="post">
-        <div class="mb-3">
-            <label asp-for="@Model.Type" class="form-label">Type: </label>
-            <br />
-            <input type="radio" asp-for="Type" name="type" value="MorningShift"/>Morning shift
-            <br />
-            <input type="radio" asp-for="Type" name="type" value="Afternoon shift" />Afternoon shift
-            <br />
-            <input type="radio" asp-for="Type" name="type" value="NightShift"/>Night shift
-            <br />
-            <input type="radio" asp-for="Type" name="type" value="EmergencyShift" />Emergency shift
-            <br />
-            <input type="radio" asp-for="Type" name="type" value="WeekendShift" />Weekend shift
-        </div>
-        <span class="text-danger" asp-validation-for="@Model.Type"></span>
-        <div class="mb-3">
-            <label asp-for="@Model.StartTime" class="form-label">Start time: </label>
-            <input asp-for="@Model.StartTime" type="time" step="60" class="form-control"/>
-            <span class="text-danger" asp-validation-for="@Model.StartTime"></span>
-        </div>
 
-        <div class="mb-3">
-            <label asp-for="@Model.EndTime" class="form-label">End time: </label>
-            <input asp-for="@Model.EndTime" type="time" step="60" class="form-control" />
-            <span class="text-danger" asp-validation-for="@Model.EndTime"></span>
+    <div class="container pb-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-7">
+                <div class="glass-panel">
+                    <h4 class="mb-4"><i class="bi bi-clock-history me-2"></i>Create New Shift Type</h4>
+
+                    <form asp-action="Create" method="post">
+                        <div class="mb-4">
+                            <label class="form-label d-block mb-3">Select Shift Type</label>
+
+                            <div class="row g-2">
+                                <div class="col-md-6">
+                                    <input type="radio" class="btn-check" asp-for="Type" value="MorningShift" id="morning" checked>
+                                    <label class="shift-option" for="morning">Morning Shift</label>
+
+                                    <input type="radio" class="btn-check" asp-for="Type" value="Afternoon shift" id="afternoon">
+                                    <label class="shift-option" for="afternoon">Afternoon Shift</label>
+
+                                    <input type="radio" class="btn-check" asp-for="Type" value="NightShift" id="night">
+                                    <label class="shift-option" for="night">Night Shift</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="radio" class="btn-check" asp-for="Type" value="EmergencyShift" id="emergency">
+                                    <label class="shift-option" for="emergency">Emergency Shift</label>
+
+                                    <input type="radio" class="btn-check" asp-for="Type" value="WeekendShift" id="weekend">
+                                    <label class="shift-option" for="weekend">Weekend Shift</label>
+                                </div>
+                            </div>
+                            <span class="text-danger" asp-validation-for="@Model.Type"></span>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <label asp-for="@Model.StartTime" class="form-label">Start Time</label>
+                                <input asp-for="@Model.StartTime" type="time" step="60" class="form-control custom-input" />
+                                <span class="text-danger" asp-validation-for="@Model.StartTime"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-4">
+                                <label asp-for="@Model.EndTime" class="form-label">End Time</label>
+                                <input asp-for="@Model.EndTime" type="time" step="60" class="form-control custom-input" />
+                                <span class="text-danger" asp-validation-for="@Model.EndTime"></span>
+                            </div>
+                        </div>
+
+                        <div class="d-flex gap-3 mt-5 pt-3 border-top border-white border-opacity-25">
+                            <button type="submit" class="btn btn-primary-white flex-grow-1">Create Shift</button>
+                            <a asp-action="Index" class="btn btn-outline-light rounded-pill px-5">Back</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-        <div class="mb-3">
-            <button type="submit" class="btn btn-primary">Submit</button>
-            <a asp-action="Index" class="btn btn-secondary" style="display:inline">Back</a>
-        </div>
-    </form>
+    </div>
 }
+
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }

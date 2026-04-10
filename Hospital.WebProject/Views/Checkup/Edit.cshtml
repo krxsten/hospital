@@ -1,40 +1,137 @@
-﻿<link rel="stylesheet" href="/css/styles.css">
+﻿<style>
+    .scheme-dark {
+        color-scheme: dark;
+    }
+
+    .glass-panel {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(15px);
+        border: 2px solid #ffffff;
+        border-radius: 30px;
+        padding: 40px;
+    }
+
+    .form-select option {
+        background-color: #0f172a;
+        color: white;
+    }
+
+    .input-group-text {
+        border-right: none !important;
+    }
+
+    .form-select {
+        border-left: none !important;
+    }
+
+    #Date {
+        border-left: 2px solid #ffffff !important;
+    }
+
+    .btn-primary-white {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+        font-weight: 800;
+        border: none;
+    }
+
+        .btn-primary-white:hover {
+            background-color: rgba(255,255,255,0.9);
+            transform: scale(1.02);
+        }
+</style>
 @using Hospital.WebProject.ViewModels.Checkup
-@model CheckupIndexViewModel
+@model CheckupEditViewModel
 
-@if (User.IsInRole("Patient"))
+@if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse"))
 {
-    <div class="mb-3">
-        <h2 style="text-align:center">———— Check ups ————</h2>
+    <div class="page-header-custom text-center">
+        <h2 class="page-title-white">Reschedule Check-up</h2>
+        <div class="title-divider"></div>
     </div>
-    <form asp-action="Edit" method="post">
-        <div class="mb-3">
-            <label asp-for="@Model.DoctorID" class="form-label">Doctor: </label>
-            <select asp-for="@Model.DoctorID" id="DoctorID" asp-items="@ViewBag.Doctors" class="form-select"></select>
-            <span class="text-danger" asp-validation-for="@Model.DoctorID"></span>
-        </div>
 
-        <div class="mb-3">
-            <label asp-for="@Model.Date" class="form-label">Date: </label>
-            <input asp-for="@Model.Date" id="Date" type="date" class="form-control" min="@DateTime.Now.ToString("yyyy-MM-dd")" />
-            <span asp-validation-for="@Model.Date" class="text-danger"></span>
-        </div>
-        <div class="mb-3">
-            <label asp-for="@Model.Time" class="form-label">Available Time: </label>
+    <div class="container pb-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-7">
+                <div class="glass-panel">
+                    <h4 class="text-white fw-bold mb-4">
+                        <i class="bi bi-pencil-square me-2"></i>Modify Appointment
+                    </h4>
 
-            <select asp-for="@Model.Time" id="Time" class="form-select">
-                <option>Select time</option>
-            </select>
-            <span asp-validation-for="@Model.Time" class="text-danger"></span>
-        </div>
+                    <form asp-action="Edit" method="post">
 
-        <div class="mb-3">
-            <button type="submit" class="btn btn-primary">Update</button>
-            <a asp-action="Index" class="btn btn-secondary">Back</a>
+                        <div class="mb-4">
+                            <label asp-for="@Model.DoctorID" class="form-label text-white fw-bold">Assigned Specialist</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-transparent border-white text-white">
+                                    <i class="bi bi-person-badge"></i>
+                                </span>
+                                <select asp-for="@Model.DoctorID" id="DoctorID" asp-items="@ViewBag.Doctors"
+                                        class="form-select bg-dark text-white border-white">
+                                </select>
+                            </div>
+                            <span class="text-danger small" asp-validation-for="@Model.DoctorID"></span>
+                            <input type="hidden" asp-for="PatientID" />
+                            <div class="col-md-6 mb-4">
+                                <label asp-for="@Model.Date" class="form-label text-white fw-bold">Appointment Date</label>
+                                <input asp-for="@Model.Date" id="Date" type="date"
+                                       class="form-control bg-transparent text-white border-white scheme-dark"
+                                       min="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                                <span asp-validation-for="@Model.Date" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6 mb-4">
+                                <label asp-for="@Model.Time" class="form-label text-white fw-bold">Available Time</label>
+                                <select asp-for="@Model.Time" id="Time" class="form-select bg-dark text-white border-white">
+                                    <option value="@Model.Time">@Model.Time (Current)</option>
+                                </select>
+                                <span asp-validation-for="@Model.Time" class="text-danger small"></span>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 pt-3 border-top border-white border-opacity-25 d-flex gap-3">
+                            <button type="submit" class="btn btn-primary-white btn-lg flex-grow-1 rounded-pill">
+                                UPDATE APPOINTMENT
+                            </button>
+                            <a asp-action="Index" class="btn btn-outline-light btn-lg rounded-pill px-4">
+                                BACK
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-    </form>
+    </div>
 }
+
+
+
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
-}
 
+    <script>
+        function loadSlots(){
+            var doctorId = $("#DoctorID").val();
+            var date = $("#Date").val();
+
+            if(!doctorId || !date) return;
+
+            $.get("/Checkup/GetAvailableSlots", {
+                doctorId: doctorId,
+                date: date
+            }, function(data){
+                var currentTime = "@Model.Time";
+                $("#Time").empty();
+                $("#Time").append(`<option value="">Select time</option>`);
+
+                data.forEach(function(time){
+                    var selected = (time === currentTime) ? "selected" : "";
+                    $("#Time").append(`<option value="${time}" ${selected}>${time}</option>`);
+                });
+            });
+        }
+
+        $("#DoctorID").change(loadSlots);
+        $("#Date").change(loadSlots);
+    </script>
+}

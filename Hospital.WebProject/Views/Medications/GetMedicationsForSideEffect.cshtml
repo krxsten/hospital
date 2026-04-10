@@ -1,37 +1,111 @@
-﻿@using Hospital.WebProject.ViewModels.Medication
-@model List<MedicationIndexViewModel>
-<h2 class="text-white">Search Medications by Side Effect</h2>
-<div class="mb-3">
-<form method="get" asp-controller="Medications" asp-action="GetMedicationsForSideEffect">
-    <input type="text" name="sideEffect" class="form-control" placeholder="Enter side effect..." required />
-    <br />
-    <button class="btn btn-primary">Search</button>
-    <a asp-action="Index" class="btn btn-secondary" style="display:inline">Back</a>
-</form>
-</div>
-<hr />
+﻿<style>
+    .glass-panel {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(15px);
+        border: 2px solid #ffffff;
+        border-radius: 30px;
+        padding: 40px;
+    }
 
-@if (Model != null && Model.Any())
-{
-    <div class="row">
-        @foreach (var m in Model)
-        {
-            <div class="col-md-4 mb-4">
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        <h5>@m.Name</h5>
-                        <p>
-                            <strong>Diagnose:</strong> @m.DiagnoseName <br />
-                            <strong>Side Effects:</strong> @m.SideEffects
-                        </p>
-                    </div>
+    .medication-card {
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid #ffffff;
+        border-radius: 20px;
+        padding: 20px;
+        transition: transform 0.3s ease;
+        height: 100%;
+    }
+
+        .medication-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.12);
+        }
+</style>
+
+@using Hospital.WebProject.ViewModels.Medication
+@model List<MedicationIndexViewModel>
+
+<div class="page-header-custom text-center">
+    <h2 class="page-title-white">Medication Explorer</h2>
+    <div class="title-divider"></div>
+</div>
+
+<div class="container pb-5">
+    <div class="glass-panel mb-5">
+        <h4 class="text-white mb-4"><i class="bi bi-search me-2"></i>Filter by Side Effect</h4>
+
+        <form method="get" asp-controller="Medications" asp-action="GetMedicationsForSideEffect" id="searchForm">
+            <div class="row g-3">
+                <div class="col-md-8">
+                    <input type="text" name="sideEffect" id="sideEffectInput" class="form-control bg-transparent text-white border-white"
+                           placeholder="Type a letter (e.g., 'n' for Nausea)..." style="height: 50px; border-radius: 10px;" autocomplete="off" />
+                </div>
+                <div class="col-md-4 d-flex gap-2">
+                    <button type="submit" class="btn btn-primary-white flex-grow-1" style="height: 50px; border-radius: 10px;">
+                        Search
+                    </button>
+                    <a asp-action="Index" class="btn btn-outline-light d-flex align-items-center justify-content-center px-4"
+                       style="height: 50px; border-radius: 10px;">
+                        Back
+                    </a>
                 </div>
             </div>
+        </form>
+    </div>
+
+    <div class="row" id="medicationResults">
+        @if (Model != null && Model.Any())
+        {
+            @foreach (var m in Model)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="medication-card">
+                        <h5 class="text-white fw-bold">@m.Name</h5>
+                        <hr class="border-white opacity-25" />
+                        <p class="text-white-50 mb-1 small">Diagnosis:</p>
+                        <p class="text-white mb-3">@m.DiagnoseName</p>
+                        <p class="text-white-50 mb-1 small">Side effects:</p>
+                        <p class="text-white mb-0">@m.SideEffects</p>
+                    </div>
+                </div>
+            }
         }
     </div>
-}
-else if (Model == null)
-{
-    <p>No medications where found.</p>
-}
+</div>
 
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $("#sideEffectInput").on("input", function () {
+                var searchVal = $(this).val();
+
+                if (searchVal.length >= 1) {
+                    $.get("/Medications/GetMedicationsForSideEffect", { sideEffect: searchVal }, function (data) {
+                        var resultsDiv = $("#medicationResults");
+                        resultsDiv.empty();
+
+                        if (data.length === 0) {
+                            resultsDiv.append('<div class="col-12 text-center"><p class="text-white-50">No matching medications found.</p></div>');
+                            return;
+                        }
+
+                        data.forEach(function (m) {
+                            var card = `
+                                <div class="col-md-4 mb-4">
+                                    <div class="medication-card">
+                                        <h5 class="text-white fw-bold">${m.name}</h5>
+                                        <hr class="border-white opacity-25" />
+                                        <p class="text-white-50 mb-1 small">DIAGNOSIS:</p>
+                                        <p class="text-white mb-3">${m.diagnoseName || 'No Data'}</p>
+                                        <p class="text-white-50 mb-1 small">SIDE EFFECTS:</p>
+                                        <p class="text-white mb-0">${m.sideEffects}</p>
+                                    </div>
+                                </div>`;
+                            resultsDiv.append(card);
+                        });
+                    });
+                }
+            });
+        });
+    </script>
+}

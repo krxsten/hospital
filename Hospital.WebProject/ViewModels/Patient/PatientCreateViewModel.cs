@@ -5,10 +5,10 @@ namespace Hospital.WebProject.ViewModels.Patient
 {
 	public class PatientCreateViewModel
 	{
-		[Required(ErrorMessage = "This field is required!")]
-		public Guid UserID { get; set; }
+        [Required(ErrorMessage = "This field is required!")]
+        public string PatientName { get; set; } = null!;
 
-		[Required(ErrorMessage = "This field is required!")]
+        [Required(ErrorMessage = "This field is required!")]
 		public Guid DoctorId { get; set; }
 
 		[Required(ErrorMessage = "This field is required!")]
@@ -28,15 +28,14 @@ namespace Hospital.WebProject.ViewModels.Patient
         public TimeOnly DischargeTime { get; set; }
 
         [Required(ErrorMessage = "This field is required!")]
-		[StringLength(100, MinimumLength = 2)]
 		public string BirthCity { get; set; } = null!;
 
         [DataType(DataType.Date)]
-        [Range(typeof(DateOnly), "1920-01-01", "2100-12-31", ErrorMessage = "Date of birth must be after 1920.")]
         public DateOnly DateOfBirth { get; set; }
 
         [Required(ErrorMessage = "This field is required!")]
 		[Phone(ErrorMessage = "Invalid phone number!")]
+        [StringLength(10)]
 		public string PhoneNumber { get; set; } = null!;
 
 		[Required(ErrorMessage = "This field is required!")]

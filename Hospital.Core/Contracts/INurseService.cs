@@ -15,7 +15,7 @@ namespace Hospital.Core.Contracts
 
         Task CreateAsync(NurseCreateDTO model);
 
-        Task UpdateAsync(NurseIndexDTO model);
+        Task UpdateAsync(NurseEditDTO model);
 
         Task DeleteAsync(Guid id);
         Task<List<NurseIndexDTO>> FilterBySpecialization(string specialization);

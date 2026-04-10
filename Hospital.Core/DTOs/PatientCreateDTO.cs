@@ -9,7 +9,7 @@ namespace Hospital.Core.DTOs
 {
     public class PatientCreateDTO
     {
-        public Guid UserID { get; set; }
+        public string PatientName { get; set; }
         public Guid DoctorId { get; set; }
         public DateOnly HospitalizationDate { get; set; }
         public TimeOnly HospitalizationTime { get; set; }

@@ -2,11 +2,13 @@ using Hospital.Data;
 using Hospital.Data.Entities;
 using Hospital.Entities;
 using Hospital.WebProject.ViewModels.User;
+using Hospital.Core.Contracts;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Http;
 
 namespace Hospital.WebProject.Controllers
 {
@@ -17,13 +19,15 @@ namespace Hospital.WebProject.Controllers
         private readonly UserManager<User> userManager;
         private readonly SignInManager<User> signManager;
         private readonly RoleManager<IdentityRole<Guid>> roleManager;
+        private readonly IImageService imageService;
 
-        public UserController(HospitalDbContext context, UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<IdentityRole<Guid>> roleManager)
+        public UserController(HospitalDbContext context, UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<IdentityRole<Guid>> roleManager, IImageService imageService)
         {
             this.Context = context;
             this.userManager = userManager;
             this.signManager = signInManager;
             this.roleManager = roleManager;
+            this.imageService = imageService;
         }
 
         [HttpGet]
@@ -43,67 +47,39 @@ namespace Hospital.WebProject.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
+            if (model.Role == "Patient")
+            {
+                ModelState.Remove("SpecializationId");
+                ModelState.Remove("ShiftId");
+                ModelState.Remove("ImageURL");
+            }
+            else if (model.Role == "Doctor" || model.Role == "Nurse")
+            {
+                ModelState.Remove("DoctorId");
+                ModelState.Remove("RoomId");
+                ModelState.Remove("UCN");
+                ModelState.Remove("BirthCity");
+                ModelState.Remove("DateOfBirth");
+            }
+
             if (!ModelState.IsValid)
             {
                 PopulateRegisterDropdowns();
                 return View(model);
             }
 
-            if(userManager.FindByEmailAsync(model.Email) != null)
+            var existingUser = await userManager.FindByEmailAsync(model.Email);
+            if (existingUser != null)
             {
                 ModelState.AddModelError("", "User with that email address already exists!");
                 PopulateRegisterDropdowns();
                 return View(model);
             }
 
-            if (model.Role == "Doctor" || model.Role == "Nurse")
-            {
-                if (model.SpecializationId == null || model.ShiftId == null)
-                {
-                    ModelState.AddModelError("", "Specialization and shift are required.");
-                    PopulateRegisterDropdowns();
-                    return View(model);
-                }
-            }
-            if (model.Role == "Patient")
-            {
-                if (model.BirthCity == null)
-                {
-                    ModelState.AddModelError("", "Birth city is required for patients..");
-                    PopulateRegisterDropdowns();
-                    return View(model);
-                }
-                if (model.DateOfBirth == null)
-                {
-                    ModelState.AddModelError("", "Date of birth is required for patients..");
-                    PopulateRegisterDropdowns();
-                    return View(model);
-                }
-                if (model.UCN == null)
-                {
-                    ModelState.AddModelError("", "UCN is required for patients..");
-                    PopulateRegisterDropdowns();
-                    return View(model);
-                }
-                if (model.DoctorId == null || model.RoomId == null)
-                {
-                    ModelState.AddModelError("", "Doctor and room are required.");
-                    PopulateRegisterDropdowns();
-                    return View(model);
-                }
-                var roomChk = Context.Rooms.Find(model.RoomId);
-                if (roomChk == null || roomChk.IsTaken)
-                {
-                    ModelState.AddModelError("", "Selected room is not available.");
-                    PopulateRegisterDropdowns();
-                    return View(model);
-                }
-            }
-
             var user = new User()
             {
                 Email = model.Email,
-                UserName = model.FirstName + model.LastName,
+                UserName = model.FirstName+ "_" + model.LastName,
                 FirstName = model.FirstName,
                 LastName = model.LastName
             };
@@ -114,15 +90,28 @@ namespace Hospital.WebProject.Controllers
             {
                 await userManager.AddToRoleAsync(user, model.Role);
 
+                string imageUrl = model.Image;
+                string publicId = "temp";
+
+                if ((model.Role == "Doctor" || model.Role == "Nurse") && model.ImageURL != null)
+                {
+                    try
+                    {
+                        var uploadResult = await imageService.UploadImageAsync(model.ImageURL);
+                        imageUrl = uploadResult.Url;
+                        publicId = uploadResult.PublicId;
+                    }
+                    catch (Exception ex)
+                    {
+                        await userManager.DeleteAsync(user);
+                        ModelState.AddModelError("", $"Image upload failed: {ex.Message}");
+                        PopulateRegisterDropdowns();
+                        return View(model);
+                    }
+                }
+
                 if (model.Role == "Patient")
                 {
-                    var birthCityName = model.BirthCity;
-                    if (Guid.TryParse(model.BirthCity, out var cityId))
-                    {
-                        var city = await Context.Cities.FindAsync(cityId);
-                        if (city != null) birthCityName = city.Name;
-                    }
-
                     var patient = new Patient
                     {
                         ID = Guid.NewGuid(),
@@ -130,79 +119,55 @@ namespace Hospital.WebProject.Controllers
                         DoctorId = model.DoctorId.Value,
                         RoomId = model.RoomId.Value,
                         PhoneNumber = model.PhoneNumber,
-                        BirthCity = birthCityName,
+                        BirthCity = model.BirthCity,
                         DateOfBirth = model.DateOfBirth,
                         UCN = model.UCN,
                         HospitalizationDate = DateOnly.FromDateTime(DateTime.Now),
                         HospitalizationTime = TimeOnly.FromDateTime(DateTime.Now),
+                        DischargeDate = DateOnly.FromDateTime(DateTime.Now).AddDays(7),
+                        DischargeTime = TimeOnly.FromDateTime(DateTime.Now).AddHours(3),
                     };
 
-                    var selectedRoom = Context.Rooms.Find(model.RoomId);
-                    if (selectedRoom != null)
-                    {
-                        selectedRoom.IsTaken = true;
-                    }
+                    var room = await Context.Rooms.FindAsync(model.RoomId);
+                    if (room != null) room.IsTaken = true;
 
                     Context.Patients.Add(patient);
                 }
                 else if (model.Role == "Doctor")
                 {
-                    if (model.SpecializationId == null || model.ShiftId == null)
-                    {
-                        ModelState.AddModelError("", "Doctor must have specialization and shift.");
-                        PopulateRegisterDropdowns();
-                        return View(model);
-                    }
-                    var doctor = new Doctor
+                    Context.Doctors.Add(new Doctor
                     {
                         ID = Guid.NewGuid(),
                         UserId = user.Id,
                         SpecializationId = model.SpecializationId.Value,
                         ShiftId = model.ShiftId.Value,
-                        ImageURL = model.Image,
-                        CloudinaryID = "temp",
-                        IsAccepted = false
-                    };
-
-                    Context.Doctors.Add(doctor);
-                    TempData["Message"] = "Registration successful. Waiting for admin approval.";
+                        IsAccepted = false,
+                        ImageURL = imageUrl ?? string.Empty,
+                        CloudinaryID = publicId ?? string.Empty,
+                    });
                 }
                 else if (model.Role == "Nurse")
                 {
-                    if (model.SpecializationId == null || model.ShiftId == null)
-                    {
-                        ModelState.AddModelError("", "Nurse must have specialization and shift.");
-                        PopulateRegisterDropdowns();
-                        return View(model);
-                    }
-                    var nurse = new Nurse
+                    Context.Nurses.Add(new Nurse
                     {
                         ID = Guid.NewGuid(),
                         UserId = user.Id,
                         SpecializationId = model.SpecializationId.Value,
                         ShiftId = model.ShiftId.Value,
-                        ImageURL = model.Image,
-                        PublicID = "temp",
-                        IsAccepted = false
-                    };
-
-                    Context.Nurses.Add(nurse);
-                    TempData["Message"] = "Registration successful. Waiting for admin approval.";
+                        IsAccepted = false,
+                        ImageURL = imageUrl ?? string.Empty,
+                        PublicID = publicId ?? string.Empty,
+                    });
                 }
 
                 await Context.SaveChangesAsync();
                 return RedirectToAction("Login", "User");
             }
 
-            foreach (var item in result.Errors)
-            {
-                ModelState.AddModelError("", item.Description);
-            }
-
+            foreach (var error in result.Errors) ModelState.AddModelError("", error.Description);
             PopulateRegisterDropdowns();
             return View(model);
         }
-
         private void PopulateRegisterDropdowns()
         {
             ViewBag.Specializations = Context.Specializations.ToList();

@@ -101,12 +101,20 @@ namespace Hospital.Core.Services
         }
         public async Task<List<DiagnoseIndexDTO>> GetDiagnose(string diagnose)
         {
-            return await context.Diagnoses.Where(x => x.Name==diagnose).Select(x => new DiagnoseIndexDTO
+            if (string.IsNullOrWhiteSpace(diagnose))
             {
-                ID = x.ID,
-                Name = x.Name,
-                ImageURL = x.ImageURL
-            }).ToListAsync();
+                return new List<DiagnoseIndexDTO>();
+            }
+            string pattern = $"%{diagnose}%";
+            return await context.Diagnoses
+                .Where(x => EF.Functions.Like(x.Name, pattern))
+                .Select(x => new DiagnoseIndexDTO
+                {
+                    ID = x.ID,
+                    Name = x.Name,
+                    ImageURL = x.ImageURL
+                })
+                .ToListAsync();
         }
     }
 }

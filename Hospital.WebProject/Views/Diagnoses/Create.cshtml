@@ -1,30 +1,164 @@
-﻿@using Hospital.WebProject.ViewModels.Diagnose
+﻿<style>
+    .page-wrapper {
+    background: #002d72; 
+    min-height: 100vh;
+    padding: 60px 0;
+    border-radius: 40px;
+    }
+
+    .folio-card {
+        background: #ffffff;
+        border-radius: 30px;
+        padding: 50px;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    }
+
+    .hero-title {
+        color: #ffffff;
+        font-weight: 900;
+        font-size: 3.5rem;
+        letter-spacing: -2px;
+        margin-bottom: 5px;
+    }
+
+    .hero-subtitle {
+        color: #a0cfff;
+        font-size: 1.2rem;
+        font-weight: 300;
+        margin-bottom: 50px;
+    }
+
+    .section-label {
+        color: #004085;
+        font-weight: 800;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        display: block;
+        margin-bottom: 15px;
+    }
+
+    .modern-field {
+        background-color: #f0f8ff !important; 
+        border: 2px solid #cfe2f3 !important;
+        border-radius: 12px;
+        padding: 16px;
+        color: #002d72 !important;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+    }
+
+        .modern-field:focus {
+            background-color: #ffffff !important;
+            border-color: #3399ff !important;
+            box-shadow: 0 0 0 4px rgba(51, 153, 255, 0.1);
+            outline: none;
+        }
+
+    .media-vault {
+        border: 2px solid #e0f0ff;
+        background-color: #f9fafb;
+        border-radius: 20px;
+        padding: 40px;
+        text-align: center;
+        transition: 0.3s;
+    }
+
+        .media-vault:hover {
+            background-color: #f0f8ff;
+            border-color: #3399ff;
+        }
+
+    .vault-icon {
+        font-size: 2.5rem;
+        color: #007bff;
+        margin-bottom: 15px;
+    }
+
+    .btn-blue {
+        background: #007bff;
+        color: white;
+        border: none;
+        border-radius: 12px;
+        padding: 18px 45px;
+        font-weight: 800;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+    }
+
+        .btn-blue:hover {
+            background: #0056b3;
+            transform: scale(1.02);
+            box-shadow: 0 10px 20px rgba(0, 123, 255, 0.2);
+        }
+
+    .btn-link-muted {
+        color: #6b7280;
+        font-weight: 600;
+        text-decoration: none;
+        transition: 0.2s;
+    }
+
+        .btn-link-muted:hover {
+            color: #002d72;
+        }
+</style>
+
+@using Hospital.WebProject.ViewModels.Diagnose
 @model DiagnoseCreateViewModel
 
 @if (User.IsInRole("Admin") || User.IsInRole("Doctor"))
 {
-    <div class="mb-3">
-        <h2 style="text-align:center">———— Diagnoses ————</h2>
+    <div class="page-wrapper">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-xl-11">
+
+                    <div class="text-center">
+                        <h1 class="hero-title">Patient Diagnosis</h1>
+                        <p class="hero-subtitle">Clinical Record Generation System</p>
+                    </div>
+
+                    <div class="folio-card">
+                        <form asp-action="Create" asp-controller="Diagnoses" method="post" enctype="multipart/form-data">
+
+                            <div class="row g-5">
+                                <div class="col-lg-7">
+                                    <span class="section-label">Medical Classification</span>
+                                    <div class="mb-5">
+                                        <input asp-for="@Model.Name" class="form-control modern-field"
+                                               placeholder="Enter formal diagnosis name..." />
+                                        <span asp-validation-for="@Model.Name" class="text-danger small mt-2 d-block"></span>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-5">
+                                    <span class="section-label">Media Attachments</span>
+                                    <div class="media-vault">
+                                        <div class="vault-icon">
+                                            <i class="bi bi-folder2-open"></i>
+                                        </div>
+                                        <input asp-for="@Model.Image" accept="image/*" class="form-control bg-transparent border-0 text-muted mx-auto mb-2" style="width: 220px;" />
+                                        <p class="text-muted small mb-0">Select high-res clinical photography or scan results.</p>
+                                    </div>
+                                    <span asp-validation-for="@Model.Image" class="text-danger small mt-2 d-block"></span>
+                                </div>
+                            </div>
+
+                            <div class="mt-5 pt-5 border-top d-flex align-items-center justify-content-between">
+                                <a asp-action="Index" class="btn-link-muted">
+                                    <i class="bi bi-arrow-left me-2"></i>Exit without saving
+                                </a>
+                                <button type="submit" class="btn btn-blue">
+                                    Finalize & Secure Record
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <form asp-action="Create" asp-controller="Diagnoses" method="post" enctype="multipart/form-data">
-        @Html.AntiForgeryToken()
-
-        <div class="mb-3">
-            <label asp-for="@Model.Name" class="form-label">Diagnose:</label>
-            <input asp-for="@Model.Name" class="form-control" />
-            <span asp-validation-for="@Model.Name" class="text-danger"></span>
-        </div>
-        <div class="mb-3">
-            <label asp-for="@Model.Image" class="form-label">Upload image:</label>
-            <input asp-for="@Model.Image" accept="image/jpeg image/gif image/png" class="form-control" />
-            <span asp-validation-for="@Model.Image" class="text-danger"></span>
-        </div>
-
-        <div class="mb-3">
-            <button type="submit" class="btn btn-primary">Submit</button>
-            <a asp-action="Index" class="btn btn-secondary">Back</a>
-        </div>
-    </form>
 }
 
 @section Scripts {

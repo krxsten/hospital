@@ -56,6 +56,7 @@ builder.Services.AddScoped<IRoomService, RoomService>();
 builder.Services.AddScoped<IShiftService, ShiftService>();
 builder.Services.AddScoped<ISpecializationService, SpecializationService>();
 builder.Services.AddScoped<IImageService, ImageService>();
+builder.Services.AddScoped<IAdminService, AdminService>();
 
 var app = builder.Build();
 

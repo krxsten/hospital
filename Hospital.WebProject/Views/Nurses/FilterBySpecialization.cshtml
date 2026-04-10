@@ -5,10 +5,14 @@
 <h2 class="text-white">Search Nurses by Specialization</h2>
 <div class="mb-3">
 <form method="get" asp-action="FilterBySpecialization">
-    <input type="text" name="specialization" class="form-control" placeholder="Enter specialization..." required />
-    <br />
-    <button class="btn btn-primary">Search</button>
-    <a asp-action="Index" class="btn btn-secondary" style="display:inline">Back</a>
+        <input type="text" id="nurseSearchInput" class="form-control custom-input" placeholder="Search specializations..." />    <br />
+        <button type="submit" class="btn btn-primary-white flex-grow-1" style="height: 50px; border-radius: 10px;">
+            <i class="bi bi-search me-2"></i>Search
+        </button>
+        <a asp-action="Index" class="btn btn-outline-light d-flex align-items-center justify-content-center px-4"
+           style="height: 50px; border-radius: 10px;">
+            Back
+        </a>
 
 </form>
 </div>
@@ -16,7 +20,7 @@
 
 @if (Model != null && Model.Any())
 {
-    <div class="row">
+    <div class="row" id="nurseResultsContainer">
         @foreach (var n in Model)
         {
             <div class="col-md-4 mb-4">
@@ -37,4 +41,40 @@ else if (Model == null)
 {
     <p>No nurses where found.</p>
 }
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $("#nurseSearchInput").on("input", function () {
+                var searchVal = $(this).val();
+                var resultsDiv = $("#nurseResultsContainer");
 
+                if (searchVal.length >= 1) {
+                    $.get("/Nurses/GetNurseBySpecialization", { specialization: searchVal }, function (data) {
+                        resultsDiv.empty();
+                        if (data.length === 0) {
+                            resultsDiv.append('<div class="col-12 text-center"><p class="text-white-50">No nurses match your search.</p></div>');
+                            return;
+                        }
+                        data.forEach(function (n) {
+                            resultsDiv.append(`
+                                <div class="col-md-4 mb-4">
+                                    <div class="card shadow-sm patient-card p-3">
+                                        <div class="card-body">
+                                            <h5 class="text-white">${n.userName}</h5>
+                                            <p class="text-white-50 mt-2">
+                                                <strong>Specialization:</strong> ${n.specializationName} <br />
+                                                <strong>Shift:</strong> ${n.shiftName}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            `);
+                        });
+                    });
+                } else if (searchVal.length === 0) {
+                    location.reload();
+                }
+            });
+        });
+    </script>
+}

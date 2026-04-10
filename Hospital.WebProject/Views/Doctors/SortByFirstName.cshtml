@@ -16,7 +16,10 @@
 @model List<DoctorIndexViewModel>
 
 <h2 class="mb-4 text-white">Doctors Sorted by First Name</h2>
-
+<a asp-action="Index" class="btn btn-outline-light d-flex align-items-center justify-content-center px-4"
+   style="height: 50px; border-radius: 10px;">
+    Back
+</a>
 <div class="row">
     @foreach (var n in Model)
     {

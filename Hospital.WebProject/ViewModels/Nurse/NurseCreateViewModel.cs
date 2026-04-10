@@ -4,18 +4,16 @@ namespace Hospital.WebProject.ViewModels.Nurse
 {
 	public class NurseCreateViewModel
 	{
-		public Guid ID { get; set; }
+        [Required(ErrorMessage = "This field is required!")]
+        public string NurseName { get; set; } = null!;
 
-		[Required(ErrorMessage = "This field is required!")]
-		public Guid UserID { get; set; }
+        [Required(ErrorMessage = "This field is required!")]
+        public Guid SpecializationID { get; set; }
 
-		[Required(ErrorMessage = "This field is required!")]
-		public Guid SpecializationId { get; set; }
+        [Required(ErrorMessage = "This field is required!")]
+        public Guid ShiftID { get; set; }
 
-		[Required(ErrorMessage = "This field is required!")]
-		public Guid ShiftId { get; set; }
-
-		public bool IsAccepted { get; set; }
+        public bool IsAccepted { get; set; }
 
         [Required(ErrorMessage = "This field is required!")]
         public IFormFile? Image { get; set; }

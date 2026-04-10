@@ -114,35 +114,32 @@
     <div class="staff-grid">
         @foreach (var doctor in Model)
         {
-            <div class="staff-card shadow-sm">
-                <div class="staff-image-wrapper">
-                    @if (doctor.IsAccepted)
-                    {
+            @if (doctor.IsAccepted)
+            {
+                <div class="staff-card shadow-sm">
+                    <div class="staff-image-wrapper">
                         <span class="badge-status status-accepted">Active</span>
-                    }
-                    else
-                    {
-                        <span class="badge-status status-pending">Pending</span>
-                    }
-                    <img src="@doctor.ImageURL" class="staff-image" />
-                </div>
+                        <img src="@doctor.ImageURL" class="staff-image" />
+                    </div>
 
-                <div class="staff-info">
-                    <h4 class="staff-name">Dr. @doctor.UserName</h4>
-                    <div class="staff-specialty mb-2">@doctor.SpecializationName</div>
-                    <div class="staff-shift"><i class="bi bi-clock"></i> @doctor.ShiftName</div>
+                    <div class="staff-info">
+                        <h4 class="staff-name">Dr. @doctor.UserName</h4>
+                        <div class="staff-specialty mb-2">@doctor.SpecializationName</div>
+                        <div class="staff-shift"><i class="bi bi-clock"></i> @doctor.ShiftName</div>
 
-                    @if (User.IsInRole("Admin"))
-                    {
-                        <div class="d-flex justify-content-center gap-2 mt-4 pt-3 border-top">
-                            <a asp-action="Edit" asp-route-id="@doctor.ID" class="btn btn-warning btn-staff-action">Edit</a>
-                            <form asp-action="Delete" asp-route-id="@doctor.ID" method="post" class="m-0">
-                                <button type="submit" class="btn btn-danger btn-staff-action">Delete</button>
-                            </form>
-                        </div>
-                    }
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <div class="d-flex justify-content-center gap-2 mt-4 pt-3 border-top">
+                                <a asp-action="Edit" asp-route-id="@doctor.ID" class="btn btn-warning btn-staff-action">Edit</a>
+                                <form asp-action="Delete" asp-route-id="@doctor.ID" method="post" class="m-0"
+                                      onsubmit="return confirm('Are you sure you want to delete Dr. @doctor.UserName?')">
+                                    <button type="submit" class="btn btn-danger btn-staff-action">Delete</button>
+                                </form>
+                            </div>
+                        }
+                    </div>
                 </div>
-            </div>
+            }
         }
     </div>
 </div>

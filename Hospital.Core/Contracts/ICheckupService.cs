@@ -15,7 +15,7 @@ namespace Hospital.Core.Contracts
 
         Task CreateAsync(CheckupCreateDTO model);
 
-        Task UpdateAsync(CheckupIndexDTO model);
+        Task UpdateAsync(CheckupEditDTO model);
 
         Task DeleteAsync(Guid id);
         Task<List<CheckupIndexDTO>> GetCheckupsDate(DateOnly date);

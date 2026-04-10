@@ -138,7 +138,6 @@ namespace Hospital.Core.Services
                 doctor.ImageURL = uploadResult.Url;
                 doctor.CloudinaryID = uploadResult.PublicId;
             }
-
             doctor.SpecializationId = dto.SpecializationId;
             doctor.ShiftId = dto.ShiftId;
             doctor.IsAccepted = dto.IsAccepted;
@@ -146,9 +145,14 @@ namespace Hospital.Core.Services
             await context.SaveChangesAsync();
         }
 
-        public Task<List<DoctorIndexDto>> FilterBySpecialization(string specialization)
+        public async Task<List<DoctorIndexDto>> FilterBySpecialization(string specialization)
         {
-            return context.Doctors.Where(d => d.Specialization.SpecializationName==specialization)
+            if (string.IsNullOrWhiteSpace(specialization))
+            {
+                return new List<DoctorIndexDto>();
+            }
+            string pattern = $"%{specialization}%";
+            return await context.Doctors.Include(x=>x.Specialization).Where(x => EF.Functions.Like(x.Specialization.SpecializationName, pattern))
                 .Select(d => new DoctorIndexDto
                 {
                     ID = d.ID,

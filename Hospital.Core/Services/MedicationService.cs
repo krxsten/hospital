@@ -65,14 +65,13 @@ namespace Hospital.Core.Services
 			await context.SaveChangesAsync();
 		}
 
-		public async Task UpdateAsync(MedicationIndexDTO model)
+		public async Task UpdateAsync(MedicationEditDTO model)
 		{
 			var medication = await context.Medications.FindAsync(model.ID);
 			if (medication == null)
 			{
 				return;
 			}
-
 			medication.Name = model.Name;
 			medication.DiagnoseID = model.DiagnoseID;
 			medication.Description = model.Description;
@@ -92,20 +91,26 @@ namespace Hospital.Core.Services
 			context.Medications.Remove(medication);
 			await context.SaveChangesAsync();
 		}
-		public async Task<List<MedicationIndexDTO>> GetMedicationsForSideEffect(string sideEffect)
-		{
+        public async Task<List<MedicationIndexDTO>> GetMedicationsForSideEffect(string sideEffect)
+        {
+            if (string.IsNullOrWhiteSpace(sideEffect))
+            {
+                return new List<MedicationIndexDTO>();
+            }
+            string pattern = $"%{sideEffect}%";
+
             return await context.Medications
-				.Where(x=>x.SideEffects.Contains(sideEffect))
+                .Where(x => EF.Functions.Like(x.SideEffects, pattern))
                 .Select(x => new MedicationIndexDTO
                 {
                     ID = x.ID,
                     Name = x.Name,
                     DiagnoseID = x.DiagnoseID,
-                    DiagnoseName = x.Diagnose.Name,
+                    DiagnoseName = x.Diagnose != null ? x.Diagnose.Name : "No Diagnose",
                     Description = x.Description,
                     SideEffects = x.SideEffects
                 })
                 .ToListAsync();
         }
-	}
+    }
 }

@@ -1,33 +1,112 @@
-﻿@using Hospital.WebProject.ViewModels.Specialization
+﻿<style>
+    .glass-panel {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(15px);
+        border: 2px solid #ffffff;
+        border-radius: 30px;
+        padding: 40px;
+    }
+
+        .glass-panel label,
+        .glass-panel h4,
+        .page-title-white {
+            color: #ffffff !important;
+            font-weight: 700;
+        }
+
+    .custom-input {
+        background-color: transparent !important;
+        border: 1px solid #ffffff !important;
+        color: #ffffff !important;
+        border-radius: 12px;
+        padding: 12px;
+    }
+
+        .custom-input:focus {
+            background-color: rgba(255, 255, 255, 0.1) !important;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+            outline: none;
+        }
+
+    .custom-file-input::file-selector-button {
+        background-color: #ffffff;
+        color: #000000;
+        border: none;
+        border-radius: 8px;
+        padding: 8px 15px;
+        margin-right: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+
+        .custom-file-input::file-selector-button:hover {
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+
+    .btn-primary-white {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+        font-weight: 800;
+        border-radius: 50px;
+        padding: 12px 40px;
+        text-transform: uppercase;
+        border: none;
+        transition: all 0.3s ease;
+    }
+
+        .btn-primary-white:hover {
+            background-color: rgba(255, 255, 255, 0.9);
+            transform: translateY(-2px);
+        }
+
+    .text-danger {
+        color: #ff6b6b !important;
+        font-weight: 600;
+        font-size: 0.85rem;
+    }
+</style>
+
+@using Hospital.WebProject.ViewModels.Specialization
 @model SpecializationCreateViewModel
 
 @if (User.IsInRole("Admin"))
 {
-    <div class="mb-3">
-        <h2 style="text-align:center">———— Specializations ————</h2>
+    <div class="page-header-custom text-center">
+        <h2 class="page-title-white">Hospital Specializations</h2>
+        <div class="title-divider"></div>
     </div>
 
-    <form asp-action="Create" method="post" enctype="multipart/form-data">
+    <div class="container pb-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <div class="glass-panel">
+                    <h4 class="mb-4"><i class="bi bi-award me-2"></i>Add New Specialization</h4>
 
-        <div class="mb-3">
-            <label asp-for="SpecializationName" class="form-label"></label>
-            <input asp-for="SpecializationName" class="form-control" />
-            <span class="text-danger" asp-validation-for="SpecializationName"></span>
+                    <form asp-action="Create" method="post" enctype="multipart/form-data">
+
+                        <div class="mb-4">
+                            <label asp-for="SpecializationName" class="form-label">Specialization Name</label>
+                            <input asp-for="SpecializationName" class="form-control custom-input" placeholder="e.g. Cardiology" />
+                            <span class="text-danger" asp-validation-for="SpecializationName"></span>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="Image" class="form-label">Departmental Image / Icon</label>
+                            <input asp-for="Image" type="file" accept="image/*" class="form-control custom-input custom-file-input" />
+                            <div class="form-text text-white-50 mt-2">Recommended: PNG or JPG (Max 2MB)</div>
+                            <span class="text-danger" asp-validation-for="Image"></span>
+                        </div>
+
+                        <div class="d-flex gap-3 mt-5 pt-3 border-top border-white border-opacity-25">
+                            <button type="submit" class="btn btn-primary-white flex-grow-1">Save Specialization</button>
+                            <a asp-action="Index" class="btn btn-outline-light rounded-pill px-5">Back</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-
-        <div class="mb-3">
-            <label asp-for="Image" class="form-label">Upload Image:</label>
-
-            <input asp-for="Image" type="file" accept="image/*" class="form-control" />
-
-            <span class="text-danger" asp-validation-for="Image"></span>
-        </div>
-
-        <div class="mb-3">
-            <button type="submit" class="btn btn-primary">Submit</button>
-            <a asp-action="Index" class="btn btn-secondary">Back</a>
-        </div>
-    </form>
+    </div>
 }
 
 @section Scripts {

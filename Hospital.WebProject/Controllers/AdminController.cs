@@ -1,4 +1,6 @@
-﻿using Hospital.Data;
+﻿using Hospital.Core.Contracts;
+using Hospital.Core.Services;
+using Hospital.Data;
 using Hospital.Data.Entities;
 using Hospital.Entities;
 using Microsoft.AspNetCore.Authorization;
@@ -13,97 +15,57 @@ public class AdminController : Controller
     private readonly UserManager<User> userManager;
     private readonly SignInManager<User> signInManager;
     private readonly RoleManager<IdentityRole<Guid>> roleManager;
+    private readonly IAdminService adminService;
 
-    public AdminController(HospitalDbContext context, SignInManager<User> signInManager, RoleManager<IdentityRole<Guid>> roleManager, UserManager<User> userManager)
+    public AdminController(HospitalDbContext context, SignInManager<User> signInManager, RoleManager<IdentityRole<Guid>> roleManager, UserManager<User> userManager, IAdminService adminService)
     {
         this.context = context;
         this.signInManager = signInManager;
         this.roleManager = roleManager;
         this.userManager = userManager;
+        this.adminService = adminService;
     }
 
     public async Task<IActionResult> PendingDoctors()
     {
-        var doctors = await context.Doctors
-        .Include(d => d.User)
-        .Include(d => d.Specialization)
-        .Include(d => d.Shift)
-        .Where(d => !d.IsAccepted)
-        .ToListAsync();
 
-
+        var doctors = await adminService.GetPendingDoctorsAsync();
         ViewBag.Doctors = doctors;
-
         return View(doctors);
+
     }
 
     public async Task<IActionResult> PendingNurses()
     {
-
-        var nurses = await context.Nurses
-            .Include(n => n.User)
-            .Where(n => !n.IsAccepted)
-            .ToListAsync();
+        var nurses = await adminService.GetPendingNursesAsync();
         ViewBag.Nurses = nurses;
-
         return View(nurses);
     }
-    //public async Task<IActionResult> PendingPatients()
-    //{
-
-    //    var patients = await context.Patients
-    //        .Include(n => n.User)
-    //        .Where(n => !n.IsAccepted)
-    //        .ToListAsync();
-    //    ViewBag.Patients = patients;
-
-    //    return View(patients);
-    //}
+  
     [HttpPost]
     public async Task<IActionResult> AcceptDoctor(Guid id)
     {
-        var doctor = await context.Doctors.FirstOrDefaultAsync(d => d.ID == id);
+        var result = await adminService.AcceptDoctorAsync(id);
 
-        if (doctor == null)
-        {
-            return NotFound();
-        }
-        doctor.IsAccepted = true;
-        await context.SaveChangesAsync();
+        if (result == null) return NotFound();
 
         return RedirectToAction("PendingDoctors");
     }
     [HttpPost]
     public async Task<IActionResult> AcceptNurse(Guid id)
     {
-        var nurse = await context.Nurses.FirstOrDefaultAsync(n => n.ID == id); 
+        var result = await adminService.AcceptNurseAsync(id);
 
-        if (nurse == null)
-        {
-            return NotFound();
-        }
+        if (result == null) return NotFound();
 
-        nurse.IsAccepted = true;
-        await context.SaveChangesAsync();
-
-        return RedirectToAction("PendingNurses"); 
+        return RedirectToAction("PendingNurses");
     }
     [HttpPost]
     public async Task<IActionResult> RejectDoctor(Guid id)
     {
-        var doctor = await context.Doctors.FindAsync(id);
+        var result = await adminService.RejectDoctorAsync(id);
 
-        if (doctor == null)
-            return NotFound();
-
-        var user = await userManager.FindByIdAsync(doctor.UserId.ToString());
-
-        context.Doctors.Remove(doctor);
-
-        if (user != null)
-            await userManager.DeleteAsync(user);
-
-        await context.SaveChangesAsync();
+        if (result == null) return NotFound();
 
         return RedirectToAction("PendingDoctors");
     }
@@ -111,19 +73,9 @@ public class AdminController : Controller
     [HttpPost]
     public async Task<IActionResult> RejectNurse(Guid id)
     {
-        var nurse = await context.Nurses.FindAsync(id);
+        var result = await adminService.RejectNurseAsync(id);
 
-        if (nurse == null)
-            return NotFound();
-
-        var user = await userManager.FindByIdAsync(nurse.UserId.ToString());
-
-        context.Nurses.Remove(nurse);
-
-        if (user != null)
-            await userManager.DeleteAsync(user);
-
-        await context.SaveChangesAsync();
+        if (result == null) return NotFound();
 
         return RedirectToAction("PendingNurses");
     }

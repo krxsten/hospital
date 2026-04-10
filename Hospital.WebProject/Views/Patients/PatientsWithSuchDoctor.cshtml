@@ -1,42 +1,179 @@
-﻿<link rel="stylesheet" href="/css/styles.css">
+﻿<style>
+    .glass-panel {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(15px);
+        border: 2px solid #ffffff;
+        border-radius: 30px;
+        padding: 40px;
+    }
+
+    .patient-card {
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid #ffffff;
+        border-radius: 20px;
+        transition: all 0.3s ease;
+        height: 100%;
+    }
+
+        .patient-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 8px 25px rgba(255, 255, 255, 0.1);
+        }
+
+    .custom-input {
+        background-color: transparent !important;
+        border: 1px solid #ffffff !important;
+        color: #ffffff !important;
+        border-radius: 12px;
+        padding: 12px;
+        height: 50px;
+    }
+
+        .custom-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+    .btn-primary-white {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+        font-weight: 800;
+        border-radius: 12px;
+        border: none;
+        transition: all 0.3s ease;
+    }
+
+        .btn-primary-white:hover {
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+
+    .text-white-50 {
+        color: rgba(255, 255, 255, 0.5) !important;
+    }
+</style>
+
 @using Hospital.WebProject.ViewModels.Patient
 @model List<PatientIndexViewModel>
+
 @if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse"))
 {
-    <h2 class="text-white">Search Patients by Doctor</h2>
-    <div class="mb-3">
-        <form method="get" asp-action="PatientsWithSuchDoctor">
-            <input type="text" name="doctorName" class="form-control" placeholder="Enter doctor's first name..." required />
-            <br />
-            <button class="btn btn-primary">Search</button>
-            <a asp-action="Index" class="btn btn-secondary" style="display:inline">Back</a>
-
-        </form>
+    <div class="page-header-custom text-center">
+        <h2 class="page-title-white">Doctor's Patient List</h2>
+        <div class="title-divider"></div>
     </div>
-    <hr />
 
-    @if (Model != null && Model.Any())
-    {
-        <div class="row">
-            @foreach (var p in Model)
-            {
-                <div class="col-md-4 mb-4">
-                    <div class="card shadow-sm">
-                        <div class="card-body">
-                            <h5>@p.UserName</h5>
-                            <p>
-                                <strong>Doctor:</strong> @p.DoctorName <br />
-                                <strong>Hospitalization date:</strong> @p.HospitalizationDate
-                                <strong>Hospitalization time:</strong> @p.HospitalizationTime
-                            </p>
-                        </div>
+    <div class="container pb-5">
+        <div class="glass-panel mb-5">
+            <form method="get" asp-action="PatientsWithSuchDoctor">
+                <div class="row g-3 align-items-end">
+                    <div class="col-md-7">
+                        <label class="text-white mb-2 fw-bold small text-uppercase">Find by Doctor Name</label>
+                        <input type="text" id="patientSearchInput" name="doctorName" class="form-control custom-input"
+                               placeholder="Enter doctor's first name..." required />
+                    </div>
+                    <div class="col-md-5 d-flex gap-2">
+                        <button type="submit" class="btn btn-primary-white flex-grow-1" style="height: 50px;">
+                            <i class="bi bi-search me-2"></i>Search
+                        </button>
+                        <a asp-action="Index" class="btn btn-outline-light d-flex align-items-center justify-content-center px-4"
+                           style="height: 50px; border-radius: 12px; flex-grow: 1;">
+                            Back
+                        </a>
                     </div>
                 </div>
-            }
+            </form>
         </div>
-    }
-    else if (Model == null)
-    {
-        <p>No patients where found.</p>
-    }
+
+        @if (Model != null && Model.Any())
+        {
+            <div class="row" id="patientResultsContainer">
+                @foreach (var p in Model)
+                {
+                    <div class="col-md-4 mb-4">
+                        <div class="patient-card p-4">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="bg-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 45px; height: 45px;">
+                                    <i class="bi bi-person-fill text-dark fs-4"></i>
+                                </div>
+                                <h5 class="text-white fw-bold mb-0">@p.UserName</h5>
+                            </div>
+
+                            <div class="border-top border-white border-opacity-10 pt-3">
+                                <p class="text-white-50 small mb-1">ASSIGNED DOCTOR</p>
+                                <p class="text-white fw-semibold mb-3">Dr. @p.DoctorName</p>
+
+                                <div class="row g-0">
+                                    <div class="col-6">
+                                        <p class="text-white-50 small mb-0">ADMIT DATE</p>
+                                        <p class="text-white mb-0">@p.HospitalizationDate</p>
+                                    </div>
+                                    <div class="col-6 text-end">
+                                        <p class="text-white-50 small mb-0">HOSPITALIZATION TIME</p>
+                                        <p class="text-white mb-0">@p.HospitalizationTime</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else if (Model != null)
+        {
+            <div class="text-center py-5">
+                <i class="bi bi-person-x text-white-50" style="font-size: 4rem;"></i>
+                <h4 class="text-white-50 mt-3">No patients were found for this doctor.</h4>
+            </div>
+        }
+    </div>
 }
+<script>
+    $(document).ready(function () {
+        $("#patientSearchInput").on("input", function () {
+            var searchVal = $(this).val();
+            var resultsDiv = $("#patientResultsContainer");
+
+            if (searchVal.length >= 1) {
+                $.get("/Patients/PatientsWithSuchDoctor", { doctorName: searchVal }, function (data) {
+                    resultsDiv.empty();
+
+                    if (data.length === 0) {
+                        resultsDiv.append('<div class="col-12 text-center py-5"><h4 class="text-white-50">No patients found for this doctor.</h4></div>');
+                        return;
+                    }
+
+                    data.forEach(function (p) {
+                        resultsDiv.append(`
+                            <div class="col-md-4 mb-4">
+                                <div class="patient-card p-4">
+                                    <div class="d-flex align-items-center mb-3">
+                                        <div class="bg-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 45px; height: 45px;">
+                                            <i class="bi bi-person-fill text-dark fs-4"></i>
+                                        </div>
+                                        <h5 class="text-white fw-bold mb-0">${p.userName}</h5>
+                                    </div>
+                                    <div class="border-top border-white border-opacity-10 pt-3">
+                                        <p class="text-white-50 small mb-1">ASSIGNED DOCTOR</p>
+                                        <p class="text-white fw-semibold mb-3">Dr. ${p.doctorName}</p>
+                                        <div class="row g-0">
+                                            <div class="col-6">
+                                                <p class="text-white-50 small mb-0">ADMIT DATE</p>
+                                                <p class="text-white mb-0">${p.hospitalizationDate}</p>
+                                            </div>
+                                            <div class="col-6 text-end">
+                                                <p class="text-white-50 small mb-0">HOSPITALIZATION TIME</p>
+                                                <p class="text-white mb-0">${p.hospitalizationTime}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `);
+                    });
+                });
+            } else if (searchVal.length === 0) {
+                location.reload();
+            }
+        });
+    });
+</script>

@@ -1,27 +1,104 @@
-﻿@using Hospital.WebProject.ViewModels.Diagnose
-@model DiagnoseIndexViewModel
-
-<form asp-action="Edit" asp-controller="Diagnoses" method="post" enctype="multipart/form-data">
-
-    <input type="hidden" asp-for="ID" />
-
-    <div class="mb-3">
-        <label asp-for="Name">Diagnose:</label>
-        <input asp-for="Name" class="form-control" />
-    </div>
-
-    <div class="mb-3">
-        <label>Upload new image:</label>
-        <input asp-for="NewImageFile" type="file" class="form-control" />
-    </div>
-
-    @if (!string.IsNullOrEmpty(Model.ImageURL))
-    {
-        <div class="mb-3">
-            <p>Current image:</p>
-            <img src="@Model.ImageURL" width="200" />
-        </div>
+﻿<style>
+    .glass-panel {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(15px);
+        border: 2px solid #ffffff;
+        border-radius: 30px;
+        padding: 40px;
     }
 
-    <button type="submit" class="btn btn-primary">Update</button>
-</form>
+        .glass-panel label,
+        .glass-panel p,
+        .glass-panel h4 {
+            color: #ffffff !important;
+            font-weight: 600;
+        }
+
+    .custom-input {
+        background-color: transparent !important;
+        border: 1px solid #ffffff !important;
+        color: #ffffff !important;
+        border-radius: 10px;
+        padding: 12px;
+    }
+
+        .custom-input:focus {
+            background-color: rgba(255, 255, 255, 0.1) !important;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+        }
+
+    .image-preview-wrapper {
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        padding: 10px;
+        border-radius: 15px;
+        display: inline-block;
+        background: rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-primary-white {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+        font-weight: 800;
+        border-radius: 50px;
+        padding: 12px 40px;
+        text-transform: uppercase;
+        border: none;
+        transition: all 0.3s ease;
+    }
+
+        .btn-primary-white:hover {
+            background-color: rgba(255, 255, 255, 0.9);
+            transform: translateY(-2px);
+        }
+</style>
+
+@using Hospital.WebProject.ViewModels.Diagnose
+@model DiagnoseIndexViewModel
+
+<div class="page-header-custom text-center">
+    <h2 class="page-title-white">Edit Diagnosis</h2>
+    <div class="title-divider"></div>
+</div>
+
+<div class="container pb-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="glass-panel">
+                <h4 class="mb-4"><i class="bi bi-pencil-square me-2"></i>Update Diagnose</h4>
+
+                <form asp-action="Edit" asp-controller="Diagnoses" method="post" enctype="multipart/form-data">
+
+                    <div class="mb-4">
+                        <label asp-for="Name" class="form-label">Diagnosis Name</label>
+                        <input asp-for="Name" class="form-control custom-input" placeholder="Update diagnosis title..." />
+                        <span asp-validation-for="Name" class="text-danger small"></span>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label">Upload New Image/Scan</label>
+                        <input asp-for="NewImageFile" type="file" class="form-control custom-input" />
+                        <small class="text-white-50">Leave empty to keep current image</small>
+                    </div>
+
+                    @if (!string.IsNullOrEmpty(Model.ImageURL))
+                    {
+                        <div class="mb-4">
+                            <p class="mb-2 small text-uppercase fw-bold">Current Attachment:</p>
+                            <div class="image-preview-wrapper">
+                                <img src="@Model.ImageURL" class="img-fluid rounded" style="max-width: 100%; height: auto; max-height: 200px;" alt="Diagnosis Image" />
+                            </div>
+                        </div>
+                    }
+
+                    <div class="d-grid gap-2 mt-5">
+                        <button type="submit" class="btn btn-primary-white">Update Diagnosis</button>
+                        <a asp-action="Index" class="btn btn-outline-light rounded-pill">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

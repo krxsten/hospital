@@ -27,9 +27,9 @@ namespace Hospital.Entities
         public Shift Shift { get; set; }
         public bool IsAccepted { get; set; } = false;
         [Required]
-        public string ImageURL { get; set; } = null!;
+        public string? ImageURL { get; set; } = null!;
         [Required]
-        public string PublicID { get; set; } = null!;
+        public string? PublicID { get; set; } = null!;
         public List<DoctorAndNurse> DoctorNurses { get; set; } = new List<DoctorAndNurse>();
     }
 }

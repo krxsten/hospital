@@ -9,14 +9,14 @@ namespace Hospital.Core.DTOs
 {
     public class NurseIndexDTO
     {
-		public Guid ID { get; set; }
-		public Guid UserID { get; set; }
-        public string UserName { get; set; } = null!;
+        public Guid ID { get; set; }
         public Guid SpecializationId { get; set; }
         public string SpecializationName { get; set; } = null!;
         public Guid ShiftId { get; set; }
         public string ShiftName { get; set; } = null!;
-        public bool IsAccepted { get; set; }
+        public Guid UserId { get; set; }
+        public string UserName { get; set; } = null!;
+        public bool IsAccepted { get; set; } = false;
         public string ImageURL { get; set; } = null!;
         public IFormFile? NewImageFile { get; set; }
 

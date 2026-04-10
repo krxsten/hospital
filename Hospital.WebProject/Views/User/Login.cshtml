@@ -20,9 +20,14 @@
                     <input asp-for="@Model.Email" class="form-control" autocomplete="username" aria-required="true" />
                     <span asp-validation-for="Email" class="text-danger"></span>
                 </div>
-                <div class="text-center mb-3">
-                    <label asp-for="@Model.Password" class="form-label"></label>
-                    <input asp-for="@Model.Password" type="password" class="form-control" autocomplete="current-password" aria-required="true" />
+                <div class="form-group mb-2">
+                    <label asp-for="@Model.Password"></label>
+                    <div class="input-group">
+                        <input asp-for="@Model.Password" type="password" id="passwordField" class="form-control" />
+                        <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                            <i class="bi bi-eye"></i> Show
+                        </button>
+                    </div>
                     <span asp-validation-for="Password" class="text-danger"></span>
                 </div>
                 <div class="text-center">
@@ -32,3 +37,13 @@
         </section>
     </div>
 </div>
+
+<script>
+    document.getElementById("togglePassword").addEventListener("click", function () {
+        const passwordField = document.getElementById("passwordField");
+        const type = passwordField.getAttribute("type") === "password" ? "text" : "password";
+        passwordField.setAttribute("type", type);
+
+        this.textContent = type === "password" ? "Show" : "Hide";
+    });
+</script>

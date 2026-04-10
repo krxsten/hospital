@@ -1,6 +1,7 @@
 ﻿using Hospital.Core.Contracts;
 using Hospital.Core.DTOs;
 using Hospital.Data;
+using Hospital.Data.Entities;
 using Hospital.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -28,7 +29,7 @@ namespace Hospital.Core.Services
 				.Select(x => new NurseIndexDTO
 				{
 					ID = x.ID,
-					UserID = x.UserId,
+					UserId = x.UserId,
 					UserName = x.User.FirstName + " " + x.User.LastName,
 					SpecializationId = x.SpecializationId,
 					SpecializationName = x.Specialization.SpecializationName,
@@ -47,7 +48,7 @@ namespace Hospital.Core.Services
 				.Select(x => new NurseIndexDTO
 				{
 					ID = x.ID,
-					UserID = x.UserId,
+					UserId = x.UserId,
 					UserName = x.User.FirstName + " " + x.User.LastName,
 					SpecializationId = x.SpecializationId,
 					SpecializationName = x.Specialization.SpecializationName,
@@ -61,13 +62,33 @@ namespace Hospital.Core.Services
 
 		public async Task CreateAsync(NurseCreateDTO model)
 		{
+            var names = model.NurseName.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+
+            var firstName = names.Length > 0 ? names[0] : "";
+            var lastName = names.Length > 1 ? names[1] : "";
+
+            var user = new User
+            {
+                Id = Guid.NewGuid(),
+                FirstName = firstName,
+                LastName = lastName,
+                UserName = firstName + "_" + lastName
+            };
+
+            await context.Users.AddAsync(user);
+
+            if (model.ImageFile == null)
+            {	
+                throw new Exception("Image is required");
+            }
+
             var uploadResult = await imageService.UploadImageAsync(model.ImageFile);
             var nurse = new Nurse
 			{
 				ID = Guid.NewGuid(),
-				UserId = model.UserID,
-				SpecializationId = model.SpecializationId,
-				ShiftId = model.ShiftId,
+				UserId = user.Id,
+				SpecializationId = model.SpecializationID,
+				ShiftId = model.ShiftID,
 				IsAccepted = model.IsAccepted,
                 ImageURL = uploadResult.Url,
                 PublicID = uploadResult.PublicId
@@ -77,18 +98,30 @@ namespace Hospital.Core.Services
 			await context.SaveChangesAsync();
 		}
 
-		public async Task UpdateAsync(NurseIndexDTO model)
+		public async Task UpdateAsync(NurseEditDTO model)
 		{
-			var nurse = await context.Nurses.FindAsync(model.ID);
-			if (nurse == null)
-			{
-				return;
-			}
-            if (model.ImageURL != null)
+            var nurse = await context.Doctors
+               .Include(d => d.User)
+               .FirstOrDefaultAsync(d => d.ID == model.ID);
+
+            if (nurse == null)
+            {
+                return;
+            }
+
+            var names = model.NurseName.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+
+            nurse.User.FirstName = names.Length > 0 ? names[0] : "";
+            nurse.User.LastName = names.Length > 1 ? names[1] : "";
+
+            if (model.NewImageFile != null)
             {
                 var uploadResult = await imageService.UploadImageAsync(model.NewImageFile);
+
                 nurse.ImageURL = uploadResult.Url;
+                nurse.CloudinaryID = uploadResult.PublicId;
             }
+
             nurse.SpecializationId = model.SpecializationId;
 			nurse.ShiftId = model.ShiftId;
 			nurse.IsAccepted = model.IsAccepted;
@@ -107,13 +140,18 @@ namespace Hospital.Core.Services
 			context.Nurses.Remove(nurse);
 			await context.SaveChangesAsync();
 		}
-        public Task<List<NurseIndexDTO>> FilterBySpecialization(string specialization)
+        public async Task<List<NurseIndexDTO>> FilterBySpecialization(string specialization)
         {
-            return context.Nurses.Where(d => d.Specialization.SpecializationName == specialization)
+            if (string.IsNullOrWhiteSpace(specialization))
+            {
+                return new List<NurseIndexDTO>();
+            }
+            string pattern = $"%{specialization}%";
+            return await context.Nurses.Include(x => x.Specialization).Where(x => EF.Functions.Like(x.Specialization.SpecializationName, pattern))
                .Select(x => new NurseIndexDTO
                {
                    ID = x.ID,
-                   UserID = x.UserId,
+                   UserId = x.UserId,
                    UserName = x.User.FirstName + " " + x.User.LastName,
                    SpecializationId = x.SpecializationId,
                    SpecializationName = x.Specialization.SpecializationName,
@@ -130,7 +168,7 @@ namespace Hospital.Core.Services
                 .Select(x => new NurseIndexDTO
                 {
                     ID = x.ID,
-                    UserID = x.UserId,
+                    UserId = x.UserId,
                     UserName = x.User.FirstName + " " + x.User.LastName,
                     SpecializationId = x.SpecializationId,
                     SpecializationName = x.Specialization.SpecializationName,

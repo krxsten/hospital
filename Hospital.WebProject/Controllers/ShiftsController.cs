@@ -141,17 +141,15 @@ namespace Hospital.WebProject.Controllers
         public async Task<IActionResult> GetShiftByTime(TimeOnly time)
         {
             var result = await shiftService.GetShiftByTime(time);
-            if (result == null)
+            
+            var model = result.Select(x=> new ShiftIndexViewModel
             {
-                return NotFound();
-            }
-            var model = new ShiftIndexViewModel
-            {
-                ID = result.ID,
-                Type = result.Type,
-                StartTime = result.StartTime,
-                EndTime = result.EndTime
-            };
+                ID = x.ID,
+                Type = x.Type,
+                StartTime = x.StartTime,
+                EndTime = x.EndTime
+            }).ToList();
+
             return View(model);
         }
     }

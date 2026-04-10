@@ -1,28 +1,81 @@
-﻿<link rel="stylesheet" href="/css/styles.css">
-@model List<DateTime>
+﻿<style>
+    .time-slot-badge {
+        background: rgba(255, 255, 255, 0.1);
+        border: 2px solid #ffffff;
+        color: #ffffff;
+        padding: 12px 25px;
+        border-radius: 15px;
+        font-weight: 700;
+        font-size: 1.1rem;
+        display: flex;
+        align-items: center;
+        transition: all 0.3s ease;
+        min-width: 160px;
+        justify-content: center;
+    }
+
+        .time-slot-badge:hover {
+            background: #ffffff;
+            color: #000000;
+            transform: translateY(-3px);
+        }
+
+    .letter-spacing-1 {
+        letter-spacing: 1px;
+    }
+
+    .glass-panel {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(15px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 24px;
+        padding: 40px;
+    }
+</style>
+@model List<DateOnly>
 @if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse"))
 {
-    <h2>Busy Times</h2>
-    @if (Model == null || !Model.Any())
-    {
-        <p>No busy times for selected date.</p>
-    }
-    else
-    {
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>Busy Time</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var time in Model)
-                {
-                    <tr>
-                        <td>@time.ToString("hh:mm tt")</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    }
+    <div class="page-header-custom text-center">
+        <h2 class="page-title-white">Busy Times</h2>
+        <div class="title-divider"></div>
+    </div>
+
+    <div class="container pb-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h4 class="text-white fw-bold mb-0">
+                <i class="bi bi-clock-history me-2"></i>Occupied Slots
+            </h4>
+            <a asp-action="Index" class="btn btn-outline-light rounded-pill px-4">
+                <i class="bi bi-arrow-left me-2"></i>Back to Schedule
+            </a>
+        </div>
+
+        @if (Model == null || !Model.Any())
+        {
+            <div class="glass-panel text-center pb-5">
+                <i class="bi bi-calendar-check text-white fs-1"></i>
+                <h3 class="text-white mt-3">All Clear</h3>
+                <p class="text-white mb-0">No busy times recorded for the selected date.</p>
+            </div>
+        }
+        else
+        {
+            <div class="glass-panel">
+                <p class="text-white-50 mb-4 small text-uppercase fw-bold letter-spacing-1">
+                    The following times are currently booked or unavailable:
+                </p>
+                
+                <div class="d-flex flex-wrap gap-3">
+                    @foreach (var time in Model)
+                    {
+                        <div class="time-slot-badge">
+                            <i class="bi bi-lock-fill me-2"></i>
+                            @time.ToString("hh:mm tt")
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    </div>
 }
+

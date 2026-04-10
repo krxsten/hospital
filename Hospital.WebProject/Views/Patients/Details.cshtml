@@ -1,0 +1,127 @@
+﻿<link rel="stylesheet" href="/css/styles.css">
+@using Hospital.WebProject.ViewModels.Patient
+@model PatientIndexViewModel
+
+<style>
+    .profile-card {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(15px);
+        border: 2px solid #ffffff;
+        border-radius: 30px;
+        padding: 40px;
+        margin-top: 30px;
+    }
+
+    .info-label {
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        font-size: 0.85rem;
+        color: rgba(255, 255, 255, 0.6);
+        margin-bottom: 4px;
+    }
+
+    .info-value {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: #ffffff;
+        margin-bottom: 20px;
+    }
+
+    .section-divider {
+        border-top: 1px solid rgba(255, 255, 255, 0.2);
+        margin: 20px 0;
+    }
+
+    .status-badge {
+        background: #ffffff;
+        color: #000000;
+        padding: 8px 20px;
+        border-radius: 50px;
+        font-weight: 800;
+        text-transform: uppercase;
+        font-size: 0.9rem;
+    }
+</style>
+@if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse"))
+{
+    <div class="page-header-custom text-center">
+        <h2 class="page-title-white">Patient Profile</h2>
+        <div class="title-divider"></div>
+    </div>
+
+    <div class="container pb-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <a asp-action="Index" class="btn btn-outline-light rounded-pill px-4">
+                <i class="bi bi-arrow-left me-2"></i>Back to List
+            </a>
+            <div class="status-badge">
+                <i class="bi bi-hospital me-2"></i>In Treatment
+            </div>
+        </div>
+
+        <div class="profile-card">
+            <div class="row">
+                <div class="col-md-4 border-end border-white border-opacity-25">
+                    <div class="text-center mb-4">
+                        <div class="bg-white text-dark rounded-circle d-inline-flex align-items-center justify-content-center shadow"
+                             style="width: 100px; height: 100px; font-size: 40px; font-weight: 900;">
+                            @Model.UserName.Substring(0, 1).ToUpper()
+                        </div>
+                        <h3 class="text-white mt-3 fw-bold">@Model.UserName</h3>
+                        <p class="text-white-50">UCN: @Model.UCN</p>
+                    </div>
+
+                    <div class="ps-3">
+                        <div class="info-label">Date of Birth</div>
+                        <div class="info-value">@Model.DateOfBirth.ToString("dd MMM yyyy")</div>
+
+                        <div class="info-label">Birth City</div>
+                        <div class="info-value">@Model.BirthCity</div>
+
+                        <div class="info-label">Phone Number</div>
+                        <div class="info-value">@Model.PhoneNumber</div>
+                    </div>
+                </div>
+
+                <div class="col-md-8 ps-md-5">
+                    <h4 class="text-white fw-bold mb-4">Medical Placement</h4>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="info-label">Assigned Doctor</div>
+                            <div class="info-value">
+                                <i class="bi bi-person-badge me-2"></i>Dr. @Model.DoctorName
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="info-label">Room Assignment</div>
+                            <div class="info-value">
+                                <i class="bi bi-door-closed me-2"></i>Room @Model.RoomNumber
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section-divider"></div>
+
+                    <h4 class="text-white fw-bold mb-4">Stay Timeline</h4>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="info-label">Hospitalization</div>
+                            <div class="info-value">
+                                <div class="text-white">@Model.HospitalizationDate.ToShortDateString()</div>
+                                <small class="text-white-50">at @Model.HospitalizationTime</small>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="info-label">Discharge Plan</div>
+                            <div class="info-value">
+                                <div class="text-white">@Model.DischargeDate.ToShortDateString()</div>
+                                <small class="text-white-50">at @Model.DischargeTime</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

@@ -1,45 +1,127 @@
-﻿@using Hospital.WebProject.ViewModels.Diagnose
+﻿<style>
+    .glass-panel {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(15px);
+        border: 2px solid #ffffff;
+        border-radius: 30px;
+        padding: 40px;
+    }
+
+    .diagnose-card {
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid #ffffff;
+        border-radius: 20px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        height: 100%;
+    }
+
+        .diagnose-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+    .diagnose-image {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-bottom: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .btn-primary-white {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+        font-weight: 800;
+        border-radius: 10px;
+        border: none;
+    }
+</style>
+
+@using Hospital.WebProject.ViewModels.Diagnose
 @model List<DiagnoseIndexViewModel>
-@{
-    ViewData["Title"] = "Diagnose with such letter";
-}
 
-<h2 class="text-white">Search Diagnose</h2>
-<div class="mb-3">
-    <form method="get" asp-action="GetDiagnose">
-        <div class="form-group">
-            <input type="text" name="diagnose" placeholder="Enter diagnose..." class="form-control" />
-        </div>
-
-        <br />
-        <button type="submit" class="btn btn-primary">Search</button>
-        <a asp-action="Index" class="btn btn-secondary" style="display:inline">Back</a>
-
-    </form>
+<div class="page-header-custom text-center">
+    <h2 class="page-title-white">Medical Diagnosis Search</h2>
+    <div class="title-divider"></div>
 </div>
-<hr />
 
-@if (Model != null && Model.Any())
-{
-    <h3 class="text-white">Results:</h3>
-
-    <div class="row">
-        @foreach (var diagnose in Model)
-        {
-            <div class="col-md-4 mb-4">
-                <div class="card shadow-sm rounded-3">
-                    <div class="card-body">
-                        <h5 class="card-title">@diagnose.Name</h5>
-                        <p class="card-text">
-                            <img src="@diagnose.ImageURL" alt="diagnose" />
-                        </p>
-                    </div>
+<div class="container pb-5">
+    <div class="glass-panel mb-5">
+        <form method="get" asp-action="GetDiagnose" id="searchForm">
+            <div class="row g-3">
+                <div class="col-md-8">
+                    <label class="text-white mb-2 fw-bold small text-uppercase">Search by Name or Keyword</label>
+                    <input type="text" id="diagnoseInput" name="diagnose"
+                           class="form-control bg-transparent text-white border-white"
+                           placeholder="Type to search (e.g. 'Flu')..."
+                           style="height: 50px; border-radius: 10px;" autocomplete="off" />
+                </div>
+                <div class="col-md-4 d-flex align-items-end gap-2">
+                    <button type="submit" class="btn btn-primary-white flex-grow-1" style="height: 50px;">
+                        <i class="bi bi-search me-2"></i>Search
+                    </button>
+                    <a asp-action="Index" class="btn btn-outline-light d-flex align-items-center px-4" style="height: 50px; border-radius: 10px;">
+                        Back
+                    </a>
                 </div>
             </div>
+        </form>
+    </div>
+
+    <div class="row" id="diagnoseResults">
+        @if (Model != null && Model.Any())
+        {
+            @foreach (var d in Model)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="diagnose-card">
+                        @if (!string.IsNullOrEmpty(d.ImageURL))
+                        {
+                            <img src="@d.ImageURL" class="diagnose-image" alt="@d.Name" />
+                        }
+                        <div class="p-4 text-center">
+                            <h4 class="text-white fw-bold mb-0">@d.Name</h4>
+                        </div>
+                    </div>
+                </div>
+            }
         }
     </div>
-}
-else if (Model == null)
-{
-    <p>No diagnoses where found.</p>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $("#diagnoseInput").on("input", function () {
+                var searchVal = $(this).val();
+
+                if (searchVal.length >= 1) {
+                    $.get("/Diagnoses/GetDiagnose", { diagnose: searchVal }, function (data) {
+                        var resultsDiv = $("#diagnoseResults");
+                        resultsDiv.empty();
+
+                        if (data.length === 0) {
+                            resultsDiv.append('<div class="col-12 text-center"><p class="text-white-50">No diagnoses found.</p></div>');
+                            return;
+                        }
+
+                        data.forEach(function (d) {
+                            var imgHtml = d.imageURL ? `<img src="${d.imageURL}" class="diagnose-image" alt="${d.name}" />` : '';
+
+                            var card = `
+                                <div class="col-md-4 mb-4">
+                                    <div class="diagnose-card">
+                                        ${imgHtml}
+                                        <div class="p-4 text-center">
+                                            <h4 class="text-white fw-bold mb-0">${d.name}</h4>
+                                        </div>
+                                    </div>
+                                </div>`;
+                            resultsDiv.append(card);
+                        });
+                    });
+                }
+            });
+        });
+    </script>
 }

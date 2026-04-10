@@ -10,10 +10,11 @@ namespace Hospital.Core.DTOs
 {
     public class NurseCreateDTO
     {
-        public Guid UserID { get; set; }
-        public Guid SpecializationId { get; set; }
-        public Guid ShiftId { get; set; }
-        public bool IsAccepted { get; set; }
+        public string NurseName { get; set; } = null!;
+        public Guid SpecializationID { get; set; }
+        public string SpecializationName { get; set; } = null!;
+        public Guid ShiftID { get; set; }
+        public bool IsAccepted { get; set; } = false;
         public IFormFile ImageFile { get; set; } = null!;
 
     }

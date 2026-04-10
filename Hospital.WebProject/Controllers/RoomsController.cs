@@ -23,7 +23,7 @@ namespace Hospital.WebProject.Controllers
 			this.roomService = roomService;
 		}
 
-		[Authorize(Roles = "Admin,Patient,Doctor,Nurse")]
+		[Authorize(Roles = "Admin,Doctor,Nurse")]
 		[HttpGet]
 		public async Task<IActionResult> Index()
 		{
@@ -34,7 +34,7 @@ namespace Hospital.WebProject.Controllers
 				ID = x.ID,
 				RoomNumber = x.RoomNumber,
 				IsTaken = x.IsTaken
-			}).ToList();
+			}).OrderBy(x => x.RoomNumber).ToList();
 
 			return View(model);
 		}
@@ -66,25 +66,7 @@ namespace Hospital.WebProject.Controllers
 			return RedirectToAction(nameof(Index));
 		}
 
-		[Authorize(Roles = "Admin,Patient,Doctor,Nurse")]
-		[HttpGet]
-		public async Task<IActionResult> Details(Guid id)
-		{
-			var dto = await roomService.GetByIdAsync(id);
-			if (dto == null)
-			{
-				return NotFound();
-			}
-
-			var model = new RoomIndexViewModel
-			{
-				ID = dto.ID,
-				RoomNumber = dto.RoomNumber,
-				IsTaken = dto.IsTaken
-			};
-
-			return View(model);
-		}
+		
 
 		[Authorize(Roles = "Admin,Doctor,Nurse")]
 		[HttpGet]
@@ -144,7 +126,7 @@ namespace Hospital.WebProject.Controllers
                 ID = x.ID,
                 RoomNumber = x.RoomNumber,
                 IsTaken = x.IsTaken
-            }).ToList();
+            }).OrderBy(x => x.RoomNumber).ToList();
 			return View(model);
         }
     }
