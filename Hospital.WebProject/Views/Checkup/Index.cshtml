@@ -108,7 +108,7 @@
                                 <th>Patient</th>
                                 <th>Doctor</th>
                                 <th>Appointment Date</th>
-                                @if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse") || User.IsInRole("Patient"))
+                                @if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse"))
                                 {
                                     <th>Actions</th>
                                 }
