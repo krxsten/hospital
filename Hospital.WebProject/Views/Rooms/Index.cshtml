@@ -85,7 +85,7 @@
             {
                 <a asp-action="Create" class="btn btn-success rounded-pill px-4 shadow-sm">+ Create Room</a>
             }
-            @if (User.IsInRole("Admin"))
+            @if (User.IsInRole("Admin")|| User.IsInRole("Doctor") ||User.IsInRole("Nurse"))
             {
                 <a asp-action="GetRoomsAfterNum" class="btn btn-light border rounded-pill px-4 shadow-sm">
                     <i class="bi bi-search"></i> Search Room

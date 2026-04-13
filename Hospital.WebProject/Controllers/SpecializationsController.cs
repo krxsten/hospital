@@ -75,7 +75,7 @@ namespace Hospital.WebProject.Controllers
 			}
 		}
 
-		[Authorize(Roles = "Admin,Doctor,Nurse")]
+		[Authorize(Roles = "Admin")]
 		[HttpGet]
 		public async Task<IActionResult> Edit(Guid id)
 		{
@@ -95,7 +95,7 @@ namespace Hospital.WebProject.Controllers
 			return View(model);
 		}
 
-		[Authorize(Roles = "Admin,Doctor,Nurse")]
+		[Authorize(Roles = "Admin")]
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Edit(SpecializationIndexViewModel model)
@@ -124,7 +124,7 @@ namespace Hospital.WebProject.Controllers
 			}
 		}
 
-		[Authorize(Roles = "Admin,Doctor,Nurse")]
+		[Authorize(Roles = "Admin")]
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Delete(Guid id)

@@ -117,7 +117,7 @@ namespace Hospital.WebProject.Controllers
 			await roomService.DeleteAsync(id);
 			return RedirectToAction(nameof(Index));
 		}
-        [Authorize(Roles = "Admin,Patient,Doctor,Nurse")]
+        [Authorize(Roles = "Admin,Doctor,Nurse")]
         public async Task<IActionResult> GetRoomsAfterNum(int roomNum)
 		{
 			var result = await roomService.GetRoomsAfterNum(roomNum);

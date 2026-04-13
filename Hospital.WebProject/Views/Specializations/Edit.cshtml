@@ -78,7 +78,7 @@
 @using Hospital.WebProject.ViewModels.Specialization
 @model SpecializationIndexViewModel
 
-@if (User.IsInRole("Admin") || User.IsInRole("Nurse") || User.IsInRole("Doctor"))
+@if (User.IsInRole("Admin"))
 {
     <div class="page-header-custom text-center">
         <h2 class="page-title-white">Edit Specialization</h2>
