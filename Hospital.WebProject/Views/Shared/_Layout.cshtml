@@ -1,7 +1,7 @@
 ﻿<style>
     .main-wrapper {
         width: 100%;
-        padding: 40px 80px; 
+        padding: 40px 80px;
     }
 
     .container {
@@ -31,7 +31,7 @@
         .service-card:hover {
             transform: translateY(-5px);
         }
-    
+
 
     .brand-text {
         font-size: 1.3rem;
@@ -42,6 +42,7 @@
         .brand-text strong {
             color: #bbdefb;
         }
+
     .navbar .dropdown-menu {
         background: white !important;
         border: none !important;
@@ -67,27 +68,28 @@
                 background-color: #bbdefb !important;
                 color: #0b3c91 !important;
             }
+
     .navbar-nav .nav-link {
-        border: 1px solid transparent; 
+        border: 1px solid transparent;
         border-radius: 8px;
         transition: all 0.3s ease;
         margin: 0 2px;
     }
 
         .navbar-nav .nav-link:hover {
-            border-color: rgba(255, 255, 255, 0.5); 
+            border-color: rgba(255, 255, 255, 0.5);
             background: rgba(255, 255, 255, 0.1);
         }
 
     .navbar .dropdown-menu {
         border: 1px solid transparent;
         border-radius: 8px;
-        margin: 2px 8px; 
+        margin: 2px 8px;
         transition: all 0.2s ease;
     }
 
         .navbar .dropdown-menu :hover {
-            border-color: #0d47a1 !important; 
+            border-color: #0d47a1 !important;
             background-color: #f8f9fa !important;
         }
 
@@ -107,7 +109,7 @@
     <link rel="stylesheet" href="~/Hospital.WebProject.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/site.css">
 </head>
-    
+
 
 <body>
     <header>
@@ -139,7 +141,7 @@
                             <a class="nav-link text-light" asp-controller="Specializations" asp-action="Index">Specializations</a>
                         </li>
                         @if (User.IsInRole("Admin") || User.IsInRole("Doctor") ||
-                                                User.IsInRole("Nurse") || User.IsInRole("Patient"))
+                                                User.IsInRole("Nurse"))
                         {
                             <li class="nav-item">
                                 <a class="nav-link text-light" asp-controller="Checkup" asp-action="Index">
@@ -158,18 +160,14 @@
                             </li>
                         }
 
-                       
-                        @if (User.IsInRole("Admin") || User.IsInRole("Doctor") ||
-                                                User.IsInRole("Nurse"))
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-light" asp-controller="Medications" asp-action="Index">
-                                    Medications
-                                </a>
-                            </li>
-                        }
 
-                       
+                        <li class="nav-item">
+                            <a class="nav-link text-light" asp-controller="Medications" asp-action="Index">
+                                Medications
+                            </a>
+                        </li>
+
+
 
                         @if (User.IsInRole("Admin"))
                         {
@@ -201,19 +199,18 @@
                                 </li>
                             </ul>
                         </li>
+
                         <li class="nav-item dropdown text-white">
                             <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown">
                                 Hospital management
                             </a>
                             <ul class="dropdown-menu">
-                                @if (User.IsInRole("Admin"))
-                                {
-                                    <li class="nav-item">
-                                        <a class="dropdown-item" asp-controller="Shifts" asp-action="Index">
-                                            Shifts
-                                        </a>
-                                    </li>
-                                }
+
+                                <li class="nav-item">
+                                    <a class="dropdown-item" asp-controller="Shifts" asp-action="Index">
+                                        Shifts
+                                    </a>
+                                </li>
                                 @if (User.IsInRole("Admin") || User.IsInRole("Doctor") ||
                                                                 User.IsInRole("Nurse"))
                                 {

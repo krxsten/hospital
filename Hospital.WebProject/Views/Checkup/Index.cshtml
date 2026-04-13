@@ -76,7 +76,7 @@
 
 @using Hospital.WebProject.ViewModels.Checkup
 @model List<CheckupIndexViewModel>
-@if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse") || User.IsInRole("Patient"))
+@if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse"))
 {
 
     <div class="container pb-5">
@@ -89,7 +89,7 @@
             {
                 <a asp-action="Create" class="btn btn-success rounded-pill px-4">+ Create Appointment</a>
             }
-            @if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse") || User.IsInRole("Patient"))
+            @if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse"))
             {
                 <a asp-action="GetCheckupsDate" class="btn btn-light border rounded-pill px-4">Search by Date</a>
             }
@@ -138,7 +138,7 @@
                                                     </button>
                                                 </form>
                                             }
-                                            @if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse"))
+                                            @if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse") || User.IsInRole("Patient"))
                                             {
                                                 <a asp-action="GetBusyTimes"
                                                    asp-route-doctorId="@item.DoctorID"

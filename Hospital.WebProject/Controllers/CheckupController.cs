@@ -27,7 +27,7 @@ namespace Hospital.WebProject.Controllers
             this.context = context;
         }
 
-        [Authorize(Roles = "Admin,Doctor,Nurse,Patient")]
+        [Authorize(Roles = "Admin,Doctor,Nurse")]
         [HttpGet]
         public async Task<IActionResult> Index()
         {
@@ -167,7 +167,7 @@ namespace Hospital.WebProject.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        [Authorize(Roles = "Admin,Doctor,Nurse")]
+        [Authorize(Roles = "Admin,Doctor,Nurse,Patient")]
         [HttpGet]
         public async Task<IActionResult> GetBusyTimes(Guid doctorId, DateTime date)
         {
@@ -179,7 +179,7 @@ namespace Hospital.WebProject.Controllers
             return View(busy);
         }
 
-        [Authorize(Roles = "Admin,Doctor,Nurse")]
+        [Authorize(Roles = "Admin,Doctor,Nurse,Patient")]
         [HttpGet]
         public async Task<IActionResult> GetDoctorShift(Guid doctorId)
         {
@@ -226,7 +226,7 @@ namespace Hospital.WebProject.Controllers
             slots = slots.Where(x => !takenSlots.Contains(x)).ToList();
             return Json(slots);
         }
-        [Authorize(Roles = "Patient,Doctor,Nurse,Admin")]
+        [Authorize(Roles = "Doctor,Nurse,Admin")]
         [HttpGet]
         public async Task<IActionResult> GetCheckupsDate(DateOnly date)
         {

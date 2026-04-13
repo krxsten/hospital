@@ -4,7 +4,7 @@
     ViewData["Title"] = "Checkups Search";
 }
 
-@if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse") || User.IsInRole("Patient"))
+@if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse"))
 {
     <div class="container mt-4">
         <h2 class="text-white mb-4">Search Checkups After Date</h2>

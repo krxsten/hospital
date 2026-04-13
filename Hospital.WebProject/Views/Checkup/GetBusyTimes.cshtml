@@ -33,7 +33,7 @@
     }
 </style>
 @model List<DateOnly>
-@if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse"))
+@if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse")|| User.IsInRole("Patient"))
 {
     <div class="page-header-custom text-center">
         <h2 class="page-title-white">Busy Times</h2>
