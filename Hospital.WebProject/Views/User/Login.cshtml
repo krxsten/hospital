@@ -1,49 +1,168 @@
-﻿<link rel="stylesheet" href="/css/styles.css">
-@model LoginViewModel
+﻿@model LoginViewModel
 @{
     ViewData["Title"] = "Log in";
 }
 
-<h1 class="text-center">@ViewData["Title"]</h1>
-@if (TempData["Message"] != null)
-{
-    <div class="alert alert-info">@TempData["Message"]</div>
-}
-<div class="row">
-    <div class="col-md-4 offset-md-4">
-        <section>
-            <form id="account" method="post">
-                <hr />
-                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <div class="text-center mb-3">
-                    <label asp-for="@Model.Email" class="form-label"></label>
-                    <input asp-for="@Model.Email" class="form-control" autocomplete="username" aria-required="true" />
-                    <span asp-validation-for="Email" class="text-danger"></span>
+<style>
+    body {
+        background-color: #0f172a;
+        color: white;
+    }
+
+    .login-container {
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .glass-card {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(15px);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 24px;
+        padding: 40px;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        width: 100%;
+        max-width: 450px;
+    }
+
+    .login-title {
+        font-weight: 800;
+        margin-bottom: 0.5rem;
+        color: white;
+    }
+
+    .form-label {
+        color: white !important;
+        font-weight: 600;
+        font-size: 0.9rem;
+        margin-left: 5px;
+    }
+
+    .form-control {
+        background: rgba(255, 255, 255, 0.08) !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        color: white !important;
+        border-radius: 12px;
+        padding: 12px 15px;
+    }
+
+        .form-control::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .form-control:focus {
+            border-color: #10b981 !important;
+            box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.2) !important;
+        }
+
+    .input-group-text {
+        background: rgba(255, 255, 255, 0.12) !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        border-left: none !important;
+        color: white !important;
+        cursor: pointer;
+        border-radius: 0 12px 12px 0 !important;
+        font-size: 1.25rem; 
+        transition: all 0.2s ease;
+        padding: 0 18px;
+    }
+
+        .input-group-text:hover {
+            background: rgba(255, 255, 255, 0.18) !important;
+            color: #10b981 !important; 
+        }
+
+    .btn-submit {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        border: none;
+        border-radius: 12px;
+        padding: 14px;
+        font-weight: 800;
+        color: white;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: all 0.3s ease;
+        margin-top: 1rem;
+    }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+        }
+
+    .text-danger {
+        color: #fb7185 !important;
+        font-weight: 500;
+    }
+
+    .register-link {
+        color: #10b981 !important;
+        text-decoration: none;
+        font-weight: 700;
+    }
+
+        .register-link:hover {
+            text-decoration: underline;
+        }
+</style>
+
+<div class="login-container">
+    <div class="glass-card">
+        <div class="text-center">
+            <h2 class="login-title">Welcome</h2>
+            <p class="text-white small mb-4">Please enter your credentials to access Saint Anna Medical portal.</p>
+        </div>
+
+        <form id="account" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger small mb-3"></div>
+
+            <div class="mb-3">
+                <label asp-for="@Model.Email" class="form-label">Email Address</label>
+                <input asp-for="@Model.Email" class="form-control" placeholder="name@example.com" />
+                <span asp-validation-for="@Model.Email" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-4">
+                <label asp-for="@Model.Password" class="form-label">Password</label>
+                <div class="input-group">
+                    <input asp-for="@Model.Password" type="password" id="passwordField"
+                           class="form-control" style="border-right: none !important;" placeholder="••••••••" />
+
+                    <button class="input-group-text" type="button" id="togglePassword"
+                            style="font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; min-width: 70px;">
+                        Show
+                    </button>
                 </div>
-                <div class="form-group mb-2">
-                    <label asp-for="@Model.Password"></label>
-                    <div class="input-group">
-                        <input asp-for="@Model.Password" type="password" id="passwordField" class="form-control" />
-                        <button class="btn btn-outline-secondary" type="button" id="togglePassword">
-                            <i class="bi bi-eye"></i> Show
-                        </button>
-                    </div>
-                    <span asp-validation-for="Password" class="text-danger"></span>
-                </div>
-                <div class="text-center">
-                    <button id="login-submit" type="submit" class="btn btn-success">Log in</button>
-                </div>
-            </form>
-        </section>
+                <span asp-validation-for="@Model.Password" class="text-danger small"></span>
+            </div>
+
+            <button id="login-submit" type="submit" class="btn w-100 btn-submit">Sign In</button>
+
+            <div class="mt-4 text-center">
+                <p class="text-white small">
+                    Don't have an account?
+                    <a asp-action="Register" asp-controller="User" class="register-link">Register here</a>
+                </p>
+            </div>
+        </form>
     </div>
 </div>
 
-<script>
-    document.getElementById("togglePassword").addEventListener("click", function () {
-        const passwordField = document.getElementById("passwordField");
-        const type = passwordField.getAttribute("type") === "password" ? "text" : "password";
-        passwordField.setAttribute("type", type);
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        document.getElementById("togglePassword").addEventListener("click", function () {
+            const passwordField = document.getElementById("passwordField");
 
-        this.textContent = type === "password" ? "Show" : "Hide";
-    });
-</script>
+            const isPassword = passwordField.getAttribute("type") === "password";
+
+            passwordField.setAttribute("type", isPassword ? "text" : "password");
+
+            this.textContent = isPassword ? "Hide" : "Show";
+
+            this.style.color = isPassword ? "#10b981" : "white";
+        });
+    </script>
+}

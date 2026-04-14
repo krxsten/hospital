@@ -1,143 +1,233 @@
-<link rel="stylesheet" href="/css/styles.css">
 @model RegisterViewModel
 @{
     ViewData["Title"] = "Register";
 }
-<h1 class="text-center">@ViewData["Title"]</h1>
 
-<div class="row">
-    <div class="col-md-4 offset-md-4">
+<style>
+    body {
+        background-color: #0f172a;
+        color: white;
+    }
+
+    .register-container {
+        min-height: 90vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 0;
+    }
+
+    .glass-card {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(15px);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 24px;
+        padding: 40px;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        width: 100%;
+        max-width: 600px;
+    }
+
+    .form-label {
+        color: white !important;
+        font-weight: 600;
+        font-size: 0.9rem;
+        margin-bottom: 5px;
+        display: block;
+    }
+
+    .form-control, .form-select {
+        background: rgba(255, 255, 255, 0.08) !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        color: white !important;
+        border-radius: 12px;
+        padding: 12px 15px;
+    }
+
+        .form-control:focus, .form-select:focus {
+            border-color: #10b981 !important;
+            box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.2) !important;
+            outline: none;
+        }
+
+    option {
+        background: #1e293b;
+        color: white;
+    }
+
+    .input-group-text {
+        background: rgba(255, 255, 255, 0.12) !important;
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        border-left: none !important;
+        color: white !important;
+        cursor: pointer;
+        border-radius: 0 12px 12px 0 !important;
+        font-weight: 700;
+        font-size: 0.8rem;
+        text-transform: uppercase;
+        min-width: 70px;
+    }
+
+    .btn-submit {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        border: none;
+        border-radius: 12px;
+        padding: 14px;
+        font-weight: 800;
+        color: white;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: all 0.3s ease;
+        margin-top: 1.5rem;
+    }
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+            color: white;
+        }
+
+    .section-divider {
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        margin: 20px 0;
+    }
+</style>
+
+<div class="register-container">
+    <div class="glass-card">
+        <div class="text-center mb-4">
+            <h2 class="fw-bold">Create Account</h2>
+            <p class="text-white small mb-4">Join the Saint Anna Medical network</p>
+        </div>
+
         <form id="registerForm" method="post" enctype="multipart/form-data">
-            <hr />
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="text-center mb-3">
-                <label asp-for="@Model.FirstName">First name</label>
-                <input class="form-control " autocomplete="username" aria-required="true" asp-for="@Model.FirstName" />
-                <span asp-validation-for="@Model.FirstName" class="text-danger"></span>
-            </div>
-            <div class="text-center mb-3">
-                <label asp-for="@Model.LastName">Last name</label>
-                <input class="form-control " autocomplete="username" aria-required="true" asp-for="@Model.LastName" />
-                <span asp-validation-for="@Model.LastName" class="text-danger"></span>
-            </div>
-            <div class="text-center mb-3">
-                <label asp-for="@Model.Email">Email</label>
-                <input class="form-control " autocomplete="username" aria-required="true" asp-for="@Model.Email" />
-                <span asp-validation-for="@Model.Email" class="text-danger"></span>
-            </div>
-            <div class="form-group mb-2">
-                <label asp-for="@Model.Password"></label>
-                <div class="input-group">
-                    <input asp-for="@Model.Password" type="password" id="passwordField" class="form-control" />
-                    <button class="btn btn-outline-secondary" type="button" id="togglePassword">
-                        <i class="bi bi-eye"></i> Show
-                    </button>
+            <div asp-validation-summary="ModelOnly" class="text-danger small mb-3"></div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="FirstName" class="form-label">First Name</label>
+                    <input asp-for="FirstName" class="form-control" placeholder="Kristen" />
+                    <span asp-validation-for="FirstName" class="text-danger small"></span>
                 </div>
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-            <div class="form-group mb-2">
-                <label asp-for="@Model.ConfirmPassword"></label>
-                <div class="input-group">
-                    <input asp-for="@Model.ConfirmPassword" type="password" id="passwordField" class="form-control" />
-                    <button class="btn btn-outline-secondary" type="button" id="togglePassword">
-                        <i class="bi bi-eye"></i> Show
-                    </button>
+                <div class="col-md-6 mb-3">
+                    <label asp-for="LastName" class="form-label">Last Name</label>
+                    <input asp-for="LastName" class="form-control" placeholder="Gencheva" />
+                    <span asp-validation-for="LastName" class="text-danger small"></span>
                 </div>
-                <span asp-validation-for="Password" class="text-danger"></span>
             </div>
-            <div class="text-center mb-3">
-                <label asp-for="Role">Register as</label>
-                <select id="roleSelect" class="form-control" asp-for="Role">
-                    <option value="" style="text-align:center">-- Select role --</option>
+
+            <div class="mb-3">
+                <label asp-for="Email" class="form-label">Email</label>
+                <input asp-for="Email" class="form-control" placeholder="name@example.com" />
+                <span asp-validation-for="Email" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Password" class="form-label"></label>
+                <div class="input-group">
+                    <input asp-for="Password" type="password" class="form-control pass-input" style="border-right:none !important;" />
+                    <button class="input-group-text toggle-pass" type="button">Show</button>
+                </div>
+                <span asp-validation-for="Password" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="ConfirmPassword" class="form-label"></label>
+                <div class="input-group">
+                    <input asp-for="ConfirmPassword" type="password" class="form-control pass-input" style="border-right:none !important;" />
+                    <button class="input-group-text toggle-pass" style="text-align:center" type="button">Show</button>
+                </div>
+                <span asp-validation-for="ConfirmPassword" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Role" class="form-label">Register as</label>
+                <select id="roleSelect" class="form-select" asp-for="Role">
+                    <option style="text-align:center" value="">-- Select role --</option>
                     <option value="Doctor">Doctor</option>
                     <option value="Nurse">Nurse</option>
                     <option value="Patient">Patient</option>
                 </select>
-                <span asp-validation-for="@Model.Role" class="text-danger"></span>
+                <span asp-validation-for="Role" class="text-danger small"></span>
             </div>
+
+            <div class="section-divider"></div>
+
             <div id="doctorFields" style="display:none;">
-                <div class="text-center mb-3">
-                    <label asp-for="SpecializationId">Specialization</label>
-                    <select asp-for="SpecializationId" class="form-control">
+                <div class="mb-3">
+                    <label asp-for="SpecializationId" class="form-label">Specialization</label>
+                    <select asp-for="SpecializationId" class="form-select">
                         <option value="">-- Select specialization --</option>
                         @foreach (var s in ViewBag.Specializations)
                         {
                             <option value="@s.ID">@s.SpecializationName</option>
                         }
                     </select>
-                    <span asp-validation-for="@Model.SpecializationId" class="text-danger"></span>
                 </div>
-
-                <div class="text-center mb-3">
-                    <label asp-for="ShiftId">Shift</label>
-                    <select asp-for="ShiftId" class="form-control">
+                <div class="mb-3">
+                    <label asp-for="ShiftId" class="form-label">Shift</label>
+                    <select asp-for="ShiftId" class="form-select">
                         <option value="">-- Select shift --</option>
                         @foreach (var s in ViewBag.Shifts)
                         {
                             <option value="@s.ID">@s.Type</option>
                         }
                     </select>
-                    <span asp-validation-for="@Model.ShiftId" class="text-danger"></span>
                 </div>
-
-                <div class="text-center mb-3">
-                    <label asp-for="@Model.ImageURL" class="form-label">Upload image:</label>
-                    <input asp-for="@Model.ImageURL" accept="image/jpeg image/gif image/png" class="form-control" />
-                    <span asp-validation-for="@Model.ImageURL" class="text-danger"></span>
+                <div class="mb-3">
+                    <label asp-for="ImageURL" class="form-label">Profile Picture</label>
+                    <input asp-for="ImageURL" type="file" class="form-control" />
                 </div>
             </div>
 
             <div id="patientFields" style="display:none;">
-
-                <div class="text-center mb-3">
-                    <label asp-for="DoctorId">Doctor</label>
-                    <select asp-for="DoctorId" class="form-control" asp-items="@ViewBag.Doctors">
-                        <option value="">-- Select a Doctor --</option>
-                    </select>
-                    <span asp-validation-for="@Model.DoctorId" class="text-danger"></span>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="DoctorId" class="form-label">Primary Doctor</label>
+                        <select asp-for="DoctorId" class="form-select" asp-items="@ViewBag.Doctors">
+                            <option value="">-- Select --</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="RoomId" class="form-label">Assigned Room</label>
+                        <select asp-for="RoomId" class="form-select" asp-items="@ViewBag.Rooms">
+                            <option value="">-- Select --</option>
+                        </select>
+                    </div>
                 </div>
-
-                <div class="text-center mb-3">
-                    <label asp-for="RoomId">Room</label>
-                    <select asp-for="RoomId" class="form-control" asp-items="@ViewBag.Rooms">
-                        <option value="">-- Select a Room --</option>
-                    </select>
-                    <span asp-validation-for="@Model.RoomId" class="text-danger"></span>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="PhoneNumber" class="form-label">Phone</label>
+                        <input class="form-control" asp-for="PhoneNumber" />
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="UCN" class="form-label">UCN / ID</label>
+                        <input class="form-control" asp-for="UCN" />
+                    </div>
                 </div>
-
-                <div class="text-center mb-3">
-                    <label asp-for="PhoneNumber"></label>
-                    <input class="form-control" asp-for="PhoneNumber" />
-                    <span asp-validation-for="@Model.PhoneNumber" class="text-danger"></span>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="BirthCity" class="form-label">Birth City</label>
+                        <select asp-for="BirthCity" class="form-select" asp-items="@ViewBag.Cities">
+                            <option value="">-- Select --</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label asp-for="DateOfBirth" class="form-label">Date of Birth</label>
+                        <input class="form-control" type="date" asp-for="DateOfBirth" />
+                    </div>
                 </div>
-
-                <div class="text-center mb-3">
-                    <label asp-for="BirthCity">Birth City</label>
-                    <select asp-for="BirthCity" class="form-control" asp-items="@ViewBag.Cities">
-                        <option value="">-- Select a City --</option>
-                    </select>
-                    <span asp-validation-for="@Model.BirthCity" class="text-danger"></span>
-                </div>
-
-                <div class="text-center mb-3">
-                    <label asp-for="DateOfBirth"></label>
-                    <input class="form-control" type="date" asp-for="DateOfBirth" />
-                    <span asp-validation-for="@Model.DateOfBirth" class="text-danger"></span>
-                </div>
-
-                <div class="text-center mb-3">
-                    <label asp-for="UCN"></label>
-                    <input class="form-control" asp-for="UCN" />
-                    <span asp-validation-for="@Model.UCN" class="text-danger"></span>
-                </div>
-
             </div>
-            <div class="text-center">
-                <button id="registerSubmit" type="submit" class="btn btn-primary">Register</button>
+
+            <button id="registerSubmit" type="submit" class="btn btn-primary w-100 btn-submit">Complete Registration</button>
+
+            <div class="mt-4 text-center">
+                <p class="small">Already have an account? <a asp-action="Login" class="text-info text-decoration-none fw-bold">Sign In</a></p>
             </div>
         </form>
     </div>
 </div>
+
 <script>
     document.addEventListener("DOMContentLoaded", function () {
         const roleSelect = document.getElementById("roleSelect");
@@ -146,29 +236,22 @@
 
         function toggleFields() {
             const role = roleSelect.value;
-
-            if (role === "Doctor" || role === "Nurse") {
-                doctorFields.style.display = "block";
-            } else {
-                doctorFields.style.display = "none";
-            }
-
-            if (role === "Patient") {
-                patientFields.style.display = "block";
-            } else {
-                patientFields.style.display = "none";
-            }
+            doctorFields.style.display = (role === "Doctor" || role === "Nurse") ? "block" : "none";
+            patientFields.style.display = (role === "Patient") ? "block" : "none";
         }
 
         roleSelect.addEventListener("change", toggleFields);
-
         toggleFields();
-    });
-    document.getElementById("togglePassword").addEventListener("click", function () {
-        const passwordField = document.getElementById("passwordField");
-        const type = passwordField.getAttribute("type") === "password" ? "text" : "password";
-        passwordField.setAttribute("type", type);
 
-        this.textContent = type === "password" ? "Show" : "Hide";
+        document.querySelectorAll(".toggle-pass").forEach(button => {
+            button.addEventListener("click", function () {
+                const input = this.closest(".input-group").querySelector(".pass-input");
+                const isPassword = input.getAttribute("type") === "password";
+
+                input.setAttribute("type", isPassword ? "text" : "password");
+                this.textContent = isPassword ? "Hide" : "Show";
+                this.style.color = isPassword ? "#10b981" : "white";
+            });
+        });
     });
 </script>
