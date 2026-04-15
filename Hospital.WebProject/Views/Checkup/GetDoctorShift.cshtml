@@ -62,7 +62,7 @@
                     
                     <div class="col-md-5">
                         <p class="text-white-50 text-uppercase letter-spacing-2 mb-2">Shift Begins</p>
-                        <h1 class="display-3 text-white fw-900 mb-0">@Model.StartTime.ToString(@"hh\:mm")</h1>
+                        <h1 class="display-3 text-white fw-900 mb-0">@Model.StartTime.ToShortTimeString()</h1>
                         <span class="text-white badge border border-white mt-2 px-3">START</span>
                     </div>
 
@@ -74,7 +74,7 @@
 
                     <div class="col-md-5">
                         <p class="text-white-50 text-uppercase letter-spacing-2 mb-2">Shift Ends</p>
-                        <h1 class="display-3 text-white fw-900 mb-0">@Model.EndTime.ToString(@"hh\:mm")</h1>
+                        <h1 class="display-3 text-white fw-900 mb-0">@Model.EndTime.ToShortTimeString()</h1>
                         <span class="text-white badge border border-white mt-2 px-3">FINISH</span>
                     </div>
 

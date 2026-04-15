@@ -68,7 +68,6 @@
 
     .action-bar .btn {
         border-radius: 50px;
-        font-weight: 600;
     }
 </style>
 
@@ -77,18 +76,18 @@
 
 <div class="container pb-5">
     <div class="text-center mb-5">
-        <h2 class="fw-bold">Diagnoses</h2>
+        <h2 class="fw-bold display-6">Diagnoses</h2>
         <div class="mx-auto bg-white rounded-pill mt-2" style="height: 4px; width: 60px;"></div>
     </div>
     <div class="d-flex justify-content-end align-items-center mb-4 gap-2 action-bar">
-        <a asp-action="GetDiagnose" class="btn btn-light border px-4 shadow-sm">
-            <i class="bi bi-search"></i> Search
-        </a>
 
         @if (User.IsInRole("Admin") || User.IsInRole("Doctor"))
         {
-            <a asp-action="Create" class="btn btn-success px-4 shadow-sm">+ Create</a>
+            <a asp-action="Create" class="btn btn-success px-4 shadow-sm">+ Add diagnose</a>
         }
+        <a asp-action="GetDiagnose" class="btn btn-light border px-4 shadow-sm">
+            <i class="bi bi-search"></i> Search
+        </a>
 
         <a asp-action="Index" asp-controller="Home" class="btn btn-secondary px-4 shadow-sm">
             <i class="bi bi-arrow-left"></i> Back

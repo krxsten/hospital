@@ -60,16 +60,16 @@
 @using Hospital.WebProject.ViewModels.Shift
 @model List<ShiftIndexViewModel>
 
-<div class="container py-5">
+<div class="container pb-5">
     <div class="text-center mb-5">
-        <h2 class="fw-bold">Staff Working Shifts</h2>
-        <div class="mx-auto bg-primary rounded-pill mt-2" style="height: 4px; width: 60px;"></div>
+        <h2 class="fw-bold display-6">Staff Working Shifts</h2>
+        <div class="mx-auto bg-white rounded-pill mt-2" style="height: 4px; width: 60px;"></div>
     </div>
 
     <div class="d-flex justify-content-end align-items-center mb-4 gap-2">
         @if (User.IsInRole("Admin"))
         {
-            <a asp-action="Create" class="btn btn-success rounded-pill px-4 shadow-sm">+ Create Shift</a>
+            <a asp-action="Create" class="btn btn-success rounded-pill px-4 shadow-sm">+ Add shift</a>
         }
 
         <a asp-action="GetShiftByTime" class="btn btn-light border rounded-pill px-4 shadow-sm">

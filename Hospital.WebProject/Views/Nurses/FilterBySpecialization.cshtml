@@ -1,46 +1,106 @@
-﻿<link rel="stylesheet" href="/css/styles.css">
+﻿<style>
+    .glass-panel {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(15px);
+        border: 2px solid #ffffff;
+        border-radius: 30px;
+        padding: 40px;
+    }
+
+    .nurse-card {
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid #ffffff;
+        border-radius: 20px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        height: 100%;
+    }
+
+        .nurse-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.15);
+        }
+
+    .btn-primary-white {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+        font-weight: 800;
+        border-radius: 10px;
+        border: none;
+    }
+
+    .custom-search-input {
+        height: 50px;
+        border-radius: 10px;
+        background: rgba(255,255,255,0.1) !important;
+        color: white !important;
+        border: 1px solid #ffffff !important;
+    }
+
+        .custom-search-input::placeholder {
+            color: rgba(255,255,255,0.5);
+        }
+</style>
+
 @using Hospital.WebProject.ViewModels.Nurse
 @model List<NurseIndexViewModel>
 
-<h2 class="text-white">Search Nurses by Specialization</h2>
-<div class="mb-3">
-<form method="get" asp-action="FilterBySpecialization">
-        <input type="text" id="nurseSearchInput" class="form-control custom-input" placeholder="Search specializations..." />    <br />
-        <button type="submit" class="btn btn-primary-white flex-grow-1" style="height: 50px; border-radius: 10px;">
-            <i class="bi bi-search me-2"></i>Search
-        </button>
-        <a asp-action="Index" class="btn btn-outline-light d-flex align-items-center justify-content-center px-4"
-           style="height: 50px; border-radius: 10px;">
-            Back
-        </a>
-
-</form>
+<div class="page-header-custom text-center">
+    <h2 class="page-title-white text-white">Nurses by Specialization</h2>
+    <div class="title-divider"></div>
 </div>
-<hr />
 
-@if (Model != null && Model.Any())
-{
+<div class="container pb-5">
+    <div class="glass-panel mb-5">
+        <form method="get" asp-action="FilterBySpecialization" id="searchForm">
+            <div class="row g-3">
+                <div class="col-md-8">
+                    <input type="text" id="nurseSearchInput" name="specialization"
+                           class="form-control custom-search-input"
+                           placeholder="Search specializations..."
+                           autocomplete="off" />
+                </div>
+                <div class="col-md-4 d-flex gap-2">
+                    <button type="submit" class="btn btn-primary-white flex-grow-1" style="height: 50px;">
+                        <i class="bi bi-search me-2"></i>Search
+                    </button>
+                    <a asp-action="Index" class="btn btn-outline-light d-flex align-items-center px-4"
+                       style="border-radius: 10px;">
+                        Back
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
+
     <div class="row" id="nurseResultsContainer">
-        @foreach (var n in Model)
+        @if (Model != null && Model.Any())
         {
-            <div class="col-md-4 mb-4">
-                <div class="card shadow-sm">
-                    <div class="card-body">
-                        <h5>@n.UserName</h5>
-                        <p>
-                            <strong>Specialization:</strong> @n.SpecializationName <br />
-                            <strong>Shift:</strong> @n.ShiftName
+            @foreach (var n in Model)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="nurse-card p-4">
+                        <h4 class="text-white fw-bold mb-3">@n.UserName</h4>
+                        <p class="text-white-50 mb-2">
+                            <strong class="text-white">Specialization:</strong> @n.SpecializationName
+                        </p>
+                        <p class="text-white-50 mb-0">
+                            <strong class="text-white">Shift:</strong> @n.ShiftName
                         </p>
                     </div>
                 </div>
+            }
+        }
+        else
+        {
+            <div class="col-12 text-center py-5">
+                <p class="text-white-50 fs-5">Start typing to find nurses by specialization.</p>
             </div>
         }
     </div>
-}
-else if (Model == null)
-{
-    <p>No nurses where found.</p>
-}
+</div>
+
 @section Scripts {
     <script>
         $(document).ready(function () {
@@ -51,21 +111,23 @@ else if (Model == null)
                 if (searchVal.length >= 1) {
                     $.get("/Nurses/GetNurseBySpecialization", { specialization: searchVal }, function (data) {
                         resultsDiv.empty();
+
                         if (data.length === 0) {
                             resultsDiv.append('<div class="col-12 text-center"><p class="text-white-50">No nurses match your search.</p></div>');
                             return;
                         }
+
                         data.forEach(function (n) {
                             resultsDiv.append(`
                                 <div class="col-md-4 mb-4">
-                                    <div class="card shadow-sm patient-card p-3">
-                                        <div class="card-body">
-                                            <h5 class="text-white">${n.userName}</h5>
-                                            <p class="text-white-50 mt-2">
-                                                <strong>Specialization:</strong> ${n.specializationName} <br />
-                                                <strong>Shift:</strong> ${n.shiftName}
-                                            </p>
-                                        </div>
+                                    <div class="nurse-card p-4">
+                                        <h4 class="text-white fw-bold mb-3">${n.userName}</h4>
+                                        <p class="text-white-50 mb-2">
+                                            <strong class="text-white">Specialization:</strong> ${n.specializationName}
+                                        </p>
+                                        <p class="text-white-50 mb-0">
+                                            <strong class="text-white">Shift:</strong> ${n.shiftName}
+                                        </p>
                                     </div>
                                 </div>
                             `);

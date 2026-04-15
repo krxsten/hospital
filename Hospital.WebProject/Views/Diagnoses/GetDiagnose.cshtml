@@ -35,13 +35,29 @@
         border-radius: 10px;
         border: none;
     }
+
+        .btn-primary-white:hover {
+            background-color: rgba(255,255,255,0.8) !important;
+        }
+
+    .custom-search-input {
+        height: 50px;
+        border-radius: 10px;
+        background: rgba(255,255,255,0.1) !important;
+        color: white !important;
+        border: 1px solid #ffffff !important;
+    }
+
+        .custom-search-input::placeholder {
+            color: rgba(255,255,255,0.5);
+        }
 </style>
 
 @using Hospital.WebProject.ViewModels.Diagnose
 @model List<DiagnoseIndexViewModel>
 
 <div class="page-header-custom text-center">
-    <h2 class="page-title-white">Medical Diagnosis Search</h2>
+    <h2 class="page-title-white text-white">Medical Diagnosis Search</h2>
     <div class="title-divider"></div>
 </div>
 
@@ -50,43 +66,44 @@
         <form method="get" asp-action="GetDiagnose" id="searchForm">
             <div class="row g-3">
                 <div class="col-md-8">
-                    <label class="text-white mb-2 fw-bold small text-uppercase">Search by Name or Keyword</label>
                     <input type="text" id="diagnoseInput" name="diagnose"
-                           class="form-control bg-transparent text-white border-white"
-                           placeholder="Type to search (e.g. 'Flu')..."
-                           style="height: 50px; border-radius: 10px;" autocomplete="off" />
+                           class="form-control custom-search-input"
+                           placeholder="Type to search (e.g. Flu)..."
+                           autocomplete="off" />
                 </div>
-                <div class="col-md-4 d-flex align-items-end gap-2">
-                    <button type="submit" class="btn btn-primary-white flex-grow-1" style="height: 50px;">
-                        <i class="bi bi-search me-2"></i>Search
-                    </button>
-                    <a asp-action="Index" class="btn btn-outline-light d-flex align-items-center px-4" style="height: 50px; border-radius: 10px;">
-                        Back
-                    </a>
+                <div class="col-md-4 d-flex gap-2">
+                    <button type="submit" class="btn btn-primary-white flex-grow-1">Search</button>
+                    <a asp-action="Index" class="btn btn-outline-light d-flex align-items-center px-4" style="border-radius: 10px;">Back</a>
                 </div>
             </div>
         </form>
     </div>
+</div>
 
-    <div class="row" id="diagnoseResults">
-        @if (Model != null && Model.Any())
+<div class="row" id="diagnoseResults">
+    @if (Model != null && Model.Any())
+    {
+        @foreach (var d in Model)
         {
-            @foreach (var d in Model)
-            {
-                <div class="col-md-4 mb-4">
-                    <div class="diagnose-card">
-                        @if (!string.IsNullOrEmpty(d.ImageURL))
-                        {
-                            <img src="@d.ImageURL" class="diagnose-image" alt="@d.Name" />
-                        }
-                        <div class="p-4 text-center">
-                            <h4 class="text-white fw-bold mb-0">@d.Name</h4>
-                        </div>
+            <div class="col-md-4 mb-4">
+                <div class="diagnose-card">
+                    @if (!string.IsNullOrEmpty(d.ImageURL))
+                    {
+                        <img src="@d.ImageURL" class="diagnose-image" alt="@d.Name" />
+                    }
+                    <div class="p-4 text-center">
+                        <h4 class="text-white fw-bold mb-0">@d.Name</h4>
                     </div>
                 </div>
-            }
+            </div>
         }
-    </div>
+    }
+    else
+    {
+        <div class="col-12 text-center pb-5">
+            <p class="text-white-50 fs-5">Start typing to see diagnoses...</p>
+        </div>
+    }
 </div>
 
 @section Scripts {
@@ -120,6 +137,8 @@
                             resultsDiv.append(card);
                         });
                     });
+                } else if (searchVal.length === 0) {
+                    location.reload();
                 }
             });
         });

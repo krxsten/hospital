@@ -10,44 +10,45 @@
     .room-card {
         background: rgba(255, 255, 255, 0.08);
         border: 1px solid #ffffff;
-        border-radius: 15px;
+        border-radius: 20px;
+        overflow: hidden;
         transition: all 0.3s ease;
-        color: #ffffff;
+        height: 100%;
     }
 
         .room-card:hover {
+            transform: translateY(-10px);
             background: rgba(255, 255, 255, 0.15);
-            transform: scale(1.02);
-        }
-
-    .custom-input {
-        background-color: transparent !important;
-        border: 1px solid #ffffff !important;
-        color: #ffffff !important;
-        border-radius: 12px;
-        padding: 12px;
-        height: 50px;
-    }
-
-        .custom-input::placeholder {
-            color: rgba(255, 255, 255, 0.5);
+            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.15);
         }
 
     .btn-primary-white {
         background-color: #ffffff !important;
         color: #000000 !important;
         font-weight: 800;
-        border-radius: 12px;
+        border-radius: 10px;
         border: none;
-        transition: all 0.3s ease;
     }
 
+    .custom-search-input {
+        height: 50px;
+        border-radius: 10px;
+        background: rgba(255,255,255,0.1) !important;
+        color: white !important;
+        border: 1px solid #ffffff !important;
+    }
+
+        .custom-search-input::placeholder {
+            color: rgba(255,255,255,0.5);
+        }
+
     .badge-status {
-        padding: 5px 12px;
+        padding: 6px 14px;
         border-radius: 50px;
         font-size: 0.8rem;
         font-weight: 700;
         text-transform: uppercase;
+        display: inline-block;
     }
 
     .status-occupied {
@@ -67,25 +68,25 @@
 @if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse"))
 {
     <div class="page-header-custom text-center">
-        <h2 class="page-title-white">Room Directory</h2>
+        <h2 class="page-title-white text-white">Room Directory</h2>
         <div class="title-divider"></div>
     </div>
 
     <div class="container pb-5">
         <div class="glass-panel mb-5">
             <form method="get" asp-action="GetRoomsAfterNum">
-                <div class="row g-3 align-items-end">
-                    <div class="col-md-7">
-                        <label class="text-white mb-2 fw-bold small text-uppercase">Search by Room Number</label>
-                        <input type="number" name="roomNum" class="form-control custom-input"
-                               placeholder="Enter minimum room number..." required />
+                <div class="row g-3">
+                    <div class="col-md-8">
+                        <input type="number" name="roomNum"
+                               class="form-control custom-search-input"
+                               placeholder="Enter minimum room number..." />
                     </div>
-                    <div class="col-md-5 d-flex gap-2">
+                    <div class="col-md-4 d-flex gap-2">
                         <button type="submit" class="btn btn-primary-white flex-grow-1" style="height: 50px;">
                             <i class="bi bi-search me-2"></i>Search
                         </button>
-                        <a asp-action="Index" class="btn btn-outline-light d-flex align-items-center justify-content-center px-4"
-                           style="height: 50px; border-radius: 12px; flex-grow: 1;">
+                        <a asp-action="Index" class="btn btn-outline-light d-flex align-items-center px-4"
+                           style="border-radius: 10px;">
                             Back
                         </a>
                     </div>
@@ -93,22 +94,15 @@
             </form>
         </div>
 
-        @if (Model != null && Model.Any())
-        {
-            <div class="row justify-content-center">
-                <div class="col-lg-8">
-                    @foreach (var r in Model)
-                    {
-                        <div class="room-card mb-3 p-4 d-flex justify-content-between align-items-center">
-                            <div class="d-flex align-items-center">
-                                <i class="bi bi-door-closed fs-3 me-3"></i>
-                                <div>
-                                    <h5 class="mb-0 fw-bold">Room @r.RoomNumber</h5>
-                                    <span class="small text-white-50">Facility Wing A</span>
-                                </div>
-                            </div>
-
-                            <div>
+        <div class="row" id="roomResultsContainer">
+            @if (Model != null && Model.Any())
+            {
+                @foreach (var r in Model)
+                {
+                    <div class="col-md-4 mb-4">
+                        <div class="room-card p-4">
+                            <h4 class="text-white fw-bold mb-3">Room @r.RoomNumber</h4>
+                            <p class="mb-0">
                                 @if (r.IsTaken)
                                 {
                                     <span class="badge-status status-occupied">Occupied</span>
@@ -117,18 +111,17 @@
                                 {
                                     <span class="badge-status status-available">Available</span>
                                 }
-                            </div>
+                            </p>
                         </div>
-                    }
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="col-12 text-center py-5">
+                    <p class="text-white-50 fs-5">Search to view available rooms.</p>
                 </div>
-            </div>
-        }
-        else if (Model == null)
-        {
-            <div class="text-center py-5">
-                <i class="bi bi-building-exclamation text-white-50" style="font-size: 4rem;"></i>
-                <h4 class="text-white-50 mt-3">No rooms found matching your criteria.</h4>
-            </div>
-        }
+            }
+        </div>
     </div>
 }

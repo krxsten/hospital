@@ -12,13 +12,34 @@
         border: 1px solid #ffffff;
         border-radius: 20px;
         padding: 20px;
-        transition: transform 0.3s ease;
+        transition: all 0.3s ease;
         height: 100%;
     }
 
         .medication-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-8px);
             background: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 10px 30px rgba(255,255,255,0.15);
+        }
+
+    .btn-primary-white {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+        font-weight: 800;
+        border-radius: 10px;
+        border: none;
+    }
+
+    .custom-search-input {
+        height: 50px;
+        border-radius: 10px;
+        background: rgba(255,255,255,0.1) !important;
+        color: white !important;
+        border: 1px solid #ffffff !important;
+    }
+
+        .custom-search-input::placeholder {
+            color: rgba(255,255,255,0.5);
         }
 </style>
 
@@ -26,22 +47,22 @@
 @model List<MedicationIndexViewModel>
 
 <div class="page-header-custom text-center">
-    <h2 class="page-title-white">Medication Explorer</h2>
+    <h2 class="page-title-white text-white">Medication Explorer</h2>
     <div class="title-divider"></div>
 </div>
 
 <div class="container pb-5">
     <div class="glass-panel mb-5">
-        <h4 class="text-white mb-4"><i class="bi bi-search me-2"></i>Filter by Side Effect</h4>
-
         <form method="get" asp-controller="Medications" asp-action="GetMedicationsForSideEffect" id="searchForm">
             <div class="row g-3">
                 <div class="col-md-8">
-                    <input type="text" name="sideEffect" id="sideEffectInput" class="form-control bg-transparent text-white border-white"
-                           placeholder="Type a letter (e.g., 'n' for Nausea)..." style="height: 50px; border-radius: 10px;" autocomplete="off" />
+                    <input type="text" name="sideEffect" id="sideEffectInput"
+                           class="form-control custom-search-input"
+                           placeholder="Type a side effect..."
+                           autocomplete="off" />
                 </div>
                 <div class="col-md-4 d-flex gap-2">
-                    <button type="submit" class="btn btn-primary-white flex-grow-1" style="height: 50px; border-radius: 10px;">
+                    <button type="submit" class="btn btn-primary-white flex-grow-1" style="height: 50px;">
                         Search
                     </button>
                     <a asp-action="Index" class="btn btn-outline-light d-flex align-items-center justify-content-center px-4"
@@ -62,13 +83,19 @@
                     <div class="medication-card">
                         <h5 class="text-white fw-bold">@m.Name</h5>
                         <hr class="border-white opacity-25" />
-                        <p class="text-white-50 mb-1 small">Diagnosis:</p>
+                        <p class="text-white-50 mb-1 small">Diagnosis</p>
                         <p class="text-white mb-3">@m.DiagnoseName</p>
-                        <p class="text-white-50 mb-1 small">Side effects:</p>
+                        <p class="text-white-50 mb-1 small">Side Effects</p>
                         <p class="text-white mb-0">@m.SideEffects</p>
                     </div>
                 </div>
             }
+        }
+        else
+        {
+            <div class="col-12 text-center py-5">
+                <p class="text-white-50 fs-5">Start typing to explore medications.</p>
+            </div>
         }
     </div>
 </div>
@@ -95,15 +122,17 @@
                                     <div class="medication-card">
                                         <h5 class="text-white fw-bold">${m.name}</h5>
                                         <hr class="border-white opacity-25" />
-                                        <p class="text-white-50 mb-1 small">DIAGNOSIS:</p>
+                                        <p class="text-white-50 mb-1 small">Diagnosis</p>
                                         <p class="text-white mb-3">${m.diagnoseName || 'No Data'}</p>
-                                        <p class="text-white-50 mb-1 small">SIDE EFFECTS:</p>
+                                        <p class="text-white-50 mb-1 small">Side Effects</p>
                                         <p class="text-white mb-0">${m.sideEffects}</p>
                                     </div>
                                 </div>`;
                             resultsDiv.append(card);
                         });
                     });
+                } else if (searchVal.length === 0) {
+                    location.reload();
                 }
             });
         });

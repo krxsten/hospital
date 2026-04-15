@@ -138,7 +138,7 @@ namespace Hospital.WebProject.Controllers
         }
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> GetShiftByTime(TimeOnly time)
+        public async Task<IActionResult> GetShiftByTime(TimeOnly? time = null)
         {
             var result = await shiftService.GetShiftByTime(time);
             

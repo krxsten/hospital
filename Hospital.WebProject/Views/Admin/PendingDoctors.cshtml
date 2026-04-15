@@ -61,52 +61,54 @@
 </style>
 @if (User.IsInRole("Admin"))
 {
-    <div class="page-header-custom text-center mb-3">
-        <h2 class="page-title-white text-white">Pending Approvals</h2>
+    <div class="page-header-custom text-center mb-5">
+        <h2 class="page-title-white text-white display-6">Pending Doctor Approvals</h2>
         <div class="title-divider"></div>
     </div>
 
     <div class="container pb-5">
         @if (User.IsInRole("Admin"))
         {
-            <div class="col-lg-6 mb-2">
-                <div class="approval-panel">
-                    <div class="panel-header text-info">
-                        <h5 class="panel-title text-info"><i class="bi bi-person-heart me-2"></i>Doctors</h5>
-                        <span class="badge bg-info text-white rounded-pill">@ViewBag.Doctors.Count</span>
-                    </div>
+            <div class="row justify-content-center">
+                <div class="col-lg-6 mb-2">
+                    <div class="approval-panel">
+                        <div class="panel-header text-info">
+                            <h5 class="panel-title text-info"><i class="bi bi-person-heart me-2"></i>Doctors</h5>
+                            <span class="badge bg-info text-white rounded-pill">@ViewBag.Doctors.Count</span>
+                        </div>
 
-                    @if (ViewBag.Doctors.Count > 0)
-                    {
-                        @foreach (var d in ViewBag.Doctors)
+                        @if (ViewBag.Doctors.Count > 0)
                         {
-                            <div class="pending-item d-flex align-items-center justify-content-between">
-                                <div>
-                                    <div class="fw-bold text-dark">@d.User.FirstName @d.User.LastName</div>
-                                    <div class="staff-meta">@d.User.Email</div>
-                                </div>
-                                <div class="d-flex gap-2">
-                                    <form asp-action="AcceptDoctor" asp-route-id="@d.ID" method="post" class="m-0">
-                                        <button type="submit" class="btn btn-success btn-approve">Accept</button>
-                                    </form>
+                            @foreach (var d in ViewBag.Doctors)
+                            {
+                                <div class="pending-item d-flex align-items-center justify-content-between">
+                                    <div>
+                                        <div class="fw-bold text-dark">@d.User.FirstName @d.User.LastName</div>
+                                        <div class="staff-meta">@d.User.Email</div>
+                                    </div>
+                                    <div class="d-flex gap-2">
+                                        <form asp-action="AcceptDoctor" asp-route-id="@d.ID" method="post" class="m-0">
+                                            <button type="submit" class="btn btn-success btn-approve">Accept</button>
+                                        </form>
 
-                                    <form asp-action="RejectDoctor" asp-route-id="@d.ID" method="post" class="m-0">
-                                        <button type="submit" class="btn btn-outline-danger btn-approve"
-                                                onclick="return confirm('Are you sure you want to reject and delete this user?')">
-                                            Reject
-                                        </button>
-                                    </form>
+                                        <form asp-action="RejectDoctor" asp-route-id="@d.ID" method="post" class="m-0">
+                                            <button type="submit" class="btn btn-outline-danger btn-approve"
+                                                    onclick="return confirm('Are you sure you want to reject and delete this user?')">
+                                                Reject
+                                            </button>
+                                        </form>
+                                    </div>
                                 </div>
+                            }
+                        }
+                        else
+                        {
+                            <div class="empty-state">
+                                <i class="bi bi-check2-circle fs-1 text-success"></i>
+                                <p class="mt-2">No pending doctors</p>
                             </div>
                         }
-                    }
-                    else
-                    {
-                        <div class="empty-state">
-                            <i class="bi bi-check2-circle fs-1 text-success"></i>
-                            <p class="mt-2">No pending doctors</p>
-                        </div>
-                    }
+                    </div>
                 </div>
             </div>
 

@@ -42,11 +42,36 @@ namespace Hospital.WebProject.Controllers
                 Time = x.Time,
                 PatientID = x.PatientID,
                 PatientName = x.PatientName
+            })
+            .OrderBy(x=>x.Date)
+            .ThenBy(x => x.PatientName)
+            .ToList();
+
+            return View(model);
+        }
+        [HttpGet]
+        public async Task<IActionResult> PatientAppointments()
+        {
+            var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
+            var patient = context.Patients.FirstOrDefault(x => x.UserId == userId);
+            if (patient == null)
+            {
+                return NotFound();
+            }
+            var checkups = await checkupService.GetPatientAppointmentAsync(patient.ID);
+            var model = checkups.Select(x => new CheckupIndexViewModel
+            {
+                ID = x.ID,
+                Date = x.Date,
+                DoctorID = x.DoctorID,
+                DoctorName = x.DoctorName,
+                Time = x.Time,
+                PatientID = x.PatientID,
+                PatientName = x.PatientName
             }).ToList();
 
             return View(model);
         }
-
         [Authorize(Roles = "Patient")]
         [HttpGet]
         public async Task<IActionResult> Create()
@@ -98,7 +123,7 @@ namespace Hospital.WebProject.Controllers
             };
 
             await checkupService.CreateAsync(dto);
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(PatientAppointments));
         }
 
         [Authorize(Roles = "Admin,Doctor,Nurse")]

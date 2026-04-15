@@ -113,7 +113,7 @@ namespace Hospital.Core.Services
                 UserName = firstName + "_" + lastName
             };
             await context.Users.AddAsync(user);
-            
+
             var patient = new Patient
             {
                 UserId = user.Id,
@@ -212,23 +212,29 @@ namespace Hospital.Core.Services
             await context.Patients.AddAsync(patient);
             await context.SaveChangesAsync();
         }
-        public async Task<List<PatientIndexDTO>> PatientsWithSuchDoctor(string doctroName)
+        public async Task<List<PatientIndexDTO>> PatientsWithSuchDoctor(string doctorName)
         {
-            if (string.IsNullOrWhiteSpace(doctroName))
+            if (string.IsNullOrWhiteSpace(doctorName))
             {
                 return new List<PatientIndexDTO>();
             }
-            string pattern = $"%{doctroName}%";
+
+            string pattern = $"%{doctorName}%";
+
             var patients = await context.Patients
-              .Include(p => p.Doctor.User)
-              .Include(p => p.Room)
-              .Include(p => p.User)
-              .ToListAsync();
+                .Include(p => p.Doctor)
+                    .ThenInclude(d => d.User)
+                .Include(p => p.Room)
+                .Include(p => p.User)
+                .Where(x => x.Doctor != null &&
+                            x.Doctor.User != null &&
+                            EF.Functions.Like(x.Doctor.User.FirstName, pattern))
+                .ToListAsync();
 
             var cityIdsAsGuids = patients
                 .Select(p => p.BirthCity)
                 .Where(bc => Guid.TryParse(bc, out _))
-                .Select(bc => Guid.Parse(bc))
+                .Select(Guid.Parse)
                 .Distinct()
                 .ToList();
 
@@ -236,17 +242,21 @@ namespace Hospital.Core.Services
                 .Where(c => cityIdsAsGuids.Contains(c.Id))
                 .ToDictionaryAsync(c => c.Id.ToString(), c => c.Name);
 
-            return patients.Where(x => EF.Functions.Like(x.Doctor.User.FirstName, doctroName)).Select(x => new PatientIndexDTO
+            return patients.Select(x => new PatientIndexDTO
             {
                 ID = x.ID,
                 DoctorId = x.DoctorId,
-                DoctorName = x.Doctor?.User != null ? x.Doctor.User.FirstName + " " + x.Doctor.User.LastName : "No data",
+                DoctorName = x.Doctor?.User != null
+                    ? x.Doctor.User.FirstName + " " + x.Doctor.User.LastName
+                    : "No data",
                 HospitalizationDate = x.HospitalizationDate,
                 HospitalizationTime = x.HospitalizationTime,
                 DischargeDate = x.DischargeDate,
                 DischargeTime = x.DischargeTime,
                 UserID = x.UserId,
-                UserName = x.User != null ? x.User.FirstName + " " + x.User.LastName : "No data",
+                UserName = x.User != null
+                    ? x.User.FirstName + " " + x.User.LastName
+                    : "No data",
                 RoomId = x.RoomId,
                 RoomNumber = x.Room?.RoomNumber ?? 0,
                 BirthCity = cityNames.ContainsKey(x.BirthCity) ? cityNames[x.BirthCity] : x.BirthCity,

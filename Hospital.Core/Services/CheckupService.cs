@@ -33,6 +33,24 @@ namespace Hospital.Core.Services
                     PatientID = x.PatientID,
                     PatientName = x.Patient.User.FirstName + " " + x.Patient.User.LastName
                 })
+                 .OrderBy(x => x.Date)
+                .ThenBy(x=>x.PatientName)
+                .ToListAsync();
+        }
+        public async Task<List<CheckupIndexDTO>> GetPatientAppointmentAsync(Guid patientID)
+        {
+            return await context.Checkups
+                .Where(x=>x.PatientID==patientID)
+                .Select(x => new CheckupIndexDTO
+                {
+                    ID = x.ID,
+                    Date = x.Date,
+                    Time = x.Time,
+                    DoctorID = x.DoctorID,
+                    DoctorName = x.Doctor.User.FirstName + " " + x.Doctor.User.LastName,
+                    PatientID = x.PatientID,
+                    PatientName = x.Patient.User.FirstName + " " + x.Patient.User.LastName
+                })
                 .ToListAsync();
         }
 

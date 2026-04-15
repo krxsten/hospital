@@ -43,7 +43,13 @@ namespace Hospital.Data.Configurations
                 .HasForeignKey(p => p.RoomId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            builder.HasData(new Patient
+            builder.HasData(CreatePatients());
+        }
+        public List<Patient> CreatePatients()
+        {
+            List<Patient> patients = new List<Patient>()
+            {
+                new Patient
             {
                 ID = new Guid("9783d8b3-014f-477a-b951-6ff87057b44f"),
                 UserId = new Guid("a7e0d718-a822-48db-b8ff-82cff6dbd5c7"),
@@ -117,13 +123,7 @@ namespace Hospital.Data.Configurations
                         UCN = "0249152349",
                         DoctorId = new Guid("3480fb00-bfdc-4139-91a3-a975153ab6b3"),
                         RoomId = new Guid("c219c792-8a69-4850-ac40-a36f5f752786")
-                    });
-        }
-        public List<Patient> CreatePatients()
-        {
-            List<Patient> patients = new List<Patient>()
-            {
-
+                    }
             };
             return patients;
         }

@@ -19,5 +19,6 @@ namespace Hospital.Core.Contracts
 
         Task DeleteAsync(Guid id);
         Task<List<CheckupIndexDTO>> GetCheckupsDate(DateOnly date);
+        Task<List<CheckupIndexDTO>> GetPatientAppointmentAsync(Guid patientID);
     }
 }

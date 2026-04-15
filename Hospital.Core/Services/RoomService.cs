@@ -76,7 +76,7 @@ namespace Hospital.Core.Services
 			context.Rooms.Remove(room);
 			await context.SaveChangesAsync();
 		}
-		public async Task<List<RoomIndexDTO>> GetRoomsAfterNum(int roomNum)
+		public async Task<List<RoomIndexDTO>> GetRoomsAfterNum(int? roomNum = null)
 		{
             return await context.Rooms
 				.Where(x=>x.RoomNumber > roomNum)

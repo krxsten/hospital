@@ -1,4 +1,9 @@
 ﻿<style>
+    .global-bg {
+        background: linear-gradient(180deg, #0f172a 0%, #162033 45%, #1e293b 100%);
+        min-height: 100vh;
+        margin: 0;
+    }
     .main-wrapper {
         width: 100%;
         padding: 40px 80px;
@@ -8,7 +13,7 @@
         max-width: 100% !important;
         padding: 0 !important;
         margin: 0 !important;
-        background: none !important;
+        background: transparent !important;
         box-shadow: none !important;
     }
 
@@ -96,8 +101,71 @@
     .nav-link.active {
         border-color: #bbdefb !important;
     }
+
+    .news-ticker-bar {
+        background: rgba(255, 255, 255, 0.06);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-top: 1px solid rgba(255,255,255,0.08);
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+        padding: 10px 0;
+        overflow: hidden;
+    }
+
+    .news-ticker-content {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+    .news-badge {
+        flex-shrink: 0;
+        color: white;
+        font-size: 0.9rem;
+        font-weight: 700;
+        padding: 7px 14px;
+        border-radius: 999px;
+        background: rgba(59, 130, 246, 0.18);
+        border: 1px solid rgba(147, 197, 253, 0.25);
+    }
+
+    .news-ticker-text {
+        display: inline-block;
+        color: white;
+        font-size: 18px;
+        animation: tickerScroll 60s linear infinite;
+        padding-left: 100%; 
+    }
+
+        .news-ticker-text span {
+            display: inline-block;
+            margin-right: 14px;
+        }
+
+    .divider {
+        color: #93c5fd;
+        opacity: 0.8;
+    }
+
+    @@keyframes tickerScroll {
+        0%
+
+    {
+        transform: translateX(0%);
+    }
+
+    100% {
+        transform: translateX(-100%);
+    }
+
+    }
+
+
 </style>
 <!DOCTYPE html>
+<title>Saint Anna</title>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -111,7 +179,7 @@
 </head>
 
 
-<body>
+<body class="global-bg">
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm custom-navbar border-bottom mb-3">
             <div class="px-5 w-100">
@@ -228,6 +296,27 @@
                 </div>
             </div>
         </nav>
+        <div class="news-ticker-bar">
+                <div class="news-ticker-content">
+                    <div class="news-ticker-text">
+                        <span>24/7 Emergency Department now available</span>
+                        <span class="divider">•</span>
+                        <span>Book your checkup online in just a few clicks</span>
+                        <span class="divider">•</span>
+                        <span>New cardiology consultations open this week</span>
+                        <span class="divider">•</span>
+                        <span>Free preventive screenings available this month</span>
+                        <span class="divider">•</span>
+                        <span>Advanced MRI diagnostics now operational</span>
+                        <span class="divider">•</span>
+                        <span>Flu vaccination campaign has started</span>
+                        <span class="divider">•</span>
+                        <span>Online patient portal updated with new features</span>
+                        <span class="divider">•</span>
+                        <span>Shorter waiting times for laboratory results</span>
+                </div>
+            </div>
+        </div>
     </header>
     <div class="main-wrapper">
         <main role="main" class="pb-3">

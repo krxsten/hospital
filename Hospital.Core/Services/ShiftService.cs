@@ -91,8 +91,10 @@ namespace Hospital.Core.Services
 			context.Shifts.Remove(shift);
 			await context.SaveChangesAsync();
 		}
-        public async Task<List<ShiftIndexDTO>> GetShiftByTime(TimeOnly time)
+        public async Task<List<ShiftIndexDTO>> GetShiftByTime(TimeOnly? time = null)
         {
+            if (time == null) return new List<ShiftIndexDTO>();
+
             return await context.Shifts
                 .Where(s => (s.StartTime <= s.EndTime && time >= s.StartTime && time <= s.EndTime) || (s.StartTime > s.EndTime && (time >= s.StartTime || time <= s.EndTime)))
                 .Select(s => new ShiftIndexDTO

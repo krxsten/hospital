@@ -97,55 +97,54 @@
 <div class="container pb-5">
     <div class="text-center mb-5">
         <h2 class="fw-bold display-6">Nursing Staff</h2>
-        <div class="mx-auto bg-info rounded-pill mt-2" style="height: 4px; width: 60px;"></div>
+        <div class="mx-auto bg-white rounded-pill mt-2" style="height: 4px; width: 60px;"></div>
     </div>
 
-</div>
+    <div class="d-flex justify-content-end align-items-center mb-4 gap-2">
+        @if (User.IsInRole("Admin"))
+        {
+            <a asp-action="Create" class="btn btn-success rounded-pill px-4 shadow-sm">+ Register Nurse</a>
+        }
+        <a asp-action="FilterBySpecialization" class="btn btn-light border rounded-pill px-4 shadow-sm">By Specialization</a>
+        <a asp-action="SortByFirstName" class="btn btn-light border rounded-pill px-4 shadow-sm">Sort A-Z</a>
+        <a asp-action="Index" asp-controller="Home" class="btn btn-secondary rounded-pill px-4 shadow-sm">Back</a>
+    </div>
 
+    <div class="staff-grid">
+        @foreach (var doctor in Model)
+        {
+            <div class="staff-card shadow-sm">
+                <div class="staff-image-wrapper">
+                    @if (doctor.IsAccepted)
+                    {
+                        <span class="badge-status status-accepted">Active</span>
+                    }
+                    else
+                    {
+                        <span class="badge-status status-pending">Pending</span>
+                    }
+                    <img src="@doctor.ImageURL" class="staff-image" />
+                </div>
 
-<div class="d-flex justify-content-end align-items-center mb-4 gap-2">
-    @if (User.IsInRole("Admin"))
-    {
-        <a asp-action="Create" class="btn btn-success rounded-pill px-4 shadow-sm">+ Register Nurse</a>
-    }
-    <a asp-action="FilterBySpecialization" class="btn btn-light border rounded-pill px-4 shadow-sm">By Specialization</a>
-    <a asp-action="SortByFirstName" class="btn btn-light border rounded-pill px-4 shadow-sm">Sort A-Z</a>
-    <a asp-action="Index" asp-controller="Home" class="btn btn-secondary rounded-pill px-4 shadow-sm">Back</a>
-</div>
+                <div class="staff-info">
+                    <h4 class="staff-name">Dr. @doctor.UserName</h4>
+                    <div class="staff-specialty mb-2">@doctor.SpecializationName</div>
+                    <div class="staff-shift"><i class="bi bi-clock"></i> @doctor.ShiftName</div>
 
-<div class="staff-grid">
-    @foreach (var doctor in Model)
-    {
-        <div class="staff-card shadow-sm">
-            <div class="staff-image-wrapper">
-                @if (doctor.IsAccepted)
-                {
-                    <span class="badge-status status-accepted">Active</span>
-                }
-                else
-                {
-                    <span class="badge-status status-pending">Pending</span>
-                }
-                <img src="@doctor.ImageURL" class="staff-image" />
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <div class="d-flex justify-content-center gap-2 mt-4 pt-3 border-top">
+                            <a asp-action="Edit" asp-route-id="@doctor.ID" class="btn btn-warning btn-staff-action">Edit</a>
+                            <form asp-action="Delete" asp-route-id="@doctor.ID" method="post" class="m-0">
+                                <button type="submit" class="btn btn-danger btn-staff-action">Delete</button>
+                            </form>
+                        </div>
+                    }
+                </div>
             </div>
-
-            <div class="staff-info">
-                <h4 class="staff-name">Dr. @doctor.UserName</h4>
-                <div class="staff-specialty mb-2">@doctor.SpecializationName</div>
-                <div class="staff-shift"><i class="bi bi-clock"></i> @doctor.ShiftName</div>
-
-                @if (User.IsInRole("Admin"))
-                {
-                    <div class="d-flex justify-content-center gap-2 mt-4 pt-3 border-top">
-                        <a asp-action="Edit" asp-route-id="@doctor.ID" class="btn btn-warning btn-staff-action">Edit</a>
-                        <form asp-action="Delete" asp-route-id="@doctor.ID" method="post" class="m-0">
-                            <button type="submit" class="btn btn-danger btn-staff-action">Delete</button>
-                        </form>
-                    </div>
-                }
-            </div>
-        </div>
-    }
+        }
+    </div>
 </div>
+
 
 <hr class="my-5 opacity-25">
