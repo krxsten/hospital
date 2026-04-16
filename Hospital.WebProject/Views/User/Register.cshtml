@@ -91,6 +91,16 @@
         border-top: 1px solid rgba(255, 255, 255, 0.1);
         margin: 20px 0;
     }
+
+    .register-link {
+        color: #10b981 !important;
+        text-decoration: none;
+        font-weight: 700;
+    }
+
+        .register-link:hover {
+            text-decoration: underline;
+        }
 </style>
 
 <div class="register-container">
@@ -222,7 +232,7 @@
             <button id="registerSubmit" type="submit" class="btn btn-primary w-100 btn-submit">Complete Registration</button>
 
             <div class="mt-4 text-center">
-                <p class="small">Already have an account? <a asp-action="Login" class="text-info text-decoration-none fw-bold">Sign In</a></p>
+                <p class="small">Already have an account? <a asp-action="Login" class="register-link">Sign In</a></p>
             </div>
         </form>
     </div>

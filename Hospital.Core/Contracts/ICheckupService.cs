@@ -1,4 +1,5 @@
 ﻿using Hospital.Core.DTOs;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,5 +21,8 @@ namespace Hospital.Core.Contracts
         Task DeleteAsync(Guid id);
         Task<List<CheckupIndexDTO>> GetCheckupsDate(DateOnly date);
         Task<List<CheckupIndexDTO>> GetPatientAppointmentAsync(Guid patientID);
+        Task<List<TimeOnly>> GetAvailableTimeSlotsAsync(Guid doctorId, DateOnly date);
+        Task<DoctorShiftDTO?> GetDoctorShift(Guid doctorId);
+        Task<List<DateOnly>> GetBusyTimes(Guid doctorId, DateTime date);
     }
 }

@@ -72,52 +72,75 @@
     .btn:hover {
         filter: brightness(90%);
     }
+
+    .btn-back {
+        background: linear-gradient(135deg, #64748b, #475569);
+        color: white;
+        font-weight: 600;
+        padding: 12px 28px;
+        border-radius: 30px;
+        border: none;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        display: inline-flex;
+        align-items: center;
+        justify-content: right;
+    }
+
+        .btn-back:hover {
+            transform: translateY(-3px);
+            background: linear-gradient(135deg, #475569, #334155);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            color: white;
+        }
 </style>
 
 @using Hospital.WebProject.ViewModels.Checkup
 @model List<CheckupIndexViewModel>
 
 
-    <div class="container pb-5">
-        <div class="text-center mb-5">
-            <h2 class="fw-bold text-white">Medical Appointments</h2>
-            <div class="mx-auto bg-white rounded-pill mt-2" style="height: 4px; width: 60px;"></div>
-        </div>
-
-        @if (Model != null && Model.Any())
-        {
-            <div class="checkup-container">
-                <div class="table-responsive">
-                    <table class="table text-center">
-                        <thead>
-                            <tr>
-                                <th>Patient</th>
-                                <th>Doctor</th>
-                                <th>Appointment Date</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var item in Model)
-                            {
-                                <tr>
-                                    <td class="fw-bold">@item.PatientName</td>
-                                    <td>
-                                        <span class="badge bg-info text-dark rounded-pill px-3">Dr. @item.DoctorName</span>
-                                    </td>
-                                    <td class="text-muted">@item.Date</td>
-                                    }
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        }
-        else
-        {
-            <div class="alert alert-info text-center rounded-4 shadow-sm">
-                No checkups found.
-            </div>
-        }
+<div class="container pb-5">
+    <div class="text-center mb-5">
+        <h2 class="fw-bold text-white">Medical Appointments</h2>
+        <div class="mx-auto bg-white rounded-pill mt-2" style="height: 4px; width: 60px;"></div>
     </div>
-}
+    <div class="d-flex justify-content-end">
+        <a asp-action="Index" asp-controller="Home" class="btn btn-back">Back</a>
+    </div>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="checkup-container">
+            <div class="table-responsive">
+                <table class="table text-center">
+                    <thead>
+                        <tr>
+                            <th>Patient</th>
+                            <th>Doctor</th>
+                            <th>Appointment Date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="fw-bold">@item.PatientName</td>
+                                <td>
+                                    <span class="badge bg-info text-dark rounded-pill px-3">Dr. @item.DoctorName</span>
+                                </td>
+                                <td class="text-muted">@item.Date</td>
+
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info text-center rounded-4 shadow-sm">
+            No checkups found.
+        </div>
+    }
+</div>

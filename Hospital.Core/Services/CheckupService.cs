@@ -111,6 +111,34 @@ namespace Hospital.Core.Services
             context.Checkups.Remove(checkup);
             await context.SaveChangesAsync();
         }
+        public async Task<List<DateOnly>> GetBusyTimes(Guid doctorId, DateTime date)
+        {
+            var busy = await context.Checkups
+                .Where(c => c.DoctorID == doctorId &&
+                            c.Date.Day == date.Day &&
+                            c.Date.Month == date.Month &&
+                            c.Date.Year == date.Year)
+                .Select(c => c.Date)
+                .ToListAsync();
+
+            return busy;
+        }
+
+        public async Task<DoctorShiftDTO?> GetDoctorShift(Guid doctorId)
+        {
+            var shift = await context.Doctors
+                .Include(d => d.Shift)
+                .Where(d => d.ID == doctorId)
+                .Select(d => new DoctorShiftDTO
+                {
+                    StartTime = d.Shift.StartTime,
+                    EndTime = d.Shift.EndTime
+                })
+                .FirstOrDefaultAsync();
+
+            return shift;
+        }
+
         public async Task<List<CheckupIndexDTO>> GetCheckupsDate(DateOnly date)
         {
             return await context.Checkups.Where(x => x.Date == date)
@@ -125,6 +153,37 @@ namespace Hospital.Core.Services
                     PatientName = x.Patient.User.FirstName + " " + x.Patient.User.LastName
                 })
                 .ToListAsync();
+        }
+        public async Task<List<TimeOnly>> GetAvailableTimeSlotsAsync(Guid doctorId, DateOnly date)
+        {
+            var doctor = await context.Doctors
+                .Include(d => d.Shift)
+                .FirstOrDefaultAsync(d => d.ID == doctorId);
+
+            if (doctor == null || doctor.Shift == null)
+            {
+                return new List<TimeOnly>();
+            }
+
+            var bookedTimes = await context.Checkups
+                .Where(c => c.DoctorID == doctorId && c.Date == date)
+                .Select(c => c.Time)
+                .ToListAsync();
+
+            var availableSlots = new List<TimeOnly>();
+
+            var start = doctor.Shift.StartTime;
+            var end = doctor.Shift.EndTime;
+
+            for (var time = start; time < end; time = time.AddMinutes(30))
+            {
+                if (!bookedTimes.Contains(time))
+                {
+                    availableSlots.Add(time);
+                }
+            }
+
+            return availableSlots;
         }
     }
 }

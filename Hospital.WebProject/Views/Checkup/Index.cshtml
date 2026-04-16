@@ -78,7 +78,6 @@
 @model List<CheckupIndexViewModel>
 @if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse"))
 {
-
     <div class="container pb-5">
         <div class="text-center mb-5">
             <h2 class="fw-bold text-white display-6">Medical Appointments</h2>
@@ -152,7 +151,7 @@
                                             }
                                         </div>
                                     </td>
-                                    }
+
                                 </tr>
                             }
                         </tbody>

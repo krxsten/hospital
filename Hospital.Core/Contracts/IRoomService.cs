@@ -18,6 +18,6 @@ namespace Hospital.Core.Contracts
         Task UpdateAsync(RoomIndexDTO model);
 
         Task DeleteAsync(Guid id);
-        Task<List<RoomIndexDTO>> GetRoomsAfterNum(int? roomNum = null);
+        Task<List<RoomIndexDTO>> GetRoomsAfterNum(int? roomNum);
     }
 }

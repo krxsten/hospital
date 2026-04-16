@@ -57,7 +57,7 @@
 @if (User.IsInRole("Admin") || User.IsInRole("Doctor"))
 {
     <div class="page-header-custom text-center">
-        <h2 class="page-title-white">Edit Diagnosis</h2>
+        <h2 class="page-title-white text-white">Edit Diagnose</h2>
         <div class="title-divider"></div>
     </div>
 
@@ -91,9 +91,9 @@
                             </div>
                         }
 
-                        <div class="d-grid gap-2 mt-5">
+                        <div class="d-grid gap-3 mt-5">
                             <button type="submit" class="btn btn-primary-white">Update Diagnosis</button>
-                            <a asp-action="Index" class="btn btn-outline-light rounded-pill">Cancel</a>
+                            <a asp-action="Index" class="btn btn-primary-white flex-grow-1">Back</a>
                         </div>
                     </form>
                 </div>

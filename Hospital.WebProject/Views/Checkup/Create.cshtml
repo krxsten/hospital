@@ -1,6 +1,6 @@
 ﻿<style>
     :root {
-        --primary-accent: #3b82f6; 
+        --primary-accent: #3b82f6;
         --dark-bg: #0f172a;
         --card-bg: #1e293b;
         --input-bg: #334155;
@@ -86,34 +86,35 @@
 
                     <form asp-action="Create" method="post">
                         <div class="mb-4">
-                            <label asp-for="@Model.DoctorID" class="form-label text-white-50 small text-uppercase fw-bold">Select Specialist</label>
+                            <label asp-for="DoctorID" class="form-label text-white-50 small text-uppercase fw-bold">Select Specialist</label>
                             <div class="input-group">
                                 <span class="input-group-text">
                                     <i class="bi bi-person-badge"></i>
                                 </span>
-                                <select asp-for="@Model.DoctorID" id="DoctorID" asp-items="@ViewBag.Doctors"
-                                        class="form-select">
+                                <select asp-for="DoctorID" id="DoctorID" asp-items="ViewBag.Doctors" class="form-select">
                                     <option value="">-- Choose a Doctor --</option>
                                 </select>
                             </div>
-                            <span class="text-danger small" asp-validation-for="@Model.DoctorID"></span>
+                            <span asp-validation-for="DoctorID" class="text-danger small"></span>
                         </div>
 
                         <div class="row">
                             <div class="col-md-6 mb-4">
-                                <label asp-for="@Model.Date" class="form-label text-white-50 small text-uppercase fw-bold">Preferred Date</label>
-                                <input asp-for="@Model.Date" id="Date" type="date"
+                                <label asp-for="Date" class="form-label text-white-50 small text-uppercase fw-bold">Preferred Date</label>
+                                <input asp-for="Date"
+                                       id="Date"
+                                       type="date"
                                        class="form-control scheme-dark"
-                                       min="@DateTime.Now.ToString("yyyy-MM-dd")" />
-                                <span asp-validation-for="@Model.Date" class="text-danger small"></span>
+                                       min="@DateOnly.FromDateTime(DateTime.Now).ToString("yyyy-MM-dd")" />
+                                <span asp-validation-for="Date" class="text-danger small"></span>
                             </div>
 
                             <div class="col-md-6 mb-4">
-                                <label asp-for="@Model.Time" class="form-label text-white-50 small text-uppercase fw-bold">Available Slots</label>
-                                <select asp-for="@Model.Time" id="Time" class="form-select">
-                                    <option>Select time</option>
+                                <label asp-for="Time" class="form-label text-white-50 small text-uppercase fw-bold">Available Slots</label>
+                                <select asp-for="Time" id="Time" class="form-select">
+                                    <option value="">-- Select time --</option>
                                 </select>
-                                <span asp-validation-for="@Model.Time" class="text-danger small"></span>
+                                <span asp-validation-for="Time" class="text-danger small"></span>
                             </div>
                         </div>
 
@@ -136,27 +137,55 @@
     <partial name="_ValidationScriptsPartial" />
 
     <script>
-        function loadSlots(){
+        function resetTimeDropdown(message) {
+            $("#Time").empty().append(`<option value="">${message}</option>`);
+        }
+
+        function loadSlots() {
             var doctorId = $("#DoctorID").val();
             var date = $("#Date").val();
 
-            if(!doctorId || !date) return;
+            if (!doctorId || !date) {
+                resetTimeDropdown("-- Select time --");
+                return;
+            }
 
-            $("#Time").empty().append(`<option>Loading...</option>`);
+            resetTimeDropdown("Loading...");
 
-            $.get("/Checkup/GetAvailableSlots", {
-                doctorId: doctorId,
-                date: date
-            }, function(data){
-                $("#Time").empty();
-                $("#Time").append(`<option>Select time</option>`);
-                data.forEach(function(time){
-                    $("#Time").append(`<option value="${time}">${time}</option>`);
-                });
+            $.ajax({
+                url: '@Url.Action("GetAvailableSlots", "Checkup")',
+                type: 'GET',
+                data: {
+                    doctorId: doctorId,
+                    date: date
+                },
+                success: function (data) {
+                    $("#Time").empty();
+
+                    if (!data || data.length === 0) {
+                        $("#Time").append(`<option value="">No available slots</option>`);
+                        return;
+                    }
+
+                    $("#Time").append(`<option value="">-- Select time --</option>`);
+
+                    data.forEach(function (time) {
+                        $("#Time").append(`<option value="${time}">${time}</option>`);
+                    });
+                },
+                error: function () {
+                    resetTimeDropdown("Could not load slots");
+                }
             });
         }
 
-        $("#DoctorID").change(loadSlots);
-        $("#Date").change(loadSlots);
+        $(document).ready(function () {
+            $("#DoctorID").on("change", loadSlots);
+            $("#Date").on("change", loadSlots);
+
+            if ($("#DoctorID").val() && $("#Date").val()) {
+                loadSlots();
+            }
+        });
     </script>
 }

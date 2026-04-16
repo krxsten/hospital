@@ -89,23 +89,39 @@ namespace Hospital.WebProject.Controllers
                 await LoadDropdownsAsync();
                 return View(model);
             }
+
             var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier));
             var patient = context.Patients.FirstOrDefault(x => x.UserId == userId);
+
             if (patient == null)
             {
                 return NotFound();
             }
+
             var doctor = await context.Doctors
-       .Include(d => d.Shift)
-       .FirstOrDefaultAsync(d => d.ID == model.DoctorID);
+                .Include(d => d.Shift)
+                .FirstOrDefaultAsync(d => d.ID == model.DoctorID);
+
             if (doctor == null)
             {
                 ModelState.AddModelError("DoctorID", "Doctor not found.");
             }
-
-            if (model.Time < doctor.Shift.StartTime || model.Time > doctor.Shift.EndTime)
+            else
             {
-                ModelState.AddModelError("Time", "Selected time is outside doctor's shift.");
+                if (model.Time < doctor.Shift.StartTime || model.Time >= doctor.Shift.EndTime)
+                {
+                    ModelState.AddModelError("Time", "Selected time is outside doctor's shift.");
+                }
+                    
+                var isBooked = await context.Checkups.AnyAsync(c =>
+                    c.DoctorID == model.DoctorID &&
+                    c.Date == model.Date &&
+                    c.Time == model.Time);
+
+                if (isBooked)
+                {
+                    ModelState.AddModelError("Time", "This time slot is already booked.");
+                }
             }
 
             if (!ModelState.IsValid)
@@ -113,9 +129,9 @@ namespace Hospital.WebProject.Controllers
                 await LoadDropdownsAsync();
                 return View(model);
             }
+
             var dto = new CheckupCreateDTO
             {
-                
                 Date = model.Date,
                 Time = model.Time,
                 DoctorID = model.DoctorID,
@@ -123,6 +139,7 @@ namespace Hospital.WebProject.Controllers
             };
 
             await checkupService.CreateAsync(dto);
+
             return RedirectToAction(nameof(PatientAppointments));
         }
 
@@ -196,61 +213,39 @@ namespace Hospital.WebProject.Controllers
         [HttpGet]
         public async Task<IActionResult> GetBusyTimes(Guid doctorId, DateTime date)
         {
-            var busy = await context.Checkups
-                .Where(c => c.DoctorID == doctorId && c.Date.Day == date.Date.Day && c.Date.Month == date.Date.Month && c.Date.Year == date.Date.Year)
-                .Select(c => c.Date)
-                .ToListAsync();
-
-            return View(busy);
+            var busyTimes = await checkupService.GetBusyTimes(doctorId, date);
+            return View(busyTimes);
         }
 
         [Authorize(Roles = "Admin,Doctor,Nurse,Patient")]
         [HttpGet]
         public async Task<IActionResult> GetDoctorShift(Guid doctorId)
         {
-            var shift = await context.Doctors
-                .Include(d => d.Shift)
-                .Where(d => d.ID == doctorId)
-                .Select(d => new DoctorShiftViewModel
-                {
-                    EndTime = d.Shift.EndTime,
-                    StartTime = d.Shift.StartTime
-                })
-                .FirstOrDefaultAsync();
+            var shiftDto = await checkupService.GetDoctorShift(doctorId);
 
-            if (shift == null)
+            if (shiftDto == null)
             {
                 return NotFound();
             }
 
-            return View(shift);
+            var viewModel = new DoctorShiftViewModel
+            {
+                StartTime = shiftDto.StartTime,
+                EndTime = shiftDto.EndTime
+            };
+
+            return View(viewModel);
         }
         [HttpGet]
-        public async Task<IActionResult> GetAvailableSlots(Guid doctorId, DateOnly date)
+        public async Task<JsonResult> GetAvailableSlots(Guid doctorId, DateOnly date)
         {
-            var doctor = await context.Doctors
-                .Include(d => d.Shift)
-                .FirstOrDefaultAsync(d => d.ID == doctorId);
+            var slots = await checkupService.GetAvailableTimeSlotsAsync(doctorId, date);
 
-            if (doctor == null)
-                return NotFound();
+            var result = slots.Select(t => t.ToString("HH:mm")).ToList();
 
-            var start = doctor.Shift.StartTime;
-            var end = doctor.Shift.EndTime;
-
-            var slots = new List<string>();
-
-            var current = start;
-
-            while (current < end)
-            {
-                slots.Add(current.ToString("HH:mm"));
-                current = current.Add(TimeSpan.FromMinutes(30));
-            }
-            var takenSlots = await context.Checkups.Where(c => c.DoctorID == doctorId && c.Date == date).Select(c => c.Time.ToString()).ToListAsync();
-            slots = slots.Where(x => !takenSlots.Contains(x)).ToList();
-            return Json(slots);
+            return Json(result);
         }
+
         [Authorize(Roles = "Doctor,Nurse,Admin")]
         [HttpGet]
         public async Task<IActionResult> GetCheckupsDate(DateOnly date)

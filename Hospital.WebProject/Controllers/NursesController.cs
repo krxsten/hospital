@@ -99,7 +99,7 @@ namespace Hospital.WebProject.Controllers
                     NurseName = model.NurseName,
                     SpecializationID = model.SpecializationID,
                     ShiftID = model.ShiftID,
-                    IsAccepted = model.IsAccepted,
+                    IsAccepted = true,
                     ImageFile = model.Image
                 };
 
@@ -130,7 +130,7 @@ namespace Hospital.WebProject.Controllers
                 ID = dto.ID,
                 SpecializationId = dto.SpecializationId,
                 ShiftId = dto.ShiftId,
-                IsAccepted = dto.IsAccepted,
+                IsAccepted = true,
                 ExistingImage = dto.ImageURL,
                 NurseName = dto.UserName
             };

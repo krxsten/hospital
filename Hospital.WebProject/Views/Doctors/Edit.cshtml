@@ -15,6 +15,9 @@
             font-weight: 700;
         }
 
+    .custom-input::placeholder {
+        color: #ffffff !important;
+    }
     .custom-input, .custom-select {
         background-color: transparent !important;
         border: 1px solid #ffffff !important;
@@ -81,7 +84,7 @@
                     <h4 class="mb-4"><i class="bi bi-pencil-square me-2"></i>Update Doctor Information</h4>
 
                     <form asp-action="Edit" method="post" enctype="multipart/form-data">
-
+                        <input asp-for="IsAccepted" type="hidden" />
                         <div class="mb-4">
                             <label asp-for="DoctorName" class="form-label">Full Name</label>
                             <input asp-for="DoctorName" class="form-control custom-input" />
@@ -120,7 +123,7 @@
 
                         <div class="d-flex gap-3 mt-5 pt-3 border-top border-white border-opacity-25">
                             <button type="submit" class="btn btn-primary-white flex-grow-1">Update Specialist</button>
-                            <a asp-action="Index" class="btn btn-outline-light rounded-pill px-4">Cancel</a>
+                            <a asp-action="Index" class="btn btn-primary-white flex-grow-1">Back</a>
                         </div>
                     </form>
                 </div>

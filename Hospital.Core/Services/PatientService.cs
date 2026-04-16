@@ -16,10 +16,11 @@ namespace Hospital.Core.Services
     public class PatientService : IPatientService
     {
         private readonly HospitalDbContext context;
-
-        public PatientService(HospitalDbContext context)
+        private readonly ICityService cityService;
+        public PatientService(HospitalDbContext context, ICityService cityService)
         {
             this.context = context;
+            this.cityService = cityService;
         }
 
         public async Task<List<PatientIndexDTO>> GetAllAsync()
@@ -29,17 +30,6 @@ namespace Hospital.Core.Services
                 .Include(p => p.Room)
                 .Include(p => p.User)
                 .ToListAsync();
-
-            var cityIdsAsGuids = patients
-                .Select(p => p.BirthCity)
-                .Where(bc => Guid.TryParse(bc, out _))
-                .Select(bc => Guid.Parse(bc))
-                .Distinct()
-                .ToList();
-
-            var cityNames = await context.Cities
-                .Where(c => cityIdsAsGuids.Contains(c.Id))
-                .ToDictionaryAsync(c => c.Id.ToString(), c => c.Name);
 
             return patients.Select(x => new PatientIndexDTO
             {
@@ -54,7 +44,7 @@ namespace Hospital.Core.Services
                 UserName = x.User != null ? x.User.FirstName + " " + x.User.LastName : "No data",
                 RoomId = x.RoomId,
                 RoomNumber = x.Room?.RoomNumber ?? 0,
-                BirthCity = cityNames.ContainsKey(x.BirthCity) ? cityNames[x.BirthCity] : x.BirthCity,
+                BirthCity = x.BirthCity,
                 DateOfBirth = x.DateOfBirth,
                 PhoneNumber = x.PhoneNumber,
                 UCN = x.UCN
@@ -64,19 +54,13 @@ namespace Hospital.Core.Services
         public async Task<PatientIndexDTO?> GetByIdAsync(Guid id)
         {
             var x = await context.Patients
-                .Include(p => p.Doctor.User)
+                .Include(p => p.Doctor)
+                .ThenInclude(p=> p.User)
                 .Include(p => p.Room)
                 .Include(p => p.User)
                 .FirstOrDefaultAsync(p => p.ID == id);
 
             if (x == null) return null;
-
-            var birthCity = x.BirthCity;
-            if (Guid.TryParse(x.BirthCity, out var cityId))
-            {
-                var city = await context.Cities.FindAsync(cityId);
-                if (city != null) birthCity = city.Name;
-            }
 
             return new PatientIndexDTO
             {
@@ -91,7 +75,7 @@ namespace Hospital.Core.Services
                 UserName = x.User != null ? x.User.FirstName + " " + x.User.LastName : "No data",
                 RoomId = x.RoomId,
                 RoomNumber = x.Room?.RoomNumber ?? 0,
-                BirthCity = birthCity,
+                BirthCity = x.BirthCity,
                 DateOfBirth = x.DateOfBirth,
                 PhoneNumber = x.PhoneNumber,
                 UCN = x.UCN

@@ -57,7 +57,7 @@ namespace Hospital.Core.Services
                 UserId = user.Id,
                 SpecializationId = dto.SpecializationID,
                 ShiftId = dto.ShiftID,
-                IsAccepted = dto.IsAccepted,
+                IsAccepted = true,
                 ImageURL = uploadResult.Url,
                 CloudinaryID = uploadResult.PublicId
             };

@@ -1,68 +1,73 @@
 ﻿<style>
-.glass-panel {
-background: rgba(255, 255, 255, 0.05);
-backdrop-filter: blur(15px);
-border: 2px solid #ffffff;
-border-radius: 30px;
-padding: 40px;
-}
+    .glass-panel {
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(15px);
+        border: 2px solid #ffffff;
+        border-radius: 30px;
+        padding: 40px;
+    }
 
-.glass-panel label,
-.glass-panel h4,
-.page-title-white {
-    color: #ffffff !important;
-    font-weight: 700;
-}
+        .glass-panel label,
+        .glass-panel p,
+        .glass-panel h4,
+        .page-title-white {
+            color: #ffffff !important;
+            font-weight: 700;
+        }
 
-.custom-input, .custom-select {
-    background-color: transparent !important;
-    border: 1px solid #ffffff !important;
-    color: #ffffff !important;
-    border-radius: 12px;
-    padding: 12px;
-}
+    .custom-input::placeholder {
+        color: #ffffff !important;
+    }
 
-.custom-select option {
-    background-color: #0f172a;
-    color: #ffffff;
-}
+    .custom-input, .custom-select {
+        background-color: transparent !important;
+        border: 1px solid #ffffff !important;
+        color: #ffffff !important;
+        border-radius: 10px;
+        padding: 12px;
+    }
 
-.custom-input:focus, .custom-select:focus {
-    background-color: rgba(255, 255, 255, 0.1) !important;
-    box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
-    outline: none;
-}
+        .custom-select option {
+            background-color: #0f172a;
+            color: #ffffff;
+        }
 
-.btn-primary-white {
-    background-color: #ffffff !important;
-    color: #000000 !important;
-    font-weight: 800;
-    border-radius: 50px;
-    padding: 12px 40px;
-    text-transform: uppercase;
-    border: none;
-    transition: all 0.3s ease;
-}
+        .custom-input:focus, .custom-select:focus {
+            background-color: rgba(255, 255, 255, 0.1) !important;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
 
-.btn-primary-white:hover {
-    background-color: rgba(255, 255, 255, 0.9);
-    transform: translateY(-2px);
-}
+    .current-image-wrapper {
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        padding: 8px;
+        border-radius: 15px;
+        background: rgba(0, 0, 0, 0.2);
+        display: inline-block;
+    }
 
-.text-danger {
-    color: #ff6b6b !important;
-    font-weight: 600;
-    font-size: 0.85rem;
-}
+    .btn-primary-white {
+        background-color: #ffffff !important;
+        color: #000000 !important;
+        font-weight: 800;
+        border-radius: 50px;
+        padding: 12px 40px;
+        text-transform: uppercase;
+        border: none;
+        transition: all 0.3s ease;
+    }
 
-.current-image-preview {
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    padding: 5px;
-    border-radius: 15px;
-    max-width: 150px;
-    margin-top: 10px;
-}
+        .btn-primary-white:hover {
+            background-color: rgba(255, 255, 255, 0.9);
+            transform: translateY(-2px);
+        }
+
+    .text-danger {
+        color: #ff6b6b !important;
+        font-weight: 600;
+        font-size: 0.85rem;
+    }
 </style>
+
 
 @using Hospital.WebProject.ViewModels.Nurse
 @model NurseEditViewModel
@@ -81,7 +86,7 @@ padding: 40px;
                     <h4 class="mb-4"><i class="bi bi-pencil-square me-2"></i>Update Staff Information</h4>
 
                     <form asp-action="Edit" method="post" enctype="multipart/form-data">
-
+                        <input asp-for="IsAccepted" type="hidden" />
                         <div class="mb-4">
                             <label asp-for="NurseName" class="form-label">Full Name</label>
                             <input asp-for="NurseName" class="form-control custom-input" />
@@ -103,22 +108,24 @@ padding: 40px;
                         </div>
 
                         <div class="mb-4">
-                            <label asp-for="@Model.ExistingImage" class="form-label">Profile Image</label>
-                            <input asp-for="@Model.ExistingImage" type="file" name="NewImage" class="form-control custom-input" accept="image/*" />
-                            <span class="text-danger" asp-validation-for="@Model.ExistingImage"></span>
-
-                            @if (!string.IsNullOrEmpty(Model.ExistingImage))
-                            {
-                                <div class="mt-2">
-                                    <p class="small text-white-50 mb-1">Current Photo:</p>
-                                    <img src="@Model.ExistingImage" class="current-image-preview" />
-                                </div>
-                            }
+                            <label asp-for="File" class="form-label">Update Profile Image</label>
+                            <input asp-for="File" type="file" accept="image/*" class="form-control custom-input" />
+                            <span class="text-danger" asp-validation-for="File"></span>
                         </div>
+
+                        @if (!string.IsNullOrEmpty(Model.ExistingImage))
+                        {
+                            <div class="mb-4 text-center">
+                                <p class="small text-uppercase mb-2">Current Photo</p>
+                                <div class="current-image-wrapper">
+                                    <img src="@Model.ExistingImage" class="rounded" width="180" />
+                                </div>
+                            </div>
+                        }
 
                         <div class="d-flex gap-3 mt-5 pt-3 border-top border-white border-opacity-25">
                             <button type="submit" class="btn btn-primary-white flex-grow-1">Update Profile</button>
-                            <a asp-action="Index" class="btn btn-outline-light rounded-pill px-5">Back</a>
+                            <a asp-action="Index" class="btn btn-primary-white flex-grow-1">Back</a>
                         </div>
                     </form>
                 </div>

@@ -89,7 +89,7 @@ namespace Hospital.Core.Services
 				UserId = user.Id,
 				SpecializationId = model.SpecializationID,
 				ShiftId = model.ShiftID,
-				IsAccepted = model.IsAccepted,
+				IsAccepted = true,
                 ImageURL = uploadResult.Url,
                 PublicID = uploadResult.PublicId
             };
@@ -100,7 +100,7 @@ namespace Hospital.Core.Services
 
 		public async Task UpdateAsync(NurseEditDTO model)
 		{
-            var nurse = await context.Doctors
+            var nurse = await context.Nurses
                .Include(d => d.User)
                .FirstOrDefaultAsync(d => d.ID == model.ID);
 
@@ -119,12 +119,12 @@ namespace Hospital.Core.Services
                 var uploadResult = await imageService.UploadImageAsync(model.NewImageFile);
 
                 nurse.ImageURL = uploadResult.Url;
-                nurse.CloudinaryID = uploadResult.PublicId;
+                nurse.PublicID = uploadResult.PublicId;
             }
 
             nurse.SpecializationId = model.SpecializationId;
 			nurse.ShiftId = model.ShiftId;
-			nurse.IsAccepted = model.IsAccepted;
+			nurse.IsAccepted = true;
 
 			await context.SaveChangesAsync();
 		}

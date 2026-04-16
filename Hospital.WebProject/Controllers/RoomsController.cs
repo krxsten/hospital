@@ -118,9 +118,14 @@ namespace Hospital.WebProject.Controllers
 			return RedirectToAction(nameof(Index));
 		}
         [Authorize(Roles = "Admin,Doctor,Nurse")]
-        public async Task<IActionResult> GetRoomsAfterNum(int roomNum)
+        public async Task<IActionResult> GetRoomsAfterNum(int? roomNum)
 		{
-			var result = await roomService.GetRoomsAfterNum(roomNum);
+            if (!roomNum.HasValue)
+            {
+                return View(new List<RoomIndexViewModel>());
+            }
+
+            var result = await roomService.GetRoomsAfterNum(roomNum.Value);
             var model = result.Select(x => new RoomIndexViewModel
             {
                 ID = x.ID,

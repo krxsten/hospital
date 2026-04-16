@@ -53,6 +53,38 @@
         justify-content: center;
         align-items: center;
     }
+
+    .specialization-img-container {
+        position: relative;
+        height: 260px;
+        overflow: hidden;
+    }
+
+    @@media (min-width: 768px) {
+        .specialization-img-container
+
+    {
+        height: 300px;
+    }
+
+    }
+
+    
+    @@media (min-width: 1200px) {
+        .specialization-img-container
+
+    {
+        height: 320px;
+    }
+
+    }
+
+    .specialization-img-container img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        background: white;
+    }
 </style>
 
 @using Hospital.WebProject.ViewModels.Specialization
@@ -87,9 +119,8 @@
             <div class="col">
                 <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden specialization-card">
 
-                    <div class="position-relative">
-                        <img src="@item.ImageURL" class="card-img-top" alt="@item.SpecializationName"
-                             style="height: 250px; object-fit: cover;">
+                    <div class="specialization-img-container">
+                        <img src="@item.ImageURL" alt="@item.SpecializationName">
 
                         <div class="card-img-overlay d-flex align-items-end p-0">
                             <div class="w-100 p-3" style="background: linear-gradient(transparent, rgba(0,0,0,0.85));">
@@ -103,13 +134,13 @@
                         <div class="card-footer bg-white border-0 p-3 d-flex justify-content-center gap-2">
                             <div class="d-inline">
                                 <a asp-action="Edit" asp-controller="Specializations" asp-route-id="@item.ID"
-                                   class="btn btn-warning btn-action-equal fw-bold rounded-3">Edit</a>
+                                   class="btn btn-warning btn-action-equal rounded-3">Edit</a>
                             </div>
 
                             <form asp-action="Delete" asp-controller="Specializations" asp-route-id="@item.ID"
                                   method="post" onsubmit="return confirm('Are you sure you want to delete this?')"
                                   class="d-inline">
-                                <button type="submit" class="btn btn-danger btn-action-equal fw-bold rounded-3">Delete</button>
+                                <button type="submit" class="btn btn-danger btn-action-equal rounded-3">Delete</button>
                             </form>
                         </div>
                     }
