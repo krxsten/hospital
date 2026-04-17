@@ -20,14 +20,16 @@ namespace Hospital.WebProject.Controllers
         private readonly SignInManager<User> signManager;
         private readonly RoleManager<IdentityRole<Guid>> roleManager;
         private readonly IImageService imageService;
+        private readonly ICityService cityService;
 
-        public UserController(HospitalDbContext context, UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<IdentityRole<Guid>> roleManager, IImageService imageService)
+        public UserController(HospitalDbContext context, UserManager<User> userManager, SignInManager<User> signInManager, RoleManager<IdentityRole<Guid>> roleManager, IImageService imageService, ICityService cityService)
         {
             this.Context = context;
             this.userManager = userManager;
             this.signManager = signInManager;
             this.roleManager = roleManager;
             this.imageService = imageService;
+            this.cityService = cityService;
         }
 
         [HttpGet]
@@ -168,7 +170,7 @@ namespace Hospital.WebProject.Controllers
             PopulateRegisterDropdowns();
             return View(model);
         }
-        private void PopulateRegisterDropdowns()
+        private async Task PopulateRegisterDropdowns(string? selectedCity = null)
         {
             ViewBag.Specializations = Context.Specializations.ToList();
             ViewBag.Shifts = Context.Shifts.ToList();
@@ -176,8 +178,8 @@ namespace Hospital.WebProject.Controllers
             ViewBag.Doctors = new SelectList(docs, "ID", "FullName");
             var rooms = Context.Rooms.Where(r => !r.IsTaken).Select(r => new { r.ID, r.RoomNumber }).ToList();
             ViewBag.Rooms = new SelectList(rooms, "ID", "RoomNumber");
-            var cities = Context.Cities.OrderBy(c => c.Name).Select(c => new { c.Id, c.Name }).ToList();
-            ViewBag.Cities = new SelectList(cities, "Id", "Name");
+            var cities = await cityService.GetAllAsync();
+            ViewBag.Cities = new SelectList(cities, selectedCity);
         }
 
         [HttpGet]

@@ -128,7 +128,7 @@
                             <div class="col-md-4 mb-4">
                                 <label asp-for="BirthCity" class="form-label fw-bold">Select City</label>
                                 <select asp-for="BirthCity" asp-items="ViewBag.Cities" class="form-select custom-select">
-                                    <option value="">-- Select a birth City --</option>
+                                    <option value="">-- Select a birth city --</option>
                                 </select>
                                 <span asp-validation-for="BirthCity" class="text-danger small"></span>
                             </div>
@@ -166,4 +166,30 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        function loadSlots(){
+            var doctorId = $("#DoctorID").val();
+            var date = $("#Date").val();
+
+            if(!doctorId || !date)
+                return;
+
+            $.get("/Checkup/GetAvailableSlots", {
+                doctorId: doctorId,
+                date: date
+            }, function(data){
+                $("#Time").empty();
+                $("#Time").append(`<option>Select time</option>`);
+
+                data.forEach(function(time){
+                    $("#Time").append(
+                        `<option value="${time}">${time}</option>`
+                    );
+                });
+            });
+        }
+
+        $("#DoctorID").change(loadSlots);
+        $("#Date").change(loadSlots);
+    </script>
 }

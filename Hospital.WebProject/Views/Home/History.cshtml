@@ -1,0 +1,173 @@
+﻿<style>
+.history-hero {
+    background: linear-gradient(135deg, #0d6efd, #0a58ca);
+    color: white;
+    padding: 80px 20px;
+    text-align: center;
+    border-radius: 0 0 30px 30px;
+}
+
+.history-hero h1 {
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.history-hero p {
+    opacity: 0.9;
+    font-size: 18px;
+}
+
+.history-card {
+    border: none;
+    border-radius: 20px;
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.history-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+}
+
+.history-card h4 {
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.section-title {
+    font-weight: 600;
+    margin-bottom: 20px;
+    border-left: 5px solid #0d6efd;
+    padding-left: 10px;
+}
+
+.timeline {
+    position: relative;
+    padding-left: 30px;
+}
+
+.timeline::before {
+    content: "";
+    position: absolute;
+    left: 10px;
+    top: 0;
+    width: 3px;
+    height: 100%;
+    background: #0d6efd;
+}
+
+.timeline-item {
+    position: relative;
+    margin-bottom: 25px;
+}
+
+.timeline-item::before {
+    content: "";
+    position: absolute;
+    left: -2px;
+    top: 5px;
+    width: 15px;
+    height: 15px;
+    background: #0d6efd;
+    border-radius: 50%;
+}
+
+.timeline-item h5 {
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.history-text {
+    color: #555;
+    line-height: 1.6;
+}
+</style>
+@{
+    ViewData["Title"] = "Hospital History";
+}
+
+<section class="history-hero">
+    <div class="container">
+        <h1>Hospital History</h1>
+        <p>A legacy of care, trust, and medical excellence</p>
+    </div>
+</section>
+<div class="d-flex justify-content-end">
+    <a asp-action="Index" asp-controller="Home" class="btn btn-back btn-secondary">Back</a>
+</div>
+<div class="container my-5">
+
+    <div class="row g-4 mb-5">
+        <div class="col-md-4">
+            <div class="card history-card shadow-sm h-100">
+                <div class="card-body">
+                    <h4>Foundation</h4>
+                    <p class="history-text">
+                        Our hospital was founded with the mission to provide quality healthcare
+                        and compassionate service to every patient.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card history-card shadow-sm h-100">
+                <div class="card-body">
+                    <h4>Growth</h4>
+                    <p class="history-text">
+                        Over the years, we expanded our departments, technologies,
+                        and medical expertise to better serve the community.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card history-card shadow-sm h-100">
+                <div class="card-body">
+                    <h4>Today</h4>
+                    <p class="history-text">
+                        Today we continue to deliver modern healthcare with a strong focus
+                        on patient well-being and innovation.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mb-5">
+        <h3 class="section-title">Our Story</h3>
+        <p class="history-text">
+            From a small medical facility to a trusted healthcare institution,
+            our journey has been driven by dedication, professionalism, and care.
+            We continuously strive to improve and adapt to the needs of modern medicine.
+        </p>
+    </div>
+
+    <div>
+        <h3 class="section-title">Milestones</h3>
+
+        <div class="timeline">
+            <div class="timeline-item">
+                <h5>Founded</h5>
+                <p class="history-text">The hospital opens its doors to the community.</p>
+            </div>
+
+            <div class="timeline-item">
+                <h5>Expansion</h5>
+                <p class="history-text">New departments and specialists are introduced.</p>
+            </div>
+
+            <div class="timeline-item">
+                <h5>Modernization</h5>
+                <p class="history-text">Advanced medical equipment and technologies are implemented.</p>
+            </div>
+
+            <div class="timeline-item">
+                <h5>Present Day</h5>
+                <p class="history-text">A modern hospital focused on innovation and patient care.</p>
+            </div>
+        </div>
+    </div>
+
+</div>

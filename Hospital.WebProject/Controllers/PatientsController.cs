@@ -23,15 +23,17 @@ namespace Hospital.WebProject.Controllers
         private readonly IPatientService patientService;
         private readonly HospitalDbContext context;
         private readonly UserManager<User> userManager;
-
+        private readonly ICityService cityService;
         public PatientsController(
             IPatientService patientService,
             HospitalDbContext context,
-            UserManager<User> userManager)
+            UserManager<User> userManager,
+            ICityService cityService)
         {
             this.patientService = patientService;
             this.context = context;
             this.userManager = userManager;
+            this.cityService = cityService;
         }
 
         [Authorize(Roles = "Admin,Doctor,Nurse")]
@@ -85,13 +87,13 @@ namespace Hospital.WebProject.Controllers
         {
             if (!ModelState.IsValid)
             {
-                await LoadDropdownsAsync();
+                await LoadPatientDropdownsAsync();
                 return View(model);
             }
             if (string.IsNullOrWhiteSpace(model.PatientName))
             {
                 ModelState.AddModelError("DoctorName", "Doctor name is required.");
-                await LoadDropdownsAsync();
+                await LoadPatientDropdownsAsync();
                 return View(model);
             }
             try
@@ -119,6 +121,7 @@ namespace Hospital.WebProject.Controllers
             {
                 ModelState.AddModelError(string.Empty, ex.Message);
                 await LoadDropdownsAsync();
+                TempData["ErrorMessage"] = "Invalid data. Check your input and try again!";
                 return View(model);
             }
             
@@ -129,7 +132,7 @@ namespace Hospital.WebProject.Controllers
         public async Task<IActionResult> Edit(Guid id)
         {
             ViewBag.Cities = new SelectList(LoadBulgarianCities());
-            await LoadDropdownsAsync();
+            await LoadPatientDropdownsAsync();
 
             var dto = await patientService.GetByIdAsync(id);
             if (dto == null)
@@ -309,60 +312,9 @@ namespace Hospital.WebProject.Controllers
             return View(model);
         }
 
-        [Authorize(Roles = "Patient")]
-        [HttpGet]
-        public async Task<IActionResult> SelectDoctorAndRoom()
-        {
-            var userId = Guid.Parse(userManager.GetUserId(User)!);
-            var existingPatient = await context.Patients
-                .AnyAsync(p => p.UserId == userId);
+       
 
-            if (existingPatient)
-            {
-                TempData["Error"] = "You have already selected a doctor and room.";
-                return RedirectToAction("Index", "Home");
-            }
-
-            await LoadPatientDropdownsAsync();
-            return View(new SelectDoctorAndRoomViewModel());
-        }
-
-        [Authorize(Roles = "Patient")]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SelectDoctorAndRoom(SelectDoctorAndRoomViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                await LoadPatientDropdownsAsync();
-                return View(model);
-            }
-
-            var userId = Guid.Parse(userManager.GetUserId(User)!);
-
-            try
-            {
-                await patientService.SelectDoctorAndRoomAsync(
-                    userId,
-                    model.DoctorId,
-                    model.RoomId,
-                    model.BirthCity,
-                    model.DateOfBirth,
-                    model.PhoneNumber,
-                    model.UCN);
-
-                TempData["Success"] = "You have been successfully registered!";
-                return RedirectToAction(nameof(Index));
-            }
-            catch (InvalidOperationException ex)
-            {
-                ModelState.AddModelError(string.Empty, ex.Message);
-                await LoadPatientDropdownsAsync();
-                return View(model);
-            }
-        }
-
-        private async Task LoadPatientDropdownsAsync()
+        private async Task LoadPatientDropdownsAsync(string? selectedCity = null)
         {
             var doctors = await context.Doctors
                 .Include(d => d.User)
@@ -385,17 +337,14 @@ namespace Hospital.WebProject.Controllers
                 .ToListAsync();
 
             ViewBag.Room = new SelectList(availableRooms, "ID", "RoomNumber");
+            var cities = await cityService.GetAllAsync();
 
-            var cities = await context.Cities
-                .OrderBy(c => c.Name)
-                .Select(c => new
-                {
-                    c.Id,
-                    c.Name
-                })
-                .ToListAsync();
-
-            ViewBag.Cities = new SelectList(cities, "Id", "Name");
+            ViewBag.Cities = cities.Select(c => new SelectListItem
+            {
+                Value = c,
+                Text = c,
+                Selected = c == selectedCity,
+            }).ToList();
         }
     }
 }

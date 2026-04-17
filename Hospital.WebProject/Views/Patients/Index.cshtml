@@ -100,10 +100,7 @@
                                 <div class="info-label">Attending Doctor</div>
                                 <div class="info-value val-highlight">Dr. @item.DoctorName</div>
                             </div>
-                            <div class="info-group">
-                                <div class="info-label">UCN</div>
-                                <div class="info-value">@item.UCN</div>
-                            </div>
+                            
                             <div class="info-group">
                                 <div class="info-label">Hospitalized</div>
                                 <div class="info-value text-success">@item.HospitalizationDate.ToShortDateString() @item.HospitalizationTime.ToShortTimeString()</div>
@@ -112,18 +109,8 @@
                                 <div class="info-label">Discharge Date</div>
                                 <div class="info-value val-danger">@item.DischargeDate.ToShortDateString() @item.DischargeTime.ToShortTimeString()</div>
                             </div>
-                            <div class="info-group">
-                                <div class="info-label">City of Birth</div>
-                                <div class="info-value">@item.BirthCity</div>
-                            </div>
-                            <div class="info-group">
-                                <div class="info-label">Date of Birth</div>
-                                <div class="info-value">@item.DateOfBirth.ToShortDateString()</div>
-                            </div>
-                            <div class="info-group col-span-2" style="grid-column: span 2;">
-                                <div class="info-label">Phone Number</div>
-                                <div class="info-value"><i class="bi bi-telephone"></i> @item.PhoneNumber</div>
-                            </div>
+                            
+                            
                         </div>
 
                         @if (User.IsInRole("Admin") || User.IsInRole("Doctor") || User.IsInRole("Nurse"))

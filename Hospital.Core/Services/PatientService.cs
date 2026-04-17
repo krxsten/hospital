@@ -159,43 +159,7 @@ namespace Hospital.Core.Services
             context.Patients.Remove(patient);
             await context.SaveChangesAsync();
         }
-        public async Task SelectDoctorAndRoomAsync(Guid userId, Guid doctorId, Guid roomId,
-            string birthCity, DateOnly dateOfBirth, string phoneNumber, string ucn)
-        {
-            var room = await context.Rooms.FindAsync(roomId);
-            if (room == null || room.IsTaken)
-            {
-                throw new InvalidOperationException("The selected room is no longer available.");
-            }
-
-            var birthCityName = birthCity;
-            if (Guid.TryParse(birthCity, out var cityId))
-            {
-                var city = await context.Cities.FindAsync(cityId);
-                if (city != null) birthCityName = city.Name;
-            }
-
-            var patient = new Patient
-            {
-                ID = Guid.NewGuid(),
-                UserId = userId,
-                DoctorId = doctorId,
-                RoomId = roomId,
-                HospitalizationDate = DateOnly.FromDateTime(DateTime.Now),
-                HospitalizationTime = TimeOnly.FromDateTime(DateTime.Now),
-                DischargeDate = DateOnly.FromDateTime(DateTime.Now.AddDays(7)),
-                DischargeTime = TimeOnly.FromDateTime(DateTime.Now),
-                BirthCity = birthCityName,
-                DateOfBirth = dateOfBirth,
-                PhoneNumber = phoneNumber,
-                UCN = ucn
-            };
-
-            room.IsTaken = true;
-
-            await context.Patients.AddAsync(patient);
-            await context.SaveChangesAsync();
-        }
+ 
         public async Task<List<PatientIndexDTO>> PatientsWithSuchDoctor(string doctorName)
         {
             if (string.IsNullOrWhiteSpace(doctorName))
@@ -215,16 +179,6 @@ namespace Hospital.Core.Services
                             EF.Functions.Like(x.Doctor.User.FirstName, pattern))
                 .ToListAsync();
 
-            var cityIdsAsGuids = patients
-                .Select(p => p.BirthCity)
-                .Where(bc => Guid.TryParse(bc, out _))
-                .Select(Guid.Parse)
-                .Distinct()
-                .ToList();
-
-            var cityNames = await context.Cities
-                .Where(c => cityIdsAsGuids.Contains(c.Id))
-                .ToDictionaryAsync(c => c.Id.ToString(), c => c.Name);
 
             return patients.Select(x => new PatientIndexDTO
             {
@@ -243,7 +197,7 @@ namespace Hospital.Core.Services
                     : "No data",
                 RoomId = x.RoomId,
                 RoomNumber = x.Room?.RoomNumber ?? 0,
-                BirthCity = cityNames.ContainsKey(x.BirthCity) ? cityNames[x.BirthCity] : x.BirthCity,
+                BirthCity = x.BirthCity,
                 DateOfBirth = x.DateOfBirth,
                 PhoneNumber = x.PhoneNumber,
                 UCN = x.UCN

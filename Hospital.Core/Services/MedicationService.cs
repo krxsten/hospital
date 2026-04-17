@@ -97,10 +97,23 @@ namespace Hospital.Core.Services
             {
                 return new List<MedicationIndexDTO>();
             }
-            string pattern = $"%{sideEffect}%";
 
-            return await context.Medications
-                .Where(x => EF.Functions.Like(x.SideEffects, pattern))
+            var words = sideEffect
+                .ToLower()
+                .Split(' ', StringSplitOptions.RemoveEmptyEntries);
+
+            var query = context.Medications.AsQueryable();
+
+            foreach (var word in words)
+            {
+                string pattern = $"%{word}%";
+
+                query = query.Where(x =>
+                    x.SideEffects != null &&
+                    EF.Functions.Like(x.SideEffects.ToLower(), pattern));
+            }
+
+            return await query
                 .Select(x => new MedicationIndexDTO
                 {
                     ID = x.ID,

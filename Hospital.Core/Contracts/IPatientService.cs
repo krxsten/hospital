@@ -19,8 +19,6 @@ namespace Hospital.Core.Contracts
 
         Task DeleteAsync(Guid id);
         Task<PatientIndexDTO> Details(Guid id);
-        Task SelectDoctorAndRoomAsync(Guid userId, Guid doctorId, Guid roomId,
-            string birthCity, DateOnly dateOfBirth, string phoneNumber, string ucn);
         Task<List<PatientIndexDTO>> PatientsWithSuchDoctor(string doctroName);
     }
 }

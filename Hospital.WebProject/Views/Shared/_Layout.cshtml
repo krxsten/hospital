@@ -4,11 +4,11 @@
         min-height: 100vh;
         margin: 0;
     }
+
     .main-wrapper {
         width: 100%;
-        padding: 40px 80px;
+        padding: 100px 80px 40px 80px;
     }
-
     .container {
         max-width: 100% !important;
         padding: 0 !important;
@@ -39,7 +39,7 @@
 
 
     .brand-text {
-        font-size: 1.3rem;
+        font-size: 1.7rem;
         letter-spacing: 1px;
         color: white;
     }
@@ -136,7 +136,7 @@
         color: white;
         font-size: 18px;
         animation: tickerScroll 60s linear infinite;
-        padding-left: 100%; 
+        padding-left: 100%;
     }
 
         .news-ticker-text span {
@@ -150,18 +150,31 @@
     }
 
     @@keyframes tickerScroll {
-        0%
+        0% {
+            transform: translateX(0%);
+        }
 
-    {
-        transform: translateX(0%);
+        100% {
+            transform: translateX(-100%);
+        }
     }
 
-    100% {
-        transform: translateX(-100%);
+    .custom-navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        z-index: 2000;
+        background: rgba(15, 23, 42, 0.92);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        transition: all 0.3s ease;
     }
 
-    }
-
+        .custom-navbar.scrolled {
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
 
 </style>
 <!DOCTYPE html>
@@ -181,7 +194,7 @@
 
 <body class="global-bg">
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm custom-navbar border-bottom mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm custom-navbar position-fixed border-bottom">
             <div class="px-5 w-100">
                 <a class="navbar-brand d-flex align-items-center text-white" asp-controller="Home" asp-action="Index">
                     <svg width="32" height="32" fill="white" viewBox="0 0 24 24" style="margin-right:8px;">
@@ -195,7 +208,7 @@
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <div class="navbar-collapse collapse d-sm-flex align-items-center justify-content-between">
                     <ul class="navbar-nav flex-grow-1 nav nav-underline">
                         <li class="nav-item">
                             <a class="nav-link text-light" asp-controller="Home" asp-action="Index">Home</a>
@@ -292,28 +305,28 @@
                             </ul>
                         </li>
                     </ul>
-                    <partial name="_LoginPartial" />
+                    <partial name="_LoginPartial" class="d-flex align-items-center ms-auto" />
                 </div>
             </div>
         </nav>
         <div class="news-ticker-bar">
-                <div class="news-ticker-content">
-                    <div class="news-ticker-text">
-                        <span>24/7 Emergency Department now available</span>
-                        <span class="divider">•</span>
-                        <span>Book your checkup online in just a few clicks</span>
-                        <span class="divider">•</span>
-                        <span>New cardiology consultations open this week</span>
-                        <span class="divider">•</span>
-                        <span>Free preventive screenings available this month</span>
-                        <span class="divider">•</span>
-                        <span>Advanced MRI diagnostics now operational</span>
-                        <span class="divider">•</span>
-                        <span>Flu vaccination campaign has started</span>
-                        <span class="divider">•</span>
-                        <span>Online patient portal updated with new features</span>
-                        <span class="divider">•</span>
-                        <span>Shorter waiting times for laboratory results</span>
+            <div class="news-ticker-content">
+                <div class="news-ticker-text">
+                    <span>24/7 Emergency Department now available</span>
+                    <span class="divider">•</span>
+                    <span>Book your checkup online in just a few clicks</span>
+                    <span class="divider">•</span>
+                    <span>New cardiology consultations open this week</span>
+                    <span class="divider">•</span>
+                    <span>Free preventive screenings available this month</span>
+                    <span class="divider">•</span>
+                    <span>Advanced MRI diagnostics now operational</span>
+                    <span class="divider">•</span>
+                    <span>Flu vaccination campaign has started</span>
+                    <span class="divider">•</span>
+                    <span>Online patient portal updated with new features</span>
+                    <span class="divider">•</span>
+                    <span>Shorter waiting times for laboratory results</span>
                 </div>
             </div>
         </div>
@@ -324,6 +337,16 @@
         </main>
     </div>
 
+    <script>
+        window.addEventListener("scroll", function () {
+            const nav = document.querySelector(".custom-navbar");
+            if (window.scrollY > 20) {
+                nav.classList.add("scrolled");
+            } else {
+                nav.classList.remove("scrolled");
+            }
+        });
+    </script>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

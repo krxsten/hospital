@@ -32,5 +32,9 @@
             {
                 return View();
             }
+        public IActionResult History()
+        {
+            return View();
         }
+    }
     }
