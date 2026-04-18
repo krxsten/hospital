@@ -1,173 +1,229 @@
-﻿<style>
-.history-hero {
-    background: linear-gradient(135deg, #0d6efd, #0a58ca);
-    color: white;
-    padding: 80px 20px;
-    text-align: center;
-    border-radius: 0 0 30px 30px;
-}
+﻿<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
 
-.history-hero h1 {
-    font-weight: 700;
-    letter-spacing: 1px;
-}
+<style>
+    :root {
+        --primary-blue: #0d6efd;
+        --dark-blue: #084298;
+        --light-bg: #f8f9fa;
+    }
 
-.history-hero p {
-    opacity: 0.9;
-    font-size: 18px;
-}
+    .history-hero {
+        background: linear-gradient(135deg, rgba(13, 110, 253, 0.9), rgba(10, 88, 202, 0.9)), url('https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&q=80&w=2000');
+        background-size: cover;
+        background-position: center;
+        color: white;
+        padding: 100px 20px;
+        text-align: center;
+        border-radius: 0 0 50px 50px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
 
-.history-card {
-    border: none;
-    border-radius: 20px;
-    transition: all 0.3s ease;
-    overflow: hidden;
-}
+        .history-hero h1 {
+            font-weight: 800;
+            font-size: 3.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
 
-.history-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 15px 30px rgba(0,0,0,0.1);
-}
+    .btn-back {
+        margin-top: -25px;
+        margin-right: 50px;
+        border-radius: 30px;
+        padding: 10px 25px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        z-index: 10;
+        transition: all 0.3s;
+    }
 
-.history-card h4 {
-    font-weight: 600;
-    margin-bottom: 15px;
-}
+    .history-card {
+        border: 1px solid rgba(0,0,0,0.05);
+        border-radius: 24px;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        background: #fff;
+    }
 
-.section-title {
-    font-weight: 600;
-    margin-bottom: 20px;
-    border-left: 5px solid #0d6efd;
-    padding-left: 10px;
-}
+        .history-card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+        }
 
-.timeline {
-    position: relative;
-    padding-left: 30px;
-}
+    .icon-box {
+        width: 60px;
+        height: 60px;
+        background: rgba(13, 110, 253, 0.1);
+        color: var(--primary-blue);
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
 
-.timeline::before {
-    content: "";
-    position: absolute;
-    left: 10px;
-    top: 0;
-    width: 3px;
-    height: 100%;
-    background: #0d6efd;
-}
+    .section-title {
+        font-weight: 700;
+        font-size: 2rem;
+        margin-bottom: 30px;
+        color: var(--dark-blue);
+        position: relative;
+        display: inline-block;
+    }
 
-.timeline-item {
-    position: relative;
-    margin-bottom: 25px;
-}
+        .section-title::after {
+            content: "";
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 50px;
+            height: 4px;
+            background: var(--primary-blue);
+            border-radius: 2px;
+        }
 
-.timeline-item::before {
-    content: "";
-    position: absolute;
-    left: -2px;
-    top: 5px;
-    width: 15px;
-    height: 15px;
-    background: #0d6efd;
-    border-radius: 50%;
-}
+    .timeline {
+        position: relative;
+        padding: 20px 0 20px 40px;
+    }
 
-.timeline-item h5 {
-    font-weight: 600;
-    margin-bottom: 5px;
-}
+        .timeline::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--primary-blue), #e9ecef);
+            border-radius: 10px;
+        }
 
-.history-text {
-    color: #555;
-    line-height: 1.6;
-}
+    .timeline-item {
+        position: relative;
+        padding-bottom: 40px;
+    }
+
+        .timeline-item::before {
+            content: "";
+            position: absolute;
+            left: -48px;
+            top: 0;
+            width: 20px;
+            height: 20px;
+            background: #fff;
+            border: 4px solid var(--primary-blue);
+            border-radius: 50%;
+            z-index: 2;
+        }
+
+    .timeline-date {
+        font-weight: 700;
+        color: var(--primary-blue);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .history-text {
+        color: #6c757d;
+        line-height: 1.8;
+        font-size: 1.05rem;
+    }
 </style>
+
 @{
     ViewData["Title"] = "Hospital History";
 }
 
 <section class="history-hero">
     <div class="container">
-        <h1>Hospital History</h1>
-        <p>A legacy of care, trust, and medical excellence</p>
+        <span class="badge bg-light text-primary mb-3 px-3 py-2 rounded-pill shadow-sm">ESTABLISHED 1985</span>
+        <h1>Our Legacy of Care</h1>
+        <p class="lead">Providing medical excellence for over three decades.</p>
     </div>
 </section>
-<div class="d-flex justify-content-end">
-    <a asp-action="Index" asp-controller="Home" class="btn btn-back btn-secondary">Back</a>
-</div>
-<div class="container my-5">
 
-    <div class="row g-4 mb-5">
+<div class="container">
+    <div class="d-flex justify-content-end">
+        <a asp-action="Index" asp-controller="Home" class="btn btn-back btn-dark">
+            <i class="fas fa-arrow-left me-2"></i>Return Home
+        </a>
+    </div>
+
+    <div class="row g-4 my-5">
         <div class="col-md-4">
-            <div class="card history-card shadow-sm h-100">
+            <div class="card history-card p-4 shadow-sm h-100">
                 <div class="card-body">
+                    <div class="icon-box"><i class="fas fa-hospital"></i></div>
                     <h4>Foundation</h4>
                     <p class="history-text">
-                        Our hospital was founded with the mission to provide quality healthcare
-                        and compassionate service to every patient.
+                        Founded with a vision to make healthcare accessible, we started as a small community clinic with a big heart.
                     </p>
                 </div>
             </div>
         </div>
 
         <div class="col-md-4">
-            <div class="card history-card shadow-sm h-100">
+            <div class="card history-card p-4 shadow-sm h-100">
                 <div class="card-body">
-                    <h4>Growth</h4>
+                    <div class="icon-box"><i class="fas fa-chart-line"></i></div>
+                    <h4>Rapid Growth</h4>
                     <p class="history-text">
-                        Over the years, we expanded our departments, technologies,
-                        and medical expertise to better serve the community.
+                        By integrating specialized departments and world-class experts, we grew into a regional medical hub.
                     </p>
                 </div>
             </div>
         </div>
 
         <div class="col-md-4">
-            <div class="card history-card shadow-sm h-100">
+            <div class="card history-card p-4 shadow-sm h-100">
                 <div class="card-body">
-                    <h4>Today</h4>
+                    <div class="icon-box"><i class="fas fa-microscope"></i></div>
+                    <h4>Future Ready</h4>
                     <p class="history-text">
-                        Today we continue to deliver modern healthcare with a strong focus
-                        on patient well-being and innovation.
+                        We leverage AI and modern robotics to ensure our patients receive the most advanced treatments available.
                     </p>
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="mb-5">
-        <h3 class="section-title">Our Story</h3>
-        <p class="history-text">
-            From a small medical facility to a trusted healthcare institution,
-            our journey has been driven by dedication, professionalism, and care.
-            We continuously strive to improve and adapt to the needs of modern medicine.
-        </p>
-    </div>
+    <div class="row mt-5 pt-4">
+        <div class="col-lg-5">
+            <h3 class="section-title">Our Story</h3>
+            <p class="history-text pe-lg-4">
+                What began as a 10-bed facility has evolved into a premier healthcare institution.
+                Our journey is defined not by the buildings we've built, but by the thousands of lives we've touched.
+                <br /><br />
+                We believe that medicine is as much about <strong>compassion</strong> as it is about science.
+                That philosophy guides every decision we make today.
+            </p>
+        </div>
 
-    <div>
-        <h3 class="section-title">Milestones</h3>
+        <div class="col-lg-7">
+            <h3 class="section-title">Milestones</h3>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <span class="timeline-date">1985</span>
+                    <h5>The Doors Open</h5>
+                    <p class="history-text">Inaugurated by the Ministry of Health to serve the local community.</p>
+                </div>
 
-        <div class="timeline">
-            <div class="timeline-item">
-                <h5>Founded</h5>
-                <p class="history-text">The hospital opens its doors to the community.</p>
-            </div>
+                <div class="timeline-item">
+                    <span class="timeline-date">2002</span>
+                    <h5>Specialized Surgery Wing</h5>
+                    <p class="history-text">Opening of our Cardiac and Neurosurgery departments with state-of-the-art theaters.</p>
+                </div>
 
-            <div class="timeline-item">
-                <h5>Expansion</h5>
-                <p class="history-text">New departments and specialists are introduced.</p>
-            </div>
+                <div class="timeline-item">
+                    <span class="timeline-date">2015</span>
+                    <h5>Digital Transformation</h5>
+                    <p class="history-text">Fully paperless systems and advanced diagnostic imaging implementation.</p>
+                </div>
 
-            <div class="timeline-item">
-                <h5>Modernization</h5>
-                <p class="history-text">Advanced medical equipment and technologies are implemented.</p>
-            </div>
-
-            <div class="timeline-item">
-                <h5>Present Day</h5>
-                <p class="history-text">A modern hospital focused on innovation and patient care.</p>
+                <div class="timeline-item">
+                    <span class="timeline-date">Present Day</span>
+                    <h5>Global Recognition</h5>
+                    <p class="history-text">Accredited as a center of excellence for patient safety and medical innovation.</p>
+                </div>
             </div>
         </div>
     </div>
-
 </div>

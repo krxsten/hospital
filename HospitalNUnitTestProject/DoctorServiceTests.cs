@@ -219,13 +219,13 @@ namespace Hospital.Tests.Services
 
             var fileMock = new Mock<IFormFile>();
 
-            imageServiceMock
-                .Setup(x => x.UploadImageAsync(It.IsAny<IFormFile>()))
-                .ReturnsAsync(new ImageUploadResultDTO
-                {
-                    Url = "new-url",
-                    PublicId = "new-id"
-                });
+            //imageServiceMock
+            //    .Setup(x => x.UploadImageAsync(It.IsAny<IFormFile>()))
+            //    .ReturnsAsync(new ImageUploadResultDTO
+            //    {
+            //        Url = "new-url",
+            //        PublicId = "new-id"
+            //    });
 
             var dto = new DoctorEditDTO
             {

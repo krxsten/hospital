@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Hospital.Data.Migrations
 {
     [DbContext(typeof(HospitalDbContext))]
-    [Migration("20260415092052_InitalMig")]
-    partial class InitalMig
+    [Migration("20260417170837_HospitalMigration")]
+    partial class HospitalMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -92,22 +92,6 @@ namespace Hospital.Data.Migrations
                             PatientID = new Guid("718919c3-760f-4a6a-8abf-b1cd1b459d11"),
                             Time = new TimeOnly(15, 30, 0)
                         });
-                });
-
-            modelBuilder.Entity("Hospital.Data.Entities.City", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Cities");
                 });
 
             modelBuilder.Entity("Hospital.Data.Entities.Medication", b =>
@@ -484,7 +468,7 @@ namespace Hospital.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "KRISTENG@GMAIL.COM",
                             NormalizedUserName = "KRISTEN_GENCHEVA",
-                            PasswordHash = "AQAAAAIAAYagAAAAEFrswbjUJ+oHfpSRk2t5gcUdTIkaYD5Cze65NXzXHFkSGNf7SqyaHQAXLOa540XjWg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEK2faIJ/hPGDi7Vqvnkbr9MCCvd1+fwJWffYPNMEp2+rpx6diSbNgUsCTx7LrxhF1g==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "9699665e-7685-48b4-9f44-846c4f923e3e",
                             TwoFactorEnabled = false,
@@ -502,7 +486,7 @@ namespace Hospital.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "IVANP@GMAIL.COM",
                             NormalizedUserName = "IVAN_PETROV",
-                            PasswordHash = "AQAAAAIAAYagAAAAEDueyq5liFGGbmIGoLPVa1JVsh9m3su+Uwhi9RDTFL/RNA+A8NCyU8pzwM7Q78XjXQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEI5F4yOHjLJ9VRxHtHaih4VWIZTMqon3lJaKwKvC0trQIAM64MJ8NLJXCxov+zgePA==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "c4d1f2a3-6b7c-4d8e-9f0a-1b2c3d4e5f6g",
                             TwoFactorEnabled = false,
@@ -520,7 +504,7 @@ namespace Hospital.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "GEORGID@GMAIL.COM",
                             NormalizedUserName = "GEORGI_DIMITROV",
-                            PasswordHash = "AQAAAAIAAYagAAAAEM/o4Tyun5QfjXtTzZCFLn/gy0GN3UpWlLCmI/kiJ3YhTRYh+cXYaP4natdvluDw0w==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEDzJ4Cj8IqFOPXt9LQYodmaCzG+WBMwKbKIlw51skXhbfwII8aUZsR61Dj9kDw4DcQ==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "d5e6f7a8-b9c0-4d1e-2f3a-4b5c6d7e8f9a",
                             TwoFactorEnabled = false,
@@ -538,7 +522,7 @@ namespace Hospital.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "NIKOLAII@GMAIL.COM",
                             NormalizedUserName = "NIKOLAI_IVANOV",
-                            PasswordHash = "AQAAAAIAAYagAAAAENIM3fiz4RSob5fgnsAo3vdKDasTW6laHw/W73kLFEoQCAvlOMnlmE30QMuWbhSv2A==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEEPK3Rl1s4vJmu06Dn4IHeQtCSkGAx6gLG+BSsj5ooed7+ghuk2hZOLR6cPOedcmsw==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "e6f7a8b9-c0d1-2e3f-4a5b-6c7d8e9f0a1b",
                             TwoFactorEnabled = false,
@@ -556,7 +540,7 @@ namespace Hospital.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "DIMITURS@GMAIL.COM",
                             NormalizedUserName = "DIMITUR_STOYANOV",
-                            PasswordHash = "AQAAAAIAAYagAAAAEBKdOH+h1KrHUcKnNyDq5KGafI24MxmiJp6T3GeJvKjmRSz5Y5roJ95e+WlD3WSVTQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEG6Osvm5PEN79U8q+cvjgTE/493jX0EpbLe5gNmI0UIgQV/nnsmfIX6WqzTXnEm3Uw==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "f7a8b9c0-d1e2-3f4a-5b6c-7d8e9f0a1b2c",
                             TwoFactorEnabled = false,
@@ -574,7 +558,7 @@ namespace Hospital.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ALEKSANDURN@GMAIL.COM",
                             NormalizedUserName = "ALEKSANDUR_NIKOLOV",
-                            PasswordHash = "AQAAAAIAAYagAAAAECxmoNF4Y8L9AxYNPX8JL3rQaDi4DLkMQEIaNjImqannkGUS/G6ezM29+t/UWVwk8g==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEOVWJv3dR8R6zRkS9AMOQICunZbVMVhh5w0CKP5zZdxsysV9gI966CGrVys0d+yhIQ==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "a8b9c0d1-e2f3-4a5b-6c7d-8e9f0a1b2c3d",
                             TwoFactorEnabled = false,
@@ -592,7 +576,7 @@ namespace Hospital.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "YOANAI@GMAIL.COM",
                             NormalizedUserName = "YOANA_ILIEVA",
-                            PasswordHash = "AQAAAAIAAYagAAAAEMCSM/BWn0qgY7aqCs0aYSuCbu+Vgj23fP3Ucj57r2+wpfIE8/NTE2PGmPNhNeNfoA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEEmZeJa3yA+OKyEjOOxxA4kt0FMGerdTdSyYIW/Ts4mIWoDwb9JyHWdmVNoPVwi+rg==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "b9c0d1e2-f3a4-5b6c-7d8e-9f0a1b2c3d4e",
                             TwoFactorEnabled = false,
@@ -610,7 +594,7 @@ namespace Hospital.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "VIKTORIYAN@GMAIL.COM",
                             NormalizedUserName = "VIKTORIYA_NIKOLOVA",
-                            PasswordHash = "AQAAAAIAAYagAAAAEPBl8aJmP1Xa/11YGDShgpfkDPWAK56BXRCnCB/WEgIfrkXokxbiTUxbGvJUHAIToA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEBlfdirCwQWhPSXzrpCJF+0pTV83/XeOWufmyTRDrPbCMZ+su7t+8fIbybuX5QSLRA==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "c0d1e2f3-a4b5-6c7d-8e9f-0a1b2c3d4e5f",
                             TwoFactorEnabled = false,
@@ -628,7 +612,7 @@ namespace Hospital.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ANNAA@GMAIL.COM",
                             NormalizedUserName = "ANNA_ALEKSANDROVA",
-                            PasswordHash = "AQAAAAIAAYagAAAAEMUYcCSqp6PWR/mabL3nOgwgZE4hB/D3GQMOU/RRzmN8u1+irivCUrMcNKoP/zoXWg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEFmGG7QF5YkQl9mFxJ41kRmqmEMzgXuNVjlV6eKQgrHMBi1aTIMXf/osLEDRuDm7/w==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "d1e2f3a4-b5c6-7d8e-9f0a-1b2c3d4e5f6a",
                             TwoFactorEnabled = false,
@@ -646,7 +630,7 @@ namespace Hospital.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ELENAP@GMAIL.COM",
                             NormalizedUserName = "ELENA_PETROVA",
-                            PasswordHash = "AQAAAAIAAYagAAAAEBrSfMyVjtdtyqWRosVQ09FJEjkKfnRkKShFl5oelwLL8wG7oKJ369nb/AI5itv89g==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEIWKhJF31TXkPx2EWZbfjV7VNq1PZfZxfRPDcV7g8NgWzAQbWtsZ4pDwOFZhWwalsw==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "e2f3a4b5-c6d7-8e9f-0a1b-2c3d4e5f6a7b",
                             TwoFactorEnabled = false,
@@ -664,7 +648,7 @@ namespace Hospital.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "ALEKSANDRAG@GMAIL.COM",
                             NormalizedUserName = "ALEKSANDRA_GEORGIEVA",
-                            PasswordHash = "AQAAAAIAAYagAAAAEMtwXXs+4XZWsps8klsdh5ckINFL42At1BcNABvF2hBPyu8GmkE84h82TEQtn/oofg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEOscVKmOt3Mbjpd7BDP6UC8GcSUarW5Suovojg5cB+HA7Tdqlh4Mvfa0ICkHEf4v3w==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "f3a4b5c6-d7e8-9f0a-1b2c-3d4e5f6a7b8c",
                             TwoFactorEnabled = false,
@@ -682,7 +666,7 @@ namespace Hospital.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "MARIAI@GMAIL.COM",
                             NormalizedUserName = "MARIA_IVANOVA",
-                            PasswordHash = "AQAAAAIAAYagAAAAEOJ41jPO/rTZ8lSggfnU87p/CWusLuPEMY6f21tyNIWohP/fZhAedc6Ee90Bca9cWg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEBM85fL4jQDnYtN80KjN1UYMpE/GeCbku3ko2WjhTLd2/xJjXUnfTsZ5OwaWg9+xkA==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "a4b5c6d7-e8f9-0a1b-2c3d-4e5f6a7b8c9d",
                             TwoFactorEnabled = false,
@@ -700,7 +684,7 @@ namespace Hospital.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "DESID@GMAIL.COM",
                             NormalizedUserName = "DESISLAVA_DIMITROVA",
-                            PasswordHash = "AQAAAAIAAYagAAAAEKG8FRv2glU5YJ+zjFGCSfkR2xA1SRSwFji2nNa6OuGU4AJxXBNmK/LCHMeGk3YMsA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEMliumbwtLYLJx7SNJejOygDeyZPUCRb93t1FYmj14+sv6ncBgINfaR022mFe4qITg==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "b5c6d7e8-f9a0-1b2c-3d4e-5f6a7b8c9d0e",
                             TwoFactorEnabled = false,
@@ -718,7 +702,7 @@ namespace Hospital.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "GERGANAV@GMAIL.COM",
                             NormalizedUserName = "GERGANA_VASILEVA",
-                            PasswordHash = "AQAAAAIAAYagAAAAECd4oR8WfyWFzTBzWx6/R5h5V9I7E14pfgQ4/EUs1NSb9mxdwOLkdutjWXxy9KWZPg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEFXc3SeTr93lHi/y1mvG7n7VMZ8Bl4/ZNCZpOXnr0hzgt1XiMmpkerCy0K1w2Txpgg==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "c6d7e8f9-a0b1-2c3d-4e5f-6a7b8c9d0e1f",
                             TwoFactorEnabled = false,
@@ -736,7 +720,7 @@ namespace Hospital.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "RALITSAK@GMAIL.COM",
                             NormalizedUserName = "RALITSA_KOSTOVA",
-                            PasswordHash = "AQAAAAIAAYagAAAAEJWMAj64i0/ALciIr3VOAd45Kg9LdIl/P7lYvsEMBKk9mxEC5taTWnO44D7Wdkn4Bw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEHJIPLqSYgl5v1nvbsJYikfxjJUOWkCSIyByLy/48s+8lswnSRxdXQVZ1Q9JOwsuBw==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "d7e8f9a0-b1c2-3d4e-5f6a-7b8c9d0e1f2a",
                             TwoFactorEnabled = false,
@@ -754,7 +738,7 @@ namespace Hospital.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "PETARG@GMAIL.COM",
                             NormalizedUserName = "PETAR_GEORGIEV",
-                            PasswordHash = "AQAAAAIAAYagAAAAEPheL1NLDU+Uy14TsX8hXYLybrfHXb8Hw0woDEj7JJ9MxzvQ4XN506q/C3P/0LQkCA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEGqP4h1Sglc5ylqqdP3m656JbiNudpYfuLhj60nSuDFETTgBd5HWKzoRnbyeknvw2Q==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "e8f9a0b1-c2d3-4e5f-6a7b-8c9d0e1f2a3b",
                             TwoFactorEnabled = false,
@@ -772,7 +756,7 @@ namespace Hospital.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "STEFANK@GMAIL.COM",
                             NormalizedUserName = "STEFAN_KOLEV",
-                            PasswordHash = "AQAAAAIAAYagAAAAECPLXzJ0hrrPcWy7xEU0Y0dicGG1hZ2Z6zF6ZYfE38r8cx/0Gu6CUnn1GESBP/Ii0Q==",
+                            PasswordHash = "AQAAAAIAAYagAAAAENPSYGXK2NrfhjJEvgnSX82EnZ1r2FDyQNahF6qi0tcAk5yV5ivhTCTxJQgVQgbRmA==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "f9a0b1c2-d3e4-5f6a-7b8c-9d0e1f2a3b4c",
                             TwoFactorEnabled = false,
@@ -790,7 +774,7 @@ namespace Hospital.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "BORISLAVT@GMAIL.COM",
                             NormalizedUserName = "BORISLAV_TODOROV",
-                            PasswordHash = "AQAAAAIAAYagAAAAEDg5jmmfbImAMV0KZOXPhJXKZJ89vor2SNePd9jwlgVvaGb0lDhQfl6JJXqMK0WdAw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEC0y3PxYM+7vq28aD5REj6NMuBTHToU9zcxYFGzLWGN71G0lKq1zPRu1KW8XREh8HA==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "a0b1c2d3-e4f5-6a7b-8c9d-0e1f2a3b4c5d",
                             TwoFactorEnabled = false,
@@ -808,7 +792,7 @@ namespace Hospital.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "HRISTOV@GMAIL.COM",
                             NormalizedUserName = "HRISTO_VASILEV",
-                            PasswordHash = "AQAAAAIAAYagAAAAEBpYfzGodnXhz14R7Qi+SD9YF4zJ5K+lB8O3FjpdP2h/m8N1bnSpVCsZd3hUeq1eiA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEAzOB0/LtLG6u0wi3BvxqZiHeR+xD5t917MFFGx9aTzkoXgnuk41EuJGgjCVz4wPog==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "b1c2d3e4-f5a6-7b8c-9d0e-1f2a3b4c5d6e",
                             TwoFactorEnabled = false,
@@ -826,7 +810,7 @@ namespace Hospital.Data.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "MARTINI@GMAIL.COM",
                             NormalizedUserName = "MARTIN_ILIEV",
-                            PasswordHash = "AQAAAAIAAYagAAAAEPcFeZdRWq0zaViYUWd+gd5qHn4SRIIraNY5WSuCODPoMXGpz+sn2qFJttLwBl9/2Q==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEJk5HfXQm3/r5FCPka7YnuMhwQ4klAKMNvyjYBRQIpJ9YPB6TejqEJyKTf81A49AHw==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "c2d3e4f5-a6b7-8c9d-0e1f-2a3b4c5d6e7f",
                             TwoFactorEnabled = false,
