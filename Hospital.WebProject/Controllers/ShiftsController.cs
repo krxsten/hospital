@@ -133,7 +133,14 @@ namespace Hospital.WebProject.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(Guid id)
         {
-            await shiftService.DeleteAsync(id);
+            try
+            {
+                await shiftService.DeleteAsync(id);
+            }
+            catch (Exception)
+            {
+                TempData["ErrorMessage"] = "Unable to delete shift.";
+            }
             return RedirectToAction(nameof(Index));
         }
         [HttpGet]
@@ -141,8 +148,8 @@ namespace Hospital.WebProject.Controllers
         public async Task<IActionResult> GetShiftByTime(TimeOnly? time = null)
         {
             var result = await shiftService.GetShiftByTime(time);
-            
-            var model = result.Select(x=> new ShiftIndexViewModel
+
+            var model = result.Select(x => new ShiftIndexViewModel
             {
                 ID = x.ID,
                 Type = x.Type,

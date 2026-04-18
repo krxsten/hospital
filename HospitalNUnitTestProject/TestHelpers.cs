@@ -1,26 +1,37 @@
-﻿using Hospital.Data.Entities;
+﻿using Hospital.Data;
+using Hospital.Data.Entities;
 using Hospital.Entities;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Moq;
 
 namespace Hospital.Tests.Helpers
 {
-    public static class TestHelpers
+    [TestFixture]
+    public abstract class TestHelpers
     {
-        public static Mock<UserManager<User>> CreateUserManagerMock()
-        {
-            var store = new Mock<IUserStore<User>>();
+        protected HospitalDbContext Context;
+        //protected IMapper Mapper;
 
-            return new Mock<UserManager<User>>(
-                store.Object,
-                null!,
-                null!,
-                null!,
-                null!,
-                null!,
-                null!,
-                null!,
-                null!);
+        [SetUp]
+        public void Setup()
+        {
+            var options = new DbContextOptionsBuilder<HospitalDbContext>()
+                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
+                .Options;
+
+            Context = new HospitalDbContext(options);
+            Context.Database.EnsureCreated();
+
+          //  var config = new MapperConfiguration(cfg => cfg.AddProfile<MappingProfile>());
+          //  Mapper = config.CreateMapper();
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            Context.Database.EnsureDeleted();
+            Context.Dispose();
         }
     }
 }

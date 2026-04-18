@@ -43,7 +43,7 @@ namespace Hospital.WebProject.Controllers
                 PatientID = x.PatientID,
                 PatientName = x.PatientName
             })
-            .OrderBy(x=>x.Date)
+            .OrderBy(x => x.Date)
             .ThenBy(x => x.PatientName)
             .ToList();
 
@@ -112,7 +112,7 @@ namespace Hospital.WebProject.Controllers
                 {
                     ModelState.AddModelError("Time", "Selected time is outside doctor's shift.");
                 }
-                    
+
                 var isBooked = await context.Checkups.AnyAsync(c =>
                     c.DoctorID == model.DoctorID &&
                     c.Date == model.Date &&
@@ -205,7 +205,14 @@ namespace Hospital.WebProject.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(Guid id)
         {
-            await checkupService.DeleteAsync(id);
+            try
+            {
+                await checkupService.DeleteAsync(id);
+            }
+            catch (Exception)
+            {
+                TempData["ErrorMessage"] = "Unable to delete checkup.";
+            }
             return RedirectToAction(nameof(Index));
         }
 

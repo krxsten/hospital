@@ -25,9 +25,9 @@ namespace Hospital.Tests.Services
                 .Options;
 
             context = new HospitalDbContext(options);
-            userManagerMock = TestHelpers.CreateUserManagerMock();
+           // userManagerMock = TestHelpers.CreateUserManagerMock();
 
-            service = new AdminService(context, userManagerMock.Object);
+           // service = new AdminService(context, userManagerMock.Object);
         }
 
         [TearDown]

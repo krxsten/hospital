@@ -19,65 +19,65 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace Hospital.WebProject.Controllers
 {
-	[Authorize]
-	public class NursesController : Controller
-	{
-		private readonly INurseService nurseService;
-		private readonly HospitalDbContext context;
-		private readonly UserManager<User> userManager;
+    [Authorize]
+    public class NursesController : Controller
+    {
+        private readonly INurseService nurseService;
+        private readonly HospitalDbContext context;
+        private readonly UserManager<User> userManager;
         private readonly IImageService imageService;
 
         public NursesController(
-			INurseService nurseService,
-			HospitalDbContext context,
-			UserManager<User> userManager, IImageService imageService)
-		{
-			this.nurseService = nurseService;
-			this.context = context;
-			this.userManager = userManager;
-			this.imageService = imageService;
-		}
+            INurseService nurseService,
+            HospitalDbContext context,
+            UserManager<User> userManager, IImageService imageService)
+        {
+            this.nurseService = nurseService;
+            this.context = context;
+            this.userManager = userManager;
+            this.imageService = imageService;
+        }
 
-		[AllowAnonymous]
-		[HttpGet]
-		public async Task<IActionResult> Index()
-		{
-			var dtos = await nurseService.GetAllAsync();
+        [AllowAnonymous]
+        [HttpGet]
+        public async Task<IActionResult> Index()
+        {
+            var dtos = await nurseService.GetAllAsync();
 
-			var model = dtos.Select(x => new NurseIndexViewModel
-			{
-				ID = x.ID,
-				SpecializationId = x.SpecializationId,
-				SpecializationName = x.SpecializationName,
-				ShiftId = x.ShiftId,
-				ShiftName = x.ShiftName,
-				UserID = x.UserId,
-				UserName = x.UserName,
-				IsAccepted = x.IsAccepted,
-				ImageURL = x.ImageURL
-			}).ToList();
+            var model = dtos.Select(x => new NurseIndexViewModel
+            {
+                ID = x.ID,
+                SpecializationId = x.SpecializationId,
+                SpecializationName = x.SpecializationName,
+                ShiftId = x.ShiftId,
+                ShiftName = x.ShiftName,
+                UserID = x.UserId,
+                UserName = x.UserName,
+                IsAccepted = x.IsAccepted,
+                ImageURL = x.ImageURL
+            }).ToList();
 
-			return View(model);
-		}
+            return View(model);
+        }
 
-		[Authorize(Roles = "Admin")]
-		[HttpGet]
-		public async Task<IActionResult> Create()
-		{
-			await LoadDropdownsAsync();
-			return View(new NurseCreateViewModel());
-		}
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public async Task<IActionResult> Create()
+        {
+            await LoadDropdownsAsync();
+            return View(new NurseCreateViewModel());
+        }
 
-		[Authorize(Roles = "Admin")]
-		[HttpPost]
-		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Create(NurseCreateViewModel model)
-		{
-			if (!ModelState.IsValid)
-			{
-				await LoadDropdownsAsync();
-				return View(model);
-			}
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(NurseCreateViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                await LoadDropdownsAsync();
+                return View(model);
+            }
             if (string.IsNullOrWhiteSpace(model.NurseName))
             {
                 ModelState.AddModelError("DoctorName", "Doctor name is required.");
@@ -111,22 +111,22 @@ namespace Hospital.WebProject.Controllers
                 ModelState.AddModelError(string.Empty, "Something went wrong");
                 return View(model);
             }
-		}
+        }
 
-		[Authorize(Roles = "Admin")]
-		[HttpGet]
-		public async Task<IActionResult> Edit(Guid id)
-		{
-			await LoadDropdownsAsync();
+        [Authorize(Roles = "Admin")]
+        [HttpGet]
+        public async Task<IActionResult> Edit(Guid id)
+        {
+            await LoadDropdownsAsync();
 
-			var dto = await nurseService.GetByIdAsync(id);
-			if (dto == null)
-			{
-				return NotFound();
-			}
+            var dto = await nurseService.GetByIdAsync(id);
+            if (dto == null)
+            {
+                return NotFound();
+            }
 
-			var model = new NurseEditViewModel
-			{
+            var model = new NurseEditViewModel
+            {
                 ID = dto.ID,
                 SpecializationId = dto.SpecializationId,
                 ShiftId = dto.ShiftId,
@@ -135,19 +135,19 @@ namespace Hospital.WebProject.Controllers
                 NurseName = dto.UserName
             };
 
-			return View(model);
-		}
+            return View(model);
+        }
 
-		[Authorize(Roles = "Admin")]
-		[HttpPost]
-		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Edit(NurseEditViewModel model)
-		{
-			if (!ModelState.IsValid)
-			{
-				await LoadDropdownsAsync();
-				return View(model);
-			}
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(NurseEditViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                await LoadDropdownsAsync();
+                return View(model);
+            }
             try
             {
                 var dto = new NurseEditDTO
@@ -168,17 +168,24 @@ namespace Hospital.WebProject.Controllers
                 ModelState.AddModelError(string.Empty, "Something went wrong");
                 return View(model);
             }
-           
-		}
 
-		[Authorize(Roles = "Admin")]
-		[HttpPost]
-		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Delete(Guid id)
-		{
-			await nurseService.DeleteAsync(id);
-			return RedirectToAction(nameof(Index));
-		}
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            try
+            {
+                await nurseService.DeleteAsync(id);
+            }
+            catch (Exception)
+            {
+                TempData["ErrorMessage"] = "Unable to delete nurse.";
+            }
+            return RedirectToAction(nameof(Index));
+        }
         [AllowAnonymous]
         public async Task<IActionResult> FilterBySpecialization(string specialization)
         {
@@ -218,25 +225,25 @@ namespace Hospital.WebProject.Controllers
             return View(model);
         }
         private async Task LoadDropdownsAsync()
-		{
-			ViewBag.Shift = new SelectList(
-				await context.Shifts.ToListAsync(),
-				"ID",
-				"Type");
+        {
+            ViewBag.Shift = new SelectList(
+                await context.Shifts.ToListAsync(),
+                "ID",
+                "Type");
 
-			ViewBag.Specialization = new SelectList(
-				await context.Specializations.ToListAsync(),
-				"ID",
-				"SpecializationName");
+            ViewBag.Specialization = new SelectList(
+                await context.Specializations.ToListAsync(),
+                "ID",
+                "SpecializationName");
 
-			var nurseUsers = await userManager.GetUsersInRoleAsync("Nurse");
-			var users = nurseUsers.Select(u => new
-			{
-				u.Id,
-				FullName = u.FirstName + " " + u.LastName
-			}).ToList();
+            var nurseUsers = await userManager.GetUsersInRoleAsync("Nurse");
+            var users = nurseUsers.Select(u => new
+            {
+                u.Id,
+                FullName = u.FirstName + " " + u.LastName
+            }).ToList();
 
-			ViewBag.Users = new SelectList(users, "Id", "FullName");
-		}
-	}
+            ViewBag.Users = new SelectList(users, "Id", "FullName");
+        }
+    }
 }

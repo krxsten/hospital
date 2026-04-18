@@ -165,7 +165,14 @@ namespace Hospital.WebProject.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(Guid id)
         {
-            await doctorService.DeleteAsync(id);
+            try
+            {
+                await doctorService.DeleteAsync(id);
+            }
+            catch (Exception)
+            {
+                TempData["ErrorMessage"] = "Unable to delete doctor.";
+            }
             return RedirectToAction(nameof(Index));
         }
 
@@ -245,6 +252,6 @@ namespace Hospital.WebProject.Controllers
 
             return View(model);
         }
-       
+
     }
 }

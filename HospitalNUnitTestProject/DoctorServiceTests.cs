@@ -31,9 +31,9 @@ namespace Hospital.Tests.Services
 
             context = new HospitalDbContext(options);
             imageServiceMock = new Mock<IImageService>();
-            userManagerMock = TestHelpers.CreateUserManagerMock();
+          //  userManagerMock = TestHelpers.CreateUserManagerMock();
 
-            service = new DoctorService(context, imageServiceMock.Object, userManagerMock.Object);
+          //  service = new DoctorService(context, imageServiceMock.Object, userManagerMock.Object);
         }
 
         [TearDown]
