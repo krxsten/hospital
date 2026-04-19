@@ -1,5 +1,4 @@
-﻿using CloudinaryDotNet.Actions;
-using Hospital.Core.Contracts;
+﻿using Hospital.Core.Contracts;
 using Hospital.Core.DTOs;
 using Hospital.Core.Services;
 using Hospital.Data;
@@ -31,9 +30,8 @@ namespace Hospital.Tests.Services
 
             context = new HospitalDbContext(options);
             imageServiceMock = new Mock<IImageService>();
-          //  userManagerMock = TestHelpers.CreateUserManagerMock();
-
-          //  service = new DoctorService(context, imageServiceMock.Object, userManagerMock.Object);
+            userManagerMock = TestHelpers.CreateUserManagerMock<User>();
+            service = new DoctorService(context, imageServiceMock.Object, userManagerMock.Object);
         }
 
         [TearDown]
@@ -43,147 +41,275 @@ namespace Hospital.Tests.Services
             context.Dispose();
         }
 
-        [Test]
-        public async Task CreateAsync_WithValidData_CreatesUserAndDoctor()
+        private async Task<(User user, Specialization specialization, Shift shift, Doctor doctor)> SeedDoctorAsync(
+            string firstName = "Ivan",
+            string lastName = "Petrov",
+            string specializationName = "Cardiology",
+            string shiftType = "Morning")
         {
-            var spec = new Specialization { ID = Guid.NewGuid(), SpecializationName = "Cardiology" };
-            var shift = new Shift { ID = Guid.NewGuid(), Type = "Morning" };
+            var user = new User
+            {
+                Id = Guid.NewGuid(),
+                FirstName = firstName,
+                LastName = lastName,
+                UserName = $"{firstName}_{lastName}",
+                Email = $"{firstName.ToLower()}{Guid.NewGuid():N}@test.com"
+            };
 
-            context.Specializations.Add(spec);
+            var specialization = new Specialization
+            {
+                ID = Guid.NewGuid(),
+                SpecializationName = specializationName,
+                ImageURL = "specImage",
+                PublicID = "specPublicId"
+            };
+
+            var shift = new Shift
+            {
+                ID = Guid.NewGuid(),
+                Type = shiftType,
+                StartTime = new TimeOnly(8, 0),
+                EndTime = new TimeOnly(16, 0)
+            };
+
+            var doctor = new Doctor
+            {
+                ID = Guid.NewGuid(),
+                UserId = user.Id,
+                User = user,
+                SpecializationId = specialization.ID,
+                Specialization = specialization,
+                ShiftId = shift.ID,
+                Shift = shift,
+                IsAccepted = true,
+                ImageURL = "/images/doctor.jpg",
+                CloudinaryID = "doctor_public_id"
+            };
+
+            context.Users.Add(user);
+            context.Specializations.Add(specialization);
+            context.Shifts.Add(shift);
+            context.Doctors.Add(doctor);
+
+            await context.SaveChangesAsync();
+
+            return (user, specialization, shift, doctor);
+        }
+
+        [Test]
+        public async Task CreateAsync_WhenValidData_AddsDoctorAndUser()
+        {
+            var specialization = new Specialization
+            {
+                ID = Guid.NewGuid(),
+                SpecializationName = "Neurology",
+                ImageURL = "image",
+                PublicID = "public"
+            };
+
+            var shift = new Shift
+            {
+                ID = Guid.NewGuid(),
+                Type = "Night",
+                StartTime = new TimeOnly(20, 0),
+                EndTime = new TimeOnly(6, 0)
+            };
+
+            context.Specializations.Add(specialization);
             context.Shifts.Add(shift);
             await context.SaveChangesAsync();
 
             var fileMock = new Mock<IFormFile>();
 
             imageServiceMock
-     .Setup(x => x.UploadImageAsync(It.IsAny<IFormFile>()))
-     .ReturnsAsync(("http://image.com/a.jpg", "public-id"));
+                .Setup(x => x.UploadImageAsync(fileMock.Object))
+                .ReturnsAsync(("/images/uploaded.jpg", "uploaded_public_id"));
 
             var dto = new DoctorCreateDto
             {
-                DoctorName = "John Doe",
-                SpecializationID = spec.ID,
+                DoctorName = "Georgi Dimitrov",
+                SpecializationID = specialization.ID,
                 ShiftID = shift.ID,
-                IsAccepted = true,
                 ImageFile = fileMock.Object
             };
 
             await service.CreateAsync(dto);
 
-            Assert.That(context.Users.Count(), Is.EqualTo(1));
-            Assert.That(context.Doctors.Count(), Is.EqualTo(1));
+            var doctor = await context.Doctors.Include(x => x.User).FirstOrDefaultAsync();
 
-            var user = await context.Users.FirstAsync();
-            var doctor = await context.Doctors.FirstAsync();
+            Assert.That(doctor, Is.Not.Null);
+            Assert.That(doctor!.User.FirstName, Is.EqualTo("Georgi"));
+            Assert.That(doctor.User.LastName, Is.EqualTo("Dimitrov"));
+            Assert.That(doctor.User.UserName, Is.EqualTo("Georgi_Dimitrov"));
+            Assert.That(doctor.SpecializationId, Is.EqualTo(specialization.ID));
+            Assert.That(doctor.ShiftId, Is.EqualTo(shift.ID));
+            Assert.That(doctor.IsAccepted, Is.True);
+            Assert.That(doctor.ImageURL, Is.EqualTo("/images/uploaded.jpg"));
+            Assert.That(doctor.CloudinaryID, Is.EqualTo("uploaded_public_id"));
 
-            Assert.That(user.FirstName, Is.EqualTo("John"));
-            Assert.That(user.LastName, Is.EqualTo("Doe"));
-            Assert.That(doctor.UserId, Is.EqualTo(user.Id));
-            Assert.That(doctor.ImageURL, Is.EqualTo("http://image.com/a.jpg"));
-            Assert.That(doctor.CloudinaryID, Is.EqualTo("public-id"));
+            imageServiceMock.Verify(x => x.UploadImageAsync(fileMock.Object), Times.Once);
         }
 
         [Test]
-        public void CreateAsync_WithoutImage_ThrowsException()
+        public void CreateAsync_WhenImageIsNull_ThrowsException()
         {
             var dto = new DoctorCreateDto
             {
-                DoctorName = "John Doe",
+                DoctorName = "Georgi Dimitrov",
                 SpecializationID = Guid.NewGuid(),
                 ShiftID = Guid.NewGuid(),
-                IsAccepted = true,
                 ImageFile = null
             };
 
-            Assert.ThrowsAsync<Exception>(async () => await service.CreateAsync(dto));
+            var ex = Assert.ThrowsAsync<Exception>(async () => await service.CreateAsync(dto));
+
+            Assert.That(ex!.Message, Is.EqualTo("Image is required"));
         }
 
         [Test]
         public async Task DeleteAsync_WhenDoctorExists_RemovesDoctor()
         {
-            var doctor = new Doctor { ID = Guid.NewGuid() };
-            context.Doctors.Add(doctor);
+            var seed = await SeedDoctorAsync();
+
+            await service.DeleteAsync(seed.doctor.ID);
+
+            var doctor = await context.Doctors.FindAsync(seed.doctor.ID);
+            Assert.That(doctor, Is.Null);
+        }
+        [Test]
+        public async Task UpdateAsync_WhenDoctorNameHasOnlyFirstName_SetsLastNameEmpty()
+        {
+            var seed = await SeedDoctorAsync();
+
+            var model = new DoctorEditDTO
+            {
+                ID = seed.doctor.ID,
+                DoctorName = "Ivan",
+                SpecializationId = seed.specialization.ID,
+                ShiftId = seed.shift.ID,
+                IsAccepted = true
+            };
+
+            await service.UpdateAsync(model);
+
+            var updated = await context.Doctors
+                .Include(x => x.User)
+                .FirstOrDefaultAsync(x => x.ID == seed.doctor.ID);
+
+            Assert.That(updated!.User.FirstName, Is.EqualTo("Ivan"));
+            Assert.That(updated.User.LastName, Is.EqualTo(""));
+        }
+        [Test]
+        public async Task UpdateAsync_WhenDoctorNameIsEmpty_SetsBothNamesEmpty()
+        {
+            var seed = await SeedDoctorAsync();
+
+            var model = new DoctorEditDTO
+            {
+                ID = seed.doctor.ID,
+                DoctorName = "",
+                SpecializationId = seed.specialization.ID,
+                ShiftId = seed.shift.ID,
+                IsAccepted = true
+            };
+
+            await service.UpdateAsync(model);
+
+            var updated = await context.Doctors
+                .Include(x => x.User)
+                .FirstOrDefaultAsync(x => x.ID == seed.doctor.ID);
+
+            Assert.That(updated!.User.FirstName, Is.EqualTo(""));
+            Assert.That(updated.User.LastName, Is.EqualTo(""));
+        }
+        [Test]
+        public async Task CreateAsync_WhenDoctorNameIsEmpty_SetsBothNamesEmpty()
+        {
+            var specialization = new Specialization
+            {
+                ID = Guid.NewGuid(),
+                SpecializationName = "Neurology",
+                ImageURL = "image",
+                PublicID = "public"
+            };
+
+            var shift = new Shift
+            {
+                ID = Guid.NewGuid(),
+                Type = "Morning",
+                StartTime = new TimeOnly(8, 0),
+                EndTime = new TimeOnly(16, 0)
+            };
+
+            context.Specializations.Add(specialization);
+            context.Shifts.Add(shift);
             await context.SaveChangesAsync();
 
-            await service.DeleteAsync(doctor.ID);
+            var fileMock = new Mock<IFormFile>();
 
-            Assert.That(await context.Doctors.FindAsync(doctor.ID), Is.Null);
+            imageServiceMock
+                .Setup(x => x.UploadImageAsync(fileMock.Object))
+                .ReturnsAsync(("/images/uploaded.jpg", "uploaded_public_id"));
+
+            var dto = new DoctorCreateDto
+            {
+                DoctorName = "",
+                SpecializationID = specialization.ID,
+                ShiftID = shift.ID,
+                ImageFile = fileMock.Object
+            };
+
+            await service.CreateAsync(dto);
+
+            var doctor = await context.Doctors
+                .Include(x => x.User)
+                .FirstOrDefaultAsync();
+
+            Assert.That(doctor, Is.Not.Null);
+            Assert.That(doctor!.User.FirstName, Is.EqualTo(""));
+            Assert.That(doctor.User.LastName, Is.EqualTo(""));
+            Assert.That(doctor.User.UserName, Is.EqualTo("_"));
         }
 
         [Test]
         public async Task DeleteAsync_WhenDoctorMissing_DoesNothing()
         {
-            Assert.DoesNotThrowAsync(async () => await service.DeleteAsync(Guid.NewGuid()));
+            await service.DeleteAsync(Guid.NewGuid());
+
+            Assert.That(await context.Doctors.CountAsync(), Is.EqualTo(0));
         }
 
         [Test]
-        public async Task GetAllAsync_ReturnsMappedDoctors()
+        public async Task GetAllAsync_ReturnsAllDoctors()
         {
-            var user = new User { Id = Guid.NewGuid(), FirstName = "John", LastName = "Doe" };
-            var spec = new Specialization { ID = Guid.NewGuid(), SpecializationName = "Cardiology" };
-            var shift = new Shift { ID = Guid.NewGuid(), Type = "Morning" };
-
-            var doctor = new Doctor
-            {
-                ID = Guid.NewGuid(),
-                UserId = user.Id,
-                User = user,
-                SpecializationId = spec.ID,
-                Specialization = spec,
-                ShiftId = shift.ID,
-                Shift = shift,
-                IsAccepted = true,
-                ImageURL = "img"
-            };
-
-            context.Users.Add(user);
-            context.Specializations.Add(spec);
-            context.Shifts.Add(shift);
-            context.Doctors.Add(doctor);
-            await context.SaveChangesAsync();
+            await SeedDoctorAsync("Ivan", "Petrov", "Cardiology", "Morning");
+            await SeedDoctorAsync("Maria", "Ivanova", "Neurology", "Night");
 
             var result = await service.GetAllAsync();
 
-            Assert.That(result.Count, Is.EqualTo(1));
-            Assert.That(result[0].UserName, Is.EqualTo("John Doe"));
-            Assert.That(result[0].SpecializationName, Is.EqualTo("Cardiology"));
-            Assert.That(result[0].ShiftName, Is.EqualTo("Morning"));
+            Assert.That(result.Count, Is.EqualTo(2));
+            Assert.That(result.Any(x => x.UserName == "Ivan Petrov"), Is.True);
+            Assert.That(result.Any(x => x.UserName == "Maria Ivanova"), Is.True);
+            Assert.That(result.Any(x => x.SpecializationName == "Cardiology"), Is.True);
+            Assert.That(result.Any(x => x.ShiftName == "Night"), Is.True);
         }
 
         [Test]
-        public async Task GetByIdAsync_WhenExists_ReturnsMappedDoctor()
+        public async Task GetByIdAsync_WhenDoctorExists_ReturnsDoctor()
         {
-            var user = new User { Id = Guid.NewGuid(), FirstName = "John", LastName = "Doe" };
-            var spec = new Specialization { ID = Guid.NewGuid(), SpecializationName = "Cardiology" };
-            var shift = new Shift { ID = Guid.NewGuid(), Type = "Morning" };
+            var seed = await SeedDoctorAsync();
 
-            var doctor = new Doctor
-            {
-                ID = Guid.NewGuid(),
-                UserId = user.Id,
-                User = user,
-                SpecializationId = spec.ID,
-                Specialization = spec,
-                ShiftId = shift.ID,
-                Shift = shift,
-                IsAccepted = true,
-                ImageURL = "img"
-            };
-
-            context.Users.Add(user);
-            context.Specializations.Add(spec);
-            context.Shifts.Add(shift);
-            context.Doctors.Add(doctor);
-            await context.SaveChangesAsync();
-
-            var result = await service.GetByIdAsync(doctor.ID);
+            var result = await service.GetByIdAsync(seed.doctor.ID);
 
             Assert.That(result, Is.Not.Null);
-            Assert.That(result!.UserName, Is.EqualTo("John Doe"));
+            Assert.That(result!.ID, Is.EqualTo(seed.doctor.ID));
+            Assert.That(result.UserName, Is.EqualTo("Ivan Petrov"));
+            Assert.That(result.SpecializationName, Is.EqualTo("Cardiology"));
+            Assert.That(result.ShiftName, Is.EqualTo("Morning"));
         }
 
         [Test]
-        public async Task GetByIdAsync_WhenMissing_ReturnsNull()
+        public async Task GetByIdAsync_WhenDoctorMissing_ReturnsNull()
         {
             var result = await service.GetByIdAsync(Guid.NewGuid());
 
@@ -191,47 +317,90 @@ namespace Hospital.Tests.Services
         }
 
         [Test]
-        public async Task UpdateAsync_WhenDoctorExists_UpdatesDoctorAndUser()
+        public async Task UpdateAsync_WhenDoctorExistsAndNoNewImage_UpdatesDataWithoutChangingImage()
         {
-            var user = new User { Id = Guid.NewGuid(), FirstName = "Old", LastName = "Name" };
-            var oldSpec = new Specialization { ID = Guid.NewGuid(), SpecializationName = "OldSpec" };
-            var newSpec = new Specialization { ID = Guid.NewGuid(), SpecializationName = "NewSpec" };
-            var oldShift = new Shift { ID = Guid.NewGuid(), Type = "OldShift" };
-            var newShift = new Shift { ID = Guid.NewGuid(), Type = "NewShift" };
+            var seed = await SeedDoctorAsync();
 
-            var doctor = new Doctor
+            var newSpecialization = new Specialization
             {
                 ID = Guid.NewGuid(),
-                UserId = user.Id,
-                User = user,
-                SpecializationId = oldSpec.ID,
-                ShiftId = oldShift.ID,
-                IsAccepted = false,
-                ImageURL = "old-url",
-                CloudinaryID = "old-id"
+                SpecializationName = "Neurology",
+                ImageURL = "newSpecImage",
+                PublicID = "newSpecPublicId"
             };
 
-            context.Users.Add(user);
-            context.Specializations.AddRange(oldSpec, newSpec);
-            context.Shifts.AddRange(oldShift, newShift);
-            context.Doctors.Add(doctor);
+            var newShift = new Shift
+            {
+                ID = Guid.NewGuid(),
+                Type = "Night",
+                StartTime = new TimeOnly(18, 0),
+                EndTime = new TimeOnly(2, 0)
+            };
+
+            context.Specializations.Add(newSpecialization);
+            context.Shifts.Add(newShift);
+            await context.SaveChangesAsync();
+
+            var dto = new DoctorEditDTO
+            {
+                ID = seed.doctor.ID,
+                DoctorName = "Georgi Dimitrov",
+                SpecializationId = newSpecialization.ID,
+                ShiftId = newShift.ID,
+                IsAccepted = false,
+                NewImageFile = null
+            };
+
+            await service.UpdateAsync(dto);
+
+            var updated = await context.Doctors.Include(x => x.User).FirstOrDefaultAsync(x => x.ID == seed.doctor.ID);
+
+            Assert.That(updated, Is.Not.Null);
+            Assert.That(updated!.User.FirstName, Is.EqualTo("Georgi"));
+            Assert.That(updated.User.LastName, Is.EqualTo("Dimitrov"));
+            Assert.That(updated.SpecializationId, Is.EqualTo(newSpecialization.ID));
+            Assert.That(updated.ShiftId, Is.EqualTo(newShift.ID));
+            Assert.That(updated.IsAccepted, Is.False);
+            Assert.That(updated.ImageURL, Is.EqualTo("/images/doctor.jpg"));
+            Assert.That(updated.CloudinaryID, Is.EqualTo("doctor_public_id"));
+        }
+
+        [Test]
+        public async Task UpdateAsync_WhenDoctorExistsAndNewImage_UpdatesDataAndImage()
+        {
+            var seed = await SeedDoctorAsync();
+
+            var newSpecialization = new Specialization
+            {
+                ID = Guid.NewGuid(),
+                SpecializationName = "Dermatology",
+                ImageURL = "specImg",
+                PublicID = "specPid"
+            };
+
+            var newShift = new Shift
+            {
+                ID = Guid.NewGuid(),
+                Type = "Afternoon",
+                StartTime = new TimeOnly(12, 0),
+                EndTime = new TimeOnly(20, 0)
+            };
+
+            context.Specializations.Add(newSpecialization);
+            context.Shifts.Add(newShift);
             await context.SaveChangesAsync();
 
             var fileMock = new Mock<IFormFile>();
 
-            //imageServiceMock
-            //    .Setup(x => x.UploadImageAsync(It.IsAny<IFormFile>()))
-            //    .ReturnsAsync(new ImageUploadResultDTO
-            //    {
-            //        Url = "new-url",
-            //        PublicId = "new-id"
-            //    });
+            imageServiceMock
+                .Setup(x => x.UploadImageAsync(fileMock.Object))
+                .ReturnsAsync(("/images/new-doctor.jpg", "new_public_id"));
 
             var dto = new DoctorEditDTO
             {
-                ID = doctor.ID,
-                DoctorName = "New Name",
-                SpecializationId = newSpec.ID,
+                ID = seed.doctor.ID,
+                DoctorName = "Maria Koleva",
+                SpecializationId = newSpecialization.ID,
                 ShiftId = newShift.ID,
                 IsAccepted = true,
                 NewImageFile = fileMock.Object
@@ -239,97 +408,93 @@ namespace Hospital.Tests.Services
 
             await service.UpdateAsync(dto);
 
-            var updatedDoctor = await context.Doctors.Include(x => x.User).FirstAsync(x => x.ID == doctor.ID);
+            var updated = await context.Doctors.Include(x => x.User).FirstOrDefaultAsync(x => x.ID == seed.doctor.ID);
 
-            Assert.That(updatedDoctor.User.FirstName, Is.EqualTo("New"));
-            Assert.That(updatedDoctor.User.LastName, Is.EqualTo("Name"));
-            Assert.That(updatedDoctor.SpecializationId, Is.EqualTo(newSpec.ID));
-            Assert.That(updatedDoctor.ShiftId, Is.EqualTo(newShift.ID));
-            Assert.That(updatedDoctor.IsAccepted, Is.True);
-            Assert.That(updatedDoctor.ImageURL, Is.EqualTo("new-url"));
-            Assert.That(updatedDoctor.CloudinaryID, Is.EqualTo("new-id"));
+            Assert.That(updated, Is.Not.Null);
+            Assert.That(updated!.User.FirstName, Is.EqualTo("Maria"));
+            Assert.That(updated.User.LastName, Is.EqualTo("Koleva"));
+            Assert.That(updated.SpecializationId, Is.EqualTo(newSpecialization.ID));
+            Assert.That(updated.ShiftId, Is.EqualTo(newShift.ID));
+            Assert.That(updated.IsAccepted, Is.True);
+            Assert.That(updated.ImageURL, Is.EqualTo("/images/new-doctor.jpg"));
+            Assert.That(updated.CloudinaryID, Is.EqualTo("new_public_id"));
+
+            imageServiceMock.Verify(x => x.UploadImageAsync(fileMock.Object), Times.Once);
         }
 
         [Test]
-        public async Task FilterBySpecialization_WithEmptyString_ReturnsEmptyList()
+        public async Task UpdateAsync_WhenDoctorMissing_DoesNothing()
         {
-            var result = await service.FilterBySpecialization("");
-
-            Assert.That(result, Is.Empty);
-        }
-
-        [Test]
-        public async Task FilterBySpecialization_ReturnsMatchingDoctors()
-        {
-            var user = new User { Id = Guid.NewGuid(), FirstName = "John", LastName = "Doe" };
-            var spec = new Specialization { ID = Guid.NewGuid(), SpecializationName = "Cardiology" };
-            var shift = new Shift { ID = Guid.NewGuid(), Type = "Morning" };
-
-            var doctor = new Doctor
+            var dto = new DoctorEditDTO
             {
                 ID = Guid.NewGuid(),
-                UserId = user.Id,
-                User = user,
-                SpecializationId = spec.ID,
-                Specialization = spec,
-                ShiftId = shift.ID,
-                Shift = shift
+                DoctorName = "Missing Doctor",
+                SpecializationId = Guid.NewGuid(),
+                ShiftId = Guid.NewGuid(),
+                IsAccepted = false
             };
 
-            context.Users.Add(user);
-            context.Specializations.Add(spec);
-            context.Shifts.Add(shift);
-            context.Doctors.Add(doctor);
-            await context.SaveChangesAsync();
+            await service.UpdateAsync(dto);
+
+            Assert.That(await context.Doctors.CountAsync(), Is.EqualTo(0));
+        }
+
+        [Test]
+        public async Task FilterBySpecialization_WhenSearchIsNull_ReturnsEmptyList()
+        {
+            var result = await service.FilterBySpecialization(null!);
+
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.Count, Is.EqualTo(0));
+        }
+
+        [Test]
+        public async Task FilterBySpecialization_WhenSearchIsWhitespace_ReturnsEmptyList()
+        {
+            var result = await service.FilterBySpecialization("   ");
+
+            Assert.That(result, Is.Not.Null);
+            Assert.That(result.Count, Is.EqualTo(0));
+        }
+
+        [Test]
+        public async Task FilterBySpecialization_WhenMatchesExist_ReturnsMatchingDoctors()
+        {
+            await SeedDoctorAsync("Ivan", "Petrov", "Cardiology", "Morning");
+            await SeedDoctorAsync("Maria", "Ivanova", "Neurology", "Night");
+            await SeedDoctorAsync("Georgi", "Kolev", "Cardio Surgery", "Afternoon");
 
             var result = await service.FilterBySpecialization("Cardio");
 
-            Assert.That(result.Count, Is.EqualTo(1));
-            Assert.That(result[0].SpecializationName, Is.EqualTo("Cardiology"));
+            Assert.That(result.Count, Is.EqualTo(2));
+            Assert.That(result.Any(x => x.SpecializationName == "Cardiology"), Is.True);
+            Assert.That(result.Any(x => x.SpecializationName == "Cardio Surgery"), Is.True);
+            Assert.That(result.Any(x => x.SpecializationName == "Neurology"), Is.False);
         }
 
         [Test]
-        public async Task SortByFirstName_ReturnsOrderedDoctors()
+        public async Task FilterBySpecialization_WhenNoMatchesExist_ReturnsEmptyList()
         {
-            var spec = new Specialization { ID = Guid.NewGuid(), SpecializationName = "Spec" };
-            var shift = new Shift { ID = Guid.NewGuid(), Type = "Morning" };
+            await SeedDoctorAsync("Ivan", "Petrov", "Cardiology", "Morning");
 
-            var user1 = new User { Id = Guid.NewGuid(), FirstName = "Zed", LastName = "A" };
-            var user2 = new User { Id = Guid.NewGuid(), FirstName = "Anna", LastName = "B" };
+            var result = await service.FilterBySpecialization("Oncology");
 
-            context.Users.AddRange(user1, user2);
-            context.Specializations.Add(spec);
-            context.Shifts.Add(shift);
+            Assert.That(result.Count, Is.EqualTo(0));
+        }
 
-            context.Doctors.AddRange(
-                new Doctor
-                {
-                    ID = Guid.NewGuid(),
-                    UserId = user1.Id,
-                    User = user1,
-                    SpecializationId = spec.ID,
-                    Specialization = spec,
-                    ShiftId = shift.ID,
-                    Shift = shift
-                },
-                new Doctor
-                {
-                    ID = Guid.NewGuid(),
-                    UserId = user2.Id,
-                    User = user2,
-                    SpecializationId = spec.ID,
-                    Specialization = spec,
-                    ShiftId = shift.ID,
-                    Shift = shift
-                });
-
-            await context.SaveChangesAsync();
+        [Test]
+        public async Task SortByFirstName_ReturnsDoctorsOrderedByFirstName()
+        {
+            await SeedDoctorAsync("Zoran", "Petrov", "Cardiology", "Morning");
+            await SeedDoctorAsync("Anna", "Ivanova", "Neurology", "Night");
+            await SeedDoctorAsync("Boris", "Kolev", "Surgery", "Afternoon");
 
             var result = await service.SortByFirstName();
 
-            Assert.That(result.Count, Is.EqualTo(2));
-            Assert.That(result[0].UserName, Is.EqualTo("Anna B"));
-            Assert.That(result[1].UserName, Is.EqualTo("Zed A"));
+            Assert.That(result.Count, Is.EqualTo(3));
+            Assert.That(result[0].UserName, Is.EqualTo("Anna Ivanova"));
+            Assert.That(result[1].UserName, Is.EqualTo("Boris Kolev"));
+            Assert.That(result[2].UserName, Is.EqualTo("Zoran Petrov"));
         }
     }
 }

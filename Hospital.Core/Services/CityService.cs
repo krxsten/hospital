@@ -22,7 +22,19 @@ public class CityService : ICityService
 
         var json = await File.ReadAllTextAsync(path);
 
-        return JsonSerializer.Deserialize<List<string>>(json)
-               ?? new List<string>();
+        if (string.IsNullOrWhiteSpace(json))
+        {
+            return new List<string>();
+        }
+
+        try
+        {
+            return JsonSerializer.Deserialize<List<string>>(json)
+                   ?? new List<string>();
+        }
+        catch
+        {
+            return new List<string>();
+        }
     }
 }
