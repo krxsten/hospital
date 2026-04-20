@@ -84,6 +84,24 @@ namespace Hospital.Core.Services
 
         public async Task CreateAsync(PatientCreateDTO model)
         {
+            if (model.DateOfBirth < new DateOnly(1920, 1, 1) ||
+    model.DateOfBirth > DateOnly.FromDateTime(DateTime.Now))
+            {
+                throw new Exception("Invalid Date of Birth");
+            }
+            if (model.HospitalizationDate < new DateOnly(1985, 1, 1))
+            {
+                throw new Exception("Hospitalization date cannot be before 1985");
+            }
+
+            if (model.DischargeDate < new DateOnly(1985, 1, 1))
+            {
+                throw new Exception("Discharge date cannot be before 1985");
+            }
+            if (model.DischargeDate < model.HospitalizationDate)
+            {
+                throw new Exception("Discharge date cannot be before hospitalization date");
+            }
             var names = model.PatientName.Split(' ', StringSplitOptions.RemoveEmptyEntries);
 
             var firstName = names.Length > 0 ? names[0] : "";
@@ -119,6 +137,24 @@ namespace Hospital.Core.Services
 
         public async Task UpdateAsync(PatientEditDTO model)
         {
+            if (model.DateOfBirth < new DateOnly(1920, 1, 1) ||
+    model.DateOfBirth > DateOnly.FromDateTime(DateTime.Now))
+            {
+                throw new Exception("Invalid Date of Birth");
+            }
+            if (model.HospitalizationDate < new DateOnly(1985, 1, 1))
+            {
+                throw new Exception("Hospitalization date cannot be before 1985");
+            }
+
+            if (model.DischargeDate < new DateOnly(1985, 1, 1))
+            {
+                throw new Exception("Discharge date cannot be before 1985");
+            }
+            if (model.DischargeDate < model.HospitalizationDate)
+            {
+                throw new Exception("Discharge date cannot be before hospitalization date");
+            }
             var patient = await context.Patients
               .Include(d => d.User)
               .FirstOrDefaultAsync(d => d.ID == model.ID);

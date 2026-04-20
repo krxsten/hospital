@@ -29,14 +29,27 @@ namespace Hospital.Data.Configurations
                  .HasForeignKey(p => p.DoctorId)
                  .OnDelete(DeleteBehavior.Restrict);
 
+            
+
             builder
                 .HasIndex(x => x.UCN)
                 .IsUnique();
             builder
                 .HasIndex(x => x.PhoneNumber)
                 .IsUnique();
-            builder
-                .ToTable(t => t.HasCheckConstraint("CK_DateOfBirth_MinYear", "DATEPART(year, [DateOfBirth]) > 1920"));
+            builder.ToTable(t => t.HasCheckConstraint(
+     "CK_DateOfBirth_Valid",
+     "[DateOfBirth] >= '1920-01-01' AND [DateOfBirth] <= CAST(GETDATE() AS date)"
+ ));
+            builder.ToTable(t => t.HasCheckConstraint(
+    "CK_HospitalizationDate_MinYear",
+    "[HospitalizationDate] >= '1985-01-01'"
+));
+
+            builder.ToTable(t => t.HasCheckConstraint(
+                "CK_DischargeDate_MinYear",
+                "[DischargeDate] >= '1985-01-01'"
+            ));
             builder
                 .HasOne(p => p.Room)
                 .WithMany(r => r.ListOfPatients)
