@@ -232,11 +232,25 @@
                         }
                         @if (User.IsInRole("Patient"))
                         {
-                            <li class="nav-item">
-                                <a class="nav-link text-light" asp-controller="Checkup" asp-action="Create">
-                                    Book an appointment
+                            <li class="nav-item dropdown text-white">
+                                <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown">
+                                    Patient Panel
                                 </a>
+                                <ul class="dropdown-menu">
+                                    <li class="nav-item">
+                                        <a class="dropdown-item" asp-controller="Checkup" asp-action="Create">
+                                            Book an appointment
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="dropdown-item" asp-controller="Checkup" asp-action="PatientAppointments">
+                                            My appointments
+                                        </a>
+                                    </li>
+                                </ul>
                             </li>
+                            
+                            
                         }
                         @if (User.IsInRole("Admin") || User.IsInRole("Doctor") ||
                                                 User.IsInRole("Nurse"))

@@ -125,11 +125,11 @@
                             </div>
 
                             <div class="col-md-4 mb-4">
-                                <label asp-for="BirthCity" class="form-label fw-bold">Select City</label>
-                                <select asp-for="BirthCity" asp-items="ViewBag.Cities" class="form-select custom-select">
+                                <label asp-for="@Model.BirthCity" class="form-label fw-bold">Select City</label>
+                                <select asp-for="@Model.BirthCity" asp-items="@ViewBag.Cities" class="form-select custom-select">
                                     <option value="">-- Select a birth city --</option>
                                 </select>
-                                <span asp-validation-for="BirthCity" class="text-danger small"></span>
+                                <span asp-validation-for="@Model.BirthCity" class="text-danger small"></span>
                             </div>
 
                             <div class="col-md-4 mb-4">

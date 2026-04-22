@@ -17,6 +17,7 @@
     .custom-input::placeholder {
         color: #ffffff !important;
     }
+
     .custom-input {
         background-color: transparent !important;
         border: 1px solid #ffffff !important;
@@ -106,7 +107,11 @@
 
                             <input type="radio" class="btn-check" asp-for="Type" value="Night shift" id="nightShift">
                             <label class="shift-option" for="nightShift">Night Shift</label>
+                            <input type="radio" class="btn-check" asp-for="Type" value="Emergency Shift" id="emergency">
+                            <label class="shift-option" for="emergency">Emergency Shift</label>
 
+                            <input type="radio" class="btn-check" asp-for="Type" value="Weekend Shift" id="weekend">
+                            <label class="shift-option" for="weekend">Weekend Shift</label>
                             <span class="text-danger" asp-validation-for="@Model.Type"></span>
                         </div>
 
