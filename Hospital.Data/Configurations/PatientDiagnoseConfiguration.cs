@@ -32,7 +32,6 @@ namespace Hospital.Data.Configurations
             builder.HasData(
                 new PatientAndDiagnose
                 {
-                    // Add a unique ID for each row
                     Id = new Guid("11111111-1111-1111-1111-111111111111"),
                     PatientId = new Guid("9783d8b3-014f-477a-b951-6ff87057b44f"),
                     DiagnoseId = new Guid("2edd634a-5c31-4f68-b9b5-58c2f5b80216")

@@ -16,7 +16,7 @@ namespace Hospital.WebProject.Seed
                     Name = "Paracetamol",
                     Description = "Pain relief",
                     SideEffects = "Nausea",
-                    DiagnoseID = new Guid("0b0a943c-4d25-4b22-b21f-ee4f80f8e6b0") // Migraine
+                    DiagnoseID = new Guid("0b0a943c-4d25-4b22-b21f-ee4f80f8e6b0") 
                 },
                 new Medication
                 {
@@ -24,7 +24,7 @@ namespace Hospital.WebProject.Seed
                     Name = "Ibuprofen",
                     Description = "Anti inflammatory",
                     SideEffects = "Stomach pain",
-                    DiagnoseID = new Guid("02ce1c83-0198-4d90-9dc1-d697c61f936e") // Fracture
+                    DiagnoseID = new Guid("02ce1c83-0198-4d90-9dc1-d697c61f936e") 
                 },
                 new Medication
                 {
@@ -32,7 +32,7 @@ namespace Hospital.WebProject.Seed
                     Name = "Amoxicillin",
                     Description = "Antibiotic",
                     SideEffects = "Allergy",
-                    DiagnoseID = new Guid("2edd634a-5c31-4f68-b9b5-58c2f5b80216") // Pneumonia
+                    DiagnoseID = new Guid("2edd634a-5c31-4f68-b9b5-58c2f5b80216") 
                 },
                 new Medication
                 {
@@ -40,7 +40,7 @@ namespace Hospital.WebProject.Seed
                     Name = "Aspirin",
                     Description = "Blood thinner",
                     SideEffects = "Bleeding",
-                    DiagnoseID = new Guid("732a09fb-ad41-4059-829b-8f32cbf0ce2f") // Hypertension
+                    DiagnoseID = new Guid("732a09fb-ad41-4059-829b-8f32cbf0ce2f") 
                 },
                 new Medication
                 {
@@ -48,7 +48,7 @@ namespace Hospital.WebProject.Seed
                     Name = "Metformin",
                     Description = "Diabetes medication",
                     SideEffects = "Fatigue",
-                    DiagnoseID = new Guid("46a961d1-e24f-4029-9c13-4ee9a345610c") // Diabetes
+                    DiagnoseID = new Guid("46a961d1-e24f-4029-9c13-4ee9a345610c") 
                 },
                 new Medication
                 {
@@ -56,7 +56,7 @@ namespace Hospital.WebProject.Seed
                     Name = "Lisinopril",
                     Description = "Blood pressure",
                     SideEffects = "Cough",
-                    DiagnoseID = new Guid("732a09fb-ad41-4059-829b-8f32cbf0ce2f") // Hypertension
+                    DiagnoseID = new Guid("732a09fb-ad41-4059-829b-8f32cbf0ce2f") 
                 },
                 new Medication
                 {
@@ -64,7 +64,7 @@ namespace Hospital.WebProject.Seed
                     Name = "Omeprazole",
                     Description = "Acid reflux",
                     SideEffects = "Headache",
-                    DiagnoseID = new Guid("c97e4a52-4926-4268-8261-82739340e77b") // Raynauld's syndrome
+                    DiagnoseID = new Guid("c97e4a52-4926-4268-8261-82739340e77b") 
                 }
             );
         }

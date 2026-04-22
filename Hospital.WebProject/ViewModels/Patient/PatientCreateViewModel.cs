@@ -31,7 +31,6 @@ namespace Hospital.WebProject.ViewModels.Patient
 		public string BirthCity { get; set; } = null!;
 
         [DataType(DataType.Date)]
-       // [Range(typeof(DateOnly), "01/01/1920", "12/31/2100", ErrorMessage = "Invalid date range.")]
         public DateOnly DateOfBirth { get; set; }
 
         [Required(ErrorMessage = "This field is required!")]
